@@ -1,0 +1,41 @@
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { IOrderDetailPayload } from "../../interfaces/Order";
+
+export interface ICartState {
+  cart: IOrderDetailPayload[];
+}
+
+export enum CartActionTypes {
+  ADD_TO_CART = "ADD_TO_CART",
+  UPDATE_CART = "UPDATE_CART",
+  DELETE_ALL_FROM_CART_REQUEST = "DELETE_ALL_FROM_CART_REQUEST",
+  DELETE_FROM_CART = "DELETE_FROM_CART",
+}
+
+export interface IAddToCart {
+  type: CartActionTypes.ADD_TO_CART;
+  payload: IOrderDetailPayload;
+}
+
+export interface IUpdateCart {
+  type: CartActionTypes.UPDATE_CART;
+  data: IOrderDetailPayload;
+  isAdd: boolean;
+}
+
+export interface IDeleteFromCart {
+  type: CartActionTypes.DELETE_FROM_CART;
+  payload: IOrderDetailPayload;
+}
+
+export interface IDeleteAllFromCart {
+  type: CartActionTypes.DELETE_ALL_FROM_CART_REQUEST;
+}
+
+export type CartActions =
+  | IAddToCart
+  | IUpdateCart
+  | IDeleteAllFromCart
+  | IDeleteFromCart;
+export type CartDispatch = ThunkDispatch<ICartState, any, AnyAction>;
