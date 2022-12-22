@@ -1,9 +1,6 @@
-interface ArrowIconProps {
-  left: boolean;
-  size?: number;
-}
+import { IconProps } from "../../interfaces/Icon";
 
-const Arrow = ({ ...props }: ArrowIconProps) => {
+const Arrow = ({ ...props }: IconProps) => {
   return props.left ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"

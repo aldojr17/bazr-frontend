@@ -1,6 +1,3 @@
-// define every api end point
-// ex : localhost://8080/register => "/register" need to be defined here as api path inside "auth" object
-
 export const API_PATH = {
   auth: {
     REGISTER: "/register",
@@ -9,5 +6,8 @@ export const API_PATH = {
   },
   user: {
     PROFILE: "/get-profile",
+  },
+  category: {
+    GET_ALL_CATEGORIES: "/categories",
   },
 };

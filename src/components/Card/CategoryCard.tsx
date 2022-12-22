@@ -1,16 +1,12 @@
 import { Box, Image, Text } from "@chakra-ui/react";
-import React from "react";
+import { ICategoryCardProps } from "../../interfaces/Category";
 
-const CategoryCard = () => {
+const CategoryCard = ({ ...props }: ICategoryCardProps) => {
   return (
     <Box>
-      <Image
-        src="https://res.cloudinary.com/dcdexrr4n/image/upload/v1670317984/mppsna4mqr567gep3ec6.png"
-        height={"200px"}
-        minWidth={"150px"}
-      />
-      <Text align={"center"} marginTop={5} marginBottom={3}>
-        Smartphones
+      <Image src={props.icon} height={"200px"} minWidth={"150px"} />
+      <Text align={"center"} marginTop={5} marginBottom={3} noOfLines={2}>
+        {props.name}
       </Text>
     </Box>
   );
