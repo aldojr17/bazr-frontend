@@ -24,7 +24,7 @@ const Layout = ({ children }: ILayoutProps) => {
     }
 
     onClose();
-    navigate(`/search?name=${event.currentTarget.value}`, { replace: true });
+    navigate(`/search?q=${event.currentTarget.value}`, { replace: true });
   };
 
   return (

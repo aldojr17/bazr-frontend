@@ -41,6 +41,11 @@ const Button = defineStyleConfig({
     carousel: {
       bg: "#ed5b5b",
     },
+    icon: {
+      bg: "white",
+      boxShadow: "rgb(49 53 59 / 12%) 0px 1px 6px 0px",
+      borderColor: "dark",
+    },
     // 4. We can override existing variants
     solid: (props: StyleFunctionProps) => ({
       bg: props.colorMode === "dark" ? "red.300" : "red.500",

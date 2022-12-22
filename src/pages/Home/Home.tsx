@@ -31,7 +31,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // fetchCategories();
+    fetchCategories();
   }, []);
 
   return (

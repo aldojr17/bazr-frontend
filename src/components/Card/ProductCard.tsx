@@ -28,7 +28,7 @@ const ProductCard = () => {
         </Flex>
         <HStack justifyContent={"space-between"}>
           <Text>Rp {formatCurrency(30000)}</Text>
-          <Text>Terjual 45</Text>
+          <Text>45 Sold</Text>
         </HStack>
       </Stack>
     </Box>
