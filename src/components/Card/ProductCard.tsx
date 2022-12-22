@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Flex, HStack, Image, Stack, Text, VStack } from "@chakra-ui/react";
+import { AspectRatio, Box, Flex, HStack, Image, Stack, Text } from "@chakra-ui/react";
 import Icon from "../../assets/icons";
 import React from "react";
 import { formatCurrency } from "../../util/util";
@@ -23,7 +23,7 @@ const ProductCard = () => {
           Smartphones
         </Text>
         <Flex gap={2}>
-          <Icon.Star fill size={20} />
+          <Icon.Star fill={"orange"} />
           4.0
         </Flex>
         <HStack justifyContent={"space-between"}>
