@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
+import { AspectRatio, Box, Flex, HStack, Image, Stack, Text, VStack } from "@chakra-ui/react";
 import Icon from "../../assets/icons";
 import React from "react";
 import { formatCurrency } from "../../util/util";
@@ -6,16 +6,23 @@ import { formatCurrency } from "../../util/util";
 const ProductCard = () => {
   return (
     <Box>
-      <Image
-        src="https://res.cloudinary.com/dcdexrr4n/image/upload/v1670317984/mppsna4mqr567gep3ec6.png"
-        height={"250px"}
-        width={"250px"}
-      />
-      <Box maxWidth={"250px"}>
+      <AspectRatio
+        ratio={1}
+        width={{
+          base: "250px",
+          sm: "200px",
+          md: "100%",
+          lg: "100%",
+          xl: "100%",
+        }}
+      >
+        <Image src="https://res.cloudinary.com/dcdexrr4n/image/upload/v1670317984/mppsna4mqr567gep3ec6.png" />
+      </AspectRatio>
+      <Stack gap={1}>
         <Text marginTop={5} marginBottom={1} noOfLines={1}>
           Smartphones
         </Text>
-        <Flex gap={3}>
+        <Flex gap={2}>
           <Icon.Star fill size={20} />
           4.0
         </Flex>
@@ -23,7 +30,7 @@ const ProductCard = () => {
           <Text>Rp {formatCurrency(30000)}</Text>
           <Text>Terjual 45</Text>
         </HStack>
-      </Box>
+      </Stack>
     </Box>
   );
 };

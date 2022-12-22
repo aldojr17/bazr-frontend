@@ -2,6 +2,8 @@ import {
   Box,
   Button,
   Center,
+  Grid,
+  GridItem,
   Heading,
   HStack,
   Image,
@@ -10,14 +12,28 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import categoryService from "../../api/service/category";
 import Icon from "../../assets/icons";
 import CategoryCard from "../../components/Card/CategoryCard";
 import ProductCard from "../../components/Card/ProductCard";
+import { IPrimaryCategoryPayload } from "../../interfaces/Category";
 import { CarouselItemIndex, CategoryWrapper } from "./style";
 
 const Home = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState<number>(1);
+  const [categories, setCategories] = useState<IPrimaryCategoryPayload[]>([]);
+
+  const fetchCategories = async () => {
+    const response = await categoryService.fetchAllCategory();
+    if (response.is_success) {
+      setCategories(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <>
@@ -53,47 +69,22 @@ const Home = () => {
       </Box>
 
       <SimpleGrid columns={2} spacing={10} className="d-none d-lg-grid">
-        <Box
-          height="120px"
-          className="d-flex justify-content-between align-items-center px-5"
-        >
+        <Box height="120px" className="d-flex justify-content-between align-items-center px-5">
           <HStack justifyContent={"space-between"} width={"100%"}>
             <Box>
-              <Button
-                variant={"ghost"}
-                onClick={() =>
-                  setActiveIndex((index) => (index - 1 > 0 ? index - 1 : 4))
-                }
-              >
+              <Button variant={"ghost"} onClick={() => setActiveIndex((index) => (index - 1 > 0 ? index - 1 : 4))}>
                 <Icon.Arrow left size={24} />
               </Button>
-              <Button
-                variant={"ghost"}
-                onClick={() =>
-                  setActiveIndex((index) => (index + 1 < 5 ? index + 1 : 1))
-                }
-              >
+              <Button variant={"ghost"} onClick={() => setActiveIndex((index) => (index + 1 < 5 ? index + 1 : 1))}>
                 <Icon.Arrow left={false} size={24} />
               </Button>
             </Box>
             <HStack spacing={5}>
               <Text>01</Text>
-              <CarouselItemIndex
-                className="rounded"
-                active={activeIndex === 1}
-              />
-              <CarouselItemIndex
-                className="rounded"
-                active={activeIndex === 2}
-              />
-              <CarouselItemIndex
-                className="rounded"
-                active={activeIndex === 3}
-              />
-              <CarouselItemIndex
-                className="rounded"
-                active={activeIndex === 4}
-              />
+              <CarouselItemIndex className="rounded" active={activeIndex === 1} />
+              <CarouselItemIndex className="rounded" active={activeIndex === 2} />
+              <CarouselItemIndex className="rounded" active={activeIndex === 3} />
+              <CarouselItemIndex className="rounded" active={activeIndex === 4} />
               <Text>04</Text>
             </HStack>
           </HStack>
@@ -118,52 +109,60 @@ const Home = () => {
       </SimpleGrid>
 
       <Box className="p-4 pb-5 p-lg-5">
-        <Heading
-          fontWeight={"medium"}
-          size={{ sm: "sm", md: "md", lg: "lg" }}
-          className="pb-4"
-        >
+        <Heading fontWeight={"medium"} size={{ sm: "sm", md: "md", lg: "lg" }} className="pb-4">
           Category
         </Heading>
         <CategoryWrapper>
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
+          {categories.length !== 0
+            ? categories.map((category) => <CategoryCard {...category} key={category.id} />)
+            : ""}
         </CategoryWrapper>
       </Box>
 
       <Box className="px-4 px-lg-5">
-        <Heading
-          fontWeight={"medium"}
-          className="pb-4"
-          size={{ sm: "sm", md: "md", lg: "lg" }}
-        >
+        <Heading fontWeight={"medium"} className="pb-4" size={{ sm: "sm", md: "md", lg: "lg" }}>
           Recommended
         </Heading>
-        <Wrap spacing={10} justify={{ base: "center", lg: "start" }}>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </Wrap>
+        <Grid
+          templateColumns={{
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+            xl: "repeat(6, 1fr)",
+          }}
+          placeItems={{
+            base: "center",
+            sm: "center",
+            md: "initial",
+            lg: "initial",
+          }}
+          gap={6}
+        >
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+          <GridItem>
+            <ProductCard />
+          </GridItem>
+        </Grid>
         <Center className="py-5">
           <Button borderRadius={"base"}>See All Products</Button>
         </Center>

@@ -1,9 +1,6 @@
-interface StarIconProps {
-  fill: boolean;
-  size?: number;
-}
+import { IconProps } from "../../interfaces/Icon";
 
-const Star = ({ ...props }: StarIconProps) => {
+const Star = ({ ...props }: IconProps) => {
   return props.fill ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"
