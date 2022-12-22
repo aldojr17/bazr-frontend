@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/Navbar";
+import { RootState } from "../../redux";
 import { login } from "../../redux/user/action";
 import { UserDispatch } from "../../redux/user/types";
 import "./auth.scss";
@@ -14,7 +16,9 @@ const Login = () => {
     email: false,
     password: false,
   });
+  const navigate = useNavigate();
   const dispatch: UserDispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     setInput({
@@ -42,6 +46,7 @@ const Login = () => {
 
   return (
     <>
+      <Navbar active="auth" />
       <div className="auth-container row gap-5 gap-lg-0">
         <div className="col-12 col-lg-6 my-auto">
           <div className="mb-5">
@@ -98,7 +103,7 @@ const Login = () => {
             <div className="row flex-column align-items-center text-center justify-content-center gap-5">
               <img
                 src="/assets/login.svg"
-                alt="login"
+                alt="login image"
                 className="img-thumbnail border-0 col-lg-7 col-8"
               />
               <div className="col-lg-10 d-flex flex-column gap-3">

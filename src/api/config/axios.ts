@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: "http://localhost:8080",
   timeout: 60000,
 });
 
@@ -24,11 +24,7 @@ instance.interceptors.request.use(
 export const handleHttpResponse = (status: string, message?: string) => {
   switch (status) {
     case "0": {
-      return {
-        message: "Network Error",
-        is_success: false,
-        data: null,
-      };
+      return "Network Error";
     }
     case "404": {
       return "Data Not Found";
@@ -60,7 +56,7 @@ instance.interceptors.response.use(
       throw "Invalid credential";
     } else {
       if (err.code === "ERR_NETWORK") {
-        return Promise.reject(handleHttpResponse("0"));
+        throw handleHttpResponse("0");
       } else {
         throw error;
       }

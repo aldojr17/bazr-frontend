@@ -1,27 +1,19 @@
-import Cart from "./Cart";
-import Dots from "./Dots";
-import Heart from "./Heart";
-import LeftArrow from "./LeftArrow";
-import Minus from "./Minus";
-import Plus from "./Plus";
-import Profile from "./Profile";
-import RightArrow from "./RightArrow";
-import Search from "./Search";
-import Star from "./Star";
-import Trash from "./Trash";
+import CartIcon from "./CartIcon";
+import HeartIcon from "./HeartIcon";
+import LeftIcon from "./LeftIcon";
+import RightIcon from "./RightIcon";
+import StarIcon from "./StarIcon";
+import TrashIcon from "./TrashIcon";
+import UnfillStarIcon from "./UnfillStarIcon";
 
 const Icon = {
-  Cart,
-  Dots,
-  Heart,
-  LeftArrow,
-  Minus,
-  Plus,
-  Profile,
-  RightArrow,
-  Search,
-  Star,
-  Trash,
+  CartIcon,
+  HeartIcon,
+  LeftIcon,
+  RightIcon,
+  StarIcon,
+  TrashIcon,
+  UnfillStarIcon,
 };
 
 export default Icon;

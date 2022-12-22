@@ -1,5 +1,8 @@
 import { Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import NetworkStatus from "./components/NetworkStatus/NetworkStatus";
+import { Home, NotFound } from "./pages";
 import RouteList from "./routes";
 
 function App() {

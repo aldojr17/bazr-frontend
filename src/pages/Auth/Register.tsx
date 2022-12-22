@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import authService from "../../api/service/auth";
+import Navbar from "../../components/Navbar/Navbar";
 import "./auth.scss";
 
 const Register = () => {
@@ -21,6 +22,7 @@ const Register = () => {
     error: false,
     message: "",
   });
+  const [isShowModal, setIsShowModal] = useState(false);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     setInput({
@@ -60,7 +62,7 @@ const Register = () => {
     const status = await authService.login(input);
 
     if (status.isSuccess) {
-      console.log(status);
+      setIsShowModal(true);
     } else {
       setApiError({
         error: true,
@@ -79,6 +81,7 @@ const Register = () => {
 
   return (
     <>
+      <Navbar active="auth" />
       <div className="auth-container row gap-5 gap-lg-0 flex-lg-row-reverse">
         <div className="col-12 col-lg-6 my-auto">
           <div className="mb-5">
@@ -188,7 +191,7 @@ const Register = () => {
             <div className="row flex-column align-items-center text-center justify-content-center gap-5">
               <img
                 src="/assets/register.svg"
-                alt="register"
+                alt="register image"
                 className="img-thumbnail border-0 col-lg-7 col-8"
               />
               <div className="col-lg-10 d-flex flex-column gap-3">
