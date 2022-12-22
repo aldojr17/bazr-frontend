@@ -10,7 +10,6 @@ import {
   SimpleGrid,
   Text,
   VStack,
-  Wrap,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import categoryService from "../../api/service/category";
@@ -32,7 +31,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
+    // fetchCategories();
   }, []);
 
   return (
@@ -73,10 +72,10 @@ const Home = () => {
           <HStack justifyContent={"space-between"} width={"100%"}>
             <Box>
               <Button variant={"ghost"} onClick={() => setActiveIndex((index) => (index - 1 > 0 ? index - 1 : 4))}>
-                <Icon.Arrow left size={24} />
+                <Icon.LeftArrow width={"1.4em"} height={"1.4em"} />
               </Button>
               <Button variant={"ghost"} onClick={() => setActiveIndex((index) => (index + 1 < 5 ? index + 1 : 1))}>
-                <Icon.Arrow left={false} size={24} />
+                <Icon.RightArrow width={"1.4em"} height={"1.4em"} />
               </Button>
             </Box>
             <HStack spacing={5}>
