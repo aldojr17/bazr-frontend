@@ -46,7 +46,7 @@ const Login = () => {
 
   return (
     <>
-      <Navbar active="auth" />
+      <Navbar />
       <div className="auth-container row gap-5 gap-lg-0">
         <div className="col-12 col-lg-6 my-auto">
           <div className="mb-5">

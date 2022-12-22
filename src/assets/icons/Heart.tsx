@@ -1,13 +1,11 @@
 interface HeartIconProps {
   fill: boolean;
   size?: number;
-  button?: boolean;
 }
 
-const HeartIcon = ({ ...props }: HeartIconProps) => {
+const Heart = ({ ...props }: HeartIconProps) => {
   return props.fill ? (
     <svg
-      role={props.button ? "button" : ""}
       xmlns="http://www.w3.org/2000/svg"
       width={props.size ? props.size : 24}
       height={props.size ? props.size : 24}
@@ -22,7 +20,6 @@ const HeartIcon = ({ ...props }: HeartIconProps) => {
     </svg>
   ) : (
     <svg
-      role={props.button ? "button" : ""}
       xmlns="http://www.w3.org/2000/svg"
       width={props.size ? props.size : 24}
       height={props.size ? props.size : 24}
@@ -35,4 +32,4 @@ const HeartIcon = ({ ...props }: HeartIconProps) => {
   );
 };
 
-export default HeartIcon;
+export default Heart;
