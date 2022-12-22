@@ -1,154 +1,117 @@
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Button,
+  Center,
+  Flex,
+  HStack,
+  SimpleGrid,
+  Text,
+} from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import Icon from "../../assets/icons";
-import { StyledTitle } from "./style";
 
 interface NavbarProps {
-  active?: string;
-  isLogged?: boolean;
-  isAdmin?: boolean;
+  onOpen: () => void;
 }
 
-const Navbar = ({ ...props }: NavbarProps) => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login", { replace: true });
-  };
-
+const Navbar = ({ onOpen }: NavbarProps) => {
   return (
-    <nav className="navbar navbar-expand-lg mb-4">
-      <div className="container">
-        <Link to={"/"} className="navbar-brand">
-          <StyledTitle>FoodLabs</StyledTitle>
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbar"
-          aria-controls="navbar"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+    <nav className="navbar navbar-expand-lg border-bottom">
+      <SimpleGrid
+        columns={{
+          base: 2,
+          sm: 2,
+          md: 3,
+          lg: 3,
+          xl: 3,
+        }}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        width={"100%"}
+        className={"px-lg-5 px-md-5 px-4"}
+        gridAutoFlow={"dense"}
+      >
+        <HStack direction={"row"} className={"d-none d-md-flex d-lg-block"}>
+          <Button variant={"ghost"}>
+            <Flex justifyContent={"center"} alignItems={"center"} gap={"3"}>
+              <Icon.Dots />
+              <Text as={"span"} fontWeight={"normal"}>
+                Categories
+              </Text>
+            </Flex>
+          </Button>
+          <Button variant={"ghost"} onClick={onOpen}>
+            <Flex justifyContent={"center"} alignItems={"center"} gap={"3"}>
+              <Icon.Search />
+              <Text as={"span"} fontWeight={"normal"}>
+                Search
+              </Text>
+            </Flex>
+          </Button>
+        </HStack>
+        <HStack
+          className={"d-flex d-md-none d-lg-none"}
+          gridColumn={2}
+          justifyContent={"end"}
         >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbar">
-          <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-            {props.isAdmin ? (
-              <>
-                <li className="nav-item">
-                  <Link
-                    to={"/menu"}
-                    className={`nav-link ${
-                      props.active === "menu" ? "active" : ""
-                    }`}
-                  >
-                    Menu
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    to={"/coupon"}
-                    className={`nav-link ${
-                      props.active === "coupon" ? "active" : ""
-                    }`}
-                  >
-                    Coupon
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    to={"/review"}
-                    className={`nav-link ${
-                      props.active === "review" ? "active" : ""
-                    }`}
-                  >
-                    Review
-                  </Link>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <Link
-                    to={"/menu"}
-                    className={`nav-link ${
-                      props.active === "menu" ? "active" : ""
-                    }`}
-                  >
-                    Menu
-                  </Link>
-                </li>
-                {props.isLogged ? (
-                  <>
-                    <li className="nav-item">
-                      <Link
-                        to={"/orders"}
-                        className={`nav-link ${
-                          props.active === "orders" ? "active" : ""
-                        }`}
-                      >
-                        Orders
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link
-                        to={"/profile"}
-                        className={`nav-link ${
-                          props.active === "profile" ? "active" : ""
-                        }`}
-                      >
-                        Profile
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link
-                        to={"/games"}
-                        className={`nav-link ${
-                          props.active === "games" ? "active" : ""
-                        }`}
-                      >
-                        Games
-                      </Link>
-                    </li>
-                  </>
-                ) : (
-                  ""
-                )}
-              </>
-            )}
-          </ul>
-          {props.active === "auth" ? (
-            ""
-          ) : props.isLogged ? (
-            <div className="d-flex gap-3 align-items-center">
-              {!props.isAdmin ? (
-                <>
-                  <Link to={"/favorites"} className={`nav-link`}>
-                    <Icon.HeartIcon fill={false} button />
-                  </Link>
-                  <Link to={"/cart"} className={`nav-link`}>
-                    <Icon.CartIcon />
-                  </Link>
-                </>
-              ) : (
-                ""
-              )}
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => handleLogout()}
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link to={"/login"}>
-              <button className="btn btn-outline-dark">Login</button>
-            </Link>
-          )}
-        </div>
-      </div>
+          <Button variant={"ghost"} onClick={onOpen}>
+            <Icon.Search />
+          </Button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbar"
+            aria-controls="navbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+        </HStack>
+        <Center
+          className={"d-flex"}
+          justifyContent={{
+            sm: "start",
+            md: "center",
+            lg: "center",
+            xl: "center",
+          }}
+        >
+          <Link to={"/"} className={`nav-link`}>
+            BaZR
+          </Link>
+        </Center>
+        <HStack
+          id="navbar"
+          justifyContent={{
+            sm: "start",
+            md: "end",
+            lg: "end",
+            xl: "end",
+          }}
+          width={"100%"}
+          className="collapse navbar-collapse d-md-flex"
+          marginStart={{
+            base: "-1em",
+            sm: "-1em",
+            md: 0,
+            lg: 0,
+            xl: 0,
+          }}
+        >
+          <HStack className="mt-2 mt-md-0 mt-lg-0">
+            <Button variant={"ghost"}>
+              <Icon.Heart />
+            </Button>
+            <Button variant={"ghost"}>
+              <Icon.Profile width={"1.5em"} height={"1.5em"} />
+            </Button>
+            <Button variant={"ghost"}>
+              <Icon.Cart />
+            </Button>
+          </HStack>
+        </HStack>
+      </SimpleGrid>
     </nav>
   );
 };
