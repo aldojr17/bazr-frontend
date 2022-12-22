@@ -7,7 +7,7 @@ const Layout = ({ children }: ILayoutProps) => {
   return (
     <>
       <Navbar />
-      <div className="container">{children}</div>
+      {children}
       <Footer />
     </>
   );
