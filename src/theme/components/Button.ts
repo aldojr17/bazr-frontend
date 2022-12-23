@@ -3,7 +3,7 @@ import { defineStyleConfig, StyleFunctionProps } from "@chakra-ui/react";
 const Button = defineStyleConfig({
   // 1. We can update the base styles
   baseStyle: {
-    fontWeight: "semibold", // Normally, it is "semibold"
+    fontWeight: "light", // Normally, it is "semibold"
     borderRadius: "full",
   },
   // 2. We can add a new button size or extend existing

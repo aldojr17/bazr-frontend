@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import instance from "../../api/config/axios";
-import { ILoginPayload } from "../../interfaces/Auth";
+import { ILoginRequestPayload } from "../../interfaces/Auth";
 import { IFilterPayload } from "../../interfaces/Filter";
 import { IChangeProfilePayload, IUserPayload } from "../../interfaces/User";
 import { UserActions, UserActionTypes } from "./types";
@@ -12,7 +12,7 @@ export const setUser = (payload: IUserPayload): UserActions => {
   };
 };
 
-export const login = (payload: ILoginPayload) => {
+export const login = (payload: ILoginRequestPayload) => {
   return async (dispatch: Dispatch<UserActions>) => {
     await instance
       .post("/login", payload)

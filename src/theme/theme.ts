@@ -2,6 +2,10 @@ import { extendTheme } from "@chakra-ui/react";
 import { Button } from "./components";
 
 export const customTheme = extendTheme({
+  fonts: {
+    heading: `'Montserrat', sans-serif`,
+    body: `'Poppins', sans-serif`,
+  },
   colors: {
     primary: "#89D5C5",
     primaryLighten: "#A4DFD2",

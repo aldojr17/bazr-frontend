@@ -1,15 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+import { ChakraProvider } from "@chakra-ui/react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
-import store, { persistor } from "./redux";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import { ChakraProvider } from "@chakra-ui/react";
+import App from "./App";
+import "./index.css";
+import store, { persistor } from "./redux";
+import reportWebVitals from "./reportWebVitals";
 import { customTheme } from "./theme/theme";
 
 const root = ReactDOM.createRoot(
@@ -18,13 +19,15 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ChakraProvider theme={customTheme}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </PersistGate>
-      </Provider>
+      <GoogleOAuthProvider clientId="193045182620-6i9jf7k31ghtl4dkvqbvsni03r0dm7mm.apps.googleusercontent.com">
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </PersistGate>
+        </Provider>
+      </GoogleOAuthProvider>
     </ChakraProvider>
   </React.StrictMode>
 );
