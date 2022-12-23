@@ -1,12 +1,12 @@
-import React from "react";
+import { parseCookies } from "nookies";
 import { Navigate, Outlet } from "react-router-dom";
 import Layout from "../layout/Layout";
 
 const ProtectedRoutes = () => {
-  const isLogged = localStorage.getItem("sessionId");
+  const isLoggedIn = parseCookies()?.auth;
 
-  if (isLogged !== null) {
-    return <Navigate to="/adsada" />;
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
   }
 
   return (

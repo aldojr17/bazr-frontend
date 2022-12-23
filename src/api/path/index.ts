@@ -2,6 +2,8 @@ export const API_PATH = {
   auth: {
     REGISTER: "/register",
     LOGIN: "/login",
+    LOGIN_GOOGLE: "/login-google",
+    REFRESH: "/refresh",
     CHECK_EMAIL: "/check-email",
   },
   user: {

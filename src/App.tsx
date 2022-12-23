@@ -16,7 +16,7 @@ function App() {
         </div>
       }
     >
-      <RouteList authenticated={true} />
+      <RouteList />
     </Suspense>
   );
 }

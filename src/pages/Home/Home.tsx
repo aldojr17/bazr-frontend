@@ -9,7 +9,7 @@ import {
   Image,
   SimpleGrid,
   Text,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import categoryService from "../../api/service/category";
