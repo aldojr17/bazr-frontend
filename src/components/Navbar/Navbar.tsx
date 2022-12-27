@@ -1,4 +1,4 @@
-import { Button, Center, Flex, HStack, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, HStack, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import Icon from "../../assets/icons";
 
@@ -8,7 +8,7 @@ interface NavbarProps {
 
 const Navbar = ({ onOpen }: NavbarProps) => {
   return (
-    <nav className="navbar navbar-expand-lg border-bottom">
+    <Box borderBottom={"1px solid #dee2e6"} py={2}>
       <SimpleGrid
         columns={{
           base: 2,
@@ -45,17 +45,14 @@ const Navbar = ({ onOpen }: NavbarProps) => {
           <Button variant={"ghost"} onClick={onOpen}>
             <Icon.Search />
           </Button>
-          <button
-            className="navbar-toggler"
-            type="button"
+          <IconButton
             data-bs-toggle="collapse"
             data-bs-target="#navbar"
-            aria-controls="navbar"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+            aria-label="hamburger"
+            variant={"outline"}
+            borderRadius={"lg"}
+            icon={<Icon.Hamburger />}
+          />
         </HStack>
         <Center
           className={"d-flex"}
@@ -101,7 +98,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
           </HStack>
         </HStack>
       </SimpleGrid>
-    </nav>
+    </Box>
   );
 };
 

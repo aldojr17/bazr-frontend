@@ -2,8 +2,9 @@ import { AspectRatio, Box, Flex, HStack, Image, Stack, Text } from "@chakra-ui/r
 import Icon from "../../assets/icons";
 import React from "react";
 import { formatCurrency } from "../../util/util";
+import { IProductPayload } from "../../interfaces/Product";
 
-const ProductCard = () => {
+const ProductCard = ({ ...props }: IProductPayload) => {
   return (
     <Box>
       <AspectRatio
@@ -20,15 +21,15 @@ const ProductCard = () => {
       </AspectRatio>
       <Stack gap={1}>
         <Text marginTop={5} marginBottom={1} noOfLines={1}>
-          Smartphones
+          {props.name}
         </Text>
         <Flex gap={2}>
           <Icon.Star fill={"orange"} />
-          4.0
+          {props.total_review !== 0 ? (props.total_rating / props.total_review).toFixed(2) : 0}
         </Flex>
         <HStack justifyContent={"space-between"}>
-          <Text>Rp {formatCurrency(30000)}</Text>
-          <Text>45 Sold</Text>
+          <Text>Rp {formatCurrency(props.lowest_price)}</Text>
+          <Text>{props.unit_sold} Sold</Text>
         </HStack>
       </Stack>
     </Box>

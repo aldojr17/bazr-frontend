@@ -12,4 +12,7 @@ export const API_PATH = {
   category: {
     GET_ALL_CATEGORIES: "/categories",
   },
+  product: {
+    GET_ALL_PRODUCTS: "/products",
+  },
 };
