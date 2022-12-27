@@ -50,7 +50,7 @@ export const handleHttpResponse = (status: string, message?: string) => {
 instance.interceptors.response.use(
   (res) => {
     if (res.data.data?.access_token) {
-      setCookie(null, "auth", `Bearer ${res.data.data.access_token}`)
+      setCookie(null, "auth", `Bearer ${res.data.data.access_token}`);
       localStorage.setItem("refresh", res.data.data.refresh_token);
     }
     return res;
@@ -58,18 +58,19 @@ instance.interceptors.response.use(
   (err) => {
     const error = err && err.response && err.response.data;
     if (error && error.error === "unauthorized") {
-      destroyCookie(null, 'auth');
+      destroyCookie(null, "auth");
 
       // To be checked further
       if (localStorage.getItem("refresh")) {
-        instance.post(API_PATH.auth.REFRESH, { refresh_token: localStorage.getItem("refresh") })
-          .then((response) => setCookie(null, 'auth', response.data.access_token))
-          .catch((error) => localStorage.clear())
-        return
+        instance
+          .post(API_PATH.auth.REFRESH, { refresh_token: localStorage.getItem("refresh") })
+          .then((response) => setCookie(null, "auth", response.data.access_token))
+          .catch((error) => localStorage.clear());
+        return;
       }
 
       window.location.replace("/login");
-      throw "Invalid credential";
+      throw Promise.reject("Invalid credential");
     } else {
       if (err.code === "ERR_NETWORK") {
         return Promise.reject(handleHttpResponse("0"));

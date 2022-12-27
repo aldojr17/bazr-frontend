@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { ProtectedRoutes } from "../pages";
+import { LayoutRoutes, ProtectedRoutes } from "../pages";
 import UnprotectedRoutes from "../pages/UnprotectedRoutes";
 
 const Home = React.lazy(() => import("../pages/Home/Home"));
@@ -15,10 +15,12 @@ const RouteList = () => {
       <Route element={<UnprotectedRoutes />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route element={<LayoutRoutes />}>
+          <Route path="/" element={<Home />} errorElement={<NotFound />} />
+          <Route path="/search" element={<Search />} />
+        </Route>
       </Route>
-      <Route element={<ProtectedRoutes />}>
-        <Route path="/" element={<Home />} errorElement={<NotFound />} />
-      </Route>
+      <Route element={<ProtectedRoutes />}></Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
