@@ -12,26 +12,22 @@ import {
   VStack
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import categoryService from "../../api/service/category";
 import Icon from "../../assets/icons";
 import CategoryCard from "../../components/Card/CategoryCard";
 import ProductCard from "../../components/Card/ProductCard";
-import { IPrimaryCategoryPayload } from "../../interfaces/Category";
+import useCategory from "../../hooks/useCategory";
+import useProduct from "../../hooks/useProduct";
 import { CarouselItemIndex, CategoryWrapper } from "./style";
 
 const Home = () => {
   const [activeIndex, setActiveIndex] = useState<number>(1);
-  const [categories, setCategories] = useState<IPrimaryCategoryPayload[]>([]);
-
-  const fetchCategories = async () => {
-    const response = await categoryService.fetchAllCategory();
-    if (response.is_success) {
-      setCategories(response.data);
-    }
-  };
+  const { categories } = useCategory();
+  const { products, getProducts } = useProduct();
 
   useEffect(() => {
-    fetchCategories();
+    getProducts({
+      limit: 18,
+    });
   }, []);
 
   return (
@@ -137,30 +133,13 @@ const Home = () => {
           }}
           gap={6}
         >
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
-          <GridItem>
-            <ProductCard />
-          </GridItem>
+          {products.data.length !== 0
+            ? products.data.map((product) => (
+                <GridItem key={product.id}>
+                  <ProductCard {...product} />
+                </GridItem>
+              ))
+            : ""}
         </Grid>
         <Center className="py-5">
           <Button borderRadius={"base"}>See All Products</Button>

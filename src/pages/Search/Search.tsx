@@ -6,12 +6,13 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Center,
   Checkbox,
-  CheckboxGroup,
   Grid,
   GridItem,
   Heading,
   HStack,
+  IconButton,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -26,97 +27,319 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Skeleton,
   Text,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import categoryService from "../../api/service/category";
 import Icon from "../../assets/icons";
-import { IPrimaryCategoryPayload } from "../../interfaces/Category";
-import {
-  ISearchFilterPayload,
-  ISearchParamsPayload,
-  SearchFilterState,
-  SearchParamsState,
-} from "../../interfaces/Filter";
+import { ISearchFilterPayload, ISearchParamsPayload, SearchParamsState } from "../../interfaces/Filter";
 import ProductCard from "../../components/Card/ProductCard";
+import Pagination from "../../components/Pagination/Pagination";
+import useCategory from "../../hooks/useCategory";
+import { IProductPaginationPayload } from "../../interfaces/Product";
+import productService from "../../api/service/product";
 
 const Search = () => {
   const [search, setSearch] = useSearchParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [categories, setCategories] = useState<IPrimaryCategoryPayload[]>([]);
-  const [filter, setFilter] = useState<ISearchFilterPayload>(SearchFilterState);
-  const [params, setParams] = useState<ISearchParamsPayload>(SearchParamsState);
-  const [sortBy, setSortBy] = useState<String>("Recommended");
+  const { categories } = useCategory();
 
-  const fetchCategories = async () => {
-    const response = await categoryService.fetchAllCategory();
+  const [params, setParams] = useState<ISearchParamsPayload>({
+    q: search.get("q") !== null ? String(search.get("q")) : "",
+    pmin: search.get("pmin") !== null ? String(search.get("pmin")) : "",
+    pmax: search.get("pmax") !== null ? String(search.get("pmax")) : "",
+    c: search.get("c") !== null ? String(search.get("c")) : "",
+    cl: search.get("cl") !== null ? String(search.get("cl")) : "",
+    rt: search.get("rt") !== null ? String(search.get("rt")) : "",
+    city: search.get("city") !== null ? String(search.get("city")) : "",
+  });
+  const [sortBy, setSortBy] = useState<string>("view_count");
+  const [sort, setSort] = useState<string>("desc");
+  const [products, setProducts] = useState<IProductPaginationPayload>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [display, setDisplay] = useState<string>("none");
+  const [page, setPage] = useState<number>(1);
+
+  const getProducts = async (filter?: ISearchFilterPayload) => {
+    setIsLoading(true);
+
+    const response = await productService.fetchAllProducts(filter);
+
     if (response.is_success) {
-      setCategories(response.data);
+      setProducts(response.data);
     }
+
+    setIsLoading(false);
   };
 
   const handleChangeLocation = (id: number, isChecked: boolean) => {
+    let newParams: Record<string, string> = {
+      q: search.get("q") !== null ? String(search.get("q")) : "",
+    };
+
     if (!isChecked) {
-      setFilter({
-        ...filter,
-        location: filter.location?.filter((val) => val !== id).map((val) => val),
+      setParams({
+        ...params,
+        city: params.city
+          ?.split(",")
+          .filter((val) => parseInt(val) !== id)
+          .join(","),
+      });
+      newParams["city"] = params.city
+        ?.split(",")
+        .filter((val) => parseInt(val) !== id)
+        .join(",")!;
+    } else {
+      setParams({
+        ...params,
+        city: params.city?.split(",").length !== 0 ? [...params.city?.split(",")!, id].join(",") : `${id}`,
+      });
+      newParams["city"] = params.city?.split(",").length !== 0 ? [...params.city?.split(",")!, id].join(",") : `${id}`;
+    }
+
+    if (newParams["city"].at(0) === ",") {
+      newParams["city"] = newParams["city"].substring(1);
+    }
+
+    if (newParams["city"] === "") {
+      newParams = {
+        q: search.get("q") !== null ? String(search.get("q")) : "",
+      };
+    }
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key && value !== "" && key !== "city") {
+        newParams[key] = value;
+      }
+    });
+
+    setSearch(newParams, { replace: true });
+  };
+
+  const handleChangeLocationModal = (id: number, isChecked: boolean) => {
+    if (!isChecked) {
+      setParams({
+        ...params,
+        city: params.city
+          ?.split(",")
+          .filter((val) => parseInt(val) !== id)
+          .join(","),
       });
     } else {
-      setFilter({
-        ...filter,
-        location: filter.location ? [...filter.location, id] : [id],
+      setParams({
+        ...params,
+        city: params.city?.split(",").length !== 0 ? [...params.city?.split(",")!, id].join(",") : `${id}`,
       });
     }
   };
 
-  const handleChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.currentTarget.value === "") {
-      setFilter({
-        ...filter,
-        [event.currentTarget.name]: event.currentTarget.value,
-      });
-    } else {
-      setFilter({
-        ...filter,
-        [event.currentTarget.name]: parseInt(event.currentTarget.value),
-      });
-    }
+  const handleApplyPriceFilter = (event: FormEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    let newParams: Record<string, string> = {
+      q: search.get("q") !== null ? String(search.get("q")) : "",
+    };
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key && value !== "") {
+        newParams[key] = value;
+      }
+    });
+
+    setSearch(newParams, { replace: true });
+  };
+
+  const handleApplyPriceFilterModal = (event: FormEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    let newParams: Record<string, string> = {
+      q: search.get("q") !== null ? String(search.get("q")) : "",
+    };
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key && value !== "" && key !== "q") {
+        if (value.at(0) === ",") {
+          newParams[key] = value.substring(1);
+        } else {
+          newParams[key] = value;
+        }
+      }
+    });
+
+    setSearch(newParams, { replace: true });
+  };
+
+  const handlePriceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setParams({
+      ...params,
+      [event.currentTarget.name]: event.currentTarget.value !== "" ? event.currentTarget.value : "",
+    });
   };
 
   const handleClearFilter = () => {
-    setFilter(SearchFilterState);
-
-    setSearch({ q: params.name }, { replace: true });
+    setSearch({ q: String(search.get("q")) }, { replace: true });
+    setParams(SearchParamsState);
+    setSortBy("view_count");
+    setSort("desc");
+    setDisplay("none");
   };
 
-  const handleSelectCategory = (id: number) => {
-    let searchParams = {
-      q: params.name,
+  const handleSelectCategory = (id: number, level: number) => {
+    setParams({
+      ...params,
       c: String(id),
+      cl: String(level),
+    });
+
+    let newParams: Record<string, string> = {
+      q: search.get("q") !== null ? String(search.get("q")) : "",
+      c: String(id),
+      cl: String(level),
     };
 
-    setSearch(searchParams, { replace: true });
+    Object.entries(params).forEach(([key, value]) => {
+      if (key && value !== "" && key !== "c" && key !== "cl") {
+        newParams[key] = value;
+      }
+    });
+
+    setSearch(newParams, { replace: true });
+  };
+
+  const handleSelectCategoryModal = (id: number, level: number) => {
+    setParams({
+      ...params,
+      c: String(id),
+      cl: String(level),
+    });
   };
 
   const handleChangeSortBy = (value: string) => {
     setSortBy(value);
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const handleChangeRating = (event: ChangeEvent<HTMLInputElement>) => {
+    let newParams: Record<string, string> = {
+      q: search.get("q") !== null ? String(search.get("q")) : "",
+    };
+
+    if (event.currentTarget.checked) {
+      setParams({
+        ...params,
+        rt: "4",
+      });
+
+      newParams["rt"] = "4";
+    } else {
+      setParams({ ...params, rt: "" });
+
+      newParams = {
+        q: search.get("q") !== null ? String(search.get("q")) : "",
+      };
+    }
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key && value !== "" && key !== "rt") {
+        newParams[key] = value;
+      }
+    });
+
+    setSearch(newParams, { replace: true });
+  };
+
+  const handleChangeRatingModal = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.checked) {
+      setParams({
+        ...params,
+        rt: "4",
+      });
+    } else {
+      setParams({ ...params, rt: "" });
+    }
+  };
+
+  const handleChangeSort = (value: string) => {
+    setSort(value);
+  };
+
+  const showHideClearFilterButton = () => {
+    if (
+      params.c !== "" ||
+      params.city !== "" ||
+      params.cl !== "" ||
+      params.pmax !== "" ||
+      params.pmin !== "" ||
+      params.rt !== ""
+    ) {
+      setDisplay("flex");
+      return;
+    }
+
+    setDisplay("none");
+  };
+
+  const handleFilter = () => {
+    let addOnFilter: Record<string, string | number> = {};
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key && value !== "" && key !== "q") {
+        switch (key) {
+          case "pmin":
+            addOnFilter["min_price"] = value;
+            break;
+          case "pmax":
+            addOnFilter["max_price"] = value;
+            break;
+          case "c":
+            addOnFilter["category"] = value;
+            break;
+          case "cl":
+            addOnFilter["category_level"] = value;
+            break;
+          case "rt":
+            addOnFilter["min_rating"] = value;
+            break;
+          default:
+            if (value.at(0) === ",") {
+              addOnFilter[key] = value.substring(1);
+            } else {
+              addOnFilter[key] = value;
+            }
+        }
+      }
+    });
+
+    getProducts({
+      name: String(search.get("q")),
+      limit: 30,
+      sortBy,
+      sort,
+      page,
+      ...addOnFilter,
+    });
+  };
 
   useEffect(() => {
     setParams({
-      name: search.get("q") !== null ? String(search.get("q")) : "",
-      category: search.get("c") !== null ? String(search.get("c")) : "",
+      q: search.get("q") !== null ? String(search.get("q")) : "",
+      pmin: search.get("pmin") !== null ? String(search.get("pmin")) : "",
+      pmax: search.get("pmax") !== null ? String(search.get("pmax")) : "",
+      c: search.get("c") !== null ? String(search.get("c")) : "",
+      cl: search.get("cl") !== null ? String(search.get("cl")) : "",
+      rt: search.get("rt") !== null ? String(search.get("rt")) : "",
       city: search.get("city") !== null ? String(search.get("city")) : "",
     });
-  }, [search]);
+    handleFilter();
+    showHideClearFilterButton();
+  }, [search, sortBy, sort, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, sortBy, sort]);
 
   return (
     <>
@@ -151,7 +374,7 @@ const Search = () => {
             }}
             fontWeight={"bold"}
           >
-            {'"' + params.name + '"'}
+            {'"' + search.get("q") + '"'}
           </Text>
         </HStack>
         <Grid
@@ -202,9 +425,9 @@ const Search = () => {
                       _focusVisible={{
                         outline: "none",
                       }}
-                      name={"minPrice"}
-                      value={filter.minPrice === 0 ? "" : filter.minPrice}
-                      onChange={handleChangeNumber}
+                      name={"pmin"}
+                      value={params.pmin}
+                      onChange={handlePriceChange}
                     />
                   </InputGroup>
                   <InputGroup
@@ -220,9 +443,9 @@ const Search = () => {
                       _focusVisible={{
                         outline: "none",
                       }}
-                      name={"maxPrice"}
-                      value={filter.maxPrice === 0 ? "" : filter.maxPrice}
-                      onChange={handleChangeNumber}
+                      name={"pmax"}
+                      value={params.pmax}
+                      onChange={handlePriceChange}
                     />
                   </InputGroup>
                   <Button
@@ -233,6 +456,7 @@ const Search = () => {
                       xl: "md",
                     }}
                     width={"100%"}
+                    onClick={handleApplyPriceFilter}
                   >
                     Apply filter
                   </Button>
@@ -268,12 +492,15 @@ const Search = () => {
                                       as="span"
                                       noOfLines={1}
                                       textAlign={"start"}
-                                      onClick={() => handleSelectCategory(category.id)}
+                                      onClick={() => handleSelectCategory(category.id, 1)}
                                       role={"button"}
                                       fontSize={{
                                         lg: "sm",
                                         xl: "md",
                                       }}
+                                      fontWeight={
+                                        params.c! === String(category.id) && params.cl === "1" ? "bold" : "normal"
+                                      }
                                     >
                                       {category.name}
                                     </Text>
@@ -291,12 +518,17 @@ const Search = () => {
                                                   as="span"
                                                   noOfLines={1}
                                                   textAlign={"start"}
-                                                  onClick={() => handleSelectCategory(secondary.id)}
+                                                  onClick={() => handleSelectCategory(secondary.id, 2)}
                                                   role={"button"}
                                                   fontSize={{
                                                     lg: "sm",
                                                     xl: "md",
                                                   }}
+                                                  fontWeight={
+                                                    params.c! === String(secondary.id) && params.cl === "2"
+                                                      ? "bold"
+                                                      : "normal"
+                                                  }
                                                 >
                                                   {secondary.name}
                                                 </Text>
@@ -315,12 +547,17 @@ const Search = () => {
                                                             xl: 1,
                                                           }}
                                                           textAlign={"start"}
-                                                          onClick={() => handleSelectCategory(tertiary.id)}
+                                                          onClick={() => handleSelectCategory(tertiary.id, 3)}
                                                           role={"button"}
                                                           fontSize={{
                                                             lg: "sm",
                                                             xl: "md",
                                                           }}
+                                                          fontWeight={
+                                                            params.c! === String(tertiary.id) && params.cl === "3"
+                                                              ? "bold"
+                                                              : "normal"
+                                                          }
                                                         >
                                                           {tertiary.name}
                                                         </Text>
@@ -360,7 +597,7 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        <Checkbox>
+                        <Checkbox onChange={handleChangeRating} isChecked={params.rt !== ""}>
                           <Icon.Star mt={"-.3em"} fill={"orange"} width={"1.2em"} marginEnd={2} />
                           <Text as={"span"}>4 &amp; Up</Text>
                         </Checkbox>
@@ -387,25 +624,41 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        <CheckboxGroup>
-                          <VStack alignItems={"start"}>
-                            <Checkbox value="1" onChange={(e) => handleChangeLocation(1, e.target.checked)}>
-                              <Text as={"span"} noOfLines={1}>
-                                DKI Jakarta
-                              </Text>
-                            </Checkbox>
-                            <Checkbox value="2" onChange={(e) => handleChangeLocation(2, e.target.checked)}>
-                              <Text as={"span"} noOfLines={1}>
-                                Bali
-                              </Text>
-                            </Checkbox>
-                            <Checkbox value="3" onChange={(e) => handleChangeLocation(3, e.target.checked)}>
-                              <Text as={"span"} noOfLines={1}>
-                                Jawa Barat
-                              </Text>
-                            </Checkbox>
-                          </VStack>
-                        </CheckboxGroup>
+                        <VStack alignItems={"start"}>
+                          <Checkbox
+                            value="1"
+                            onChange={(e) => {
+                              handleChangeLocation(1, e.currentTarget.checked);
+                            }}
+                            isChecked={params.city?.includes("1")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              DKI Jakarta
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            value="2"
+                            onChange={(e) => {
+                              handleChangeLocation(2, e.currentTarget.checked);
+                            }}
+                            isChecked={params.city?.includes("2")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Bali
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            value="3"
+                            onChange={(e) => {
+                              handleChangeLocation(3, e.currentTarget.checked);
+                            }}
+                            isChecked={params.city?.includes("3")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Jawa Barat
+                            </Text>
+                          </Checkbox>
+                        </VStack>
                       </AccordionPanel>
                     </>
                   )}
@@ -422,6 +675,14 @@ const Search = () => {
               xl: 4,
             }}
             p={4}
+            maxWidth={{
+              base: "18rem",
+              sm: "100%",
+            }}
+            justifySelf={{
+              base: "center",
+              sm: "auto",
+            }}
           >
             <HStack
               justifyContent={"space-between"}
@@ -439,12 +700,13 @@ const Search = () => {
                   Sort by:
                 </Text>
                 <Button
-                  fontWeight={"bold"}
+                  fontWeight={sortBy === "view_count" ? "bold" : "normal"}
                   variant={"unstyled"}
                   size={{
                     lg: "sm",
                     xl: "md",
                   }}
+                  onClick={() => handleChangeSortBy("view_count")}
                 >
                   <Text
                     fontSize={{
@@ -456,12 +718,13 @@ const Search = () => {
                   </Text>
                 </Button>
                 <Button
-                  fontWeight={"normal"}
+                  fontWeight={sortBy === "date" ? "bold" : "normal"}
                   variant={"unstyled"}
                   size={{
                     lg: "xs",
                     xl: "md",
                   }}
+                  onClick={() => handleChangeSortBy("date")}
                 >
                   <Text
                     fontSize={{
@@ -473,12 +736,13 @@ const Search = () => {
                   </Text>
                 </Button>
                 <Button
-                  fontWeight={"normal"}
+                  fontWeight={sortBy === "unit_sold" ? "bold" : "normal"}
                   variant={"unstyled"}
                   size={{
                     lg: "xs",
                     xl: "md",
                   }}
+                  onClick={() => handleChangeSortBy("unit_sold")}
                 >
                   <Text
                     fontSize={{
@@ -490,12 +754,13 @@ const Search = () => {
                   </Text>
                 </Button>
                 <Button
-                  fontWeight={"normal"}
+                  fontWeight={sortBy === "price" ? "bold" : "normal"}
                   variant={"unstyled"}
                   size={{
                     lg: "xs",
                     xl: "md",
                   }}
+                  onClick={() => handleChangeSortBy("price")}
                 >
                   <Text
                     fontSize={{
@@ -512,6 +777,9 @@ const Search = () => {
                     lg: "xs",
                     xl: "md",
                   }}
+                  onClick={() => {
+                    sort === "desc" ? handleChangeSort("asc") : handleChangeSort("desc");
+                  }}
                 >
                   <Icon.Sort
                     width={{
@@ -522,7 +790,7 @@ const Search = () => {
                       lg: "1.2rem",
                       xl: "1.5rem",
                     }}
-                    selected={"desc"}
+                    selected={sort}
                   />
                 </Button>
               </HStack>
@@ -534,7 +802,7 @@ const Search = () => {
                   xl: "md",
                 }}
                 onClick={handleClearFilter}
-                display={{ base: "none", sm: "none", md: "none", lg: "flex", xl: "flex" }}
+                display={{ base: "none", sm: "none", md: "none", lg: display, xl: display }}
               >
                 <Text
                   fontSize={{
@@ -555,21 +823,38 @@ const Search = () => {
               >
                 <HStack>
                   <Menu isLazy>
-                    <MenuButton>{sortBy}</MenuButton>
+                    <MenuButton
+                      fontSize={{
+                        base: "sm",
+                        sm: "sm",
+                        md: "md",
+                      }}
+                    >
+                      {sortBy === "view_count"
+                        ? "Recommended"
+                        : sortBy === "date"
+                        ? "Newest"
+                        : sortBy === "unit_sold"
+                        ? "Most buy"
+                        : "Price"}
+                    </MenuButton>
                     <MenuList>
-                      <MenuItem onClick={() => handleChangeSortBy("Recommended")}>Recommended</MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("Newest")}>Newest</MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("Most buy")}>Most buy</MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("Price")}>Price</MenuItem>
+                      <MenuItem onClick={() => handleChangeSortBy("view_count")}>Recommended</MenuItem>
+                      <MenuItem onClick={() => handleChangeSortBy("date")}>Newest</MenuItem>
+                      <MenuItem onClick={() => handleChangeSortBy("unit_sold")}>Most buy</MenuItem>
+                      <MenuItem onClick={() => handleChangeSortBy("price")}>Price</MenuItem>
                     </MenuList>
                   </Menu>
 
                   <Button
                     variant={"unstyled"}
                     size={{
-                      base: "lg",
-                      sm: "xs",
+                      base: "xs",
+                      sm: "sm",
                       md: "md",
+                    }}
+                    onClick={() => {
+                      sort === "desc" ? handleChangeSort("asc") : handleChangeSort("desc");
                     }}
                   >
                     <Icon.Sort
@@ -583,13 +868,43 @@ const Search = () => {
                         sm: "1.2rem",
                         md: "1.5rem",
                       }}
-                      selected={"desc"}
+                      selected={sort}
                     />
                   </Button>
                 </HStack>
-                <Button fontWeight={"normal"} variant={"unstyled"} onClick={onOpen}>
-                  Filter
-                </Button>
+                <HStack>
+                  <Button
+                    textDecoration={display === "flex" ? "underline" : ""}
+                    fontWeight={"normal"}
+                    variant={"unstyled"}
+                    onClick={onOpen}
+                    size={{
+                      base: "sm",
+                      sm: "sm",
+                      md: "md",
+                    }}
+                  >
+                    Filter
+                  </Button>
+                  <IconButton
+                    size={"sm"}
+                    aria-label="close"
+                    variant={"unstyled"}
+                    icon={<Icon.Close />}
+                    onClick={handleClearFilter}
+                    display={display}
+                    width={{
+                      base: "1em",
+                      sm: "1.3em",
+                      md: "1.3em",
+                    }}
+                    height={{
+                      base: "1em",
+                      sm: "1.3em",
+                      md: "1.3em",
+                    }}
+                  />
+                </HStack>
               </HStack>
             </HStack>
 
@@ -609,32 +924,43 @@ const Search = () => {
                 }}
                 gap={6}
               >
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
-                <GridItem>
-                  <ProductCard />
-                </GridItem>
+                {products?.data.length !== 0 ? (
+                  products?.data.map((product) => (
+                    <Skeleton key={product.id} isLoaded={!isLoading}>
+                      <GridItem>
+                        <ProductCard {...product} />
+                      </GridItem>
+                    </Skeleton>
+                  ))
+                ) : (
+                  <GridItem
+                    colSpan={{
+                      base: 2,
+                      sm: 2,
+                      md: 3,
+                      lg: 4,
+                      xl: 4,
+                    }}
+                  >
+                    <Center>
+                      <Text>No products available.</Text>
+                    </Center>
+                  </GridItem>
+                )}
               </Grid>
             </Box>
+
+            {products?.data.length !== 0 ? (
+              <Pagination
+                data={{
+                  current_page: products?.current_page ? products.current_page : 0,
+                  total_page: products?.total_page! ? products.total_page : 0,
+                }}
+                setPage={setPage}
+              />
+            ) : (
+              ""
+            )}
           </GridItem>
         </Grid>
       </Box>
@@ -684,9 +1010,9 @@ const Search = () => {
                       _focusVisible={{
                         outline: "none",
                       }}
-                      name={"minPrice"}
-                      value={filter.minPrice === 0 ? "" : filter.minPrice}
-                      onChange={handleChangeNumber}
+                      name={"pmin"}
+                      value={params.pmin}
+                      onChange={handlePriceChange}
                     />
                   </InputGroup>
                   <InputGroup
@@ -703,9 +1029,9 @@ const Search = () => {
                       _focusVisible={{
                         outline: "none",
                       }}
-                      name={"maxPrice"}
-                      value={filter.maxPrice === 0 ? "" : filter.maxPrice}
-                      onChange={handleChangeNumber}
+                      name={"pmax"}
+                      value={params.pmax}
+                      onChange={handlePriceChange}
                     />
                   </InputGroup>
                 </VStack>
@@ -741,13 +1067,18 @@ const Search = () => {
                                       as="span"
                                       noOfLines={1}
                                       textAlign={"start"}
-                                      onClick={() => handleSelectCategory(category.id)}
+                                      onClick={() => {
+                                        handleSelectCategoryModal(category.id, 1);
+                                      }}
                                       role={"button"}
                                       fontSize={{
                                         base: "sm",
                                         sm: "sm",
                                         md: "md",
                                       }}
+                                      fontWeight={
+                                        params.c! === String(category.id) && params.cl === "1" ? "bold" : "normal"
+                                      }
                                     >
                                       {category.name}
                                     </Text>
@@ -765,13 +1096,20 @@ const Search = () => {
                                                   as="span"
                                                   noOfLines={1}
                                                   textAlign={"start"}
-                                                  onClick={() => handleSelectCategory(secondary.id)}
+                                                  onClick={() => {
+                                                    handleSelectCategoryModal(secondary.id, 2);
+                                                  }}
                                                   role={"button"}
                                                   fontSize={{
                                                     base: "sm",
                                                     sm: "sm",
                                                     md: "md",
                                                   }}
+                                                  fontWeight={
+                                                    params.c! === String(secondary.id) && params.cl === "2"
+                                                      ? "bold"
+                                                      : "normal"
+                                                  }
                                                 >
                                                   {secondary.name}
                                                 </Text>
@@ -790,13 +1128,20 @@ const Search = () => {
                                                             xl: 1,
                                                           }}
                                                           textAlign={"start"}
-                                                          onClick={() => handleSelectCategory(tertiary.id)}
+                                                          onClick={() => {
+                                                            handleSelectCategoryModal(tertiary.id, 3);
+                                                          }}
                                                           role={"button"}
                                                           fontSize={{
                                                             base: "sm",
                                                             sm: "sm",
                                                             md: "md",
                                                           }}
+                                                          fontWeight={
+                                                            params.c! === String(tertiary.id) && params.cl === "3"
+                                                              ? "bold"
+                                                              : "normal"
+                                                          }
                                                         >
                                                           {tertiary.name}
                                                         </Text>
@@ -836,7 +1181,12 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        <Checkbox>
+                        <Checkbox
+                          onChange={(e) => {
+                            handleChangeRatingModal(e);
+                          }}
+                          isChecked={params.rt !== ""}
+                        >
                           <Icon.Star mt={"-.3em"} fill={"orange"} width={"1.2em"} marginEnd={2} />
                           <Text as={"span"}>4 &amp; Up</Text>
                         </Checkbox>
@@ -863,25 +1213,41 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        <CheckboxGroup>
-                          <VStack alignItems={"start"}>
-                            <Checkbox value="1" onChange={(e) => handleChangeLocation(1, e.target.checked)}>
-                              <Text as={"span"} noOfLines={1}>
-                                DKI Jakarta
-                              </Text>
-                            </Checkbox>
-                            <Checkbox value="2" onChange={(e) => handleChangeLocation(2, e.target.checked)}>
-                              <Text as={"span"} noOfLines={1}>
-                                Bali
-                              </Text>
-                            </Checkbox>
-                            <Checkbox value="3" onChange={(e) => handleChangeLocation(3, e.target.checked)}>
-                              <Text as={"span"} noOfLines={1}>
-                                Jawa Barat
-                              </Text>
-                            </Checkbox>
-                          </VStack>
-                        </CheckboxGroup>
+                        <VStack alignItems={"start"}>
+                          <Checkbox
+                            value="1"
+                            onChange={(e) => {
+                              handleChangeLocationModal(1, e.currentTarget.checked);
+                            }}
+                            isChecked={params.city?.includes("1")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              DKI Jakarta
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            value="2"
+                            onChange={(e) => {
+                              handleChangeLocationModal(2, e.currentTarget.checked);
+                            }}
+                            isChecked={params.city?.includes("2")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Bali
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            value="3"
+                            onChange={(e) => {
+                              handleChangeLocationModal(3, e.currentTarget.checked);
+                            }}
+                            isChecked={params.city?.includes("3")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Jawa Barat
+                            </Text>
+                          </Checkbox>
+                        </VStack>
                       </AccordionPanel>
                     </>
                   )}
@@ -896,7 +1262,10 @@ const Search = () => {
                 sm: "sm",
                 md: "md",
               }}
-              onClick={onClose}
+              onClick={(e) => {
+                handleApplyPriceFilterModal(e);
+                onClose();
+              }}
               variant={"outline"}
               borderRadius={"md"}
             >
