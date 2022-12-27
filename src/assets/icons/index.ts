@@ -6,6 +6,7 @@ import Minus from "./Minus";
 import Plus from "./Plus";
 import Profile from "./Profile";
 import RightArrow from "./RightArrow";
+import Sort from "./Sort";
 import Search from "./Search";
 import Star from "./Star";
 import Trash from "./Trash";
@@ -19,6 +20,7 @@ const Icon = {
   Plus,
   Profile,
   RightArrow,
+  Sort,
   Search,
   Star,
   Trash,
