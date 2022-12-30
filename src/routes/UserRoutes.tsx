@@ -1,15 +1,14 @@
-import { useSelector } from "react-redux";
+import { parseCookies } from "nookies";
 import { Navigate, Outlet } from "react-router-dom";
-import { RootState } from "../redux";
 
 const UserRoutes = () => {
-// const { user } = useSelector((state: RootState) => state.userReducer);
+  const isLogged = parseCookies().auth;
 
-// if (user.role === 0) {
-// return <Navigate to="/admin" />;
-//   }
+  if (!isLogged) {
+    return <Navigate to="/login" />;
+  }
 
-return <Outlet />;
+  return <Outlet />;
 };
 
 export default UserRoutes;

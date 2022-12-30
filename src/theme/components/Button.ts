@@ -106,6 +106,12 @@ const Button = defineStyleConfig({
       borderRadius: "lg",
       color: "teal.400",
     },
+    basicOutline: {
+      border: "1px solid",
+      borderColor: "primary",
+      borderRadius: "lg",
+      color: "teal.400",
+    },
   },
   // 6. We can overwrite defaultProps
   defaultProps: {
