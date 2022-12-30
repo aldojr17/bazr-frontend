@@ -1,11 +1,23 @@
 import { ISearchFilterPayload } from "../../interfaces/Filter";
-import { IProductsResponsePayload } from "../../interfaces/Product";
+import { IProductResponsePayload, IProductsResponsePayload } from "../../interfaces/Product";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
 
+const fetchProduct = async (id: number): Promise<IProductResponsePayload> => {
+  try {
+    const response = await instance.get<IProductResponsePayload>(
+      API_PATH.product.PRODUCTS + "/" + id
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IProductResponsePayload;
+  }
+}
+
 const fetchAllProducts = async (filter?: ISearchFilterPayload): Promise<IProductsResponsePayload> => {
   try {
-    const response = await instance.get<IProductsResponsePayload>(API_PATH.product.GET_ALL_PRODUCTS, {
+    const response = await instance.get<IProductsResponsePayload>(API_PATH.product.PRODUCTS, {
       params: filter,
     });
 
@@ -16,6 +28,7 @@ const fetchAllProducts = async (filter?: ISearchFilterPayload): Promise<IProduct
 };
 
 const productService = {
+  fetchProduct,
   fetchAllProducts,
 };
 

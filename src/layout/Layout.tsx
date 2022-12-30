@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar/Navbar";
 import { ILayoutProps } from "../interfaces/Layout";
 import Footer from "./Footer/Footer";
 import {
+  Box,
+  Flex,
   Input,
   InputGroup,
   InputLeftElement,
@@ -28,9 +30,9 @@ const Layout = ({ children }: ILayoutProps) => {
   };
 
   return (
-    <>
+    <Flex direction={"column"} minH="100vh">
       <Navbar onOpen={onOpen} />
-      {children}
+      <Box flex={1}>{children}</Box>
       <Footer />
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -67,7 +69,7 @@ const Layout = ({ children }: ILayoutProps) => {
           </InputGroup>
         </ModalContent>
       </Modal>
-    </>
+    </Flex>
   );
 };
 

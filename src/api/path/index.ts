@@ -13,6 +13,9 @@ export const API_PATH = {
     GET_ALL_CATEGORIES: "/categories",
   },
   product: {
-    GET_ALL_PRODUCTS: "/products",
+    PRODUCTS: "/products"
+  },
+  cart: {
+    CART: "/cart"
   },
 };
