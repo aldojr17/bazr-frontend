@@ -1,12 +1,4 @@
-import {
-  AspectRatio,
-  Box,
-  Flex,
-  HStack,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { AspectRatio, Box, Flex, HStack, Image, Stack, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import { IProductPayload } from "../../interfaces/Product";
@@ -15,7 +7,16 @@ import { formatCurrency } from "../../util/util";
 const ProductCard = ({ ...props }: IProductPayload) => {
   const navigate = useNavigate();
   return (
-    <Box onClick={() => navigate(`/pdp/${props.id}`)}>
+    <Box
+      onClick={() => navigate(`/pdp/${props.id}`)}
+      maxW={{
+        base: "250px",
+        sm: "200px",
+        md: "100%",
+        lg: "100%",
+        xl: "100%",
+      }}
+    >
       <AspectRatio
         ratio={1}
         width={{
@@ -34,12 +35,10 @@ const ProductCard = ({ ...props }: IProductPayload) => {
         </Text>
         <Flex gap={2}>
           <Icon.Star fill={"orange"} />
-          {props.total_review !== 0
-            ? (props.total_rating / props.total_review).toFixed(2)
-            : 0}
+          {props.total_review !== 0 ? (props.total_rating / props.total_review).toFixed(2) : 0}
         </Flex>
         <HStack justifyContent={"space-between"}>
-          <Text>Rp {formatCurrency(props.lowest_price)}</Text>
+          <Text>Rp{formatCurrency(props.lowest_price)}</Text>
           <Text>{props.unit_sold} Sold</Text>
         </HStack>
       </Stack>

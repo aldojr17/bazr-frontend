@@ -1,13 +1,14 @@
+import { parseCookies } from "nookies";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthRoutes = () => {
-const isLogged = localStorage.getItem("sessionId");
+  const isLogged = parseCookies().auth;
 
-if (isLogged !== null) {
-return <Navigate to="/" />;
+  if (isLogged && isLogged !== null) {
+    return <Navigate to="/" />;
   }
 
-return <Outlet />;
+  return <Outlet />;
 };
 
 export default AuthRoutes;

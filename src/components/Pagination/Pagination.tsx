@@ -1,13 +1,6 @@
 import { Button, Flex } from "@chakra-ui/react";
-import React, { Dispatch, useEffect, useState } from "react";
-
-interface IPaginationProps {
-  data: {
-    total_page: number;
-    current_page: number;
-  };
-  setPage: Dispatch<React.SetStateAction<number>>;
-}
+import React, { useEffect, useState } from "react";
+import { IPaginationProps } from "../../interfaces/Pagination";
 
 const Pagination = ({ ...props }: IPaginationProps) => {
   const [pagination, setPagination] = useState<String[]>([]);

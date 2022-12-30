@@ -1,9 +1,6 @@
-import { Icon, IconProps } from "@chakra-ui/react";
+import { Icon } from "@chakra-ui/react";
 import React from "react";
-
-interface ISortProps extends IconProps {
-  selected: string;
-}
+import { ISortProps } from "../../interfaces/Icon";
 
 const Sort = (props: ISortProps) => {
   return props.selected === "desc" ? (

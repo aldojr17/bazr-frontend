@@ -9,7 +9,7 @@ import {
   Image,
   SimpleGrid,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
@@ -104,7 +104,7 @@ const Home = () => {
       </SimpleGrid>
 
       <Box className="p-4 pb-5 p-lg-5">
-        <Heading fontWeight={"medium"} size={{ sm: "sm", md: "md", lg: "lg" }} className="pb-4">
+        <Heading fontWeight={"medium"} size={{ base: "sm", sm: "sm", md: "md", lg: "lg" }} className="pb-4">
           Category
         </Heading>
         <CategoryWrapper>
@@ -115,7 +115,7 @@ const Home = () => {
       </Box>
 
       <Box className="px-4 px-lg-5">
-        <Heading fontWeight={"medium"} className="pb-4" size={{ sm: "sm", md: "md", lg: "lg" }}>
+        <Heading fontWeight={"medium"} className="pb-4" size={{ base: "sm", sm: "sm", md: "md", lg: "lg" }}>
           Recommended
         </Heading>
         <Grid

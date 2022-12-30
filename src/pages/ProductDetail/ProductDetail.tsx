@@ -1,17 +1,10 @@
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  Flex,
-  Heading,
-} from "@chakra-ui/react";
+import { Box, Button, Container, Divider, Flex, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import cartService from "../../api/service/cart";
 import productService from "../../api/service/product";
 import ImagePreviewer from "../../components/Image/ImagePreviewer";
-import { ICartUpdateRequestPayload } from "../../interfaces/Cart";
+import { ICartAddUpdateRequestPayload } from "../../interfaces/Cart";
 import { IProductPayload } from "../../interfaces/Product";
 import { IVariantTypePayload } from "../../interfaces/Variant";
 import ProductDetailPricing from "./ProductDetailPricing";
@@ -24,14 +17,13 @@ function ProductDetail() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [product, setProduct] = useState<IProductPayload | null>(null);
-  const [selectedVariantType, setSelectedVariantType] =
-    useState<IVariantTypePayload>({
-      id: 0,
-      name: "",
-      price: 0,
-      stock: 0,
-      variant_group_id: 0,
-    });
+  const [selectedVariantType, setSelectedVariantType] = useState<IVariantTypePayload>({
+    id: 0,
+    name: "",
+    price: 0,
+    stock: 0,
+    variant_group_id: 0,
+  });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const fetchProduct = async (productId: number) => {
@@ -43,10 +35,10 @@ function ProductDetail() {
     }
   };
 
-  const updateProductToCart = async (payload: ICartUpdateRequestPayload) => {
+  const updateProductToCart = async (payload: ICartAddUpdateRequestPayload) => {
     const response = await cartService.addToCart(payload);
     if (response.is_success) {
-      setProduct(response.data);
+      // setProduct(response.data);
 
       setIsLoading(false);
     }
@@ -60,13 +52,10 @@ function ProductDetail() {
     setSelectedQuantity(quantity);
   };
 
-  const handleAddToCart = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    const cartPayload: ICartUpdateRequestPayload = {
-      user_id: 1,
+    const cartPayload: ICartAddUpdateRequestPayload = {
       shop_id: product?.shop_id!,
       variant_type_id: selectedVariantType.id,
       quantity: selectedQuantity,
@@ -109,9 +98,7 @@ function ProductDetail() {
             />
 
             <ProductDetailVariant
-              variantGroup={
-                product?.variant_group! && product.variant_group[0]!
-              }
+              variantGroup={product?.variant_group! && product.variant_group[0]!}
               onVariantChange={handleSetSelectedVariantType}
             />
 
@@ -123,11 +110,7 @@ function ProductDetail() {
             />
 
             <Flex mt={10} gap={1} direction={{ base: "column", lg: "row" }}>
-              <Button
-                w={{ base: "100%", lg: "50%" }}
-                variant="primaryOutline"
-                onClick={(e) => handleAddToCart(e)}
-              >
+              <Button w={{ base: "100%", lg: "50%" }} variant="primaryOutline" onClick={(e) => handleAddToCart(e)}>
                 Add to Cart
               </Button>
               <Button w={{ base: "100%", lg: "50%" }} variant="primary">

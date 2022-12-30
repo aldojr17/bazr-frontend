@@ -1,5 +1,5 @@
-export interface IconProps {
-  size?: number;
-  fill?: boolean;
-  left?: boolean;
+import { IconProps } from "@chakra-ui/react";
+
+export interface ISortProps extends IconProps {
+  selected: string;
 }
