@@ -4,6 +4,12 @@ export interface ProductState {
   products: IProductPaginationPayload;
 }
 
+export interface IProductResponsePayload {
+  is_success: boolean;
+  data: IProductPayload;
+  message: string;
+}
+
 export interface IProductsResponsePayload {
   is_success: boolean;
   data: IProductPaginationPayload;
@@ -40,4 +46,5 @@ export interface IProductPayload {
   shop_id: number;
   category: IProductCategoryPayload;
   variant_group: null;
+  product_photos: string[];
 }

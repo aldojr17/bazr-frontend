@@ -1,15 +1,15 @@
 import { extendTheme } from "@chakra-ui/react";
-import { Button } from "./components";
+import { Button, Divider, Heading, Input, Select } from "./components";
 
 export const customTheme = extendTheme({
   fonts: {
     heading: `'Montserrat', sans-serif`,
-    body: `'Poppins', sans-serif`,
+    body: `'Montserrat', sans-serif`,
   },
   colors: {
-    primary: "#89D5C5",
-    primaryLighten: "#A4DFD2",
-    primaryDarken: "#86D5C4",
+    primary: "#38B2AC", //teal.400
+    primaryLighten: "#4FD1C5", //teal.300
+    primaryDarken: "#319795", //teal.500
     secondary: "#949494",
     secondaryLighten: "#A3A3A3",
     secondaryDarken: "#8F8F8F",
@@ -18,12 +18,14 @@ export const customTheme = extendTheme({
     light: "#212121",
     lightLighten: "#212121",
   },
+  shadows: {
+    default: "0px 8px 24px rgba(154, 170, 207, 0.15)",
+  },
   components: {
     Button,
-    Divider: {
-      baseStyle: {
-        borderColor: "primary",
-      },
-    },
+    Heading,
+    Select,
+    Divider,
+    Input,
   },
 });

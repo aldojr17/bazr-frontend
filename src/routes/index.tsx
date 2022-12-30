@@ -1,7 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { LayoutRoutes, ProtectedRoutes } from "../pages";
-import UnprotectedRoutes from "../pages/UnprotectedRoutes";
+import ProductDetail from "../pages/ProductDetail/ProductDetail";
+import AuthRoutes from "./AuthRoutes";
+import LayoutRoutes from "./LayoutRoutes";
 
 const Home = React.lazy(() => import("../pages/Home/Home"));
 const Login = React.lazy(() => import("../pages/Auth/Login"));
@@ -12,15 +13,21 @@ const Search = React.lazy(() => import("../pages/Search/Search"));
 const RouteList = () => {
   let routes = (
     <Routes>
-      <Route element={<UnprotectedRoutes />}>
+      <Route element={<LayoutRoutes />}>
+        <Route path="/" element={<Home />} errorElement={<NotFound />} />
+        <Route path="/search" element={<Search />} />
+        <Route
+          path="/pdp/:id"
+          element={<ProductDetail />}
+          errorElement={<NotFound />}
+        />
+      </Route>
+
+      <Route element={<AuthRoutes />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route element={<LayoutRoutes />}>
-          <Route path="/" element={<Home />} errorElement={<NotFound />} />
-          <Route path="/search" element={<Search />} />
-        </Route>
       </Route>
-      <Route element={<ProtectedRoutes />}></Route>
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
