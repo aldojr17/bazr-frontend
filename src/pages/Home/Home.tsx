@@ -1,16 +1,3 @@
-import {
-  Box,
-  Button,
-  Center,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  Image,
-  SimpleGrid,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
 import CategoryCard from "../../components/Card/CategoryCard";
