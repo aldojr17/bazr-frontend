@@ -1,0 +1,10 @@
+image: node:18.12.1-slim
+
+stages:
+  - lint
+
+lint-job:
+  stage: lint
+  script:
+    - npx prettier --check --config .prettierrc.yml --no-editorconfig .
+  allow_failure: true
