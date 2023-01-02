@@ -14,7 +14,9 @@ const Pagination = ({ ...props }: IPaginationProps) => {
     const actualPage = currentPage + 1;
 
     if (totalPage <= 10) {
-      element = Array.from(Array(props.data.total_page).keys(), (index) => String(index + 1));
+      element = Array.from(Array(props.data.total_page).keys(), (index) =>
+        String(index + 1)
+      );
     } else {
       if (actualPage <= 4) {
         element = ["1", "2", "3", "...", String(totalPage)];
@@ -39,7 +41,13 @@ const Pagination = ({ ...props }: IPaginationProps) => {
           String(totalPage),
         ];
       } else if (actualPage > totalPage - 4) {
-        element = ["1", "...", String(totalPage - 2), String(totalPage - 1), String(totalPage)];
+        element = [
+          "1",
+          "...",
+          String(totalPage - 2),
+          String(totalPage - 1),
+          String(totalPage),
+        ];
       } else {
         element = [
           "1",
@@ -86,7 +94,9 @@ const Pagination = ({ ...props }: IPaginationProps) => {
           key={index}
           variant={"unstyled"}
           borderRadius={"none"}
-          fontWeight={props.data.current_page === Number(item) ? "bold" : "normal"}
+          fontWeight={
+            props.data.current_page === Number(item) ? "bold" : "normal"
+          }
           borderBottom={props.data.current_page === Number(item) ? "1px" : ""}
           borderColor={"primary"}
           size={{

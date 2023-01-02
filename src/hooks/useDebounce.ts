@@ -22,6 +22,6 @@ function useDebounce<Func extends SomeFunction>(func: Func, delay: number) {
   }) as Func;
 
   return debouncedFunction;
-};
+}
 
 export default useDebounce;

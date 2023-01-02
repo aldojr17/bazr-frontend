@@ -5,21 +5,21 @@ import { useAppDispatch, useAppSelector } from "./useSelector";
 
 const useUser = () => {
   const userId = useAppSelector((state) => state.user.userId);
-//   const dispatch = useAppDispatch();
+  //   const dispatch = useAppDispatch();
 
-//   const getUserId = async () => {
-//     const response = await categoryService.fetchAllCategory();
+  //   const getUserId = async () => {
+  //     const response = await categoryService.fetchAllCategory();
 
-//     if (response.is_success) {
-//       dispatch(storeCategories(response.data));
-//     }
-//   };
+  //     if (response.is_success) {
+  //       dispatch(storeCategories(response.data));
+  //     }
+  //   };
 
-//   useEffect(() => {
-//     if (categories.length === 0) {
-//       getCategories();
-//     }
-//   }, []);
+  //   useEffect(() => {
+  //     if (categories.length === 0) {
+  //       getCategories();
+  //     }
+  //   }, []);
 
   return {
     userId,

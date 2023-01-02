@@ -9,16 +9,18 @@ import {
   Input,
   Link,
   Text,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Formik } from "formik";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import authService from "../../api/service/auth";
+import useTitle from "../../hooks/useTitle";
 import { IRegisterRequestPayload } from "../../interfaces/Auth";
 import "./auth.scss";
 
 const Register = () => {
+  useTitle("Register | BAZR");
   const { state } = useLocation();
   const navigate = useNavigate();
   const toast = useToast();
@@ -98,9 +100,9 @@ const Register = () => {
           <Box textAlign="left" mt={4}>
             <Formik
               initialValues={{
-                name: state ? state.fullname as string : "",
+                name: state ? (state.fullname as string) : "",
                 username: "",
-                email: state ? state.email as string : "",
+                email: state ? (state.email as string) : "",
                 password: "",
                 confirmPassword: "",
               }}
@@ -111,7 +113,11 @@ const Register = () => {
             >
               {({ handleSubmit, errors, touched }) => (
                 <form onSubmit={handleSubmit}>
-                  <FormControl mt={4} isInvalid={!!errors.name && touched.name} isDisabled={state ? true : false}>
+                  <FormControl
+                    mt={4}
+                    isInvalid={!!errors.name && touched.name}
+                    isDisabled={state ? true : false}
+                  >
                     <FormLabel>Name</FormLabel>
                     <Field
                       as={Input}

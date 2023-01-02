@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { CategoryState, IPrimaryCategoryPayload } from "../../interfaces/Category";
 import { UserState } from "../../interfaces/User";
 
 const initialState: UserState = {

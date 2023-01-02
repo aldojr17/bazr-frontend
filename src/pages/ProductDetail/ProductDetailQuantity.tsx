@@ -11,13 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { TiMinus, TiPlus } from "react-icons/ti";
 import useDebounce from "../../hooks/useDebounce";
-
-interface IProductDetailQuantityProps {
-  stock: number;
-  minQty?: number;
-  maxQty?: number;
-  onQuantityChange: (qty: number) => void;
-}
+import { IProductDetailQuantityProps } from "../../interfaces/Product";
 
 function ProductDetailQuantity(props: IProductDetailQuantityProps) {
   const { stock, minQty, maxQty, onQuantityChange } = props;

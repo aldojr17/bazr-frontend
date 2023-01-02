@@ -9,10 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import cartService from "../../api/service/cart";
-import productService from "../../api/service/product";
 import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 import ImagePreviewer from "../../components/Image/ImagePreviewer";
+import useCart from "../../hooks/useCart";
+import useProduct from "../../hooks/useProduct";
+import useTitle from "../../hooks/useTitle";
 import { ICartAddUpdateRequestPayload } from "../../interfaces/Cart";
 import { IProductPayload } from "../../interfaces/Product";
 import { IVariantTypePayload } from "../../interfaces/Variant";
@@ -24,34 +25,22 @@ import ProductDetailVariant from "./ProductDetailVariant";
 function ProductDetail() {
   const { id } = useParams();
 
+  const { fetchProduct } = useProduct();
+  const { updateCart, getCart } = useCart();
+
   const [isLoading, setIsLoading] = useState(true);
   const [product, setProduct] = useState<IProductPayload | null>(null);
-  const [selectedVariantType, setSelectedVariantType] = useState<IVariantTypePayload>({
-    id: 0,
-    name: "",
-    price: 0,
-    stock: 0,
-    variant_group_id: 0,
-  });
+  const [selectedVariantType, setSelectedVariantType] =
+    useState<IVariantTypePayload>({
+      id: 0,
+      name: "",
+      price: 0,
+      stock: 0,
+      variant_group_id: 0,
+    });
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
-  const fetchProduct = async (productId: number) => {
-    const response = await productService.fetchProduct(productId);
-    if (response.is_success) {
-      setProduct(response.data);
-
-      setIsLoading(false);
-    }
-  };
-
-  const updateProductToCart = async (payload: ICartAddUpdateRequestPayload) => {
-    const response = await cartService.addToCart(payload);
-    if (response.is_success) {
-      // setProduct(response.data);
-
-      setIsLoading(false);
-    }
-  };
+  useTitle(`${product?.name ? `${product.name} | BAZR` : "BAZR"}`);
 
   const handleSetSelectedVariantType = (variantType: IVariantTypePayload) => {
     setSelectedVariantType(variantType);
@@ -61,7 +50,9 @@ function ProductDetail() {
     setSelectedQuantity(quantity);
   };
 
-  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleAddToCart = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
     const cartPayload: ICartAddUpdateRequestPayload = {
@@ -70,11 +61,17 @@ function ProductDetail() {
       quantity: selectedQuantity,
     };
 
-    updateProductToCart(cartPayload);
+    setIsLoading(true);
+    updateCart(cartPayload)
+      .then(() => getCart())
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
-    fetchProduct(parseInt(id!));
+    setIsLoading(true);
+    fetchProduct(parseInt(id!))
+      .then((response) => setProduct(response))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -89,10 +86,7 @@ function ProductDetail() {
               {/* <ImagePreviewer data={product?.product_photos ?? []} /> */}
               <ImagePreviewer data={photoDummyData} />
             </Box>
-            <Box
-              w={{ base: "100%", lg: "50%" }}
-              px={{ base: 0, lg: 3 }}
-            >
+            <Box w={{ base: "100%", lg: "50%" }} px={{ base: 0, lg: 3 }}>
               <ProductDetailRating rating={4.5} review={23} />
               <Heading variant={"productTitle"} mt={2} mb={1}>
                 {product?.name}

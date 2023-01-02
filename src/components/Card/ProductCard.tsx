@@ -1,4 +1,12 @@
-import { AspectRatio, Box, Flex, HStack, Image, Stack, Text } from "@chakra-ui/react";
+import {
+  AspectRatio,
+  Box,
+  Flex,
+  HStack,
+  Image,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import { IProductPayload } from "../../interfaces/Product";
@@ -8,7 +16,14 @@ const ProductCard = ({ ...props }: IProductPayload) => {
   const navigate = useNavigate();
   return (
     <Box
-      onClick={() => navigate(`/pdp/${props.id}`)}
+      onClick={() =>
+        navigate(
+          `/pdp/${props.id}/${props.name
+            .replace(/[^\w]+/gm, " ")
+            .split(" ")
+            .join("-")}`
+        )
+      }
       maxW={{
         base: "250px",
         sm: "200px",
@@ -35,7 +50,9 @@ const ProductCard = ({ ...props }: IProductPayload) => {
         </Text>
         <Flex gap={2}>
           <Icon.Star fill={"orange"} />
-          {props.total_review !== 0 ? (props.total_rating / props.total_review).toFixed(2) : 0}
+          {props.total_review !== 0
+            ? (props.total_rating / props.total_review).toFixed(2)
+            : 0}
         </Flex>
         <HStack justifyContent={"space-between"}>
           <Text>Rp{formatCurrency(props.lowest_price)}</Text>

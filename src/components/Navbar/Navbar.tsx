@@ -142,7 +142,12 @@ const Navbar = ({ onOpen }: NavbarProps) => {
               xl: 5,
             }}
           >
-            <Popover isLazy trigger="hover" offset={[-100, 8]} placement="bottom">
+            <Popover
+              isLazy
+              trigger="hover"
+              offset={[-100, 8]}
+              placement="bottom"
+            >
               <PopoverTrigger>
                 <Button
                   variant={"ghost"}
@@ -156,7 +161,12 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                   }}
                   onClick={handleNavigateToCartPage}
                 >
-                  <Box borderBottom={cart.length !== 0 ? "2px" : ""} borderColor={"purple.600"} pb={"0.3em"} pt={1}>
+                  <Box
+                    borderBottom={cart.length !== 0 ? "2px" : ""}
+                    borderColor={"purple.600"}
+                    pb={"0.3em"}
+                    pt={1}
+                  >
                     <Icon.Cart
                       width={{
                         base: "1.2em",
@@ -212,7 +222,11 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                     as={"span"}
                     position={"absolute"}
                   >
-                    {cart.length !== 0 ? (cart.length > 9 ? "9+" : cart.length) : ""}
+                    {cart.length !== 0
+                      ? cart.length > 9
+                        ? "9+"
+                        : cart.length
+                      : ""}
                   </Text>
                 </Button>
               </PopoverTrigger>
@@ -229,7 +243,14 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                 }}
               >
                 {cart.length !== 0 ? (
-                  <PopoverHeader px={5} width="100%" fontWeight={"semibold"} color={"secondary"} pt={5} pb={2}>
+                  <PopoverHeader
+                    px={5}
+                    width="100%"
+                    fontWeight={"semibold"}
+                    color={"secondary"}
+                    pt={5}
+                    pb={2}
+                  >
                     Recently Added Products
                   </PopoverHeader>
                 ) : (
@@ -244,7 +265,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                           key={index}
                           image=""
                           name={value.product_name}
-                          price={parseInt(value.variant_type_price)}
+                          price={value.variant_type_price}
                         />
                       ))}
                     </VStack>
@@ -257,17 +278,30 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                 {cart.length !== 0 ? (
                   <PopoverFooter px={5}>
                     <Flex
-                      justifyContent={cart.length !== 0 && cart.length > 5 ? "space-between" : "end"}
+                      justifyContent={
+                        cart.length !== 0 && cart.length > 5
+                          ? "space-between"
+                          : "end"
+                      }
                       alignItems={"center"}
                     >
                       {cart.length !== 0 && cart.length > 5 ? (
-                        <Text fontWeight={"semibold"} py={3} color="secondary" fontSize={"sm"}>
+                        <Text
+                          fontWeight={"semibold"}
+                          py={3}
+                          color="secondary"
+                          fontSize={"sm"}
+                        >
                           {cart.length - 5} more products in cart
                         </Text>
                       ) : (
                         ""
                       )}
-                      <Button variant={"primary"} size={"md"} onClick={handleNavigateToCartPage}>
+                      <Button
+                        variant={"primary"}
+                        size={"md"}
+                        onClick={handleNavigateToCartPage}
+                      >
                         Cart
                       </Button>
                     </Flex>
@@ -318,7 +352,12 @@ const Navbar = ({ onOpen }: NavbarProps) => {
             )}
 
             {isLogged ? (
-              <Popover isLazy trigger="hover" offset={[5, 8]} placement="bottom-start">
+              <Popover
+                isLazy
+                trigger="hover"
+                offset={[5, 8]}
+                placement="bottom-start"
+              >
                 <PopoverTrigger>
                   <Button
                     variant={"ghost"}
@@ -368,12 +407,19 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                 >
                   <PopoverArrow />
                   <PopoverBody px={5}>
-                    <Button variant={"ghost"} bgColor={"blackAlpha.100"} width={"100%"} py={10}>
+                    <Button
+                      variant={"ghost"}
+                      bgColor={"blackAlpha.100"}
+                      width={"100%"}
+                      py={10}
+                    >
                       <HStack width={"100%"} spacing={5} alignItems={"center"}>
                         <Avatar bg={"purple.600"} />
                         <VStack alignItems={"start"}>
                           <Text>Nama Orang</Text>
-                          <Text fontWeight={"normal"}>Go to your profile {">"}</Text>
+                          <Text fontWeight={"normal"}>
+                            Go to your profile {">"}
+                          </Text>
                         </VStack>
                       </HStack>
                     </Button>
@@ -381,7 +427,12 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                   {cart.length !== 0 ? (
                     <PopoverFooter px={5}>
                       <Flex justifyContent={"end"}>
-                        <Button variant={"ghost"} size={"md"} colorScheme={"teal"} onClick={handleLogout}>
+                        <Button
+                          variant={"ghost"}
+                          size={"md"}
+                          colorScheme={"teal"}
+                          onClick={handleLogout}
+                        >
                           Logout
                         </Button>
                       </Flex>
@@ -393,10 +444,18 @@ const Navbar = ({ onOpen }: NavbarProps) => {
               </Popover>
             ) : (
               <HStack>
-                <Button variant={"basicOutline"} size={"sm"} onClick={() => navigate("/login")}>
+                <Button
+                  variant={"basicOutline"}
+                  size={"sm"}
+                  onClick={() => navigate("/login")}
+                >
                   Login
                 </Button>
-                <Button variant={"primary"} size={"sm"} onClick={() => navigate("/register")}>
+                <Button
+                  variant={"primary"}
+                  size={"sm"}
+                  onClick={() => navigate("/register")}
+                >
                   Register
                 </Button>
               </HStack>

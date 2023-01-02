@@ -1,13 +1,6 @@
 import { Box, Button, Heading, HStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import {
-    IVariantGroupPayload
-} from "../../interfaces/Variant";
-
-interface IProductDetailVariantsProps {
-  variantGroup: IVariantGroupPayload;
-  onVariantChange: Function;
-}
+import { IProductDetailVariantsProps } from "../../interfaces/Product";
 
 function ProductDetailVariants(props: IProductDetailVariantsProps) {
   const { variantGroup, onVariantChange } = props;
@@ -32,7 +25,7 @@ function ProductDetailVariants(props: IProductDetailVariantsProps) {
         (e, i, a) => a.indexOf(e) === i
       );
     }
-    
+
     setDisplayVariants(variants);
   };
 
@@ -51,26 +44,31 @@ function ProductDetailVariants(props: IProductDetailVariantsProps) {
     }
 
     setSelectedVariant(variant);
-    onVariantChange(selectVariant)
+    onVariantChange(selectVariant);
   };
 
   const findVariantType = (variant: {}) => {
-    let selectedVariantArray: string[] = Object.values(variant)
-    let selectedVariantString = selectedVariantArray.join(",")
+    let selectedVariantArray: string[] = Object.values(variant);
+    let selectedVariantString = selectedVariantArray.join(",");
 
-    let selectedVariantType = variantGroup.variant_type.find((variantType) => variantType.name === selectedVariantString)
+    let selectedVariantType = variantGroup.variant_type.find(
+      (variantType) => variantType.name === selectedVariantString
+    );
 
-    onVariantChange(selectedVariantType)
-  }
+    onVariantChange(selectedVariantType);
+  };
 
-  const handleSetVariant = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const variantName = e.currentTarget.parentElement?.parentElement?.children[0].innerHTML!
-    const variantType = e.currentTarget.innerHTML!
+  const handleSetVariant = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const variantName =
+      e.currentTarget.parentElement?.parentElement?.children[0].innerHTML!;
+    const variantType = e.currentTarget.innerHTML!;
 
-    let newVariant = {...selectedVariant, [variantName]: variantType }
+    let newVariant = { ...selectedVariant, [variantName]: variantType };
 
-    setSelectedVariant(newVariant)
-    findVariantType(newVariant); 
+    setSelectedVariant(newVariant);
+    findVariantType(newVariant);
   };
 
   useEffect(() => {
@@ -89,9 +87,7 @@ function ProductDetailVariants(props: IProductDetailVariantsProps) {
             {(displayVariants as any)[name].map((type: string) => (
               <Button
                 variant={`${
-                  (selectedVariant as any)[name] === type
-                    ? "solid"
-                    : "outline"
+                  (selectedVariant as any)[name] === type ? "solid" : "outline"
                 }`}
                 colorScheme="teal"
                 size="xs"
