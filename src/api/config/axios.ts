@@ -1,4 +1,6 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { API_PATH } from "../path";
 
 const instance = axios.create({
   baseURL: "http://localhost:8080",
@@ -11,7 +13,7 @@ instance.interceptors.request.use(
       ...config,
       headers: {
         ...config.headers,
-        Authorization: localStorage.getItem("sessionId"),
+        Authorization: parseCookies().auth,
       },
     };
     return newConfig;
@@ -41,19 +43,69 @@ export const handleHttpResponse = (status: string, message?: string) => {
   }
 };
 
+const handleFallback = (
+  method: string,
+  url: string,
+  payload?: AxiosRequestConfig
+) => {
+  switch (method) {
+    case "get":
+      instance.get(url, payload?.params);
+      return;
+    case "post":
+      instance.post(url, JSON.parse(payload?.data!)).catch((err) => {
+        console.log("Fallback Error: ", err);
+        // const error = err && err.response && err.response.data;
+        // if (error && error.message === "unauthorized") {
+        //   localStorage.clear()
+        //   window.location.replace("/login");
+        // }
+      });
+      return;
+    default:
+      return;
+  }
+};
+
 instance.interceptors.response.use(
   (res) => {
-    if (res.data.token) {
-      localStorage.setItem("sessionId", `Bearer ${res.data.token}`);
+    if (res.data.data?.access_token) {
+      setCookie(null, "auth", `Bearer ${res.data.data.access_token}`);
     }
+    if (res.data.data?.refresh_token) {
+      localStorage.setItem("refresh", res.data.data.refresh_token);
+    }
+
     return res;
   },
   (err) => {
     const error = err && err.response && err.response.data;
-    if (error && error.error === "unauthorized") {
-      localStorage.clear();
-      window.location.replace("/");
-      throw "Invalid credential";
+    if (error && error.message === "unauthorized") {
+      destroyCookie(null, "auth");
+
+      if (localStorage.getItem("refresh")) {
+        instance
+          .post(API_PATH.auth.REFRESH, {
+            refresh_token: localStorage.getItem("refresh"),
+          })
+          .then((response) => {
+            setCookie(
+              null,
+              "auth",
+              `Bearer ${response.data.data.access_token}`
+            );
+            handleFallback(err.config.method, err.config.url, err.config);
+          })
+          .catch((error) => {
+            localStorage.clear();
+            window.location.replace("/login");
+          });
+
+        return;
+      }
+
+      window.location.replace("/login");
+      throw Promise.reject("Invalid credential");
     } else {
       if (err.code === "ERR_NETWORK") {
         throw handleHttpResponse("0");

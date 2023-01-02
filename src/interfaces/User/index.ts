@@ -14,3 +14,7 @@ export interface IChangeProfilePayload {
   phone: string;
   profile_picture: string;
 }
+
+export interface UserState {
+  userId: number;
+}

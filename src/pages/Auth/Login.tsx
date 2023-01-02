@@ -1,126 +1,206 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
-import { RootState } from "../../redux";
-import { login } from "../../redux/user/action";
-import { UserDispatch } from "../../redux/user/types";
+import {
+  Box,
+  Button,
+  Center,
+  Divider,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  HStack,
+  Input,
+  Link,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import { GoogleLogin } from "@react-oauth/google";
+import { Field, Formik } from "formik";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import authService from "../../api/service/auth";
+import useTitle from "../../hooks/useTitle";
+import {
+  ILoginGoogleRequestPayload,
+  ILoginRequestPayload,
+} from "../../interfaces/Auth";
 import "./auth.scss";
 
 const Login = () => {
-  const [input, setInput] = useState({
-    email: "",
-    password: "",
-  });
-  const [isError, setIsError] = useState({
-    email: false,
-    password: false,
-  });
+  useTitle("Login | BAZR");
   const navigate = useNavigate();
-  const dispatch: UserDispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.userReducer);
+  const toast = useToast();
 
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setInput({
-      ...input,
-      [event.currentTarget.name]: event.currentTarget.value,
-    });
-  };
+  const handleSubmitLogin = async (payload: ILoginRequestPayload) => {
+    const response = await authService.login(payload);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (input.email === "" || input.password === "") {
-      setIsError({
-        email: input.email === "",
-        password: input.password === "",
+    if (response.is_success) {
+      toast({
+        title: "Welcome back!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
       });
-      return;
-    }
-    dispatch(login(input));
 
-    setIsError({
-      email: false,
-      password: false,
-    });
+      navigate("/");
+    } else {
+      toast({
+        title: "Failed to login",
+        description: response.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
+
+  const handleSubmitGoogleLogin = async (
+    payload: ILoginGoogleRequestPayload
+  ) => {
+    const response = await authService.loginGoogle(payload);
+
+    if (response.is_success) {
+      if (response.data.is_registered) {
+        toast({
+          title: "Welcome back!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        navigate("/");
+      } else {
+        navigate("/register", { state: response.data });
+      }
+    } else {
+      toast({
+        title: "Failed to login",
+        description: response.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const loginValidationSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Required"),
+    password: Yup.string().required("Required"),
+  });
 
   return (
     <>
-      <Navbar active="auth" />
-      <div className="auth-container row gap-5 gap-lg-0">
-        <div className="col-12 col-lg-6 my-auto">
-          <div className="mb-5">
-            <h1 className="text-center">Welcome Back!</h1>
-            <p className="text-center fs-4">We are happy to have you back</p>
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="row flex-column align-items-center gy-4"
-          >
-            <div className="col-lg-5 col-8 text-start">
-              <input
-                className="form-control p-3"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
-                onChange={handleChange}
-              />
-              {isError.email ? (
-                <div className="text-danger mt-3">
-                  Email should not be empty
-                </div>
-              ) : (
-                ""
+      <Flex
+        minHeight="100vh"
+        width="full"
+        align="center"
+        justifyContent="center"
+      >
+        <Box
+          borderWidth={1}
+          borderRadius={4}
+          p={10}
+          width="full"
+          maxWidth="500px"
+          textAlign="center"
+          boxShadow="lg"
+        >
+          <Box textAlign="center">
+            <Heading>Sign in to your account</Heading>
+            <Text>
+              Or{" "}
+              <Link as={RouterLink} to="/register" color="teal.500">
+                sign up now!
+              </Link>
+            </Text>
+          </Box>
+
+          <Box textAlign="left" my={4}>
+            <Formik
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              validationSchema={loginValidationSchema}
+              onSubmit={(values) => {
+                handleSubmitLogin(values);
+              }}
+            >
+              {({ handleSubmit, errors, touched }) => (
+                <form onSubmit={handleSubmit}>
+                  <FormControl isInvalid={!!errors.email && touched.email}>
+                    <FormLabel>Email</FormLabel>
+                    <Field
+                      as={Input}
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email address"
+                      variant="filled"
+                    />
+                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl
+                    mt={4}
+                    isInvalid={!!errors.password && touched.password}
+                  >
+                    <FormLabel>Password</FormLabel>
+                    <Field
+                      as={Input}
+                      name="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      variant="filled"
+                    />
+                    <FormErrorMessage>{errors.password}</FormErrorMessage>
+                  </FormControl>
+
+                  <Stack isInline justifyContent="end" mt={4}>
+                    <Box>
+                      <Link color="teal.500">Forgot your password?</Link>
+                    </Box>
+                  </Stack>
+
+                  <Button variant="primary" width="full" mt={10} type="submit">
+                    Sign in
+                  </Button>
+                </form>
               )}
-            </div>
-            <div className="col-lg-5 col-8 text-start">
-              <input
-                className="form-control p-3"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                onChange={handleChange}
+            </Formik>
+          </Box>
+
+          <Box textAlign="center">
+            <HStack>
+              <Divider
+                my={8}
+                borderColor="gray.300"
+                background="gray.300"
+                borderWidth="1px"
               />
-              {isError.password ? (
-                <div className="text-danger mt-3">
-                  Password should not be empty
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="col-lg-5 col-8 text-center">
-              <button type="submit" className="btn btn-dark w-75">
-                Login
-              </button>
-            </div>
-          </form>
-        </div>
-        <div className="col-12 col-lg-6 my-auto p-0 pb-5 pb-lg-0">
-          <div className="border border-1 w-75 mx-auto shadow py-5">
-            <div className="row flex-column align-items-center text-center justify-content-center gap-5">
-              <img
-                src="/assets/login.svg"
-                alt="login image"
-                className="img-thumbnail border-0 col-lg-7 col-8"
+              <Text px={5}>or</Text>
+              <Divider
+                my={8}
+                borderColor="gray.300"
+                background="gray.300"
+                borderWidth="1px"
               />
-              <div className="col-lg-10 d-flex flex-column gap-3">
-                <h1>Don't have an account?</h1>
-                <span className="fs-4">
-                  Get started by creating your new account
-                </span>
-                <Link to="/register" className="mt-3 text-decoration-none">
-                  <button className="btn btn-outline-dark w-50">
-                    Register
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </HStack>
+            <Center my={3}>
+              <GoogleLogin
+                onSuccess={(response) => {
+                  handleSubmitGoogleLogin({
+                    token: (response as any).credential,
+                  });
+                }}
+                type="standard"
+                shape="circle"
+                theme="outline"
+                text="signin_with"
+              />
+            </Center>
+          </Box>
+        </Box>
+      </Flex>
     </>
   );
 };

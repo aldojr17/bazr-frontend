@@ -1,3 +1,4 @@
+import { Center, Spinner } from "@chakra-ui/react";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -9,17 +10,12 @@ function App() {
   return (
     <Suspense
       fallback={
-        <div
-          style={{ width: "100vw", height: "100vh" }}
-          className="d-flex justify-content-center align-items-center"
-        >
-          <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
+        <Center width={"100vw"} height={"100vh"}>
+          <Spinner speed="0.65s" size="xl" />
+        </Center>
       }
     >
-      <RouteList authenticated={true} />
+      <RouteList />
     </Suspense>
   );
 }

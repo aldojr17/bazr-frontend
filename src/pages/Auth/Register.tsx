@@ -1,210 +1,208 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import { Field, Formik } from "formik";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import authService from "../../api/service/auth";
-import Navbar from "../../components/Navbar/Navbar";
+import useTitle from "../../hooks/useTitle";
+import { IRegisterRequestPayload } from "../../interfaces/Auth";
 import "./auth.scss";
 
 const Register = () => {
-  const [input, setInput] = useState({
-    fullname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [isError, setIsError] = useState({
-    fullname: false,
-    email: false,
-    password: false,
-    confirmPassword: false,
-    matchPassword: false,
-  });
-  const [apiError, setApiError] = useState({
-    error: false,
-    message: "",
-  });
-  const [isShowModal, setIsShowModal] = useState(false);
+  useTitle("Register | BAZR");
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const toast = useToast();
 
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setInput({
-      ...input,
-      [event.currentTarget.name]: event.currentTarget.value,
-    });
-  };
+  const handleSubmitRegister = async (payload: IRegisterRequestPayload) => {
+    const response = await authService.register(payload);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (
-      input.fullname === "" ||
-      input.email === "" ||
-      input.password === "" ||
-      input.confirmPassword === ""
-    ) {
-      setIsError({
-        fullname: input.fullname === "",
-        email: input.email === "",
-        password: input.password === "",
-        confirmPassword: input.confirmPassword === "",
-        matchPassword: false,
+    if (response.is_success) {
+      toast({
+        title: "Welcome! Your account has been created",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
       });
-      return;
-    }
 
-    if (input.password !== input.confirmPassword) {
-      setIsError({
-        ...isError,
-        confirmPassword: input.confirmPassword === "",
-        matchPassword: true,
-      });
-      return;
-    }
-
-    const status = await authService.login(input);
-
-    if (status.isSuccess) {
-      setIsShowModal(true);
+      if (state) {
+        navigate("/");
+      } else {
+        navigate("/login");
+      }
     } else {
-      setApiError({
-        error: true,
-        message: status.error,
+      toast({
+        title: "Failed to register",
+        description: response.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
       });
     }
-
-    setIsError({
-      fullname: input.fullname === "",
-      email: input.email === "",
-      password: input.password === "",
-      confirmPassword: input.confirmPassword === "",
-      matchPassword: input.password !== input.confirmPassword,
-    });
   };
+
+  const registerValidationSchema = Yup.object().shape({
+    name: Yup.string().required("Required"),
+    username: Yup.string()
+      .required("Required")
+      .matches(/^[a-zA-Z0-9]*$/, "Must not contain any space"),
+    email: Yup.string().email("Invalid email format").required("Required"),
+    password: Yup.string()
+      .required("Required")
+      .min(8, "Password must contain at least 8 characters")
+      .matches(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+        "Must contain at least One Uppercase, One Lowercase, One Number and one special case Character"
+      ),
+    confirmPassword: Yup.string()
+      .required("Required")
+      .oneOf([Yup.ref("password"), null], "Password must match"),
+  });
 
   return (
     <>
-      <Navbar active="auth" />
-      <div className="auth-container row gap-5 gap-lg-0 flex-lg-row-reverse">
-        <div className="col-12 col-lg-6 my-auto">
-          <div className="mb-5">
-            <h1 className="text-center">Create Account</h1>
-            <p className="text-center fs-4">
-              Get started by creating your new account
-            </p>
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="row flex-column align-items-center gy-4"
-          >
-            <div className="col-lg-5 col-8 text-start">
-              <input
-                className="form-control p-3"
-                type="text"
-                name="fullname"
-                id="fullname"
-                placeholder="Full Name"
-                onChange={handleChange}
-              />
-              {isError.fullname ? (
-                <div className="text-danger mt-3">
-                  Full Name should not be empty
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="col-lg-5 col-8 text-start">
-              <input
-                className="form-control p-3"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
-                onChange={handleChange}
-              />
-              {isError.email ? (
-                <div className="text-danger mt-3">
-                  Email should not be empty
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="col-lg-5 col-8 text-start">
-              <input
-                className="form-control p-3"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                minLength={6}
-                onChange={handleChange}
-              />
-              {isError.password ? (
-                <div className="text-danger mt-3">
-                  Password should not be empty
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="col-lg-5 col-8 text-start">
-              <input
-                className="form-control p-3"
-                type="password"
-                name="confirmPassword"
-                id="confirmPassword"
-                placeholder="Confirm Password"
-                minLength={6}
-                onChange={handleChange}
-              />
-              {isError.confirmPassword ? (
-                <div className="text-danger mt-3">
-                  Confirm Password should not be empty
-                </div>
-              ) : (
-                ""
-              )}
-              {isError.matchPassword ? (
-                <div className="text-danger mt-3">
-                  Password and Confirm Password doesn't match
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="col-lg-5 col-8 text-start">
-              {apiError.error ? (
-                <div className="text-danger mt-3">{apiError.message}</div>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="col-lg-5 col-8 text-center">
-              <button type="submit" className="btn btn-dark w-75">
-                Register
-              </button>
-            </div>
-          </form>
-        </div>
+      <Flex
+        minHeight="100vh"
+        width="full"
+        align="center"
+        justifyContent="center"
+      >
+        <Box
+          borderWidth={1}
+          borderRadius={4}
+          p={10}
+          width="full"
+          maxWidth="500px"
+          textAlign="center"
+          boxShadow="lg"
+        >
+          <Box textAlign="center">
+            <Heading>Sign up</Heading>
+            <Text>
+              Or{" "}
+              <Link as={RouterLink} to="/login" color="teal.500">
+                sign in now!
+              </Link>
+            </Text>
+          </Box>
 
-        <div className="col-12 col-lg-6 my-auto p-0 pb-5 pb-lg-0">
-          <div className="border border-1 w-75 mx-auto shadow py-5">
-            <div className="row flex-column align-items-center text-center justify-content-center gap-5">
-              <img
-                src="/assets/register.svg"
-                alt="register image"
-                className="img-thumbnail border-0 col-lg-7 col-8"
-              />
-              <div className="col-lg-10 d-flex flex-column gap-3">
-                <h1>Already have an account?</h1>
-                <span className="fs-4">We are happy to have you back</span>
-                <Link to="/login" className="mt-3 text-decoration-none">
-                  <button className="btn btn-outline-dark w-50">Login</button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+          <Box textAlign="left" mt={4}>
+            <Formik
+              initialValues={{
+                name: state ? (state.fullname as string) : "",
+                username: "",
+                email: state ? (state.email as string) : "",
+                password: "",
+                confirmPassword: "",
+              }}
+              validationSchema={registerValidationSchema}
+              onSubmit={(values) => {
+                handleSubmitRegister(values);
+              }}
+            >
+              {({ handleSubmit, errors, touched }) => (
+                <form onSubmit={handleSubmit}>
+                  <FormControl
+                    mt={4}
+                    isInvalid={!!errors.name && touched.name}
+                    isDisabled={state ? true : false}
+                  >
+                    <FormLabel>Name</FormLabel>
+                    <Field
+                      as={Input}
+                      name="name"
+                      type="text"
+                      placeholder="Enter your name"
+                      variant="filled"
+                    />
+                    <FormErrorMessage>{errors.name}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl
+                    mt={4}
+                    isInvalid={!!errors.username && touched.username}
+                  >
+                    <FormLabel>Username</FormLabel>
+                    <Field
+                      as={Input}
+                      name="username"
+                      type="text"
+                      placeholder="Enter your username"
+                      variant="filled"
+                    />
+                    <FormErrorMessage>{errors.username}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl
+                    mt={4}
+                    isInvalid={!!errors.email && touched.email}
+                    isDisabled={state ? true : false}
+                  >
+                    <FormLabel>Email</FormLabel>
+                    <Field
+                      as={Input}
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email address"
+                      variant="filled"
+                    />
+                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl
+                    mt={4}
+                    isInvalid={!!errors.password && touched.password}
+                  >
+                    <FormLabel>Password</FormLabel>
+                    <Field
+                      as={Input}
+                      name="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      variant="filled"
+                    />
+                    <FormErrorMessage>{errors.password}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl
+                    mt={4}
+                    isInvalid={
+                      !!errors.confirmPassword && touched.confirmPassword
+                    }
+                  >
+                    <FormLabel>Confirm Password</FormLabel>
+                    <Field
+                      as={Input}
+                      name="confirmPassword"
+                      type="password"
+                      placeholder="Re-enter your password"
+                      variant="filled"
+                    />
+                    <FormErrorMessage>
+                      {errors.confirmPassword}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <Button variant="primary" width="full" mt={10} type="submit">
+                    Sign up
+                  </Button>
+                </form>
+              )}
+            </Formik>
+          </Box>
+        </Box>
+      </Flex>
     </>
   );
 };
