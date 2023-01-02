@@ -35,6 +35,10 @@ const Heading = defineStyleConfig({
             fontSize: "md",
             color: "gray.600",
         },
+        productShopName: {
+            fontSize: "xl",
+            fontWeight: "semibold",
+        },
     },
     defaultProps: {
         variant: "productTitle",

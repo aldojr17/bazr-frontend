@@ -1,8 +1,17 @@
-import { Box, Button, Container, Divider, Flex, Heading } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Flex,
+  Heading,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import cartService from "../../api/service/cart";
 import productService from "../../api/service/product";
+import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 import ImagePreviewer from "../../components/Image/ImagePreviewer";
 import { ICartAddUpdateRequestPayload } from "../../interfaces/Cart";
 import { IProductPayload } from "../../interfaces/Product";
@@ -73,52 +82,71 @@ function ProductDetail() {
       {isLoading ? (
         <>loading</>
       ) : (
-        <Flex direction={{ base: "column", lg: "row" }} alignItems={"center"}>
-          <Box w={{ base: "100%", lg: "50%" }}>
-            {/* <ImagePreviewer data={product?.product_photos ?? []} /> */}
-            <ImagePreviewer data={photoDummyData} />
-          </Box>
-          <Box w={{ base: "100%", lg: "50%" }} px={{ base: 0, lg: 3 }} py={10}>
-            <ProductDetailRating rating={4.5} review={23} />
-
-            <Heading variant={"productTitle"} mt={2} mb={1}>
-              {product?.name}
-            </Heading>
-
-            <ProductDetailPricing
-              normalPrice={selectedVariantType.price!}
-              // discountedPrice={7000}
-            />
-
-            <Divider
-              variant={"solidPrimary"}
-              orientation="horizontal"
-              my={10}
-              display={{ base: "block", lg: "none" }}
-            />
-
-            <ProductDetailVariant
-              variantGroup={product?.variant_group! && product.variant_group[0]!}
-              onVariantChange={handleSetSelectedVariantType}
-            />
-
-            <ProductDetailQuantity
-              stock={selectedVariantType.stock}
-              // minQty={5}
-              // maxQty={10}
-              onQuantityChange={handleSetQuantity}
-            />
-
-            <Flex mt={10} gap={1} direction={{ base: "column", lg: "row" }}>
-              <Button w={{ base: "100%", lg: "50%" }} variant="primaryOutline" onClick={(e) => handleAddToCart(e)}>
-                Add to Cart
-              </Button>
-              <Button w={{ base: "100%", lg: "50%" }} variant="primary">
-                Buy Now
-              </Button>
-            </Flex>
-          </Box>
-        </Flex>
+        <>
+          <BreadCrumb categories={product?.category!} />
+          <Flex direction={{ base: "column", lg: "row" }}>
+            <Box w={{ base: "100%", lg: "50%" }}>
+              {/* <ImagePreviewer data={product?.product_photos ?? []} /> */}
+              <ImagePreviewer data={photoDummyData} />
+            </Box>
+            <Box
+              w={{ base: "100%", lg: "50%" }}
+              px={{ base: 0, lg: 3 }}
+            >
+              <ProductDetailRating rating={4.5} review={23} />
+              <Heading variant={"productTitle"} mt={2} mb={1}>
+                {product?.name}
+              </Heading>
+              <ProductDetailPricing
+                normalPrice={selectedVariantType.price!}
+                // discountedPrice={7000}
+              />
+              <Divider
+                variant={"solidPrimary"}
+                orientation="horizontal"
+                my={10}
+                display={{ base: "block", lg: "none" }}
+              />
+              <ProductDetailVariant
+                variantGroup={
+                  product?.variant_group! && product.variant_group[0]!
+                }
+                onVariantChange={handleSetSelectedVariantType}
+              />
+              <ProductDetailQuantity
+                stock={selectedVariantType.stock}
+                // minQty={5}
+                // maxQty={10}
+                onQuantityChange={handleSetQuantity}
+              />
+              <Flex mt={10} gap={1} direction={{ base: "column", lg: "row" }}>
+                <Button
+                  w={{ base: "100%", lg: "50%" }}
+                  variant="primaryOutline"
+                  onClick={(e) => handleAddToCart(e)}
+                >
+                  Add to Cart
+                </Button>
+                <Button w={{ base: "100%", lg: "50%" }} variant="primary">
+                  Buy Now
+                </Button>
+              </Flex>
+            </Box>
+          </Flex>
+          <Flex
+            background={"blackAlpha.300"}
+            my={10}
+            px={10}
+            py={8}
+            borderRadius={"lg"}
+            direction={"row"}
+            alignItems={"center"}
+            gap={5}
+          >
+            <Avatar size={"lg"} />
+            <Heading variant={"productShopName"}>Shop Name</Heading>
+          </Flex>
+        </>
       )}
     </Container>
   );
