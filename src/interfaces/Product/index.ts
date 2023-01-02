@@ -1,4 +1,5 @@
 import { IProductCategoryPayload } from "../Category";
+import { IVariantGroupPayload } from "../Variant";
 
 export interface ProductState {
   products: IProductPaginationPayload;
@@ -47,4 +48,31 @@ export interface IProductPayload {
   category: IProductCategoryPayload;
   variant_group: null;
   product_photos: string[];
+}
+
+export interface IProductDetailPricingProps {
+  normalPrice: number;
+  discountedPrice?: number;
+}
+
+export interface IProductDetailQuantityProps {
+  stock: number;
+  minQty?: number;
+  maxQty?: number;
+  onQuantityChange: (qty: number) => void;
+}
+
+export interface IProductDetailRatingProps {
+  rating: number;
+  review: number;
+}
+
+export interface IProductDetailVariantProps {
+  variantGroup: IVariantGroupPayload;
+  onVariantChange: Function;
+}
+
+export interface IProductDetailVariantsProps {
+  variantGroup: IVariantGroupPayload;
+  onVariantChange: Function;
 }

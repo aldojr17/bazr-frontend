@@ -1,4 +1,3 @@
-import { useState } from "react";
 import productService from "../api/service/product";
 import { ISearchFilterPayload } from "../interfaces/Filter";
 import { storeProductPagination } from "../redux/product";
@@ -8,22 +7,28 @@ const useProduct = () => {
   const products = useAppSelector((state) => state.product.products);
   const dispatch = useAppDispatch();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const getProducts = async (filter?: ISearchFilterPayload) => {
-    setIsLoading(true);
     const response = await productService.fetchAllProducts(filter);
 
     if (response.is_success) {
       dispatch(storeProductPagination(response.data));
     }
-    setIsLoading(false);
+  };
+
+  const fetchProduct = async (productId: number) => {
+    const response = await productService.fetchProduct(productId);
+
+    if (response.is_success) {
+      return response.data;
+    }
+
+    return null;
   };
 
   return {
-    isLoading,
     getProducts,
     products,
+    fetchProduct,
   };
 };
 

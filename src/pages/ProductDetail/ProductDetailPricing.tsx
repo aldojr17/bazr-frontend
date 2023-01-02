@@ -1,10 +1,6 @@
 import { Heading, HStack } from "@chakra-ui/react";
+import { IProductDetailPricingProps } from "../../interfaces/Product";
 import { getPriceString } from "../../util/util";
-
-interface IProductDetailPricingProps {
-  normalPrice: number;
-  discountedPrice?: number;
-}
 
 function ProductDetailPricing(props: IProductDetailPricingProps) {
   const { normalPrice, discountedPrice } = props;

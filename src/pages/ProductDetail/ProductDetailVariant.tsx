@@ -1,12 +1,7 @@
 import { Box, Heading, Select } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
-import { IVariantGroupPayload } from "../../interfaces/Variant";
-
-interface IProductDetailVariantProps {
-  variantGroup: IVariantGroupPayload;
-  onVariantChange: Function;
-}
+import { IProductDetailVariantProps } from "../../interfaces/Product";
 
 function ProductDetailVariant(props: IProductDetailVariantProps) {
   const { variantGroup, onVariantChange } = props;

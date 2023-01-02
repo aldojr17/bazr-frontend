@@ -11,6 +11,7 @@ const Register = React.lazy(() => import("../pages/Auth/Register"));
 const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
 const Search = React.lazy(() => import("../pages/Search/Search"));
 const Cart = React.lazy(() => import("../pages/Cart/Cart"));
+const Checkout = React.lazy(() => import("../pages/Checkout/Checkout"));
 
 const RouteList = () => {
   let routes = (
@@ -18,9 +19,14 @@ const RouteList = () => {
       <Route element={<LayoutRoutes />}>
         <Route path="/" element={<Home />} errorElement={<NotFound />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/pdp/:id" element={<ProductDetail />} errorElement={<NotFound />} />
+        <Route
+          path="/pdp/:id/:title"
+          element={<ProductDetail />}
+          errorElement={<NotFound />}
+        />
         <Route element={<UserRoutes />}>
           <Route path="/cart" element={<Cart />} />
+          <Route path="/cart/shipment" element={<Checkout />} />
         </Route>
       </Route>
 

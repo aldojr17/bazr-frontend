@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IProductPaginationPayload, ProductState } from "../../interfaces/Product";
+import {
+  IProductPaginationPayload,
+  ProductState,
+} from "../../interfaces/Product";
 
 const initialState: ProductState = {
   products: {
@@ -16,7 +19,10 @@ export const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    storeProductPagination: (state, action: PayloadAction<IProductPaginationPayload>) => {
+    storeProductPagination: (
+      state,
+      action: PayloadAction<IProductPaginationPayload>
+    ) => {
       state.products = action.payload;
     },
   },

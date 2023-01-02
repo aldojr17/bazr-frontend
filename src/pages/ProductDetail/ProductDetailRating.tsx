@@ -1,10 +1,6 @@
 import { Heading, HStack } from "@chakra-ui/react";
 import Icon from "../../assets/icons";
-
-interface IProductDetailRatingProps {
-  rating: number;
-  review: number;
-}
+import { IProductDetailRatingProps } from "../../interfaces/Product";
 
 function ProductDetailRating(props: IProductDetailRatingProps) {
   const { rating, review } = props;

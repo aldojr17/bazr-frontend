@@ -1,10 +1,6 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import { FiChevronRight } from "react-icons/fi";
-import { IProductCategoryPayload } from "../../interfaces/Category";
-
-interface IBreadCrumbProps {
-  categories: IProductCategoryPayload;
-}
+import { IBreadCrumbProps } from "../../interfaces/Components";
 
 function BreadCrumb(props: IBreadCrumbProps) {
   const { categories } = props;
@@ -21,14 +17,20 @@ function BreadCrumb(props: IBreadCrumbProps) {
       </BreadcrumbItem>
       {categories.primary_id && (
         <BreadcrumbItem isCurrentPage={!categories.secondary_id}>
-          <BreadcrumbLink href="#" color={`${categories.secondary_id ? "primary" : "secondary"}`}>
+          <BreadcrumbLink
+            href="#"
+            color={`${categories.secondary_id ? "primary" : "secondary"}`}
+          >
             {categories.primary_category.name}
           </BreadcrumbLink>
         </BreadcrumbItem>
       )}
       {categories.secondary_id && (
         <BreadcrumbItem isCurrentPage={!categories.tertiary_id}>
-          <BreadcrumbLink href="#" color={`${categories.tertiary_id ? "primary" : "secondary"}`}>
+          <BreadcrumbLink
+            href="#"
+            color={`${categories.tertiary_id ? "primary" : "secondary"}`}
+          >
             {categories.secondary_category.name}
           </BreadcrumbLink>
         </BreadcrumbItem>

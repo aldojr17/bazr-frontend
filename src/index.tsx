@@ -12,7 +12,9 @@ import reportWebVitals from "./reportWebVitals";
 import { customTheme } from "./theme/theme";
 import { store } from "./redux";
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
 root.render(
   <ChakraProvider theme={customTheme}>
     <GoogleOAuthProvider clientId="193045182620-6i9jf7k31ghtl4dkvqbvsni03r0dm7mm.apps.googleusercontent.com">

@@ -20,6 +20,7 @@ import { Field, Formik } from "formik";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import authService from "../../api/service/auth";
+import useTitle from "../../hooks/useTitle";
 import {
   ILoginGoogleRequestPayload,
   ILoginRequestPayload,
@@ -27,6 +28,7 @@ import {
 import "./auth.scss";
 
 const Login = () => {
+  useTitle("Login | BAZR");
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -83,8 +85,7 @@ const Login = () => {
 
   const loginValidationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Required"),
-    password: Yup.string()
-      .required("Required"),
+    password: Yup.string().required("Required"),
   });
 
   return (

@@ -35,16 +35,22 @@ import {
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Icon from "../../assets/icons";
-import { ISearchFilterPayload, ISearchParamsPayload, SearchParamsState } from "../../interfaces/Filter";
+import {
+  ISearchFilterPayload,
+  ISearchParamsPayload,
+  SearchParamsState,
+} from "../../interfaces/Filter";
 import ProductCard from "../../components/Card/ProductCard";
 import Pagination from "../../components/Pagination/Pagination";
 import useCategory from "../../hooks/useCategory";
 import { IProductPaginationPayload } from "../../interfaces/Product";
 import productService from "../../api/service/product";
+import useTitle from "../../hooks/useTitle";
 
 const Search = () => {
   const [search, setSearch] = useSearchParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  useTitle(`Shop for ${search.get("q")} | BAZR`);
 
   const { categories } = useCategory();
 
@@ -96,9 +102,15 @@ const Search = () => {
     } else {
       setParams({
         ...params,
-        city: params.city?.split(",").length !== 0 ? [...params.city?.split(",")!, id].join(",") : `${id}`,
+        city:
+          params.city?.split(",").length !== 0
+            ? [...params.city?.split(",")!, id].join(",")
+            : `${id}`,
       });
-      newParams["city"] = params.city?.split(",").length !== 0 ? [...params.city?.split(",")!, id].join(",") : `${id}`;
+      newParams["city"] =
+        params.city?.split(",").length !== 0
+          ? [...params.city?.split(",")!, id].join(",")
+          : `${id}`;
     }
 
     if (newParams["city"].at(0) === ",") {
@@ -132,7 +144,10 @@ const Search = () => {
     } else {
       setParams({
         ...params,
-        city: params.city?.split(",").length !== 0 ? [...params.city?.split(",")!, id].join(",") : `${id}`,
+        city:
+          params.city?.split(",").length !== 0
+            ? [...params.city?.split(",")!, id].join(",")
+            : `${id}`,
       });
     }
   };
@@ -176,7 +191,8 @@ const Search = () => {
   const handlePriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     setParams({
       ...params,
-      [event.currentTarget.name]: event.currentTarget.value !== "" ? event.currentTarget.value : "",
+      [event.currentTarget.name]:
+        event.currentTarget.value !== "" ? event.currentTarget.value : "",
     });
   };
 
@@ -492,14 +508,19 @@ const Search = () => {
                                       as="span"
                                       noOfLines={1}
                                       textAlign={"start"}
-                                      onClick={() => handleSelectCategory(category.id, 1)}
+                                      onClick={() =>
+                                        handleSelectCategory(category.id, 1)
+                                      }
                                       role={"button"}
                                       fontSize={{
                                         lg: "sm",
                                         xl: "md",
                                       }}
                                       fontWeight={
-                                        params.c! === String(category.id) && params.cl === "1" ? "bold" : "normal"
+                                        params.c! === String(category.id) &&
+                                        params.cl === "1"
+                                          ? "bold"
+                                          : "normal"
                                       }
                                     >
                                       {category.name}
@@ -507,67 +528,100 @@ const Search = () => {
                                   </HStack>
                                   <AccordionPanel py={0} pe={0}>
                                     {category.secondary_category.length !== 0
-                                      ? category.secondary_category.map((secondary) => (
-                                          <Accordion key={secondary.id} allowMultiple>
-                                            <AccordionItem border={"none"}>
-                                              <HStack spacing={8}>
-                                                <AccordionButton px={0} width={0}>
-                                                  <AccordionIcon />
-                                                </AccordionButton>
-                                                <Text
-                                                  as="span"
-                                                  noOfLines={1}
-                                                  textAlign={"start"}
-                                                  onClick={() => handleSelectCategory(secondary.id, 2)}
-                                                  role={"button"}
-                                                  fontSize={{
-                                                    lg: "sm",
-                                                    xl: "md",
-                                                  }}
-                                                  fontWeight={
-                                                    params.c! === String(secondary.id) && params.cl === "2"
-                                                      ? "bold"
-                                                      : "normal"
-                                                  }
-                                                >
-                                                  {secondary.name}
-                                                </Text>
-                                              </HStack>
-                                              <AccordionPanel py={0} pe={0}>
-                                                {secondary.tertiary_category.length !== 0
-                                                  ? secondary.tertiary_category.map((tertiary) => (
-                                                      <Box py={2} key={tertiary.id}>
-                                                        <Text
-                                                          as="span"
-                                                          ms={"1em"}
-                                                          px={3}
-                                                          noOfLines={{
-                                                            base: 1,
-                                                            lg: 2,
-                                                            xl: 1,
-                                                          }}
-                                                          textAlign={"start"}
-                                                          onClick={() => handleSelectCategory(tertiary.id, 3)}
-                                                          role={"button"}
-                                                          fontSize={{
-                                                            lg: "sm",
-                                                            xl: "md",
-                                                          }}
-                                                          fontWeight={
-                                                            params.c! === String(tertiary.id) && params.cl === "3"
-                                                              ? "bold"
-                                                              : "normal"
-                                                          }
-                                                        >
-                                                          {tertiary.name}
-                                                        </Text>
-                                                      </Box>
-                                                    ))
-                                                  : ""}
-                                              </AccordionPanel>
-                                            </AccordionItem>
-                                          </Accordion>
-                                        ))
+                                      ? category.secondary_category.map(
+                                          (secondary) => (
+                                            <Accordion
+                                              key={secondary.id}
+                                              allowMultiple
+                                            >
+                                              <AccordionItem border={"none"}>
+                                                <HStack spacing={8}>
+                                                  <AccordionButton
+                                                    px={0}
+                                                    width={0}
+                                                  >
+                                                    <AccordionIcon />
+                                                  </AccordionButton>
+                                                  <Text
+                                                    as="span"
+                                                    noOfLines={1}
+                                                    textAlign={"start"}
+                                                    onClick={() =>
+                                                      handleSelectCategory(
+                                                        secondary.id,
+                                                        2
+                                                      )
+                                                    }
+                                                    role={"button"}
+                                                    fontSize={{
+                                                      lg: "sm",
+                                                      xl: "md",
+                                                    }}
+                                                    fontWeight={
+                                                      params.c! ===
+                                                        String(secondary.id) &&
+                                                      params.cl === "2"
+                                                        ? "bold"
+                                                        : "normal"
+                                                    }
+                                                  >
+                                                    {secondary.name}
+                                                  </Text>
+                                                </HStack>
+                                                <AccordionPanel py={0} pe={0}>
+                                                  {secondary.tertiary_category
+                                                    .length !== 0
+                                                    ? secondary.tertiary_category.map(
+                                                        (tertiary) => (
+                                                          <Box
+                                                            py={2}
+                                                            key={tertiary.id}
+                                                          >
+                                                            <Text
+                                                              as="span"
+                                                              ms={"1em"}
+                                                              px={3}
+                                                              noOfLines={{
+                                                                base: 1,
+                                                                lg: 2,
+                                                                xl: 1,
+                                                              }}
+                                                              textAlign={
+                                                                "start"
+                                                              }
+                                                              onClick={() =>
+                                                                handleSelectCategory(
+                                                                  tertiary.id,
+                                                                  3
+                                                                )
+                                                              }
+                                                              role={"button"}
+                                                              fontSize={{
+                                                                lg: "sm",
+                                                                xl: "md",
+                                                              }}
+                                                              fontWeight={
+                                                                params.c! ===
+                                                                  String(
+                                                                    tertiary.id
+                                                                  ) &&
+                                                                params.cl ===
+                                                                  "3"
+                                                                  ? "bold"
+                                                                  : "normal"
+                                                              }
+                                                            >
+                                                              {tertiary.name}
+                                                            </Text>
+                                                          </Box>
+                                                        )
+                                                      )
+                                                    : ""}
+                                                </AccordionPanel>
+                                              </AccordionItem>
+                                            </Accordion>
+                                          )
+                                        )
                                       : ""}
                                   </AccordionPanel>
                                 </AccordionItem>
@@ -597,8 +651,16 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        <Checkbox onChange={handleChangeRating} isChecked={params.rt !== ""}>
-                          <Icon.Star mt={"-.3em"} fill={"orange"} width={"1.2em"} marginEnd={2} />
+                        <Checkbox
+                          onChange={handleChangeRating}
+                          isChecked={params.rt !== ""}
+                        >
+                          <Icon.Star
+                            mt={"-.3em"}
+                            fill={"orange"}
+                            width={"1.2em"}
+                            marginEnd={2}
+                          />
                           <Text as={"span"}>4 &amp; Up</Text>
                         </Checkbox>
                       </AccordionPanel>
@@ -690,7 +752,16 @@ const Search = () => {
                 margin: "0",
               }}
             >
-              <HStack spacing={5} display={{ base: "none", sm: "none", md: "none", lg: "flex", xl: "flex" }}>
+              <HStack
+                spacing={5}
+                display={{
+                  base: "none",
+                  sm: "none",
+                  md: "none",
+                  lg: "flex",
+                  xl: "flex",
+                }}
+              >
                 <Text
                   fontSize={{
                     lg: "sm",
@@ -778,7 +849,9 @@ const Search = () => {
                     xl: "md",
                   }}
                   onClick={() => {
-                    sort === "desc" ? handleChangeSort("asc") : handleChangeSort("desc");
+                    sort === "desc"
+                      ? handleChangeSort("asc")
+                      : handleChangeSort("desc");
                   }}
                 >
                   <Icon.Sort
@@ -802,7 +875,13 @@ const Search = () => {
                   xl: "md",
                 }}
                 onClick={handleClearFilter}
-                display={{ base: "none", sm: "none", md: "none", lg: display, xl: display }}
+                display={{
+                  base: "none",
+                  sm: "none",
+                  md: "none",
+                  lg: display,
+                  xl: display,
+                }}
               >
                 <Text
                   fontSize={{
@@ -819,7 +898,13 @@ const Search = () => {
                 bg="secondaryLighten"
                 px={4}
                 justifyContent={"space-between"}
-                display={{ base: "flex", sm: "flex", md: "flex", lg: "none", xl: "none" }}
+                display={{
+                  base: "flex",
+                  sm: "flex",
+                  md: "flex",
+                  lg: "none",
+                  xl: "none",
+                }}
               >
                 <HStack>
                   <Menu isLazy>
@@ -839,10 +924,20 @@ const Search = () => {
                         : "Price"}
                     </MenuButton>
                     <MenuList>
-                      <MenuItem onClick={() => handleChangeSortBy("view_count")}>Recommended</MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("date")}>Newest</MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("unit_sold")}>Most buy</MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("price")}>Price</MenuItem>
+                      <MenuItem
+                        onClick={() => handleChangeSortBy("view_count")}
+                      >
+                        Recommended
+                      </MenuItem>
+                      <MenuItem onClick={() => handleChangeSortBy("date")}>
+                        Newest
+                      </MenuItem>
+                      <MenuItem onClick={() => handleChangeSortBy("unit_sold")}>
+                        Most buy
+                      </MenuItem>
+                      <MenuItem onClick={() => handleChangeSortBy("price")}>
+                        Price
+                      </MenuItem>
                     </MenuList>
                   </Menu>
 
@@ -854,7 +949,9 @@ const Search = () => {
                       md: "md",
                     }}
                     onClick={() => {
-                      sort === "desc" ? handleChangeSort("asc") : handleChangeSort("desc");
+                      sort === "desc"
+                        ? handleChangeSort("asc")
+                        : handleChangeSort("desc");
                     }}
                   >
                     <Icon.Sort
@@ -953,7 +1050,9 @@ const Search = () => {
             {products?.data.length !== 0 ? (
               <Pagination
                 data={{
-                  current_page: products?.current_page ? products.current_page : 0,
+                  current_page: products?.current_page
+                    ? products.current_page
+                    : 0,
                   total_page: products?.total_page! ? products.total_page : 0,
                 }}
                 setPage={setPage}
@@ -1068,7 +1167,10 @@ const Search = () => {
                                       noOfLines={1}
                                       textAlign={"start"}
                                       onClick={() => {
-                                        handleSelectCategoryModal(category.id, 1);
+                                        handleSelectCategoryModal(
+                                          category.id,
+                                          1
+                                        );
                                       }}
                                       role={"button"}
                                       fontSize={{
@@ -1077,7 +1179,10 @@ const Search = () => {
                                         md: "md",
                                       }}
                                       fontWeight={
-                                        params.c! === String(category.id) && params.cl === "1" ? "bold" : "normal"
+                                        params.c! === String(category.id) &&
+                                        params.cl === "1"
+                                          ? "bold"
+                                          : "normal"
                                       }
                                     >
                                       {category.name}
@@ -1085,73 +1190,102 @@ const Search = () => {
                                   </HStack>
                                   <AccordionPanel py={0} pe={0}>
                                     {category.secondary_category.length !== 0
-                                      ? category.secondary_category.map((secondary) => (
-                                          <Accordion key={secondary.id} allowMultiple>
-                                            <AccordionItem border={"none"}>
-                                              <HStack spacing={8}>
-                                                <AccordionButton px={0} width={0}>
-                                                  <AccordionIcon />
-                                                </AccordionButton>
-                                                <Text
-                                                  as="span"
-                                                  noOfLines={1}
-                                                  textAlign={"start"}
-                                                  onClick={() => {
-                                                    handleSelectCategoryModal(secondary.id, 2);
-                                                  }}
-                                                  role={"button"}
-                                                  fontSize={{
-                                                    base: "sm",
-                                                    sm: "sm",
-                                                    md: "md",
-                                                  }}
-                                                  fontWeight={
-                                                    params.c! === String(secondary.id) && params.cl === "2"
-                                                      ? "bold"
-                                                      : "normal"
-                                                  }
-                                                >
-                                                  {secondary.name}
-                                                </Text>
-                                              </HStack>
-                                              <AccordionPanel py={0} pe={0}>
-                                                {secondary.tertiary_category.length !== 0
-                                                  ? secondary.tertiary_category.map((tertiary) => (
-                                                      <Box py={2} key={tertiary.id}>
-                                                        <Text
-                                                          as="span"
-                                                          ms={"1em"}
-                                                          px={3}
-                                                          noOfLines={{
-                                                            base: 1,
-                                                            lg: 2,
-                                                            xl: 1,
-                                                          }}
-                                                          textAlign={"start"}
-                                                          onClick={() => {
-                                                            handleSelectCategoryModal(tertiary.id, 3);
-                                                          }}
-                                                          role={"button"}
-                                                          fontSize={{
-                                                            base: "sm",
-                                                            sm: "sm",
-                                                            md: "md",
-                                                          }}
-                                                          fontWeight={
-                                                            params.c! === String(tertiary.id) && params.cl === "3"
-                                                              ? "bold"
-                                                              : "normal"
-                                                          }
-                                                        >
-                                                          {tertiary.name}
-                                                        </Text>
-                                                      </Box>
-                                                    ))
-                                                  : ""}
-                                              </AccordionPanel>
-                                            </AccordionItem>
-                                          </Accordion>
-                                        ))
+                                      ? category.secondary_category.map(
+                                          (secondary) => (
+                                            <Accordion
+                                              key={secondary.id}
+                                              allowMultiple
+                                            >
+                                              <AccordionItem border={"none"}>
+                                                <HStack spacing={8}>
+                                                  <AccordionButton
+                                                    px={0}
+                                                    width={0}
+                                                  >
+                                                    <AccordionIcon />
+                                                  </AccordionButton>
+                                                  <Text
+                                                    as="span"
+                                                    noOfLines={1}
+                                                    textAlign={"start"}
+                                                    onClick={() => {
+                                                      handleSelectCategoryModal(
+                                                        secondary.id,
+                                                        2
+                                                      );
+                                                    }}
+                                                    role={"button"}
+                                                    fontSize={{
+                                                      base: "sm",
+                                                      sm: "sm",
+                                                      md: "md",
+                                                    }}
+                                                    fontWeight={
+                                                      params.c! ===
+                                                        String(secondary.id) &&
+                                                      params.cl === "2"
+                                                        ? "bold"
+                                                        : "normal"
+                                                    }
+                                                  >
+                                                    {secondary.name}
+                                                  </Text>
+                                                </HStack>
+                                                <AccordionPanel py={0} pe={0}>
+                                                  {secondary.tertiary_category
+                                                    .length !== 0
+                                                    ? secondary.tertiary_category.map(
+                                                        (tertiary) => (
+                                                          <Box
+                                                            py={2}
+                                                            key={tertiary.id}
+                                                          >
+                                                            <Text
+                                                              as="span"
+                                                              ms={"1em"}
+                                                              px={3}
+                                                              noOfLines={{
+                                                                base: 1,
+                                                                lg: 2,
+                                                                xl: 1,
+                                                              }}
+                                                              textAlign={
+                                                                "start"
+                                                              }
+                                                              onClick={() => {
+                                                                handleSelectCategoryModal(
+                                                                  tertiary.id,
+                                                                  3
+                                                                );
+                                                              }}
+                                                              role={"button"}
+                                                              fontSize={{
+                                                                base: "sm",
+                                                                sm: "sm",
+                                                                md: "md",
+                                                              }}
+                                                              fontWeight={
+                                                                params.c! ===
+                                                                  String(
+                                                                    tertiary.id
+                                                                  ) &&
+                                                                params.cl ===
+                                                                  "3"
+                                                                  ? "bold"
+                                                                  : "normal"
+                                                              }
+                                                            >
+                                                              {tertiary.name}
+                                                            </Text>
+                                                          </Box>
+                                                        )
+                                                      )
+                                                    : ""}
+                                                </AccordionPanel>
+                                              </AccordionItem>
+                                            </Accordion>
+                                          )
+                                        )
                                       : ""}
                                   </AccordionPanel>
                                 </AccordionItem>
@@ -1187,7 +1321,12 @@ const Search = () => {
                           }}
                           isChecked={params.rt !== ""}
                         >
-                          <Icon.Star mt={"-.3em"} fill={"orange"} width={"1.2em"} marginEnd={2} />
+                          <Icon.Star
+                            mt={"-.3em"}
+                            fill={"orange"}
+                            width={"1.2em"}
+                            marginEnd={2}
+                          />
                           <Text as={"span"}>4 &amp; Up</Text>
                         </Checkbox>
                       </AccordionPanel>
@@ -1217,7 +1356,10 @@ const Search = () => {
                           <Checkbox
                             value="1"
                             onChange={(e) => {
-                              handleChangeLocationModal(1, e.currentTarget.checked);
+                              handleChangeLocationModal(
+                                1,
+                                e.currentTarget.checked
+                              );
                             }}
                             isChecked={params.city?.includes("1")}
                           >
@@ -1228,7 +1370,10 @@ const Search = () => {
                           <Checkbox
                             value="2"
                             onChange={(e) => {
-                              handleChangeLocationModal(2, e.currentTarget.checked);
+                              handleChangeLocationModal(
+                                2,
+                                e.currentTarget.checked
+                              );
                             }}
                             isChecked={params.city?.includes("2")}
                           >
@@ -1239,7 +1384,10 @@ const Search = () => {
                           <Checkbox
                             value="3"
                             onChange={(e) => {
-                              handleChangeLocationModal(3, e.currentTarget.checked);
+                              handleChangeLocationModal(
+                                3,
+                                e.currentTarget.checked
+                              );
                             }}
                             isChecked={params.city?.includes("3")}
                           >

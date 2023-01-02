@@ -13,13 +13,18 @@ export interface ICartResponsePayload {
 export interface ICartPayload {
   product_name: string;
   variant_type_name: string;
-  variant_type_price: string;
+  variant_type_price: number;
   quantity: number;
   shop_name: string;
+  shop_id: number;
+  cart_id: number;
+  variant_type_id: number;
 }
 
 export interface CartState {
   cart: ICartPayload[];
+  checkoutCart: ICartPayload[];
+  deletedItem: ICartPayload;
 }
 
 export interface IHoverCartProps {

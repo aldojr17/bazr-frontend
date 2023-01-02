@@ -1,10 +1,7 @@
 import styled from "styled-components";
+import { ICarouselItemIndexProps } from "../../interfaces/Components";
 
-interface Props {
-  active?: boolean;
-}
-
-export const CarouselItemIndex = styled.div<Props>`
+export const CarouselItemIndex = styled.div<ICarouselItemIndexProps>`
   padding: 0.1rem 1rem;
   background-color: ${(props) => (props.active ? "#212121" : "#a3a3a3")};
 `;

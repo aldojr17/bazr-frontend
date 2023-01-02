@@ -18,7 +18,7 @@ export const XScrollableWrapper = styled.div`
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #38B2AC;
+      background: #38b2ac;
       border-radius: 10px;
     }
   }

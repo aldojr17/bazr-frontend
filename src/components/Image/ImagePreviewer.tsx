@@ -11,11 +11,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { IImagePreviewerProps } from "../../interfaces/Components";
 import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
-
-interface IImagePreviewerProps {
-  data: string[];
-}
 
 function ImagePreviewer(props: IImagePreviewerProps) {
   const { data } = props;
@@ -24,7 +21,7 @@ function ImagePreviewer(props: IImagePreviewerProps) {
 
   return (
     <>
-      <Box px={{base: "0", lg: "10"}}>
+      <Box px={{ base: "0", lg: "10" }}>
         <AspectRatio
           ratio={1}
           borderRadius="xl"

@@ -1,11 +1,24 @@
 import { AxiosError } from "axios";
-import { ILoginGoogleRequestPayload, ILoginRequestPayload, ILoginResponsePayload, IRefreshRequestPayload, IRefreshResponsePayload, IRegisterRequestPayload, IRegisterResponsePayload } from "../../interfaces/Auth";
+import {
+  ILoginGoogleRequestPayload,
+  ILoginRequestPayload,
+  ILoginResponsePayload,
+  IRefreshRequestPayload,
+  IRefreshResponsePayload,
+  IRegisterRequestPayload,
+  IRegisterResponsePayload,
+} from "../../interfaces/Auth";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
 
-const register = async (payload: IRegisterRequestPayload): Promise<IRegisterResponsePayload> => {
+const register = async (
+  payload: IRegisterRequestPayload
+): Promise<IRegisterResponsePayload> => {
   try {
-    const response = await instance.post<IRegisterResponsePayload>(API_PATH.auth.REGISTER, payload);
+    const response = await instance.post<IRegisterResponsePayload>(
+      API_PATH.auth.REGISTER,
+      payload
+    );
 
     return response.data;
   } catch (err) {
@@ -13,12 +26,18 @@ const register = async (payload: IRegisterRequestPayload): Promise<IRegisterResp
   }
 };
 
-const login = async ({ email, password }: ILoginRequestPayload): Promise<ILoginResponsePayload> => {
+const login = async ({
+  email,
+  password,
+}: ILoginRequestPayload): Promise<ILoginResponsePayload> => {
   try {
-    const response = await instance.post<ILoginResponsePayload>(API_PATH.auth.LOGIN, {
-      email,
-      password,
-    });
+    const response = await instance.post<ILoginResponsePayload>(
+      API_PATH.auth.LOGIN,
+      {
+        email,
+        password,
+      }
+    );
 
     return response.data;
   } catch (err) {
@@ -26,9 +45,14 @@ const login = async ({ email, password }: ILoginRequestPayload): Promise<ILoginR
   }
 };
 
-const loginGoogle = async (payload: ILoginGoogleRequestPayload): Promise<ILoginResponsePayload> => {
+const loginGoogle = async (
+  payload: ILoginGoogleRequestPayload
+): Promise<ILoginResponsePayload> => {
   try {
-    const response = await instance.post<ILoginResponsePayload>(API_PATH.auth.LOGIN_GOOGLE, payload);
+    const response = await instance.post<ILoginResponsePayload>(
+      API_PATH.auth.LOGIN_GOOGLE,
+      payload
+    );
 
     return response.data;
   } catch (err) {
@@ -36,9 +60,14 @@ const loginGoogle = async (payload: ILoginGoogleRequestPayload): Promise<ILoginR
   }
 };
 
-const refresh = async (payload: IRefreshRequestPayload): Promise<IRefreshResponsePayload> => {
+const refresh = async (
+  payload: IRefreshRequestPayload
+): Promise<IRefreshResponsePayload> => {
   try {
-    const response = await instance.post<IRefreshResponsePayload>(API_PATH.auth.REFRESH, payload);
+    const response = await instance.post<IRefreshResponsePayload>(
+      API_PATH.auth.REFRESH,
+      payload
+    );
 
     return response.data;
   } catch (err) {

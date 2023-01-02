@@ -47,7 +47,11 @@ export const handleHttpResponse = (status: string, message?: string) => {
   }
 };
 
-const handleFallback = (method: string, url: string, payload?: AxiosRequestConfig) => {
+const handleFallback = (
+  method: string,
+  url: string,
+  payload?: AxiosRequestConfig
+) => {
   switch (method) {
     case "get":
       instance.get(url, payload?.params);
@@ -85,9 +89,15 @@ instance.interceptors.response.use(
 
       if (localStorage.getItem("refresh")) {
         instance
-          .post(API_PATH.auth.REFRESH, { refresh_token: localStorage.getItem("refresh") })
+          .post(API_PATH.auth.REFRESH, {
+            refresh_token: localStorage.getItem("refresh"),
+          })
           .then((response) => {
-            setCookie(null, "auth", `Bearer ${response.data.data.access_token}`);
+            setCookie(
+              null,
+              "auth",
+              `Bearer ${response.data.data.access_token}`
+            );
             handleFallback(err.config.method, err.config.url, err.config);
           })
           .catch((error) => {

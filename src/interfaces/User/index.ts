@@ -15,7 +15,6 @@ export interface IChangeProfilePayload {
   profile_picture: string;
 }
 
-
 export interface UserState {
   userId: number;
 }

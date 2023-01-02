@@ -4,6 +4,17 @@ import { CartState, ICartPayload } from "../../interfaces/Cart";
 
 const initialState: CartState = {
   cart: [],
+  checkoutCart: [],
+  deletedItem: {
+    cart_id: 0,
+    product_name: "",
+    quantity: 0,
+    shop_id: 0,
+    shop_name: "",
+    variant_type_id: 0,
+    variant_type_name: "",
+    variant_type_price: 0,
+  },
 };
 
 export const cartSlice = createSlice({
@@ -16,9 +27,16 @@ export const cartSlice = createSlice({
     clearCart: (state) => {
       state.cart = [];
     },
+    storeCheckoutCart: (state, action: PayloadAction<ICartPayload[]>) => {
+      state.checkoutCart = action.payload;
+    },
+    storeDeletedItem: (state, action: PayloadAction<ICartPayload>) => {
+      state.deletedItem = action.payload;
+    },
   },
 });
 
-export const { storeCart, clearCart } = cartSlice.actions;
+export const { storeCart, clearCart, storeCheckoutCart, storeDeletedItem } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

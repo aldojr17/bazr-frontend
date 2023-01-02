@@ -24,15 +24,15 @@ export const customTheme = extendTheme({
   styles: {
     global: {
       a: {
-        fontWeight: 'semibold',
+        fontWeight: "semibold",
         _hover: {
-          textDecoration: 'none',
-          color: 'primaryDarken',
+          textDecoration: "none",
+          color: "primaryDarken",
         },
       },
       span: {
-        fontWeight: 'semibold',
-      }
+        fontWeight: "semibold",
+      },
     },
   },
   components: {
