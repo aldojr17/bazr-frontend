@@ -1,6 +1,6 @@
 import { Box, Heading, Select } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FaCaretDown } from "react-icons/fa";
+import Icon from "../../assets/icons";
 import { IProductDetailVariantProps } from "../../interfaces/Product";
 
 function ProductDetailVariant(props: IProductDetailVariantProps) {
@@ -85,7 +85,7 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
           <Select
             variant={"default"}
             width={"fit-content"}
-            icon={<FaCaretDown />}
+            icon={<Icon.ChevronDown fill={"primary"} />}
             value={(selectedVariant as any)[name]}
             onChange={(e) => handleSetVariant(e)}
           >

@@ -1,4 +1,5 @@
 import Cart from "./Cart";
+import ChevronDown from "./ChevronDown";
 import ChevronRight from "./ChevronRight";
 import ChevronUp from "./ChevronUp";
 import Close from "./Close";
@@ -17,6 +18,7 @@ import Trash from "./Trash";
 
 const Icon = {
   Cart,
+  ChevronDown,
   ChevronRight,
   ChevronUp,
   Close,

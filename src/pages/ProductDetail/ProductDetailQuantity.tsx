@@ -9,7 +9,7 @@ import {
   useNumberInput,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { TiMinus, TiPlus } from "react-icons/ti";
+import Icon from "../../assets/icons";
 import useDebounce from "../../hooks/useDebounce";
 import { IProductDetailQuantityProps } from "../../interfaces/Product";
 
@@ -61,7 +61,7 @@ function ProductDetailQuantity(props: IProductDetailQuantityProps) {
       <HStack ms={-2} my={3}>
         <IconButton
           aria-label="minus"
-          icon={<TiMinus />}
+          icon={<Icon.Minus fill={"primary"} />}
           variant="quantity"
           {...getDecrementButtonProps()}
         />
@@ -78,7 +78,7 @@ function ProductDetailQuantity(props: IProductDetailQuantityProps) {
         />
         <IconButton
           aria-label="plus"
-          icon={<TiPlus />}
+          icon={<Icon.Plus fill={"primary"} />}
           variant="quantity"
           {...getIncrementButtonProps()}
         />

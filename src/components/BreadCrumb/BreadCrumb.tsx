@@ -1,5 +1,5 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
-import { FiChevronRight } from "react-icons/fi";
+import Icon from "../../assets/icons";
 import { IBreadCrumbProps } from "../../interfaces/Components";
 
 function BreadCrumb(props: IBreadCrumbProps) {
@@ -8,7 +8,7 @@ function BreadCrumb(props: IBreadCrumbProps) {
   return (
     <Breadcrumb
       spacing="8px"
-      separator={<FiChevronRight color="gray.500" />}
+      separator={<Icon.ChevronRight color="gray.500" />}
       my={8}
       variant="default"
     >
