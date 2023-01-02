@@ -24,7 +24,7 @@ function ImagePreviewer(props: IImagePreviewerProps) {
 
   return (
     <>
-      <Box p={{base: "0", lg: "10"}}>
+      <Box px={{base: "0", lg: "10"}}>
         <AspectRatio
           ratio={1}
           borderRadius="xl"

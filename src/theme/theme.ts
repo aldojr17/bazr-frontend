@@ -10,9 +10,9 @@ export const customTheme = extendTheme({
     primary: "#38B2AC", //teal.400
     primaryLighten: "#4FD1C5", //teal.300
     primaryDarken: "#319795", //teal.500
-    secondary: "#949494",
-    secondaryLighten: "#A3A3A3",
-    secondaryDarken: "#8F8F8F",
+    secondary: "#6B46C1", //purple.600
+    secondaryLighten: "#805AD5", //purple.500
+    secondaryDarken: "#553C9A", //purple.700
     dark: "#212121",
     darkLighten: "#212121",
     light: "#212121",
@@ -20,6 +20,20 @@ export const customTheme = extendTheme({
   },
   shadows: {
     default: "0px 8px 24px rgba(154, 170, 207, 0.15)",
+  },
+  styles: {
+    global: {
+      a: {
+        fontWeight: 'semibold',
+        _hover: {
+          textDecoration: 'none',
+          color: 'primaryDarken',
+        },
+      },
+      span: {
+        fontWeight: 'semibold',
+      }
+    },
   },
   components: {
     Button,
