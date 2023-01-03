@@ -424,22 +424,19 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                       </HStack>
                     </Button>
                   </PopoverBody>
-                  {cart.length !== 0 ? (
-                    <PopoverFooter px={5}>
-                      <Flex justifyContent={"end"}>
-                        <Button
-                          variant={"ghost"}
-                          size={"md"}
-                          colorScheme={"teal"}
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </Button>
-                      </Flex>
-                    </PopoverFooter>
-                  ) : (
-                    ""
-                  )}
+
+                  <PopoverFooter px={5}>
+                    <Flex justifyContent={"end"}>
+                      <Button
+                        variant={"ghost"}
+                        size={"md"}
+                        colorScheme={"teal"}
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </Button>
+                    </Flex>
+                  </PopoverFooter>
                 </PopoverContent>
               </Popover>
             ) : (
