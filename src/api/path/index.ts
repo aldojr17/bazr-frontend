@@ -7,7 +7,7 @@ export const API_PATH = {
     CHECK_EMAIL: "/check-email",
   },
   user: {
-    PROFILE: "/get-profile",
+    PROFILE: "/users/profile",
   },
   category: {
     GET_ALL_CATEGORIES: "/categories",
@@ -18,6 +18,9 @@ export const API_PATH = {
   },
   cart: {
     CART: "/cart",
+  },
+  transaction: {
+    TRANSACTIONS: "/transactions",
   },
   shop: {
     SHOPS_PROFILE: "/shops/profile",

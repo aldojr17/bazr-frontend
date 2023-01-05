@@ -11,6 +11,7 @@ export interface ICartResponsePayload {
 }
 
 export interface ICartPayload {
+  product_id?: number;
   product_name: string;
   variant_type_name: string;
   variant_type_price: number;
