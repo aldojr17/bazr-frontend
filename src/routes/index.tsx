@@ -12,6 +12,15 @@ const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
 const Search = React.lazy(() => import("../pages/Search/Search"));
 const Cart = React.lazy(() => import("../pages/Cart/Cart"));
 const Checkout = React.lazy(() => import("../pages/Checkout/Checkout"));
+const CategoryPrimary = React.lazy(
+  () => import("../pages/Category/CategoryPrimary")
+);
+const CategorySecondary = React.lazy(
+  () => import("../pages/Category/CategorySecondary")
+);
+const CategoryTertiary = React.lazy(
+  () => import("../pages/Category/CategoryTertiary")
+);
 
 const RouteList = () => {
   let routes = (
@@ -23,6 +32,15 @@ const RouteList = () => {
           path="/pdp/:id/:title"
           element={<ProductDetail />}
           errorElement={<NotFound />}
+        />
+        <Route path="/p/:cPrimary" element={<CategoryPrimary />} />
+        <Route
+          path="/p/:cPrimary/:cSecondary"
+          element={<CategorySecondary />}
+        />
+        <Route
+          path="/p/:cPrimary/:cSecondary/:cTertiary"
+          element={<CategoryTertiary />}
         />
         <Route element={<UserRoutes />}>
           <Route path="/cart" element={<Cart />} />
