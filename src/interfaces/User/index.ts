@@ -1,11 +1,8 @@
+import { IAddressPayload } from "../Address";
+
 export interface IUserPayload {
   id: string;
-  email: string;
-  address: string;
-  full_name: string;
-  phone: string;
-  profile_picture: string;
-  role: number;
+  address_detail: IAddressPayload;
 }
 
 export interface IChangeProfilePayload {
@@ -17,4 +14,10 @@ export interface IChangeProfilePayload {
 
 export interface UserState {
   userId: number;
+}
+
+export interface IUserResponsePayload {
+  is_success: boolean;
+  data: IUserPayload;
+  message: string;
 }

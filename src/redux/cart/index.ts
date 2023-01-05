@@ -6,6 +6,7 @@ const initialState: CartState = {
   cart: [],
   checkoutCart: [],
   deletedItem: {
+    product_id: 0,
     cart_id: 0,
     product_name: "",
     quantity: 0,

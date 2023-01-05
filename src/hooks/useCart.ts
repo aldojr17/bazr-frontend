@@ -11,7 +11,9 @@ import {
 import { useAppDispatch, useAppSelector } from "./useSelector";
 
 const useCart = () => {
-  const { cart, deletedItem } = useAppSelector((state) => state.cart);
+  const { cart, deletedItem, checkoutCart } = useAppSelector(
+    (state) => state.cart
+  );
   const dispatch = useAppDispatch();
 
   const getCart = async () => {
@@ -82,6 +84,7 @@ const useCart = () => {
     deleteItem,
     undoDeleteItem,
     getCart,
+    checkoutCart,
   };
 };
 

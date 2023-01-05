@@ -374,8 +374,11 @@ const Cart = () => {
                     borderRadius={"lg"}
                     width={"100%"}
                     shadow={"none"}
-                    color={"white"}
                     onClick={handleBuyNow}
+                    variant={
+                      checkoutCart.length === 0 ? "basicOutline" : "primary"
+                    }
+                    isDisabled={checkoutCart.length === 0}
                   >
                     Buy ({checkoutCart.length})
                   </Button>
@@ -431,8 +434,11 @@ const Cart = () => {
                   <Button
                     borderRadius={"lg"}
                     shadow={"none"}
-                    color={"white"}
                     onClick={handleBuyNow}
+                    variant={
+                      checkoutCart.length === 0 ? "basicOutline" : "primary"
+                    }
+                    isDisabled={checkoutCart.length === 0}
                   >
                     Buy ({checkoutCart.length})
                   </Button>
