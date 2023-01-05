@@ -31,11 +31,15 @@ const Heading = defineStyleConfig({
     },
     variantName: {
       fontSize: "md",
-      color: "gray.600",
+      color: "gray.500",
     },
     productShopName: {
       fontSize: "xl",
-      fontWeight: "semibold",
+      fontWeight: "bold",
+    },
+    sectionHeading: {
+      fontSize: "2xl",
+      fontWeight: "bold",
     },
   },
   defaultProps: {

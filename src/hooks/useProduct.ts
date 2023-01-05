@@ -12,7 +12,10 @@ const useProduct = () => {
 
     if (response.is_success) {
       dispatch(storeProductPagination(response.data));
+      return response.data;
     }
+
+    return null;
   };
 
   const fetchProduct = async (productId: number) => {
@@ -25,10 +28,24 @@ const useProduct = () => {
     return null;
   };
 
+  const getShopProducts = async (
+    shopId: number,
+    filter: ISearchFilterPayload
+  ) => {
+    const response = await productService.fetchShopProducts(shopId, filter);
+
+    if (response.is_success) {
+      return response.data;
+    }
+
+    return null;
+  };
+
   return {
     getProducts,
     products,
     fetchProduct,
+    getShopProducts,
   };
 };
 

@@ -30,7 +30,7 @@ const Button = defineStyleConfig({
     primaryOutline: {
       bg: "white",
       color: "primary",
-      border: "4px solid",
+      border: "3px solid",
       borderColor: "teal.400",
       borderRadius: "lg",
       boxShadow: "default",
@@ -101,7 +101,7 @@ const Button = defineStyleConfig({
       },
     },
     outline: {
-      border: "4px solid",
+      border: "3px solid",
       borderColor: "primary",
       borderRadius: "lg",
       color: "teal.400",

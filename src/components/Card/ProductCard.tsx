@@ -1,19 +1,23 @@
 import {
   AspectRatio,
   Box,
+  Center,
+  Divider,
   Flex,
-  HStack,
   Image,
-  Stack,
   Text,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import { IProductPayload } from "../../interfaces/Product";
-import { formatCurrency } from "../../util/util";
+import { formatCurrency, handleImageOnError } from "../../util/util";
 
 const ProductCard = ({ ...props }: IProductPayload) => {
   const navigate = useNavigate();
+
+  const [isHover, setIsHover] = useState(false);
+
   return (
     <Box
       onClick={() =>
@@ -24,13 +28,20 @@ const ProductCard = ({ ...props }: IProductPayload) => {
             .join("-")}`
         )
       }
-      maxW={{
+      flexShrink={0}
+      w={{
         base: "250px",
         sm: "200px",
-        md: "100%",
-        lg: "100%",
-        xl: "100%",
+        md: "200px",
+        lg: "200px",
+        xl: "200px",
       }}
+      border={"2px solid"}
+      borderColor={"light"}
+      borderRadius={"lg"}
+      boxShadow={"default"}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
       <AspectRatio
         ratio={1}
@@ -41,24 +52,59 @@ const ProductCard = ({ ...props }: IProductPayload) => {
           lg: "100%",
           xl: "100%",
         }}
+        borderRadius={"lg"}
       >
-        <Image src="https://res.cloudinary.com/dcdexrr4n/image/upload/v1670317984/mppsna4mqr567gep3ec6.png" />
+        <Image
+          src={props.product_photos[0]?.url}
+          borderRadius={"lg"}
+          onError={handleImageOnError}
+        />
       </AspectRatio>
-      <Stack gap={1}>
-        <Text marginTop={5} marginBottom={1} noOfLines={1}>
+      <Flex p={3} direction={"column"}>
+        <Text variant={"productCardTitle"} noOfLines={1}>
           {props.name}
         </Text>
-        <Flex gap={2}>
-          <Icon.Star fill={"orange"} />
-          {props.total_review !== 0
-            ? (props.total_rating / props.total_review).toFixed(2)
-            : 0}
+        <Text
+          variant={"productCardPrice"}
+          __css={{
+            marginTop: 0,
+          }}
+        >
+          Rp {formatCurrency(props.lowest_price)}
+        </Text>
+        <Flex gap={2} alignItems={"center"} wrap={"nowrap"}>
+          <Icon.Shop fill={"secondary"} width={3.5} />
+          <Text variant={"productCardRating"} noOfLines={1}>
+            {props.shop_name}
+          </Text>
+          <Center height="15px">
+            <Divider orientation="vertical" />
+          </Center>
+          <Icon.Location fill={"secondary"} width={3.5} />
+          <Text variant={"productCardRating"} noOfLines={1}>
+            {props.shop_location}
+          </Text>
         </Flex>
-        <HStack justifyContent={"space-between"}>
-          <Text>Rp{formatCurrency(props.lowest_price)}</Text>
-          <Text>{props.unit_sold} Sold</Text>
-        </HStack>
-      </Stack>
+        <Flex gap={2} alignItems={"center"} mt={5}>
+          <Icon.Star fill={"yellow.300"} width={4} />
+          {props.rating > 0 ? (
+            <>
+              <Text variant={"productCardRating"}>{props.rating}</Text>
+              <Text variant={"productCardReview"}>({props.total_review})</Text>
+            </>
+          ) : (
+            <Text variant={"productCardRating"}>-</Text>
+          )}
+          {props.unit_sold > 0 && (
+            <>
+              <Center height="15px">
+                <Divider orientation="vertical" />
+              </Center>
+              <Text variant={"productCardReview"}>{props.unit_sold} sold</Text>
+            </>
+          )}
+        </Flex>
+      </Flex>
     </Box>
   );
 };
