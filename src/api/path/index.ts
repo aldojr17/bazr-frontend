@@ -14,8 +14,12 @@ export const API_PATH = {
   },
   product: {
     PRODUCTS: "/products",
+    PRODUCTS_SHOP: "/products/shop",
   },
   cart: {
     CART: "/cart",
+  },
+  shop: {
+    SHOPS_PROFILE: "/shops/profile",
   },
 };

@@ -35,9 +35,28 @@ const fetchAllProducts = async (
   }
 };
 
+const fetchShopProducts = async (
+  shopId: number,
+  filter?: ISearchFilterPayload
+): Promise<IProductsResponsePayload> => {
+  try {
+    const response = await instance.get<IProductsResponsePayload>(
+      API_PATH.product.PRODUCTS_SHOP + "/" + shopId,
+      {
+        params: filter,
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IProductsResponsePayload;
+  }
+};
+
 const productService = {
   fetchProduct,
   fetchAllProducts,
+  fetchShopProducts,
 };
 
 export default productService;

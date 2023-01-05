@@ -1,6 +1,7 @@
 import { ChangeEvent, ReactNode } from "react";
 import { ICartPayload } from "../Cart";
 import { IProductCategoryPayload } from "../Category";
+import { IProductPayload, IProductPhotoPayload } from "../Product";
 
 export interface IBreadCrumbProps {
   categories: IProductCategoryPayload;
@@ -18,7 +19,7 @@ export interface ICartItemProps {
 }
 
 export interface IImagePreviewerProps {
-  data: string[];
+  data: IProductPhotoPayload[];
 }
 
 export interface IToastProps {
@@ -29,4 +30,13 @@ export interface IToastProps {
 
 export interface ICarouselItemIndexProps {
   active?: boolean;
+}
+
+export interface IProductScrollableContainerProps {
+  label: string;
+  products: IProductPayload[];
+  isLoading?: boolean;
+  isError?: boolean;
+  onError?: Function;
+  link: string;
 }

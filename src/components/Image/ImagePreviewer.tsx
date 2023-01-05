@@ -16,12 +16,12 @@ import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
 
 function ImagePreviewer(props: IImagePreviewerProps) {
   const { data } = props;
-  const [selectedImage, setSelectedImage] = useState(data[0]);
+  const [selectedImage, setSelectedImage] = useState(data[0]?.url);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Box px={{ base: "0", lg: "10" }}>
+      <Box>
         <AspectRatio
           ratio={1}
           borderRadius="xl"
@@ -38,7 +38,7 @@ function ImagePreviewer(props: IImagePreviewerProps) {
         </AspectRatio>
 
         <XScrollableWrapper>
-          {data.map((imageURL, index) => (
+          {data.map((productPhoto, index) => (
             <AspectRatio
               key={index}
               ratio={1}
@@ -49,14 +49,18 @@ function ImagePreviewer(props: IImagePreviewerProps) {
                 )
               }
               filter="auto"
-              brightness={`${imageURL === selectedImage ? "85%" : "100%"}`}
+              brightness={`${
+                productPhoto.url === selectedImage ? "85%" : "100%"
+              }`}
               borderRadius="xl"
               boxShadow="default"
             >
               <Image
-                src={imageURL}
+                src={productPhoto.url}
                 borderRadius="xl"
-                border={`${imageURL === selectedImage ? "4px" : "none"}`}
+                border={`${
+                  productPhoto.url === selectedImage ? "4px" : "none"
+                }`}
                 borderColor={`teal.300`}
               />
             </AspectRatio>
@@ -85,7 +89,7 @@ function ImagePreviewer(props: IImagePreviewerProps) {
               />
             </AspectRatio>
             <XScrollableWrapper>
-              {data.map((imageURL, index) => (
+              {data.map((productPhoto, index) => (
                 <AspectRatio
                   key={index}
                   ratio={1}
@@ -96,14 +100,18 @@ function ImagePreviewer(props: IImagePreviewerProps) {
                     )
                   }
                   filter="auto"
-                  brightness={`${imageURL === selectedImage ? "85%" : "100%"}`}
+                  brightness={`${
+                    productPhoto.url === selectedImage ? "85%" : "100%"
+                  }`}
                   borderRadius="xl"
                   boxShadow="default"
                 >
                   <Image
-                    src={imageURL}
+                    src={productPhoto.url}
                     borderRadius="xl"
-                    border={`${imageURL === selectedImage ? "4px" : "none"}`}
+                    border={`${
+                      productPhoto.url === selectedImage ? "4px" : "none"
+                    }`}
                     borderColor={`teal.300`}
                   />
                 </AspectRatio>

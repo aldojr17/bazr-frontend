@@ -1,5 +1,5 @@
 import { IProductCategoryPayload } from "../Category";
-import { IVariantGroupPayload } from "../Variant";
+import { IVariantGroupPayload, IVariantTypePayload } from "../Variant";
 
 export interface ProductState {
   products: IProductPaginationPayload;
@@ -47,18 +47,28 @@ export interface IProductPayload {
   shop_id: number;
   category: IProductCategoryPayload;
   variant_group: null;
-  product_photos: string[];
+  product_photos: IProductPhotoPayload[];
+  rating: number;
+  shop_name: string;
+  shop_location: string;
 }
-
+export interface IProductPhotoPayload {
+  id: number;
+  product_id: number;
+  url: string;
+}
 export interface IProductDetailPricingProps {
   normalPrice: number;
   discountedPrice?: number;
+  showRange: boolean;
+  minRange: number;
+  maxRange: number;
 }
 
 export interface IProductDetailQuantityProps {
-  stock: number;
-  minQty?: number;
-  maxQty?: number;
+  stock: number | null;
+  minQty: number;
+  maxQty: number;
   onQuantityChange: (qty: number) => void;
 }
 
@@ -70,9 +80,38 @@ export interface IProductDetailRatingProps {
 export interface IProductDetailVariantProps {
   variantGroup: IVariantGroupPayload;
   onVariantChange: Function;
+  error: boolean;
 }
 
 export interface IProductDetailVariantsProps {
   variantGroup: IVariantGroupPayload;
   onVariantChange: Function;
 }
+
+export interface IItemSummaryProps {
+  productName: string;
+  variantGroup: IVariantGroupPayload;
+  selectedVariant: IVariantTypePayload;
+  shopId: number;
+  shopName: string;
+  minQty: number;
+  maxQty: number;
+  onVariantChange: Function;
+}
+
+export interface IDetailProps {
+  productName: string;
+  productMinPrice: number;
+  productMaxPrice: number;
+  productRating: number;
+  productReview: number;
+  productView: number;
+  shopId: number;
+  selectedVariant: IVariantTypePayload;
+}
+
+export interface IStoreProductListProps {
+  shopId: number;
+}
+
+export interface ISimilarProductListProps {}

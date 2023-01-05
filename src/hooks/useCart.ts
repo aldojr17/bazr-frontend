@@ -42,6 +42,7 @@ const useCart = () => {
           )
         )
       );
+      return response.data;
     }
   };
 

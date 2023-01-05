@@ -7,6 +7,7 @@ function BreadCrumb(props: IBreadCrumbProps) {
 
   return (
     <Breadcrumb
+      display={{ base: "none", lg: "flex" }}
       spacing="8px"
       separator={<Icon.ChevronRight color="gray.500" />}
       my={8}
