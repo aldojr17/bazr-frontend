@@ -38,6 +38,7 @@ export interface IProductCategoryPayload {
 export interface ICategoryCardProps {
   icon: string;
   name: string;
+  onClick: () => void;
 }
 export interface CategoryState {
   categories: IPrimaryCategoryPayload[];

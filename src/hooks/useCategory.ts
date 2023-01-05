@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import categoryService from "../api/service/category";
 import { storeCategories } from "../redux/category";
 import { useAppDispatch, useAppSelector } from "./useSelector";
+import slugify from "slugify";
 
 const useCategory = () => {
   const categories = useAppSelector((state) => state.category.categories);
@@ -15,6 +16,44 @@ const useCategory = () => {
     }
   };
 
+  const getPrimaryCategoryBySlugifiedName = (slugifiedName: string) => {
+    const category = categories.find((category) => {
+      return slugify(category.name) === slugifiedName;
+    });
+    return category;
+  };
+
+  const getSecondaryCategoryBySlugifiedName = (
+    primarySlugifiedName: string,
+    secondarySlugifiedName: string
+  ) => {
+    const primaryCategory =
+      getPrimaryCategoryBySlugifiedName(primarySlugifiedName);
+    const secondaryCategory = primaryCategory?.secondary_category.find(
+      (category) => {
+        return slugify(category.name) === secondarySlugifiedName;
+      }
+    );
+    return secondaryCategory;
+  };
+
+  const getTertiaryCategoryBySlugifiedName = (
+    primarySlugifiedName: string,
+    secondarySlugifiedName: string,
+    tertiarySlugifiedName: string
+  ) => {
+    const secondaryCategory = getSecondaryCategoryBySlugifiedName(
+      primarySlugifiedName,
+      secondarySlugifiedName
+    );
+    const tertiaryCategory = secondaryCategory?.tertiary_category.find(
+      (category) => {
+        return slugify(category.name) === tertiarySlugifiedName;
+      }
+    );
+    return tertiaryCategory;
+  };
+
   useEffect(() => {
     if (categories.length === 0) {
       getCategories();
@@ -23,6 +62,9 @@ const useCategory = () => {
 
   return {
     categories,
+    getPrimaryCategoryBySlugifiedName,
+    getSecondaryCategoryBySlugifiedName,
+    getTertiaryCategoryBySlugifiedName,
   };
 };
 

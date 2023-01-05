@@ -368,31 +368,37 @@ const Search = () => {
           xl: 12,
         }}
       >
-        <HStack ps={4} pb={5}>
-          <Text
-            fontSize={{
-              base: "md",
-              sm: "md",
-              md: "lg",
-              lg: "xl",
-              xl: "xl",
-            }}
-          >
-            Search result for
-          </Text>
-          <Text
-            fontSize={{
-              base: "md",
-              sm: "md",
-              md: "lg",
-              lg: "xl",
-              xl: "xl",
-            }}
-            fontWeight={"bold"}
-          >
-            {'"' + search.get("q") + '"'}
-          </Text>
-        </HStack>
+        {search.get("q") !== null &&
+        search.get("q") !== undefined &&
+        search.get("q")!.length > 0 ? (
+          <HStack ps={4} pb={5}>
+            <Text
+              fontSize={{
+                base: "md",
+                sm: "md",
+                md: "lg",
+                lg: "xl",
+                xl: "xl",
+              }}
+            >
+              Search result for
+            </Text>
+            <Text
+              fontSize={{
+                base: "md",
+                sm: "md",
+                md: "lg",
+                lg: "xl",
+                xl: "xl",
+              }}
+              fontWeight={"bold"}
+            >
+              {'"' + search.get("q") + '"'}
+            </Text>
+          </HStack>
+        ) : (
+          ""
+        )}
         <Grid
           templateColumns={{
             sm: "repeat(2, 1fr)",

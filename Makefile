@@ -1,5 +1,5 @@
 run:
-	npm run start
+	yarn start
 
 format:
 	npx prettier --write --config .prettierrc.yml --no-editorconfig .

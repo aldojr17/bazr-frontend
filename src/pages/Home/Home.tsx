@@ -12,6 +12,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import CategoryCard from "../../components/Card/CategoryCard";
 import ProductCard from "../../components/Card/ProductCard";
@@ -19,12 +20,14 @@ import useCategory from "../../hooks/useCategory";
 import useProduct from "../../hooks/useProduct";
 import useTitle from "../../hooks/useTitle";
 import { CarouselItemIndex, CategoryWrapper } from "./style";
+import slugify from "slugify";
 
 const Home = () => {
   useTitle("Home | BAZR");
   const [activeIndex, setActiveIndex] = useState<number>(1);
   const { categories } = useCategory();
   const { products, getProducts } = useProduct();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProducts({
@@ -141,7 +144,11 @@ const Home = () => {
         <CategoryWrapper>
           {categories.length !== 0
             ? categories.map((category) => (
-                <CategoryCard {...category} key={category.id} />
+                <CategoryCard
+                  {...category}
+                  key={category.id}
+                  onClick={() => navigate(`p/${slugify(category.name)}`)}
+                />
               ))
             : ""}
         </CategoryWrapper>
