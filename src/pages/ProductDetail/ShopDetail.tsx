@@ -43,11 +43,19 @@ function ShopDetail(props: IShopDetailProps) {
         gap={5}
       >
         <SkeletonCircle isLoaded={!loading} size={"14"}>
-          <Avatar as={Link} href={"/"} size={"lg"} />
+          <Avatar
+            as={Link}
+            href={`/shop/${shopId}/${shopDetail?.username}`}
+            size={"lg"}
+          />
         </SkeletonCircle>
         <Box flex={1} ms={2}>
           <SkeletonText my={"2"} isLoaded={!loading}>
-            <Heading as={Link} href={"/"} variant={"productShopName"}>
+            <Heading
+              as={Link}
+              href={`/shop/${shopId}/${shopDetail?.username}`}
+              variant={"productShopName"}
+            >
               {shopDetail?.name!}
             </Heading>
             <Flex
