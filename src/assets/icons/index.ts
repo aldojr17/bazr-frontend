@@ -14,10 +14,13 @@ import Profile from "./Profile";
 import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
 import Search from "./Search";
-import Shop from "./Shop";
 import Sort from "./Sort";
 import Star from "./Star";
 import Trash from "./Trash";
+import Shop from "./Shop";
+import PersonCheck from "./PersonCheck";
+import PinMap from "./PinMap";
+import GeoMap from "./GeoMap";
 
 const Icon = {
   Cart,
@@ -40,6 +43,9 @@ const Icon = {
   Sort,
   Star,
   Trash,
+  PersonCheck,
+  PinMap,
+  GeoMap,
 };
 
 export default Icon;

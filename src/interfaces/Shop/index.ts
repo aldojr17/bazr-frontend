@@ -7,7 +7,7 @@ export interface IShopsResponsePayload {
 export interface IShopProfilePayload {
   id: number;
   name: string;
-  usernamr: string;
+  username: string;
   city: string;
   joined_at: string;
   total_product: number;
@@ -15,4 +15,10 @@ export interface IShopProfilePayload {
 
 export interface IShopDetailProps {
   shopId: number;
+}
+
+export interface IPropsShopProfileDetail {
+  icon: JSX.Element;
+  title: string;
+  value: string;
 }

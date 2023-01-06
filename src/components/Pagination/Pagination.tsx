@@ -6,6 +6,7 @@ const Pagination = ({ ...props }: IPaginationProps) => {
   const [pagination, setPagination] = useState<String[]>([]);
 
   const handleClick = (page: number) => {
+    window.scrollTo(0, 0);
     props.setPage(page);
   };
 

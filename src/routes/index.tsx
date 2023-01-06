@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ProductDetail from "../pages/ProductDetail/ProductDetail";
+import ShopHome from "../pages/Shop/ShopHome";
 import AuthRoutes from "./AuthRoutes";
 import LayoutRoutes from "./LayoutRoutes";
 import UserRoutes from "./UserRoutes";
@@ -46,6 +47,7 @@ const RouteList = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/cart/shipment" element={<Checkout />} />
         </Route>
+        <Route path="/shop/:shopId/:shopUsername" element={<ShopHome />} />
       </Route>
 
       <Route element={<AuthRoutes />}>
