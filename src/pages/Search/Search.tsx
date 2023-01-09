@@ -534,7 +534,8 @@ const Search = () => {
                                     </Text>
                                   </HStack>
                                   <AccordionPanel py={0} pe={0}>
-                                    {category.secondary_category.length !== 0
+                                    {category.secondary_category &&
+                                    category.secondary_category.length !== 0
                                       ? category.secondary_category.map(
                                           (secondary) => (
                                             <Accordion
@@ -576,7 +577,8 @@ const Search = () => {
                                                   </Text>
                                                 </HStack>
                                                 <AccordionPanel py={0} pe={0}>
-                                                  {secondary.tertiary_category
+                                                  {secondary.tertiary_category &&
+                                                  secondary.tertiary_category
                                                     .length !== 0
                                                     ? secondary.tertiary_category.map(
                                                         (tertiary) => (
@@ -1174,7 +1176,8 @@ const Search = () => {
                                     </Text>
                                   </HStack>
                                   <AccordionPanel py={0} pe={0}>
-                                    {category.secondary_category.length !== 0
+                                    {category.secondary_category &&
+                                    category.secondary_category.length !== 0
                                       ? category.secondary_category.map(
                                           (secondary) => (
                                             <Accordion
@@ -1217,7 +1220,8 @@ const Search = () => {
                                                   </Text>
                                                 </HStack>
                                                 <AccordionPanel py={0} pe={0}>
-                                                  {secondary.tertiary_category
+                                                  {secondary.tertiary_category &&
+                                                  secondary.tertiary_category
                                                     .length !== 0
                                                     ? secondary.tertiary_category.map(
                                                         (tertiary) => (

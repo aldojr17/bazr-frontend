@@ -13,6 +13,12 @@ export interface IShopProfilePayload {
   total_product: number;
 }
 
+export interface IShopPayload {
+  id: number;
+  shop_name: string;
+  shop_location: string;
+}
+
 export interface IShopDetailProps {
   shopId: number;
 }

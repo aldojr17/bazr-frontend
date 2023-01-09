@@ -29,7 +29,7 @@ const useCategory = () => {
   ) => {
     const primaryCategory =
       getPrimaryCategoryBySlugifiedName(primarySlugifiedName);
-    const secondaryCategory = primaryCategory?.secondary_category.find(
+    const secondaryCategory = primaryCategory?.secondary_category?.find(
       (category) => {
         return slugify(category.name) === secondarySlugifiedName;
       }
@@ -46,7 +46,7 @@ const useCategory = () => {
       primarySlugifiedName,
       secondarySlugifiedName
     );
-    const tertiaryCategory = secondaryCategory?.tertiary_category.find(
+    const tertiaryCategory = secondaryCategory?.tertiary_category?.find(
       (category) => {
         return slugify(category.name) === tertiarySlugifiedName;
       }

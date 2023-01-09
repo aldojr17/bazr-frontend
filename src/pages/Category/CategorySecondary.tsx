@@ -19,6 +19,12 @@ function CategorySecondary() {
     getSecondaryCategoryBySlugifiedName,
   } = useCategory();
   const navigate = useNavigate();
+
+  const slugifiedSecondary = getSecondaryCategoryBySlugifiedName(
+    cPrimary!,
+    cSecondary!
+  );
+
   return (
     <>
       <Box className="p-4 pb-5 p-lg-5">
@@ -52,32 +58,26 @@ function CategorySecondary() {
           </BreadcrumbItem>
         </Breadcrumb>
         <CategoryWrapper>
-          {getSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!) !==
-          undefined
-            ? getSecondaryCategoryBySlugifiedName(
-                cPrimary!,
-                cSecondary!
-              )?.tertiary_category.map((tertiary_category) => {
-                return (
-                  <CategoryCard
-                    {...tertiary_category}
-                    key={tertiary_category.id}
-                    onClick={() => {
-                      navigate(
-                        `/p/${cPrimary}/${slugify(
-                          getSecondaryCategoryBySlugifiedName(
-                            cPrimary!,
-                            cSecondary!
-                          )!.name
-                        )}/${slugify(tertiary_category.name)}?q=&c=${
-                          tertiary_category.id
-                        }&cl=3`
-                      );
-                    }}
-                  />
-                );
-              })
-            : ""}
+          {slugifiedSecondary?.tertiary_category?.map((tertiary_category) => {
+            return (
+              <CategoryCard
+                {...tertiary_category}
+                key={tertiary_category.id}
+                onClick={() => {
+                  navigate(
+                    `/p/${cPrimary}/${slugify(
+                      getSecondaryCategoryBySlugifiedName(
+                        cPrimary!,
+                        cSecondary!
+                      )!.name
+                    )}/${slugify(tertiary_category.name)}?q=&c=${
+                      tertiary_category.id
+                    }&cl=3`
+                  );
+                }}
+              />
+            );
+          })}
         </CategoryWrapper>
       </Box>
 

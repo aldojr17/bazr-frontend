@@ -17,6 +17,8 @@ function CategoryPrimary() {
   const { products, getProducts } = useProduct();
   const navigate = useNavigate();
 
+  const slugifiedPrimary = getPrimaryCategoryBySlugifiedName(cPrimary!);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const category = getPrimaryCategoryBySlugifiedName(cPrimary!);
@@ -39,25 +41,21 @@ function CategoryPrimary() {
           <span>{getPrimaryCategoryBySlugifiedName(cPrimary!)?.name}</span>
         </Heading>
         <CategoryWrapper>
-          {getPrimaryCategoryBySlugifiedName(cPrimary!) !== undefined
-            ? getPrimaryCategoryBySlugifiedName(
-                cPrimary!
-              )?.secondary_category.map((secondary_category) => {
-                return (
-                  <CategoryCard
-                    {...secondary_category}
-                    key={secondary_category.id}
-                    onClick={() => {
-                      navigate(
-                        `/p/${cPrimary}/${slugify(
-                          secondary_category.name
-                        )}?q=&c=${secondary_category.id}&cl=2`
-                      );
-                    }}
-                  />
-                );
-              })
-            : ""}
+          {slugifiedPrimary?.secondary_category?.map((secondary_category) => {
+            return (
+              <CategoryCard
+                {...secondary_category}
+                key={secondary_category.id}
+                onClick={() => {
+                  navigate(
+                    `/p/${cPrimary}/${slugify(secondary_category.name)}?q=&c=${
+                      secondary_category.id
+                    }&cl=2`
+                  );
+                }}
+              />
+            );
+          })}
         </CategoryWrapper>
       </Box>
 
