@@ -41,7 +41,7 @@ function ProductDetail() {
     fetchProduct(parseInt(id!))
       .then((response) => setProduct(response))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [id]);
 
   return (
     <Container maxW="container.xl">

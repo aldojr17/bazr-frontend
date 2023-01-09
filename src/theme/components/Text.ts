@@ -33,6 +33,12 @@ const Text = defineStyleConfig({
       fontWeight: "semibold",
       color: "primary",
     },
+    footerItem: {
+      marginY: 3,
+      fontSize: "sm",
+      fontWeight: "semibold",
+      color: "darkLighten",
+    },
   },
 });
 

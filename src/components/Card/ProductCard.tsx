@@ -30,11 +30,10 @@ const ProductCard = ({ ...props }: IProductPayload) => {
       }
       flexShrink={0}
       w={{
-        base: "250px",
-        sm: "200px",
-        md: "200px",
-        lg: "200px",
-        xl: "200px",
+        base: "49%",
+        sm: "49%",
+        md: "24%",
+        lg: "16%",
       }}
       border={"2px solid"}
       borderColor={"light"}
@@ -43,17 +42,7 @@ const ProductCard = ({ ...props }: IProductPayload) => {
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      <AspectRatio
-        ratio={1}
-        width={{
-          base: "250px",
-          sm: "200px",
-          md: "100%",
-          lg: "100%",
-          xl: "100%",
-        }}
-        borderRadius={"lg"}
-      >
+      <AspectRatio ratio={1} objectFit={"cover"} borderRadius={"lg"}>
         <Image
           src={props.product_photos[0]?.url}
           borderRadius={"lg"}
