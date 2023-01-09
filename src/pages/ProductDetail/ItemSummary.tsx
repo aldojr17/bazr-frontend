@@ -24,7 +24,7 @@ function ItemSummary(props: IItemSummaryProps) {
 
   const navigate = useNavigate();
 
-  const { getCart, setCart, updateCart } = useCart();
+  const { getCart, setCheckoutCart, updateCart } = useCart();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -89,7 +89,7 @@ function ItemSummary(props: IItemSummaryProps) {
             cart_id: response?.cart_item_id!,
           };
 
-          setCart([cartItem]);
+          setCheckoutCart([cartItem]);
           navigate("/cart/shipment", { replace: true });
         })
         .finally(() => {

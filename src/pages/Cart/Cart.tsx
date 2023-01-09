@@ -34,7 +34,8 @@ import { formatCurrency } from "../../util/util";
 
 const Cart = () => {
   useTitle("Cart | BAZR");
-  const { cart, setCart, deleteCart, deleteItem, undoDeleteItem } = useCart();
+  const { cart, setCheckoutCart, deleteCart, deleteItem, undoDeleteItem } =
+    useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
@@ -47,14 +48,16 @@ const Cart = () => {
   const [formattedCart, setFormattedCart] = useState<
     Record<number, Record<number, ICartPayload>>
   >({});
-  const [checkoutCart, setCheckoutCart] = useState<ICartPayload[]>([]);
+  const [checkoutCartState, setCheckoutCartState] = useState<ICartPayload[]>(
+    []
+  );
   const [total, setTotal] = useState<number>(0);
 
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.checked) {
-      setCheckoutCart(cart);
+      setCheckoutCartState(cart);
     } else {
-      setCheckoutCart([]);
+      setCheckoutCartState([]);
     }
   };
 
@@ -63,12 +66,14 @@ const Cart = () => {
     id: number
   ) => {
     if (event.currentTarget.checked) {
-      setCheckoutCart([
-        ...checkoutCart,
+      setCheckoutCartState([
+        ...checkoutCartState,
         ...cart.filter((val) => val.shop_id === id),
       ]);
     } else {
-      setCheckoutCart(checkoutCart.filter((val) => val.shop_id !== id));
+      setCheckoutCartState(
+        checkoutCartState.filter((val) => val.shop_id !== id)
+      );
     }
   };
 
@@ -78,13 +83,13 @@ const Cart = () => {
     shopId: number
   ) => {
     if (event.currentTarget.checked) {
-      setCheckoutCart([
-        ...checkoutCart,
+      setCheckoutCartState([
+        ...checkoutCartState,
         cart.find((val) => val.cart_id === id && val.shop_id === shopId)!,
       ]);
     } else {
-      setCheckoutCart(
-        checkoutCart.filter(
+      setCheckoutCartState(
+        checkoutCartState.filter(
           (val) => val.cart_id !== id && val.shop_id !== shopId
         )
       );
@@ -92,7 +97,7 @@ const Cart = () => {
   };
 
   const handleBuyNow = () => {
-    setCart(checkoutCart);
+    setCheckoutCart(checkoutCartState);
     navigate("/cart/shipment", { replace: true });
   };
 
@@ -140,16 +145,16 @@ const Cart = () => {
 
   useEffect(() => {
     let newIsSelected: Record<number | string, boolean> = {
-      all: cart.length !== 0 ? checkoutCart.length === cart.length : false,
+      all: cart.length !== 0 ? checkoutCartState.length === cart.length : false,
     };
 
     Object.keys(formattedCart).forEach((key) => {
       newIsSelected[key] =
-        checkoutCart.filter((val) => val.shop_id === parseInt(key)).length ===
-        Object.values(formattedCart[parseInt(key)]).length;
+        checkoutCartState.filter((val) => val.shop_id === parseInt(key))
+          .length === Object.values(formattedCart[parseInt(key)]).length;
     });
 
-    let newTotal = checkoutCart.reduce(
+    let newTotal = checkoutCartState.reduce(
       (acc, val) => acc + val.variant_type_price,
       0
     );
@@ -158,7 +163,7 @@ const Cart = () => {
     setIsSelected({
       ...newIsSelected,
     });
-  }, [checkoutCart]);
+  }, [checkoutCartState]);
 
   useEffect(() => {
     if (cart.length !== 0) {
@@ -238,7 +243,7 @@ const Cart = () => {
                       <Button
                         variant={"unstyled"}
                         visibility={
-                          checkoutCart.length !== 0 ? "initial" : "hidden"
+                          checkoutCartState.length !== 0 ? "initial" : "hidden"
                         }
                       >
                         Remove
@@ -278,7 +283,7 @@ const Cart = () => {
                                 handleSelectItem={handleSelectItem}
                                 data={childVal}
                                 selectedCart={
-                                  checkoutCart.findIndex(
+                                  checkoutCartState.findIndex(
                                     (val) => val.cart_id === childVal.cart_id
                                   ) !== -1
                                 }
@@ -376,11 +381,13 @@ const Cart = () => {
                     shadow={"none"}
                     onClick={handleBuyNow}
                     variant={
-                      checkoutCart.length === 0 ? "basicOutline" : "primary"
+                      checkoutCartState.length === 0
+                        ? "basicOutline"
+                        : "primary"
                     }
-                    isDisabled={checkoutCart.length === 0}
+                    isDisabled={checkoutCartState.length === 0}
                   >
-                    Buy ({checkoutCart.length})
+                    Buy ({checkoutCartState.length})
                   </Button>
                 </VStack>
               </GridItem>
@@ -436,11 +443,13 @@ const Cart = () => {
                     shadow={"none"}
                     onClick={handleBuyNow}
                     variant={
-                      checkoutCart.length === 0 ? "basicOutline" : "primary"
+                      checkoutCartState.length === 0
+                        ? "basicOutline"
+                        : "primary"
                     }
-                    isDisabled={checkoutCart.length === 0}
+                    isDisabled={checkoutCartState.length === 0}
                   >
-                    Buy ({checkoutCart.length})
+                    Buy ({checkoutCartState.length})
                   </Button>
                 </HStack>
               </VStack>

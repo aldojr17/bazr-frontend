@@ -112,6 +112,9 @@ const Button = defineStyleConfig({
       borderRadius: "lg",
       color: "teal.400",
     },
+    paymentMethod: {
+      padding: "12",
+    },
   },
   // 6. We can overwrite defaultProps
   defaultProps: {

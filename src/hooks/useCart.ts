@@ -48,8 +48,12 @@ const useCart = () => {
     }
   };
 
-  const setCart = (payload: ICartPayload[]) => {
+  const setCheckoutCart = (payload: ICartPayload[]) => {
     dispatch(storeCheckoutCart(payload));
+  };
+
+  const setCart = (payload: ICartPayload[]) => {
+    dispatch(storeCart(payload));
   };
 
   const deleteCart = async (payload: number) => {
@@ -79,11 +83,12 @@ const useCart = () => {
     cart,
     clearUserCart,
     updateCart,
-    setCart,
+    setCheckoutCart,
     deleteCart,
     deleteItem,
     undoDeleteItem,
     getCart,
+    setCart,
     checkoutCart,
   };
 };

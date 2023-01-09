@@ -19,12 +19,14 @@ import Plus from "./Plus";
 import Profile from "./Profile";
 import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
+import SeaPay from "./SeaPay";
 import Search from "./Search";
 import Shop from "./Shop";
 import Sort from "./Sort";
 import Star from "./Star";
 import Trash from "./Trash";
 import Twitter from "./Twitter";
+import Wallet from "./Wallet";
 import Whatsapp from "./Whatsapp";
 
 const Icon = {
@@ -50,11 +52,13 @@ const Icon = {
   Refresh,
   RightArrow,
   Search,
+  SeaPay,
   Shop,
   Sort,
   Star,
   Trash,
   Twitter,
+  Wallet,
   Whatsapp,
 };
 
