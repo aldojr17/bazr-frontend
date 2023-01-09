@@ -25,4 +25,8 @@ export const API_PATH = {
   shop: {
     SHOPS_PROFILE: "/shops/profile",
   },
+  wallet: {
+    VERIFY_PIN: "/wallets/step-up/pin",
+    PAYMENT_WALLET: "/payments/wallet-pay",
+  },
 };

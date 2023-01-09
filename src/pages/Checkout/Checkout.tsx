@@ -1,24 +1,19 @@
 import {
   Box,
-  Card,
-  CardBody,
   Grid,
   GridItem,
   Heading,
-  Stack,
   Text,
   Image,
-  Button,
   VStack,
   Divider,
   HStack,
   AspectRatio,
-  RadioGroup,
-  Radio,
   Select,
   Skeleton,
   Link,
   useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import useCart from "../../hooks/useCart";
@@ -27,19 +22,29 @@ import useUser from "../../hooks/useUser";
 import { ICartPayload } from "../../interfaces/Cart";
 import { IUserPayload } from "../../interfaces/User";
 import { formatCurrency } from "../../util/util";
-import transactionService from "../../api/service/transaction";
 import {
   IOrderDetailPayload,
   IOrderPayload,
   ITransactionRequestPayload,
 } from "../../interfaces/Transaction";
+import { IPinRequestPayload } from "../../interfaces/Auth";
+import useWallet from "../../hooks/useWallet";
+import { IPaymentWalletRequestPayload } from "../../interfaces/Wallet";
+import { useNavigate } from "react-router-dom";
+import OrderSummaryCard from "./OrderSummaryCard";
+import PaymentPinModal from "../../components/Modal/PaymentPinModal";
+import useOrder from "../../hooks/useOrder";
 
 const Checkout = () => {
   useTitle("Checkout");
 
-  const { checkoutCart } = useCart();
+  const { checkoutCart, cart, setCart, deleteCart } = useCart();
   const { fetchProfile } = useUser();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { verifyPin, createPayment } = useWallet();
+  const navigate = useNavigate();
+  const { createTransaction } = useOrder();
 
   const [formattedCart, setFormattedCart] = useState<
     Record<number, Record<number, ICartPayload>>
@@ -55,6 +60,7 @@ const Checkout = () => {
     total: 0,
     orders: [],
   });
+  const [pinInput, setPinInput] = useState("");
 
   useEffect(() => {
     setIsLoading(true);
@@ -124,28 +130,57 @@ const Checkout = () => {
     }
   }, [checkoutCart]);
 
-  const handleOrderSubmit = async (payload: ITransactionRequestPayload) => {
-    payload.payment_method_id = paymentMethod;
+  const handlePinChange = async (value: string) => {
+    if (value.length === 6) {
+      let payloadPin: IPinRequestPayload = {
+        pin: value,
+      };
 
-    const response = await transactionService.createTransaction(payload);
+      const response = await verifyPin(payloadPin);
 
-    if (response.is_success) {
-      toast({
-        title: "Successfully created order",
-        status: "success",
-        duration: 3000,
-        position: "top",
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: "Failed to create order",
-        description: response.message,
-        status: "error",
-        duration: 3000,
-        position: "top",
-        isClosable: true,
-      });
+      if (response.is_success) {
+        let txnResponse = await createTransaction(payload, paymentMethod);
+        if (!txnResponse.is_success) {
+          return;
+        }
+
+        let paymentPayload: IPaymentWalletRequestPayload = {
+          token: response.data.token,
+          user_transaction_id: txnResponse.data!.id,
+        };
+
+        let isSuccess = createPayment(paymentPayload);
+        if (!isSuccess) {
+          return;
+        }
+
+        cart.forEach((c) =>
+          checkoutCart.forEach((cc) => {
+            if (c.cart_id === cc.cart_id) {
+              deleteCart(c.cart_id);
+            }
+          })
+        );
+
+        var temp = cart.filter(
+          (val) =>
+            checkoutCart.findIndex((q) => val.cart_id === q.cart_id) === -1
+        );
+
+        setCart(temp);
+
+        navigate("/", { replace: true });
+      } else {
+        setPinInput("");
+        toast({
+          title: "Pin Error",
+          description: response.message,
+          status: "error",
+          duration: 3000,
+          position: "top",
+          isClosable: true,
+        });
+      }
     }
   };
 
@@ -336,91 +371,26 @@ const Checkout = () => {
             xl: "block",
           }}
         >
-          <Card>
-            <CardBody>
-              <Stack spacing="4">
-                <Skeleton isLoaded={!isLoading}>
-                  <Box>
-                    <Heading size="md">Order Summary</Heading>
-                    <Divider borderColor={"blue"} />
-                  </Box>
-                  <Box>
-                    <Grid templateColumns="repeat(2, 1fr)" gap={6} pt="3">
-                      <GridItem>
-                        <Text pt="2" fontSize="md">
-                          Total Items ({checkoutCart.length} products)
-                        </Text>
-                      </GridItem>
-                      <GridItem>
-                        <Text pt="2" fontSize="md" align="right">
-                          Rp{formatCurrency(grandTotal)}
-                        </Text>
-                      </GridItem>
-                    </Grid>
-                    <Grid templateColumns="repeat(2, 1fr)" gap={6} pb="3">
-                      <GridItem>
-                        <Text pt="2" fontSize="md">
-                          Delivery Fee
-                        </Text>
-                      </GridItem>
-                      <GridItem>
-                        <Text pt="2" fontSize="md" align="right">
-                          Rp10.000
-                        </Text>
-                      </GridItem>
-                    </Grid>
-                    <Divider borderColor={"blue"} borderBottomWidth={"0.1em"} />
-                    <HStack
-                      width="100%"
-                      justifyContent={"space-between"}
-                      py={5}
-                    >
-                      <Text fontSize="md" as="b">
-                        Total Payment
-                      </Text>
-                      <Text fontSize="md" as="b">
-                        Rp{formatCurrency(grandTotal + 10000)}
-                      </Text>
-                    </HStack>
-                    <Divider borderColor={"blue"} />
-                  </Box>
-                  <Box>
-                    <RadioGroup
-                      defaultValue="1"
-                      py={7}
-                      onChange={(val: string) => {
-                        console.log(val);
-                        setPaymentMethod(parseInt(val));
-                      }}
-                    >
-                      <Stack spacing={5}>
-                        <Text as="b" fontSize="md">
-                          Select Payment Method
-                        </Text>
-                        <Radio value="1">My Wallet</Radio>
-                        <Radio value="2">SeaLabs Pay</Radio>
-                      </Stack>
-                    </RadioGroup>
-                  </Box>
-                  <Box pt={3}>
-                    <Button
-                      variant="solid"
-                      colorScheme="blue"
-                      width="100%"
-                      onClick={() => {
-                        handleOrderSubmit(payload);
-                      }}
-                      isDisabled={payload.total === 0}
-                    >
-                      Place Order
-                    </Button>
-                  </Box>
-                </Skeleton>
-              </Stack>
-            </CardBody>
-          </Card>
+          <OrderSummaryCard
+            isLoading={isLoading}
+            checkoutCart={checkoutCart}
+            grandTotal={grandTotal}
+            user={user!}
+            payload={payload}
+            onOpen={onOpen}
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
+          />
         </GridItem>
       </Grid>
+      <PaymentPinModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        handlePinChange={handlePinChange}
+        pinInput={pinInput}
+        setPinInput={setPinInput}
+      />
     </Box>
   );
 };

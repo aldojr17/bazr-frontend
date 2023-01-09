@@ -3,6 +3,7 @@ import { IAddressPayload } from "../Address";
 export interface IUserPayload {
   id: string;
   address_detail: IAddressPayload;
+  wallet_detail: IUserWalletResponsePayload;
 }
 
 export interface IChangeProfilePayload {
@@ -20,4 +21,8 @@ export interface IUserResponsePayload {
   is_success: boolean;
   data: IUserPayload;
   message: string;
+}
+
+export interface IUserWalletResponsePayload {
+  balance: number;
 }

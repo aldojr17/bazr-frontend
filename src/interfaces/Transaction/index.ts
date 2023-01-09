@@ -23,6 +23,10 @@ export interface IOrderDetailPayload {
 
 export interface ITransactionResponsePayload {
   is_success: boolean;
-  data: null;
+  data: null | ITransactionSuccessResponsePayload;
   message: string;
+}
+
+export interface ITransactionSuccessResponsePayload {
+  id: number;
 }

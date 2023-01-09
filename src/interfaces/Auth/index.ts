@@ -41,3 +41,13 @@ export interface IRefreshResponsePayload {
   data: null;
   message: string;
 }
+
+export interface IPinRequestPayload {
+  pin: string;
+}
+
+export interface IPinResponsePayload {
+  is_success: boolean;
+  data: { token: string };
+  message: string;
+}

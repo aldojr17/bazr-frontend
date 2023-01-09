@@ -7,6 +7,8 @@ import {
   ITertiaryCategoryPayload,
 } from "../Category";
 import { IProductPayload, IProductPhotoPayload } from "../Product";
+import { ITransactionRequestPayload } from "../Transaction";
+import { IUserPayload } from "../User";
 
 export interface IBreadCrumbProps {
   categories: IProductCategoryPayload;
@@ -50,6 +52,25 @@ export interface IProductScrollableContainerProps {
   link: string;
 }
 
+export interface IPaymentPinProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  handlePinChange: (value: string) => Promise<void>;
+  pinInput: string;
+  setPinInput: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface IOrderSummaryCardProps {
+  isLoading: boolean;
+  checkoutCart: ICartPayload[];
+  grandTotal: number;
+  user: IUserPayload;
+  payload: ITransactionRequestPayload;
+  onOpen: () => void;
+  paymentMethod: number;
+  setPaymentMethod: React.Dispatch<React.SetStateAction<number>>;
+}
 export interface ICategoryScrollableContainerProps {
   label?: string;
   categories:
