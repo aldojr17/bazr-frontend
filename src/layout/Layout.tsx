@@ -30,11 +30,10 @@ const Layout = ({ children }: ILayoutProps) => {
   };
 
   return (
-    <Flex direction={"column"} minH="100vh">
+    <Flex direction={"column"} minH="100vh" maxWidth={"100%"}>
       <Navbar onOpen={onOpen} />
       <Box flex={1}>{children}</Box>
       <Footer />
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent

@@ -38,8 +38,9 @@ const Heading = defineStyleConfig({
       fontWeight: "bold",
     },
     sectionHeading: {
-      fontSize: "2xl",
+      textTransform: "uppercase",
       fontWeight: "bold",
+      marginBottom: 3,
     },
   },
   defaultProps: {

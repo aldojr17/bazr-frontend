@@ -8,6 +8,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Flex,
   Grid,
   GridItem,
   Heading,
@@ -1011,47 +1012,25 @@ const Search = () => {
               </HStack>
             </HStack>
 
-            <Box marginTop={5}>
-              <Grid
-                templateColumns={{
-                  sm: "repeat(2, 1fr)",
-                  md: "repeat(3, 1fr)",
-                  lg: "repeat(4, 1fr)",
-                  xl: "repeat(4, 1fr)",
-                }}
-                placeItems={{
-                  base: "center",
-                  sm: "center",
-                  md: "initial",
-                  lg: "initial",
-                }}
-                gap={6}
-              >
-                {products?.data.length !== 0 ? (
-                  products?.data.map((product) => (
-                    <Skeleton key={product.id} isLoaded={!isLoading}>
-                      <GridItem>
-                        <ProductCard {...product} />
-                      </GridItem>
-                    </Skeleton>
-                  ))
-                ) : (
-                  <GridItem
-                    colSpan={{
-                      base: 2,
-                      sm: 2,
-                      md: 3,
-                      lg: 4,
-                      xl: 4,
-                    }}
-                  >
-                    <Center>
-                      <Text>No products available.</Text>
-                    </Center>
-                  </GridItem>
-                )}
-              </Grid>
-            </Box>
+            <Flex
+              wrap={"wrap"}
+              direction={"row"}
+              justifyContent={"space-between"}
+              rowGap={{ base: 1, sm: 3, lg: 2 }}
+              columnGap={{ base: 1, sm: 2, lg: 1 }}
+              _after={{
+                md: { content: '""', flex: "auto" },
+                lg: { content: "none" },
+              }}
+            >
+              {products?.data.length !== 0 ? (
+                products?.data.map((product) => <ProductCard {...product} />)
+              ) : (
+                <Center>
+                  <Text>No products available.</Text>
+                </Center>
+              )}
+            </Flex>
 
             {products?.data.length !== 0 ? (
               <Pagination
