@@ -1,12 +1,4 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Select,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Divider, Heading, Select, Text, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
 import { IProductDetailVariantProps } from "../../interfaces/Product";
@@ -20,7 +12,7 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
   const variantPreprocessing = () => {
     let variants = {};
     const variantNames = variantGroup?.name.split(",")!;
-    const variantTypes = variantGroup?.variant_type ?? [];
+    const variantTypes = variantGroup?.variant_types ?? [];
 
     for (var index in variantNames) {
       let typeArray = [];
@@ -42,7 +34,7 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
     let selectedVariantArray: string[] = Object.values(variant);
     let selectedVariantString = selectedVariantArray.join(",");
 
-    let selectedVariantType = variantGroup.variant_type.find(
+    let selectedVariantType = variantGroup.variant_types.find(
       (variantType) => variantType.name === selectedVariantString
     );
 

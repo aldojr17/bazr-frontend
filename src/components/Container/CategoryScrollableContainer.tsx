@@ -55,8 +55,8 @@ function CategoryScrollableContainer(props: ICategoryScrollableContainerProps) {
               <XScrollableWrapper>
                 {categories.map((category) => (
                   <CategoryCard
-                    {...category}
-                    key={category.id}
+                    {...category!}
+                    key={category.id!}
                     onClick={() => navigate(`p/${slugify(category.name)}`)}
                   />
                 ))}

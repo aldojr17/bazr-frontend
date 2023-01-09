@@ -44,7 +44,7 @@ const ProductCard = ({ ...props }: IProductPayload) => {
     >
       <AspectRatio ratio={1} objectFit={"cover"} borderRadius={"lg"}>
         <Image
-          src={props.product_photos[0]?.url}
+          src={props.product_photo?.url}
           borderRadius={"lg"}
           onError={handleImageOnError}
         />
@@ -64,14 +64,14 @@ const ProductCard = ({ ...props }: IProductPayload) => {
         <Flex gap={2} alignItems={"center"} wrap={"nowrap"}>
           <Icon.Shop fill={"secondary"} width={3.5} />
           <Text variant={"productCardRating"} noOfLines={1}>
-            {props.shop_name}
+            {props.shop.shop_name}
           </Text>
           <Center height="15px">
             <Divider orientation="vertical" />
           </Center>
           <Icon.Location fill={"secondary"} width={3.5} />
           <Text variant={"productCardRating"} noOfLines={1}>
-            {props.shop_location}
+            {props.shop.shop_location}
           </Text>
         </Flex>
         <Flex gap={2} alignItems={"center"} mt={5}>

@@ -2,7 +2,7 @@ export interface IVariantGroupPayload {
   id: number;
   name: string;
   product_id: number;
-  variant_type: IVariantTypePayload[];
+  variant_types: IVariantTypePayload[];
 }
 
 export interface IVariantTypePayload {

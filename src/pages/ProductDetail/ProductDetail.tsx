@@ -49,7 +49,7 @@ function ProductDetail() {
         <>loading</>
       ) : (
         <>
-          <BreadCrumb categories={product?.category!} />
+          <BreadCrumb categories={product?.category_detail!} />
           <Flex
             direction={{ base: "column", lg: "row" }}
             gap={8}
@@ -79,7 +79,7 @@ function ProductDetail() {
                     productRating={product?.rating!}
                     productReview={product?.total_review!}
                     productView={product?.view_count!}
-                    shopId={product?.shop_id!}
+                    shopId={product?.shop.id!}
                     selectedVariant={selectedVariantType}
                   />
                 </Box>
@@ -97,14 +97,14 @@ function ProductDetail() {
                 variantGroup={product?.variant_group!}
                 onVariantChange={handleSetSelectedVariantType}
                 selectedVariant={selectedVariantType}
-                shopId={product?.shop_id!}
-                shopName={product?.shop_name!}
+                shopId={product?.shop.id!}
+                shopName={product?.shop.shop_name!}
                 minQty={product?.min_buy_qty!}
                 maxQty={product?.max_buy_qty!}
               />
             </Box>
           </Flex>
-          <StoreProductList shopId={product?.shop_id!} />
+          <StoreProductList shopId={product?.shop.id!} />
           <SimilarProductList />
         </>
       )}

@@ -1,4 +1,5 @@
 import { IProductCategoryPayload } from "../Category";
+import { IShopPayload, IShopProfilePayload } from "../Shop";
 import { IVariantGroupPayload, IVariantTypePayload } from "../Variant";
 
 export interface ProductState {
@@ -28,29 +29,27 @@ export interface IProductPaginationPayload {
 export interface IProductPayload {
   id: number;
   name: string;
-  description: string;
-  category_id: number;
-  is_hazardous: boolean;
-  weight: number;
-  condition: string;
-  internal_sku: string;
-  view_count: number;
-  favorite_count: number;
+  description?: string;
+  category_detail?: IProductCategoryPayload;
+  is_hazardous?: boolean;
+  weight?: number;
+  condition?: string;
+  internal_sku?: string;
+  view_count?: number;
+  favorite_count?: number;
   unit_sold: number;
-  is_active: boolean;
+  is_active?: boolean;
   total_review: number;
   total_rating: number;
-  min_buy_qty: number;
-  max_buy_qty: number;
+  min_buy_qty?: number;
+  max_buy_qty?: number;
   lowest_price: number;
-  highest_price: number;
-  shop_id: number;
-  category: IProductCategoryPayload;
-  variant_group: null;
-  product_photos: IProductPhotoPayload[];
+  highest_price?: number;
+  shop: IShopPayload;
+  variant_group?: null;
+  product_photo?: IProductPhotoPayload;
+  product_photos?: IProductPhotoPayload[];
   rating: number;
-  shop_name: string;
-  shop_location: string;
 }
 export interface IProductPhotoPayload {
   id: number;
