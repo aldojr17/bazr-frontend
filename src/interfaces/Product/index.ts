@@ -88,6 +88,7 @@ export interface IProductDetailVariantsProps {
 }
 
 export interface IItemSummaryProps {
+  productId: number;
   productName: string;
   variantGroup: IVariantGroupPayload;
   selectedVariant: IVariantTypePayload;
