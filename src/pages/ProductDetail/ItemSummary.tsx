@@ -12,6 +12,7 @@ import ProductDetailVariant from "./ProductDetailVariant";
 
 function ItemSummary(props: IItemSummaryProps) {
   const {
+    productId,
     productName,
     variantGroup,
     onVariantChange,
@@ -79,6 +80,7 @@ function ItemSummary(props: IItemSummaryProps) {
           getCart();
 
           const cartItem: ICartPayload = {
+            product_id: productId,
             product_name: productName,
             variant_type_id: selectedVariant.id,
             variant_type_name: selectedVariant.name,

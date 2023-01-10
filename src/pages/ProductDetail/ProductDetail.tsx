@@ -93,6 +93,7 @@ function ProductDetail() {
               top={10}
             >
               <ItemSummary
+                productId={product?.id!}
                 productName={product?.name!}
                 variantGroup={product?.variant_group!}
                 onVariantChange={handleSetSelectedVariantType}
