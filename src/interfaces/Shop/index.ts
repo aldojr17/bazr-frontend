@@ -15,8 +15,8 @@ export interface IShopProfilePayload {
 
 export interface IShopPayload {
   id: number;
-  shop_name: string;
-  shop_location: string;
+  name: string;
+  location: string;
 }
 
 export interface IShopDetailProps {

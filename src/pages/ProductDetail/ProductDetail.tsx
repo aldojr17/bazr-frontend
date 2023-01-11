@@ -99,7 +99,7 @@ function ProductDetail() {
                 onVariantChange={handleSetSelectedVariantType}
                 selectedVariant={selectedVariantType}
                 shopId={product?.shop.id!}
-                shopName={product?.shop.shop_name!}
+                shopName={product?.shop.name!}
                 minQty={product?.min_buy_qty!}
                 maxQty={product?.max_buy_qty!}
               />
