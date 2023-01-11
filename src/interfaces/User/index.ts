@@ -1,20 +1,35 @@
 import { IAddressPayload } from "../Address";
+import { IGenderPayload } from "../Gender";
 
 export interface IUserPayload {
   id: string;
   address_detail: IAddressPayload;
   wallet_detail: IUserWalletResponsePayload;
-}
-
-export interface IChangeProfilePayload {
+  username: string;
+  email: string;
   address: string;
-  full_name: string;
+  name: string;
   phone: string;
   profile_picture: string;
+  role: number;
+  birth_date: string;
+  gender_detail: IGenderPayload;
+}
+
+export interface IEditProfilePayload {
+  username: string;
+  name: string;
+  birth_date: string;
+  gender_id: number;
+  profile_picture: string | null;
 }
 
 export interface UserState {
-  userId: number;
+  user: IUserPayload | null;
+}
+
+export interface IUploadAvatarPayload {
+  photo: File | string;
 }
 
 export interface IUserResponsePayload {
@@ -25,4 +40,10 @@ export interface IUserResponsePayload {
 
 export interface IUserWalletResponsePayload {
   balance: number;
+}
+
+export interface IUserAvatarResponsePayload {
+  is_success: boolean;
+  data: string;
+  message: string;
 }

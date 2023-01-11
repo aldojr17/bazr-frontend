@@ -18,15 +18,18 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { destroyCookie, parseCookies } from "nookies";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import useCart from "../../hooks/useCart";
+import useUser from "../../hooks/useUser";
 import { NavbarProps } from "../../interfaces/Navbar";
 import HoverCart from "../Cart/HoverCart";
 
 const Navbar = ({ onOpen }: NavbarProps) => {
   const isLogged = parseCookies().auth;
   const { cart, clearUserCart } = useCart();
+  const { user, fetchProfile } = useUser();
   const navigate = useNavigate();
 
   const handleNavigateToCartPage = () => {
@@ -44,6 +47,10 @@ const Navbar = ({ onOpen }: NavbarProps) => {
     clearUserCart();
     navigate("/login", { replace: true });
   };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <Box borderBottom={"1px solid #dee2e6"} py={5}>
@@ -361,6 +368,8 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                 <PopoverTrigger>
                   <Button
                     variant={"ghost"}
+                    to={"/profile"}
+                    as={Link}
                     p={{
                       base: 0,
                       sm: "initial",
@@ -412,11 +421,13 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                       bgColor={"blackAlpha.100"}
                       width={"100%"}
                       py={10}
+                      to={"/profile"}
+                      as={Link}
                     >
                       <HStack width={"100%"} spacing={5} alignItems={"center"}>
-                        <Avatar bg={"purple.600"} />
+                        <Avatar bg={"purple.600"} src={user?.profile_picture} />
                         <VStack alignItems={"start"}>
-                          <Text>Nama Orang</Text>
+                          <Text>{user?.name}</Text>
                           <Text fontWeight={"normal"}>
                             Go to your profile {">"}
                           </Text>
