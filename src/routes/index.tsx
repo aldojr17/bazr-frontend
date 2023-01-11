@@ -1,9 +1,11 @@
+import path from "path";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ProductDetail from "../pages/ProductDetail/ProductDetail";
 import ShopHome from "../pages/Shop/ShopHome";
 import AuthRoutes from "./AuthRoutes";
 import LayoutRoutes from "./LayoutRoutes";
+import SellerRoutes from "./SellerRoutes";
 import UserRoutes from "./UserRoutes";
 
 const Home = React.lazy(() => import("../pages/Home/Home"));
@@ -23,6 +25,10 @@ const CategoryTertiary = React.lazy(
   () => import("../pages/Category/CategoryTertiary")
 );
 const Profile = React.lazy(() => import("../pages/User/User"));
+const SellerHome = React.lazy(() => import("../pages/Seller/Home/Home"));
+const SellerVoucher = React.lazy(
+  () => import("../pages/Seller/Voucher/Voucher")
+);
 
 const RouteList = () => {
   let routes = (
@@ -55,6 +61,11 @@ const RouteList = () => {
       <Route element={<AuthRoutes />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+      </Route>
+
+      <Route element={<SellerRoutes />}>
+        <Route path="/seller/home" element={<SellerHome />} />
+        <Route path="/seller/voucher" element={<SellerVoucher />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
