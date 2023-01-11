@@ -49,7 +49,9 @@ const Navbar = ({ onOpen }: NavbarProps) => {
   };
 
   useEffect(() => {
-    fetchProfile();
+    if (isLogged) {
+      fetchProfile();
+    }
   }, []);
 
   return (
