@@ -64,14 +64,14 @@ const ProductCard = ({ ...props }: IProductPayload) => {
         <Flex gap={2} alignItems={"center"} wrap={"nowrap"}>
           <Icon.Shop fill={"secondary"} width={3.5} />
           <Text variant={"productCardRating"} noOfLines={1}>
-            {props.shop.shop_name}
+            {props.shop.name}
           </Text>
           <Center height="15px">
             <Divider orientation="vertical" />
           </Center>
           <Icon.Location fill={"secondary"} width={3.5} />
           <Text variant={"productCardRating"} noOfLines={1}>
-            {props.shop.shop_location}
+            {props.shop.location}
           </Text>
         </Flex>
         <Flex gap={2} alignItems={"center"} mt={5}>
