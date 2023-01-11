@@ -8,3 +8,6 @@ export interface IPaymentWalletResponsePayload {
   is_success: boolean;
   message: string;
 }
+export interface IWalletDetailPayload {
+  balance: number;
+}

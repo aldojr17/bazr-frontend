@@ -22,6 +22,7 @@ const CategorySecondary = React.lazy(
 const CategoryTertiary = React.lazy(
   () => import("../pages/Category/CategoryTertiary")
 );
+const Profile = React.lazy(() => import("../pages/User/User"));
 
 const RouteList = () => {
   let routes = (
@@ -46,6 +47,7 @@ const RouteList = () => {
         <Route element={<UserRoutes />}>
           <Route path="/cart" element={<Cart />} />
           <Route path="/cart/shipment" element={<Checkout />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
         <Route path="/shop/:shopId/:shopUsername" element={<ShopHome />} />
       </Route>

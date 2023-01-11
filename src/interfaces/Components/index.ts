@@ -98,3 +98,29 @@ export interface IErrorContainerProps {
 export interface INoProductContainerProps {
   onReload?: Function;
 }
+
+export interface IEditUserPhoneModalProps {
+  phone: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface IEditUserProfileModalProps {
+  username: string;
+  name: string;
+  birth_date: string;
+  gender_id: number | string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface IEditUserEmailModalProps {
+  email: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface IEditUserPhotoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}

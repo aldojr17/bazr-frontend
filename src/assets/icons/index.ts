@@ -12,11 +12,13 @@ import Instagram from "./Instagram";
 import LeftArrow from "./LeftArrow";
 import Linkedin from "./Linkedin";
 import Location from "./Location";
+import Lock from "./Lock";
 import Minus from "./Minus";
 import PersonCheck from "./PersonCheck";
 import PinMap from "./PinMap";
 import Plus from "./Plus";
 import Profile from "./Profile";
+import Pencil from "./Pencil";
 import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
 import SeaPay from "./SeaPay";
@@ -44,11 +46,13 @@ const Icon = {
   LeftArrow,
   Linkedin,
   Location,
+  Lock,
   Minus,
   PersonCheck,
   PinMap,
   Plus,
   Profile,
+  Pencil,
   Refresh,
   RightArrow,
   Search,

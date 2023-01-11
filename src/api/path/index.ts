@@ -8,6 +8,7 @@ export const API_PATH = {
   },
   user: {
     PROFILE: "/users/profile",
+    AVATAR: "/users/avatar",
   },
   category: {
     GET_ALL_CATEGORIES: "/categories",
