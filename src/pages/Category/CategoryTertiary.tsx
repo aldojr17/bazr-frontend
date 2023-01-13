@@ -13,9 +13,9 @@ import Search from "../Search/Search";
 function CategoryTertiary() {
   const { cPrimary, cSecondary, cTertiary } = useParams();
   const {
-    getPrimaryCategoryBySlugifiedName,
-    getSecondaryCategoryBySlugifiedName,
-    getTertiaryCategoryBySlugifiedName,
+    fetchPrimaryCategoryBySlugifiedName,
+    fetchSecondaryCategoryBySlugifiedName,
+    fetchTertiaryCategoryBySlugifiedName,
   } = useCategory();
   return (
     <>
@@ -27,7 +27,7 @@ function CategoryTertiary() {
         >
           <span>
             {
-              getTertiaryCategoryBySlugifiedName(
+              fetchTertiaryCategoryBySlugifiedName(
                 cPrimary!,
                 cSecondary!,
                 cTertiary!
@@ -40,26 +40,27 @@ function CategoryTertiary() {
             <BreadcrumbLink
               as={Link}
               to={`/p/${slugify(
-                getPrimaryCategoryBySlugifiedName(cPrimary!)!.name
+                fetchPrimaryCategoryBySlugifiedName(cPrimary!)!.name
               )}`}
             >
-              {getPrimaryCategoryBySlugifiedName(cPrimary!)?.name}
+              {fetchPrimaryCategoryBySlugifiedName(cPrimary!)?.name}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <BreadcrumbLink
               as={Link}
               to={`/p/${slugify(
-                getPrimaryCategoryBySlugifiedName(cPrimary!)!.name
+                fetchPrimaryCategoryBySlugifiedName(cPrimary!)!.name
               )}/${slugify(
-                getSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)!
+                fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)!
                   .name
               )}?q=&c=${
-                getSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)?.id
+                fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
+                  ?.id
               }&cl=2`}
             >
               {
-                getSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
+                fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
                   ?.name
               }
             </BreadcrumbLink>
@@ -67,7 +68,7 @@ function CategoryTertiary() {
           <BreadcrumbItem isCurrentPage>
             <BreadcrumbLink>
               {
-                getTertiaryCategoryBySlugifiedName(
+                fetchTertiaryCategoryBySlugifiedName(
                   cPrimary!,
                   cSecondary!,
                   cTertiary!

@@ -15,12 +15,12 @@ import Search from "../Search/Search";
 function CategorySecondary() {
   const { cPrimary, cSecondary } = useParams();
   const {
-    getPrimaryCategoryBySlugifiedName,
-    getSecondaryCategoryBySlugifiedName,
+    fetchPrimaryCategoryBySlugifiedName,
+    fetchSecondaryCategoryBySlugifiedName,
   } = useCategory();
   const navigate = useNavigate();
 
-  const slugifiedSecondary = getSecondaryCategoryBySlugifiedName(
+  const slugifiedSecondary = fetchSecondaryCategoryBySlugifiedName(
     cPrimary!,
     cSecondary!
   );
@@ -34,7 +34,10 @@ function CategorySecondary() {
           className="pb-4"
         >
           <span>
-            {getSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)?.name}
+            {
+              fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
+                ?.name
+            }
           </span>
         </Heading>
         <Breadcrumb separator=">">
@@ -42,16 +45,16 @@ function CategorySecondary() {
             <BreadcrumbLink
               as={Link}
               to={`/p/${slugify(
-                getPrimaryCategoryBySlugifiedName(cPrimary!)!.name
+                fetchPrimaryCategoryBySlugifiedName(cPrimary!)!.name
               )}`}
             >
-              {getPrimaryCategoryBySlugifiedName(cPrimary!)?.name}
+              {fetchPrimaryCategoryBySlugifiedName(cPrimary!)?.name}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>
             <BreadcrumbLink>
               {
-                getSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
+                fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
                   ?.name
               }
             </BreadcrumbLink>
@@ -66,7 +69,7 @@ function CategorySecondary() {
                 onClick={() => {
                   navigate(
                     `/p/${cPrimary}/${slugify(
-                      getSecondaryCategoryBySlugifiedName(
+                      fetchSecondaryCategoryBySlugifiedName(
                         cPrimary!,
                         cSecondary!
                       )!.name

@@ -53,7 +53,7 @@ const Search = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   useTitle(`Shop for ${search.get("q")} | BAZR`);
 
-  const { categories } = useCategory();
+  const { categoriesProduct, fetchCategoriesProduct } = useCategory(false);
 
   const [params, setParams] = useState<ISearchParamsPayload>({
     q: search.get("q") !== null ? String(search.get("q")) : "",
@@ -358,6 +358,12 @@ const Search = () => {
     setPage(1);
   }, [search, sortBy, sort]);
 
+  useEffect(() => {
+    fetchCategoriesProduct(
+      search.get("q") !== null ? String(search.get("q")) : ""
+    );
+  }, [search]);
+
   return (
     <>
       <Box
@@ -485,7 +491,7 @@ const Search = () => {
                   </Button>
                 </VStack>
               </VStack>
-              <Accordion allowMultiple width={"100%"}>
+              <Accordion defaultIndex={[0]} allowMultiple width={"100%"}>
                 <AccordionItem>
                   {({ isExpanded }) => (
                     <>
@@ -503,8 +509,8 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        {categories.length !== 0
-                          ? categories.map((category) => (
+                        {categoriesProduct.length !== 0
+                          ? categoriesProduct.map((category) => (
                               <Accordion key={category.id} allowMultiple>
                                 <AccordionItem border={"none"}>
                                   <HStack spacing={8}>
@@ -1141,8 +1147,8 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        {categories.length !== 0
-                          ? categories.map((category) => (
+                        {categoriesProduct.length !== 0
+                          ? categoriesProduct.map((category) => (
                               <Accordion key={category.id} allowMultiple>
                                 <AccordionItem border={"none"}>
                                   <HStack spacing={8}>
