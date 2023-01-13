@@ -8,6 +8,7 @@ import Facebook from "./Facebook";
 import GeoMap from "./GeoMap";
 import Hamburger from "./Hamburger";
 import Heart from "./Heart";
+import Hide from "./Hide";
 import Instagram from "./Instagram";
 import LeftArrow from "./LeftArrow";
 import Linkedin from "./Linkedin";
@@ -24,6 +25,7 @@ import RightArrow from "./RightArrow";
 import SeaPay from "./SeaPay";
 import Search from "./Search";
 import Shop from "./Shop";
+import Show from "./Show";
 import Sort from "./Sort";
 import Star from "./Star";
 import Trash from "./Trash";
@@ -42,6 +44,7 @@ const Icon = {
   GeoMap,
   Hamburger,
   Heart,
+  Hide,
   Instagram,
   LeftArrow,
   Linkedin,
@@ -58,6 +61,7 @@ const Icon = {
   Search,
   SeaPay,
   Shop,
+  Show,
   Sort,
   Star,
   Trash,

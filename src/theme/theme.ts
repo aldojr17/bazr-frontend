@@ -1,5 +1,13 @@
 import { extendTheme } from "@chakra-ui/react";
-import { Button, Divider, Heading, Input, Select, Text } from "./components";
+import {
+  Button,
+  Divider,
+  Heading,
+  Input,
+  Select,
+  Text,
+  Alert,
+} from "./components";
 
 export const customTheme = extendTheme({
   fonts: {
@@ -42,5 +50,6 @@ export const customTheme = extendTheme({
     Divider,
     Input,
     Text,
+    Alert,
   },
 });
