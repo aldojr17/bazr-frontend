@@ -12,7 +12,8 @@ export const API_PATH = {
     AVATAR: "/users/avatar",
   },
   category: {
-    GET_ALL_CATEGORIES: "/categories",
+    CATEGORIES: "/categories",
+    CATEGORIES_PRODUCT: "/categories/product",
   },
   product: {
     PRODUCTS: "/products",

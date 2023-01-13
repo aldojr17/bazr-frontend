@@ -12,16 +12,16 @@ import slugify from "slugify";
 
 function CategoryPrimary() {
   const { cPrimary } = useParams();
-  const { getPrimaryCategoryBySlugifiedName } = useCategory();
-  useTitle("BAZR | " + getPrimaryCategoryBySlugifiedName(cPrimary!)?.name);
+  const { fetchPrimaryCategoryBySlugifiedName } = useCategory();
+  useTitle("BAZR | " + fetchPrimaryCategoryBySlugifiedName(cPrimary!)?.name);
   const { products, getProducts } = useProduct();
   const navigate = useNavigate();
 
-  const slugifiedPrimary = getPrimaryCategoryBySlugifiedName(cPrimary!);
+  const slugifiedPrimary = fetchPrimaryCategoryBySlugifiedName(cPrimary!);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const category = getPrimaryCategoryBySlugifiedName(cPrimary!);
+    const category = fetchPrimaryCategoryBySlugifiedName(cPrimary!);
     const filter: ISearchFilterPayload = {
       category: category?.id,
       category_level: "1",
@@ -38,7 +38,7 @@ function CategoryPrimary() {
           size={{ base: "sm", sm: "sm", md: "md", lg: "lg" }}
           className="pb-4"
         >
-          <span>{getPrimaryCategoryBySlugifiedName(cPrimary!)?.name}</span>
+          <span>{fetchPrimaryCategoryBySlugifiedName(cPrimary!)?.name}</span>
         </Heading>
         <CategoryWrapper>
           {slugifiedPrimary?.secondary_category?.map((secondary_category) => {
