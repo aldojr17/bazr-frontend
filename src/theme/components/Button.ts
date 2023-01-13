@@ -22,6 +22,9 @@ const Button = defineStyleConfig({
       boxShadow: "default",
       _hover: {
         bg: "primaryLighten",
+        _disabled: {
+          bg: "primaryDarken",
+        },
       },
       _active: {
         bg: "primaryDarken",

@@ -3,6 +3,7 @@ export interface IRegisterRequestPayload {
   username: string;
   email: string;
   password: string;
+  isOauth: boolean;
 }
 
 export interface IRegisterResponsePayload {
@@ -37,6 +38,21 @@ export interface IRefreshRequestPayload {
 }
 
 export interface IRefreshResponsePayload {
+  is_success: boolean;
+  data: null;
+  message: string;
+}
+
+export interface IChangePasswordRequestPayload {
+  token: string;
+  password: string;
+}
+
+export interface IResetPasswordRequestPayload {
+  email: string;
+}
+
+export interface IPasswordResponsePayload {
   is_success: boolean;
   data: null;
   message: string;
