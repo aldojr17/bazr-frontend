@@ -55,14 +55,20 @@ const Navbar = ({ onOpen }: NavbarProps) => {
   }, []);
 
   return (
-    <Box borderBottom={"1px solid #dee2e6"} py={5}>
+    <Box
+      bgColor={"white"}
+      borderBottom={"3px solid"}
+      borderColor={"primary"}
+      py={5}
+      boxShadow={"xl"}
+      position={"sticky"}
+      top={0}
+      zIndex={2}
+    >
       <SimpleGrid
         columns={{
           base: 2,
-          sm: 2,
-          md: 2,
           lg: 3,
-          xl: 3,
         }}
         justifyContent={"space-between"}
         alignItems={"center"}
@@ -97,6 +103,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
             </Flex>
           </Button>
         </HStack>
+
         <HStack
           display={{
             base: "flex",
@@ -108,10 +115,11 @@ const Navbar = ({ onOpen }: NavbarProps) => {
           gridColumn={2}
           justifyContent={"end"}
         >
-          <Button variant={"ghost"} onClick={onOpen} pe={7}>
+          <Button variant={"ghost"} onClick={onOpen}>
             <Icon.Search />
           </Button>
         </HStack>
+
         <Center
           justifyContent={{
             sm: "start",
@@ -144,12 +152,13 @@ const Navbar = ({ onOpen }: NavbarProps) => {
           <HStack
             className="mt-md-0 mt-lg-0"
             spacing={{
-              base: 0,
-              sm: 5,
-              md: 5,
-              lg: 5,
-              xl: 5,
+              base: 3,
+              sm: 0,
+              md: 3,
+              lg: 4,
+              xl: 4,
             }}
+            alignItems={"center"}
           >
             <Popover
               isLazy
@@ -160,6 +169,13 @@ const Navbar = ({ onOpen }: NavbarProps) => {
               <PopoverTrigger>
                 <Button
                   variant={"ghost"}
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: "block",
+                    xl: "block",
+                  }}
                   position={"relative"}
                   p={{
                     base: 0,
@@ -372,6 +388,15 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                     variant={"ghost"}
                     to={"/profile"}
                     as={Link}
+                    display={{
+                      base: "none",
+                      sm: "none",
+                      md: "none",
+                      lg: "flex",
+                      xl: "flex",
+                    }}
+                    justifyContent={"center"}
+                    alignItems={"center"}
                     p={{
                       base: 0,
                       sm: "initial",
