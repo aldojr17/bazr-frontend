@@ -1,4 +1,5 @@
 import Cart from "./Cart";
+import CartFilled from "./CartFilled";
 import ChevronDown from "./ChevronDown";
 import ChevronRight from "./ChevronRight";
 import ChevronUp from "./ChevronUp";
@@ -8,6 +9,7 @@ import Facebook from "./Facebook";
 import GeoMap from "./GeoMap";
 import Hamburger from "./Hamburger";
 import Heart from "./Heart";
+import Home from "./Home";
 import Hide from "./Hide";
 import Instagram from "./Instagram";
 import LeftArrow from "./LeftArrow";
@@ -15,11 +17,11 @@ import Linkedin from "./Linkedin";
 import Location from "./Location";
 import Lock from "./Lock";
 import Minus from "./Minus";
+import Pencil from "./Pencil";
 import PersonCheck from "./PersonCheck";
 import PinMap from "./PinMap";
 import Plus from "./Plus";
 import Profile from "./Profile";
-import Pencil from "./Pencil";
 import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
 import SeaPay from "./SeaPay";
@@ -35,6 +37,7 @@ import Whatsapp from "./Whatsapp";
 
 const Icon = {
   Cart,
+  CartFilled,
   ChevronDown,
   ChevronRight,
   ChevronUp,
@@ -44,6 +47,7 @@ const Icon = {
   GeoMap,
   Hamburger,
   Heart,
+  Home,
   Hide,
   Instagram,
   LeftArrow,
