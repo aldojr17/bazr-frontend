@@ -2,14 +2,9 @@ import {
   Box,
   Button,
   Center,
-  Grid,
+  Flex,
   GridItem,
   HStack,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Skeleton,
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -17,13 +12,26 @@ import Icon from "../../assets/icons";
 import ProductCard from "../../components/Card/ProductCard";
 import Pagination from "../../components/Pagination/Pagination";
 import useProduct from "../../hooks/useProduct";
-import { IProductPaginationPayload } from "../../interfaces/Product";
+import { ISearchFilterPayload } from "../../interfaces/Filter";
+import { IShopHomeProductsProps } from "../../interfaces/Shop";
+import {
+  IProductPaginationPayload,
+  IProductPayload,
+} from "../../interfaces/Product";
 
-interface IProps {
-  shopId: number;
-}
+function ShopHomeProducts(props: IShopHomeProductsProps) {
+  const {
+    sortByOption,
+    sortOption,
+    requirements,
+    sortBy,
+    setSortBy,
+    sort,
+    setSort,
+    page,
+    setPage,
+  } = props;
 
-function ShopHomeProducts(props: IProps) {
   const { getShopProducts } = useProduct();
   const [shopProducts, setshopProducts] = useState<IProductPaginationPayload>({
     current_page: 0,
@@ -32,27 +40,6 @@ function ShopHomeProducts(props: IProps) {
     total: 0,
     total_page: 0,
   });
-  const [isShopProductsLoaded, setIsShopProductsLoaded] = useState(true);
-  const sortByOption = {
-    RECOMMENDED: "view_count",
-    NEWEST: "date",
-    MOST_BUY: "unit_sold",
-    PRICE: "lowest_price",
-  };
-  const sortOption = {
-    ASCENDING: "asc",
-    DESCENDING: "desc",
-  };
-  const requirement = {
-    quantityProductToDisplay: 20,
-    sortBy: {
-      purchased: sortByOption.MOST_BUY,
-      most: sortOption.DESCENDING,
-    },
-  };
-  const [sortBy, setSortBy] = useState<string>(requirement.sortBy.purchased);
-  const [sort, setSort] = useState<string>(requirement.sortBy.most);
-  const [page, setPage] = useState<number>(1);
 
   const handleChangeSortBy = (value: string) => {
     setSortBy(value);
@@ -62,31 +49,67 @@ function ShopHomeProducts(props: IProps) {
     setSort(value);
   };
 
+  const myConst = {
+    categoryIdUnset: 0,
+  };
+
   useEffect(() => {
     const _useEffectAsync = async () => {
-      setIsShopProductsLoaded(false);
-      const shopProducts = await getShopProducts(props.shopId, {
-        limit: requirement.quantityProductToDisplay,
+      const searchFilterPayload: ISearchFilterPayload = {
+        limit: requirements.quantityProductToDisplay,
         sort: sort,
         sortBy: sortBy,
         page: page,
-      });
+      };
+      if (props.category_id && props.category_id !== myConst.categoryIdUnset) {
+        searchFilterPayload.category = props.category_id;
+        searchFilterPayload.category_level = props.category_level;
+      }
+      const shopProducts = await getShopProducts(
+        props.shopId,
+        searchFilterPayload
+      );
       if (shopProducts) {
         setshopProducts(shopProducts);
       }
-      setIsShopProductsLoaded(true);
     };
     _useEffectAsync();
-  }, [sortBy, sort, page]);
+  }, [
+    sortBy,
+    sort,
+    page,
+    props.shopId,
+    props.category_id,
+    props.category_level,
+  ]);
+
+  const showShopProducts = (limit?: number) => {
+    let shopProductsData: IProductPayload[] = shopProducts.data;
+    const limit_is_given = limit !== undefined;
+    if (limit_is_given) {
+      shopProductsData = shopProductsData.slice(0, limit);
+    }
+    return shopProductsData.map((product) => (
+      <ProductCard key={product.id} {...product} />
+    ));
+  };
+
+  useEffect(() => {
+    if (props.is_auto_scroll_to_products) {
+      props.scrollToSortOption();
+    }
+  }, [props.scrollToSortOption]);
+
   return (
     <>
       <HStack
+        ref={props.sortOptionRef}
         spacing={5}
         display={{
           base: "none",
           sm: "none",
           md: "none",
-          lg: "flex",
+          lg: "none",
           xl: "flex",
         }}
       >
@@ -195,104 +218,10 @@ function ShopHomeProducts(props: IProps) {
           />
         </Button>
       </HStack>
-      <HStack
-        width={"100%"}
-        bg="secondaryLighten"
-        px={4}
-        justifyContent={"space-between"}
-        display={{
-          base: "flex",
-          sm: "flex",
-          md: "flex",
-          lg: "none",
-          xl: "none",
-        }}
-      >
-        <HStack>
-          <Menu isLazy>
-            <MenuButton
-              fontSize={{
-                base: "sm",
-                sm: "sm",
-                md: "md",
-              }}
-            >
-              {sortBy === sortByOption.RECOMMENDED
-                ? "Recommended"
-                : sortBy === sortByOption.NEWEST
-                ? "Newest"
-                : sortBy === sortByOption.MOST_BUY
-                ? "Most buy"
-                : "Price"}
-            </MenuButton>
-            <MenuList>
-              <MenuItem
-                onClick={() => handleChangeSortBy(sortByOption.RECOMMENDED)}
-              >
-                Recommended
-              </MenuItem>
-              <MenuItem onClick={() => handleChangeSortBy(sortByOption.NEWEST)}>
-                Newest
-              </MenuItem>
-              <MenuItem
-                onClick={() => handleChangeSortBy(sortByOption.MOST_BUY)}
-              >
-                Most buy
-              </MenuItem>
-              <MenuItem onClick={() => handleChangeSortBy(sortByOption.PRICE)}>
-                Price
-              </MenuItem>
-            </MenuList>
-          </Menu>
-
-          <Button
-            variant={"unstyled"}
-            size={{
-              base: "xs",
-              sm: "sm",
-              md: "md",
-            }}
-            onClick={() => {
-              sort === "desc"
-                ? handleChangeSort(sortOption.ASCENDING)
-                : handleChangeSort(sortOption.DESCENDING);
-            }}
-          >
-            <Icon.Sort
-              width={{
-                base: "1.2rem",
-                sm: "1.2rem",
-                md: "1.5rem",
-              }}
-              height={{
-                base: "1.2rem",
-                sm: "1.2rem",
-                md: "1.5rem",
-              }}
-              selected={sort}
-            />
-          </Button>
-        </HStack>
-      </HStack>
-      <Box marginTop={5}>
-        <Grid
-          templateColumns={{
-            sm: "repeat(2, 1fr)",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(4, 1fr)",
-            xl: "repeat(4, 1fr)",
-          }}
-          placeItems="center"
-          gap={6}
-        >
+      <Box className="py-3">
+        <Flex wrap="wrap" direction="row" justifyContent="space-evenly" gap={2}>
           {shopProducts.data.length !== 0 ? (
-            shopProducts.data.map((product) => (
-              <Skeleton key={product.id} isLoaded={isShopProductsLoaded}>
-                <GridItem>
-                  <ProductCard {...product} />
-                </GridItem>
-              </Skeleton>
-            ))
+            showShopProducts()
           ) : (
             <GridItem
               colSpan={{
@@ -308,7 +237,7 @@ function ShopHomeProducts(props: IProps) {
               </Center>
             </GridItem>
           )}
-        </Grid>
+        </Flex>
       </Box>
       <Box>
         {shopProducts?.data.length !== 0 ? (

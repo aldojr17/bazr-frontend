@@ -15,10 +15,11 @@ import { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
 import useShop from "../../hooks/useShop";
 import { IShopDetailProps, IShopProfilePayload } from "../../interfaces/Shop";
+import routes from "../../routes/Routes";
 
 function ShopDetail(props: IShopDetailProps) {
   const { shopId } = props;
-  const { fetchShopProfile } = useShop();
+  const { fetchShopProfileById } = useShop();
 
   const [loading, setLoading] = useState(true);
   const [shopDetail, setShopDetail] = useState<IShopProfilePayload | null>(
@@ -26,7 +27,7 @@ function ShopDetail(props: IShopDetailProps) {
   );
 
   useEffect(() => {
-    fetchShopProfile(shopId)
+    fetchShopProfileById(shopId)
       .then((response) => setShopDetail(response))
       .finally(() => setLoading(false));
   }, []);
@@ -45,7 +46,7 @@ function ShopDetail(props: IShopDetailProps) {
         <SkeletonCircle isLoaded={!loading} size={"14"}>
           <Avatar
             as={Link}
-            href={`/shop/${shopId}/${shopDetail?.username}`}
+            href={routes.SHOP(shopDetail?.username!)}
             size={"lg"}
           />
         </SkeletonCircle>
@@ -53,7 +54,7 @@ function ShopDetail(props: IShopDetailProps) {
           <SkeletonText my={"2"} isLoaded={!loading}>
             <Heading
               as={Link}
-              href={`/shop/${shopId}/${shopDetail?.username}`}
+              href={routes.SHOP(shopDetail?.username!)}
               variant={"productShopName"}
             >
               {shopDetail?.name!}

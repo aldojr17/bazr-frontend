@@ -1,3 +1,4 @@
+import ArrowDown from "./ArrowDown";
 import Cart from "./Cart";
 import CartFilled from "./CartFilled";
 import ChevronDown from "./ChevronDown";
@@ -37,6 +38,7 @@ import Wallet from "./Wallet";
 import Whatsapp from "./Whatsapp";
 
 const Icon = {
+  ArrowDown,
   Cart,
   CartFilled,
   ChevronDown,

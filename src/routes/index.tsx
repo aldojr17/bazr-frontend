@@ -59,7 +59,7 @@ const RouteList = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/wallet" element={<UserWallet />} />
         </Route>
-        <Route path="/shop/:shopId/:shopUsername" element={<ShopHome />} />
+        <Route path="/shop/:shopUsername" element={<ShopHome />} />
       </Route>
 
       <Route element={<AuthRoutes />}>
