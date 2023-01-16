@@ -27,6 +27,7 @@ const CategoryTertiary = React.lazy(
   () => import("../pages/Category/CategoryTertiary")
 );
 const Profile = React.lazy(() => import("../pages/User/User"));
+const UserWallet = React.lazy(() => import("../pages/User/UserWallet"));
 const SellerHome = React.lazy(() => import("../pages/Seller/Home/Home"));
 const SellerVoucher = React.lazy(
   () => import("../pages/Seller/Voucher/Voucher")
@@ -56,6 +57,7 @@ const RouteList = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/cart/shipment" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/wallet" element={<UserWallet />} />
         </Route>
         <Route path="/shop/:shopId/:shopUsername" element={<ShopHome />} />
       </Route>

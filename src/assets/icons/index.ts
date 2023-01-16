@@ -6,6 +6,7 @@ import ChevronUp from "./ChevronUp";
 import Close from "./Close";
 import Dots from "./Dots";
 import Facebook from "./Facebook";
+import Gear from "./Gear";
 import GeoMap from "./GeoMap";
 import Hamburger from "./Hamburger";
 import Heart from "./Heart";
@@ -44,6 +45,7 @@ const Icon = {
   Close,
   Dots,
   Facebook,
+  Gear,
   GeoMap,
   Hamburger,
   Heart,

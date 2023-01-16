@@ -59,6 +59,7 @@ export interface IPaymentPinProps {
   handlePinChange: (value: string) => Promise<void>;
   pinInput: string;
   setPinInput: React.Dispatch<React.SetStateAction<string>>;
+  title?: string;
 }
 
 export interface IOrderSummaryCardProps {
@@ -123,4 +124,13 @@ export interface IEditUserEmailModalProps {
 export interface IEditUserPhotoModalProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
+export interface IWalletPasswordModalProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  setPasswordInput: React.Dispatch<React.SetStateAction<string>>;
+  verifyPasswordMs: React.MouseEventHandler<HTMLButtonElement>;
+  verifyPasswordKb: React.KeyboardEventHandler<HTMLInputElement>;
 }

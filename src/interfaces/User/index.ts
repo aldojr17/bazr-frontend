@@ -39,7 +39,9 @@ export interface IUserResponsePayload {
 }
 
 export interface IUserWalletResponsePayload {
+  id: number;
   balance: number;
+  is_activated: boolean;
 }
 
 export interface IUserAvatarResponsePayload {
