@@ -15,15 +15,17 @@ import {
   Divider,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "../../assets/icons";
 import PaymentPinModal from "../../components/Modal/PaymentPinModal";
+import WalletActivationModal from "../../components/Modal/WalletActivationModal";
 import WalletPasswordModal from "../../components/Modal/WalletPasswordModal";
 import useToast from "../../hooks/useToast";
 import useUser from "../../hooks/useUser";
 import useWallet from "../../hooks/useWallet";
 import {
   IPinPasswordRequestPayload,
+  IPinRequestPayload,
   IPinUpdateRequestPayload,
 } from "../../interfaces/Auth";
 import { formatCurrency } from "../../util/util";
@@ -40,10 +42,20 @@ function UserWallet() {
     onOpen: onOpenNew,
     onClose: onCloseNew,
   } = useDisclosure();
+  const {
+    isOpen: isOpenConfig,
+    onOpen: onOpenConfig,
+    onClose: onCloseConfig,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenAlert,
+    onOpen: onOpenAlert,
+    onClose: onCloseAlert,
+  } = useDisclosure();
   const [pinInput, setPinInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [jwt, setJwt] = useState("");
-  const { verifyPasswordPin, updatePin } = useWallet();
+  const { verifyPasswordPin, updatePin, activateWallet } = useWallet();
   const { successToast, errorToast } = useToast();
 
   const verifyPassword = async () => {
@@ -86,6 +98,32 @@ function UserWallet() {
       }
     }
   };
+
+  const handleNewWallet = async (value: string) => {
+    if (value.length === 6) {
+      let payloadPin: IPinRequestPayload = {
+        pin: value,
+      };
+
+      const response = await activateWallet(payloadPin);
+
+      if (response.is_success) {
+        successToast("Wallet Activated");
+        onCloseConfig();
+        setPinInput("");
+      } else {
+        errorToast("Error", response.message);
+        setPinInput("");
+        onCloseConfig();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!user?.wallet_detail.is_activated) {
+      onOpenAlert();
+    }
+  }, []);
 
   return (
     <Box
@@ -223,6 +261,21 @@ function UserWallet() {
         pinInput={pinInput}
         setPinInput={setPinInput}
         title={"Enter Your New 6 Digit Pin"}
+      />
+      <PaymentPinModal
+        isOpen={isOpenConfig}
+        onOpen={onOpenConfig}
+        onClose={onCloseConfig}
+        handlePinChange={handleNewWallet}
+        pinInput={pinInput}
+        setPinInput={setPinInput}
+        title={"Please Enter A 6 Digit Pin"}
+      />
+      <WalletActivationModal
+        isOpen={isOpenAlert}
+        onOpen={onOpenAlert}
+        onClose={onCloseAlert}
+        nextModal={onOpenConfig}
       />
     </Box>
   );

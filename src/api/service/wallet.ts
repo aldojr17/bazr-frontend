@@ -71,10 +71,26 @@ const updatePin = async (
   }
 };
 
+const activateWallet = async (
+  payload: IPinRequestPayload
+): Promise<IPaymentWalletResponsePayload> => {
+  try {
+    const response = await instance.post<IPaymentWalletResponsePayload>(
+      API_PATH.wallet.ACTIVATE_WALLET,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IPaymentWalletResponsePayload;
+  }
+};
+
 const walletService = {
   verifyPin,
   paymentWallet,
   updatePin,
+  activateWallet,
   verifyPasswordWallet,
 };
 
