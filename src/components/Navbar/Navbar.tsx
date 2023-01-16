@@ -473,14 +473,18 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                       to={"/wallet"}
                       as={Link}
                     >
-                      <HStack justifyContent={"space-between"} width={"100%"}>
-                        <Text>
-                          <Icon.Wallet boxSize={5} mr={2} /> My Wallet
-                        </Text>
-                        <Text>
-                          Rp{formatCurrency(user?.wallet_detail.balance!)}
-                        </Text>
-                      </HStack>
+                      {user?.wallet_detail.is_activated ? (
+                        <HStack justifyContent={"space-between"} width={"100%"}>
+                          <Text>
+                            <Icon.Wallet boxSize={5} mr={2} /> My Wallet
+                          </Text>
+                          <Text>
+                            Rp{formatCurrency(user?.wallet_detail.balance!)}
+                          </Text>
+                        </HStack>
+                      ) : (
+                        <Text>Wallet Not Activated</Text>
+                      )}
                     </Button>
                   </PopoverBody>
 

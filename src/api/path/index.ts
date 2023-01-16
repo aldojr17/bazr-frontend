@@ -33,5 +33,6 @@ export const API_PATH = {
     VERIFY_PASSWORD_PIN: "/wallets/step-up/password",
     PAYMENT_WALLET: "/payments/wallet-pay",
     UPDATE_PIN: "/wallets/pin",
+    ACTIVATE_WALLET: "/wallets/activate",
   },
 };

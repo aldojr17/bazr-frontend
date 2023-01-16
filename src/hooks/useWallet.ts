@@ -61,11 +61,18 @@ const useWallet = () => {
     return response.is_success;
   };
 
+  const activateWallet = async (payload: IPinRequestPayload) => {
+    const response = await walletService.activateWallet(payload);
+
+    return response;
+  };
+
   return {
     verifyPin,
     paymentWallet,
     createPayment,
     updatePin,
+    activateWallet,
     verifyPasswordPin,
   };
 };

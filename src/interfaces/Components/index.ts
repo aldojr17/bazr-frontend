@@ -134,3 +134,10 @@ export interface IWalletPasswordModalProps {
   verifyPasswordMs: React.MouseEventHandler<HTMLButtonElement>;
   verifyPasswordKb: React.KeyboardEventHandler<HTMLInputElement>;
 }
+
+export interface IWalletActivationModalProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  nextModal: () => void;
+}
