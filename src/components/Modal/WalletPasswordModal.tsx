@@ -10,14 +10,14 @@ import {
   VStack,
   Text,
   HStack,
-  PinInput,
-  PinInputField,
+  Input,
   ModalFooter,
   Button,
+  InputGroup,
 } from "@chakra-ui/react";
-import { IPaymentPinProps } from "../../interfaces/Components";
+import { IWalletPasswordModalProps } from "../../interfaces/Components";
 
-const PaymentPinModal = ({ ...props }: IPaymentPinProps) => {
+const WalletPasswordModal = ({ ...props }: IWalletPasswordModalProps) => {
   return (
     <Modal
       onClose={props.onClose}
@@ -49,50 +49,45 @@ const PaymentPinModal = ({ ...props }: IPaymentPinProps) => {
                 }}
                 as="b"
               >
-                {props.title ? props.title : "Enter Your 6 Digit Pin"}
+                Password Verification
               </Text>
               <HStack
                 justifyContent={"center"}
                 alignItems={"center"}
                 width="100%"
               >
-                <PinInput
-                  placeholder="_"
-                  onChange={(value) => {
-                    props.setPinInput(value);
-                    props.handlePinChange(value);
-                  }}
-                  value={props.pinInput}
-                  mask
-                >
-                  {[...Array(6)].map((_, i) => {
-                    return (
-                      <PinInputField
-                        boxSize={{
-                          base: "2em",
-                          sm: "2em",
-                          md: "3em",
-                          lg: "4em",
-                          xl: "4em",
-                        }}
-                        fontSize={"2em"}
-                        backgroundColor={"gray.100"}
-                        borderColor="black"
-                        tabIndex={i + 1}
-                      />
-                    );
-                  })}
-                </PinInput>
+                <InputGroup size="lg" width={"70%"}>
+                  <Input
+                    pr="4.5rem"
+                    type={"password"}
+                    placeholder="Enter password"
+                    fontSize={"2xl"}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      props.setPasswordInput(event.currentTarget.value);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        props.verifyPasswordKb(e);
+                      }
+                    }}
+                  />
+                </InputGroup>
               </HStack>
             </VStack>
           </Center>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={props.onClose}>Close</Button>
+          <Button
+            variant="solid"
+            colorScheme="blue"
+            onClick={props.verifyPasswordMs}
+          >
+            Verify
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
 };
 
-export default PaymentPinModal;
+export default WalletPasswordModal;

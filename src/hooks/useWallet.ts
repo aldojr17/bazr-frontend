@@ -1,6 +1,10 @@
 import { useToast } from "@chakra-ui/react";
 import walletService from "../api/service/wallet";
-import { IPinRequestPayload } from "../interfaces/Auth";
+import {
+  IPinPasswordRequestPayload,
+  IPinRequestPayload,
+  IPinUpdateRequestPayload,
+} from "../interfaces/Auth";
 import { IPaymentWalletRequestPayload } from "../interfaces/Wallet";
 
 const useWallet = () => {
@@ -8,6 +12,18 @@ const useWallet = () => {
 
   const verifyPin = async (payload: IPinRequestPayload) => {
     const response = await walletService.verifyPin(payload);
+
+    return response;
+  };
+
+  const verifyPasswordPin = async (payload: IPinPasswordRequestPayload) => {
+    const response = await walletService.verifyPasswordWallet(payload);
+
+    return response;
+  };
+
+  const updatePin = async (payload: IPinUpdateRequestPayload) => {
+    const response = await walletService.updatePin(payload);
 
     return response;
   };
@@ -49,6 +65,8 @@ const useWallet = () => {
     verifyPin,
     paymentWallet,
     createPayment,
+    updatePin,
+    verifyPasswordPin,
   };
 };
 

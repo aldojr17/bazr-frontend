@@ -24,6 +24,7 @@ import Icon from "../../assets/icons";
 import useCart from "../../hooks/useCart";
 import useUser from "../../hooks/useUser";
 import { NavbarProps } from "../../interfaces/Navbar";
+import { formatCurrency } from "../../util/util";
 import HoverCart from "../Cart/HoverCart";
 
 const Navbar = ({ onOpen }: NavbarProps) => {
@@ -459,6 +460,26 @@ const Navbar = ({ onOpen }: NavbarProps) => {
                             Go to your profile {">"}
                           </Text>
                         </VStack>
+                      </HStack>
+                    </Button>
+                    <Button
+                      variant={"ghost"}
+                      width={"100%"}
+                      py={6}
+                      my={3}
+                      border={"2px solid"}
+                      borderColor={"green.600"}
+                      backgroundColor={"green.200"}
+                      to={"/wallet"}
+                      as={Link}
+                    >
+                      <HStack justifyContent={"space-between"} width={"100%"}>
+                        <Text>
+                          <Icon.Wallet boxSize={5} mr={2} /> My Wallet
+                        </Text>
+                        <Text>
+                          Rp{formatCurrency(user?.wallet_detail.balance!)}
+                        </Text>
                       </HStack>
                     </Button>
                   </PopoverBody>

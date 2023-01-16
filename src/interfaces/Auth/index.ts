@@ -62,6 +62,15 @@ export interface IPinRequestPayload {
   pin: string;
 }
 
+export interface IPinPasswordRequestPayload {
+  password: string;
+}
+
+export interface IPinUpdateRequestPayload {
+  token: string;
+  pin: string;
+}
+
 export interface IPinResponsePayload {
   is_success: boolean;
   data: { token: string };
