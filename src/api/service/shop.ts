@@ -38,7 +38,7 @@ const getShopCategory = async (
 ): Promise<IShopCategoryResponsePayload> => {
   try {
     const response = await instance.get<IShopCategoryResponsePayload>(
-      `${API_PATH.category.GET_ALL_CATEGORIES}?shopId=${shopId}`
+      `${API_PATH.category.CATEGORIES}?shopId=${shopId}`
     );
     return response.data;
   } catch (err) {
