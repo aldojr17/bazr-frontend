@@ -57,7 +57,7 @@ const RouteList = () => {
           <Route path="/cart/shipment" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
-        <Route path="/shop/:shopId/:shopUsername" element={<ShopHome />} />
+        <Route path="/shop/:shopUsername" element={<ShopHome />} />
       </Route>
 
       <Route element={<AuthRoutes />}>
