@@ -1,4 +1,4 @@
-import { Box, Center, Grid, GridItem, Heading } from "@chakra-ui/react";
+import { Box, Center, Flex, Text, Heading } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import useCategory from "../../hooks/useCategory";
 import { CategoryWrapper } from "../Home/style";
@@ -28,7 +28,7 @@ function CategoryPrimary() {
       limit: 30,
     };
     getProducts(filter);
-  }, []);
+  }, [cPrimary]);
 
   return (
     <>
@@ -67,33 +67,25 @@ function CategoryPrimary() {
         >
           PRODUCTS
         </Heading>
-        {products.data.length !== 0 ? (
-          <Grid
-            templateColumns={{
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
-              lg: "repeat(4, 1fr)",
-              xl: "repeat(6, 1fr)",
-            }}
-            placeItems={{
-              base: "center",
-              sm: "center",
-              md: "initial",
-              lg: "initial",
-            }}
-            gap={6}
-          >
-            {products.data.map((product) => {
-              return (
-                <GridItem key={product.id}>
-                  <ProductCard {...product} />
-                </GridItem>
-              );
-            })}
-          </Grid>
-        ) : (
-          <Center>no products</Center>
-        )}
+        <Flex
+          wrap={"wrap"}
+          direction={"row"}
+          justifyContent={"space-between"}
+          rowGap={{ base: 1, sm: 3, lg: 2 }}
+          columnGap={{ base: 1, sm: 2, lg: 1 }}
+          _after={{
+            md: { content: '""', flex: "auto" },
+            lg: { content: "none" },
+          }}
+        >
+          {products.data.length !== 0 ? (
+            products.data.map((product) => <ProductCard {...product} />)
+          ) : (
+            <Center>
+              <Text>No products available.</Text>
+            </Center>
+          )}
+        </Flex>
       </Box>
     </>
   );
