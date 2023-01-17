@@ -35,4 +35,7 @@ export const API_PATH = {
     UPDATE_PIN: "/wallets/pin",
     ACTIVATE_WALLET: "/wallets/activate",
   },
+  voucher: {
+    SHOP_VOUCHER: "/shop-vouchers",
+  },
 };

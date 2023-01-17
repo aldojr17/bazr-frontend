@@ -141,3 +141,10 @@ export interface IWalletActivationModalProps {
   onClose: () => void;
   nextModal: () => void;
 }
+
+export interface IDeleteModalProps {
+  isOpen: boolean;
+  isLoading: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+}

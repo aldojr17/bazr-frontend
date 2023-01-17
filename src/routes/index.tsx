@@ -1,4 +1,3 @@
-import path from "path";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ProductDetail from "../pages/ProductDetail/ProductDetail";
@@ -31,6 +30,18 @@ const UserWallet = React.lazy(() => import("../pages/User/UserWallet"));
 const SellerHome = React.lazy(() => import("../pages/Seller/Home/Home"));
 const SellerVoucher = React.lazy(
   () => import("../pages/Seller/Voucher/Voucher")
+);
+const SellerVoucherCreate = React.lazy(
+  () => import("../pages/Seller/Voucher/VoucherCreate")
+);
+const SellerVoucherEdit = React.lazy(
+  () => import("../pages/Seller/Voucher/VoucherEdit")
+);
+const SellerVoucherDuplicate = React.lazy(
+  () => import("../pages/Seller/Voucher/VoucherDuplicate")
+);
+const SellerVoucherDetail = React.lazy(
+  () => import("../pages/Seller/Voucher/VoucherDetail")
 );
 
 const RouteList = () => {
@@ -72,6 +83,22 @@ const RouteList = () => {
       <Route element={<SellerRoutes />}>
         <Route path="/seller/home" element={<SellerHome />} />
         <Route path="/seller/voucher" element={<SellerVoucher />} />
+        <Route
+          path="/seller/voucher/create"
+          element={<SellerVoucherCreate />}
+        />
+        <Route
+          path="/seller/voucher/:id/edit"
+          element={<SellerVoucherEdit />}
+        />
+        <Route
+          path="/seller/voucher/:id/duplicate"
+          element={<SellerVoucherDuplicate />}
+        />
+        <Route
+          path="/seller/voucher/:id/detail"
+          element={<SellerVoucherDetail />}
+        />
       </Route>
 
       <Route path="*" element={<NotFound />} />

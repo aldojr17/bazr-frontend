@@ -1,5 +1,4 @@
-import React from "react";
-import { Box, Divider, Flex, Image } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import SidebarItem from "./SidebarItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ISidebarProps } from "../../interfaces/Sidebar";
