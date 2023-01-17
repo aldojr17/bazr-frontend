@@ -4,89 +4,62 @@ import {
   CardBody,
   CardHeader,
   Flex,
-  Heading,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
+  Text,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/react";
-import React from "react";
+import { BsPlusCircleDotted } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import routes from "../../../routes/Routes";
+import VoucherTable from "./VoucherTable";
 
 function Voucher() {
   return (
-    <div>
-      <Card variant={"outline"}>
+    <>
+      <Card variant={"outline"} rounded={"xl"} p={5} bgColor={"white"}>
         <CardHeader>
           <Flex justifyContent={"space-between"}>
-            <Heading size="md">Voucher List</Heading>
-            <Button>Add Voucher</Button>
+            <Text fontSize={"2xl"} fontWeight="bold">
+              Voucher List
+            </Text>
+            <Button
+              leftIcon={<BsPlusCircleDotted />}
+              as={Link}
+              to={routes.SELLER_VOUCHER_CREATE}
+            >
+              Create Voucher
+            </Button>
           </Flex>
         </CardHeader>
         <CardBody>
-          <TableContainer>
-            <Table variant="striped">
-              <TableCaption>Imperial to metric conversion factors</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>Code</Th>
-                  <Th>Name</Th>
-                  <Th isNumeric>Quota</Th>
-                  <Th isNumeric>Benefit</Th>
-                  <Th isNumeric>Benefit Percentage</Th>
-                  <Th>Action</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                  <Td isNumeric>25.4</Td>
-                  <Td isNumeric>25.4</Td>
-                  <Td>
-                    <Button bgColor={"yellow.300"} m={1}>
-                      Edit
-                    </Button>
-                    <Button bgColor={"red"}>Delete</Button>
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td>feet</Td>
-                  <Td>centimetres (cm)</Td>
-                  <Td isNumeric>30.48</Td>
-                  <Td isNumeric>30.48</Td>
-                  <Td isNumeric>30.48</Td>
-                  <Td>
-                    <Button bgColor={"yellow.300"} m={1}>
-                      Edit
-                    </Button>
-                    <Button bgColor={"red"}>Delete</Button>
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td>yards</Td>
-                  <Td>metres (m)</Td>
-                  <Td isNumeric>0.91444</Td>
-                  <Td isNumeric>0.91444</Td>
-                  <Td isNumeric>0.91444</Td>
-                  <Td>
-                    <Button bgColor={"yellow.300"} m={1}>
-                      Edit
-                    </Button>
-                    <Button bgColor={"red"}>Delete</Button>
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <Tabs variant="enclosed">
+            <TabList>
+              <Tab>All</Tab>
+              <Tab>Ongoing</Tab>
+              <Tab>Upcoming</Tab>
+              <Tab>Has ended</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel paddingX={0}>
+                <VoucherTable status="all" />
+              </TabPanel>
+              <TabPanel paddingX={0}>
+                <VoucherTable status="ongoing" />
+              </TabPanel>
+              <TabPanel paddingX={0}>
+                <VoucherTable status="upcoming" />
+              </TabPanel>
+              <TabPanel paddingX={0}>
+                <VoucherTable status="ended" />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </CardBody>
       </Card>
-    </div>
+    </>
   );
 }
 

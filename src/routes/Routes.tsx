@@ -15,6 +15,12 @@ const routes = {
   SHOP: (shopUsername: string) => `/shop/${shopUsername}`,
   LOGIN: "/login",
   REGISTER: "/register",
+  SELLER_VOUCHER: "/seller/voucher",
+  SELLER_VOUCHER_CREATE: "/seller/voucher/create",
+  SELLER_VOUCHER_EDIT: (id: number) => `/seller/voucher/${id}/edit`,
+  SELLER_VOUCHER_DETAIL: (id: number) => `/seller/voucher/${id}/detail`,
+  SELLER_VOUCHER_DUPLICATE: (id: number) => `/seller/voucher/${id}/duplicate`,
+  SELLER_VOUCHER_DELETE: (id: number) => `/seller/voucher/${id}/delete`,
 };
 
 export default routes;

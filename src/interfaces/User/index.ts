@@ -13,6 +13,7 @@ export interface IUserPayload {
   profile_picture: string;
   role: number;
   birth_date: string;
+  shop_id: number;
   gender_detail: IGenderPayload;
 }
 
