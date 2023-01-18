@@ -43,3 +43,7 @@ export const SearchParamsState: ISearchParamsPayload = {
   rt: "",
   city: "",
 };
+
+export interface ITransactionHistoryParams extends IFilterPayload {
+  status?: string;
+}

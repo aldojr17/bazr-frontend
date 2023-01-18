@@ -1,4 +1,6 @@
+import { ITransactionHistoryParams } from "../../interfaces/Filter";
 import {
+  ITransactionHistoryPagination,
   ITransactionRequestPayload,
   ITransactionResponsePayload,
 } from "../../interfaces/Transaction";
@@ -20,8 +22,22 @@ const createTransaction = async (
   }
 };
 
+const getTransactionHistory = async (
+  filter?: ITransactionHistoryParams
+): Promise<ITransactionHistoryPagination> => {
+  try {
+    const response = await instance.get(API_PATH.transaction.TRANSACTIONS, {
+      params: filter,
+    });
+    return response.data;
+  } catch (err) {
+    return err as ITransactionHistoryPagination;
+  }
+};
+
 const transactionService = {
   createTransaction,
+  getTransactionHistory,
 };
 
 export default transactionService;

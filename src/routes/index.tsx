@@ -1,7 +1,5 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import ProductDetail from "../pages/ProductDetail/ProductDetail";
-import ShopHome from "../pages/Shop/ShopHome";
 import AuthRoutes from "./AuthRoutes";
 import LayoutRoutes from "./LayoutRoutes";
 import SellerRoutes from "./SellerRoutes";
@@ -43,6 +41,10 @@ const SellerVoucherDuplicate = React.lazy(
 const SellerVoucherDetail = React.lazy(
   () => import("../pages/Seller/Voucher/VoucherDetail")
 );
+const ProductDetail = React.lazy(
+  () => import("../pages/ProductDetail/ProductDetail")
+);
+const ShopHome = React.lazy(() => import("../pages/Shop/ShopHome"));
 
 const RouteList = () => {
   let routes = (
