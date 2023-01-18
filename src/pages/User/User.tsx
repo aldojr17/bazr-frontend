@@ -18,7 +18,9 @@ import {
 import Icon from "../../assets/icons";
 import useUser from "../../hooks/useUser";
 import { formatCurrency } from "../../util/util";
+import TransactionOrderHistory from "../TransactionOrderHistory/TransactionOrderHistory";
 import UserProfile from "./UserProfile";
+import "./style.css";
 
 function User() {
   const { user } = useUser();
@@ -60,8 +62,12 @@ function User() {
 
           <Box flex="1" borderWidth="1px" borderRadius="lg">
             <Skeleton isLoaded={user ? true : false}>
-              <Tabs padding={2}>
-                <TabList>
+              <Tabs padding={2} maxW="calc(100vw - 2rem)">
+                <TabList
+                  overflowX="scroll"
+                  overflowY="hidden"
+                  className="hidescrollbar"
+                >
                   <Tab
                     _selected={{
                       color: "primary",
@@ -86,6 +92,14 @@ function User() {
                   >
                     Payment
                   </Tab>
+                  <Tab
+                    _selected={{
+                      color: "primary",
+                      borderBottomColor: "primary",
+                    }}
+                  >
+                    My Purchase
+                  </Tab>
                 </TabList>
 
                 <TabPanels>
@@ -97,6 +111,9 @@ function User() {
                   </TabPanel>
                   <TabPanel>
                     <p>Pembayaran</p>
+                  </TabPanel>
+                  <TabPanel padding="0">
+                    <TransactionOrderHistory />
                   </TabPanel>
                 </TabPanels>
               </Tabs>
