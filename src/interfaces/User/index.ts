@@ -3,18 +3,19 @@ import { IGenderPayload } from "../Gender";
 
 export interface IUserPayload {
   id: string;
-  address_detail: IAddressPayload;
-  wallet_detail: IUserWalletResponsePayload;
   username: string;
-  email: string;
-  address: string;
   name: string;
+  email: string;
   phone: string;
-  profile_picture: string;
-  role: number;
   birth_date: string;
+  profile_picture: string;
+  role_id: number;
+  address_detail: IAddressPayload;
+  default_address_id: number;
   shop_id: number;
+  is_seller: boolean;
   gender_detail: IGenderPayload;
+  wallet_detail: IUserWalletResponsePayload;
 }
 
 export interface IEditProfilePayload {

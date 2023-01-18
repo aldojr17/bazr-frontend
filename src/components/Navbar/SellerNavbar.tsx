@@ -1,4 +1,3 @@
-import React from "react";
 import { Avatar, Flex, IconButton } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import { NavbarProps } from "../../interfaces/Navbar";

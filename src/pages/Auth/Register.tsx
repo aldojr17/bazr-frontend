@@ -50,11 +50,11 @@ const Register = () => {
       .finally(() => setIsLoading(false));
 
     if (response.is_success) {
-      successToast("Your account has been created! Please log in.");
-
       if (state) {
+        successToast("Your account has been created!");
         navigate("/");
       } else {
+        successToast("Your account has been created! Please log in.");
         navigate("/login");
       }
     } else {
