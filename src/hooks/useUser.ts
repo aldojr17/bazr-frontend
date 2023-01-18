@@ -1,3 +1,4 @@
+import { useState } from "react";
 import userService from "../api/service/user";
 import {
   IEditProfilePayload,
@@ -11,15 +12,22 @@ const useUser = () => {
   const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
 
+  const [userLoading, setUserLoading] = useState(false);
+
   const fetchProfile = async () => {
+    setUserLoading(true);
+
     dispatch(storeUser(null));
     const response = await userService.fetchProfile();
 
     if (response.is_success) {
       dispatch(storeUser(response.data as IUserPayload));
+
+      setUserLoading(false);
       return response.data;
     }
 
+    setUserLoading(false);
     return null;
   };
 
@@ -37,6 +45,8 @@ const useUser = () => {
 
   return {
     user,
+    userLoading,
+
     fetchProfile,
     editProfile,
     uploadAvatar,

@@ -74,7 +74,9 @@ const handleFallback = (
 instance.interceptors.response.use(
   (res) => {
     if (res.data.data?.access_token) {
-      setCookie(null, "auth", `Bearer ${res.data.data.access_token}`);
+      setCookie(null, "auth", `Bearer ${res.data.data.access_token}`, {
+        path: "/",
+      });
     }
     if (res.data.data?.refresh_token) {
       localStorage.setItem("refresh", res.data.data.refresh_token);
@@ -96,7 +98,10 @@ instance.interceptors.response.use(
             setCookie(
               null,
               "auth",
-              `Bearer ${response.data.data.access_token}`
+              `Bearer ${response.data.data.access_token}`,
+              {
+                path: "/",
+              }
             );
             handleFallback(err.config.method, err.config.url, err.config);
           })
