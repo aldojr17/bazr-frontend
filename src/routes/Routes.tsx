@@ -15,6 +15,7 @@ const routes = {
   SHOP: (shopUsername: string) => `/shop/${shopUsername}`,
   LOGIN: "/login",
   REGISTER: "/register",
+  SELLER_HOME: "seller/home",
   SELLER_VOUCHER: "/seller/voucher",
   SELLER_VOUCHER_CREATE: "/seller/voucher/create",
   SELLER_VOUCHER_EDIT: (id: number) => `/seller/voucher/${id}/edit`,

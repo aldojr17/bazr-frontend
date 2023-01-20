@@ -6,6 +6,11 @@ export interface IRegisterRequestPayload {
   isOauth: boolean;
 }
 
+export interface IRegisterMerchantRequestPayload {
+  name: string;
+  username: string;
+}
+
 export interface IRegisterResponsePayload {
   is_success: boolean;
   data: null;

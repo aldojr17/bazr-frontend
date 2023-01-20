@@ -16,7 +16,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import * as Yup from "yup";
 import authService from "../../api/service/auth";
 import Icon from "../../assets/icons";
-import AuthTemplate from "../../components/Auth/AuthTemplate";
 import useToast from "../../hooks/useToast";
 import { IChangePasswordRequestPayload } from "../../interfaces/Auth";
 
@@ -68,7 +67,7 @@ function ResetRequest() {
   });
 
   return (
-    <AuthTemplate>
+    <>
       <Box textAlign="center">
         <Heading>Reset your password</Heading>
         <Text mt={2}>Set new password</Text>
@@ -182,7 +181,7 @@ function ResetRequest() {
           )}
         </Formik>
       </Box>
-    </AuthTemplate>
+    </>
   );
 }
 

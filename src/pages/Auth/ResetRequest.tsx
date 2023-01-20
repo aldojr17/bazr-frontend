@@ -14,7 +14,6 @@ import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import authService from "../../api/service/auth";
-import AuthTemplate from "../../components/Auth/AuthTemplate";
 import useToast from "../../hooks/useToast";
 import { IResetPasswordRequestPayload } from "../../interfaces/Auth";
 
@@ -47,12 +46,11 @@ function ResetRequest() {
   });
 
   return (
-    <AuthTemplate>
+    <>
       <Box textAlign="center">
         <Heading>Reset your password</Heading>
         <Text mt={2}>Request an email reset link</Text>
       </Box>
-
       <Box textAlign="left" my={4}>
         <Formik
           initialValues={{
@@ -90,7 +88,6 @@ function ResetRequest() {
           )}
         </Formik>
       </Box>
-
       <Box textAlign="center" mt={5}>
         <Text>
           Or{" "}
@@ -99,7 +96,7 @@ function ResetRequest() {
           </Link>
         </Text>
       </Box>
-    </AuthTemplate>
+    </>
   );
 }
 
