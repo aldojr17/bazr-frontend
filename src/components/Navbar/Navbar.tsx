@@ -24,6 +24,7 @@ import Icon from "../../assets/icons";
 import useCart from "../../hooks/useCart";
 import useUser from "../../hooks/useUser";
 import { NavbarProps } from "../../interfaces/Navbar";
+import routes from "../../routes/Routes";
 import { formatCurrency } from "../../util/util";
 import HoverCart from "../Cart/HoverCart";
 
@@ -46,7 +47,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
     destroyCookie(null, "auth");
     localStorage.clear();
     clearUserCart();
-    navigate("/login", { replace: true });
+    navigate(routes.HOME, { replace: true });
   };
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import {
   IPasswordResponsePayload,
   IRefreshRequestPayload,
   IRefreshResponsePayload,
+  IRegisterMerchantRequestPayload,
   IRegisterRequestPayload,
   IRegisterResponsePayload,
   IResetPasswordRequestPayload,
@@ -20,6 +21,21 @@ const register = async (
   try {
     const response = await instance.post<IRegisterResponsePayload>(
       API_PATH.auth.REGISTER,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IRegisterResponsePayload;
+  }
+};
+
+const registerMerchant = async (
+  payload: IRegisterMerchantRequestPayload
+): Promise<IRegisterResponsePayload> => {
+  try {
+    const response = await instance.post<IRegisterResponsePayload>(
+      API_PATH.auth.REGISTER_MERCHANT,
       payload
     );
 
@@ -123,6 +139,7 @@ const changePassword = async (
 
 const authService = {
   register,
+  registerMerchant,
   login,
   loginGoogle,
   refresh,

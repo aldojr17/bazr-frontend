@@ -8,6 +8,9 @@ import UserRoutes from "./UserRoutes";
 const Home = React.lazy(() => import("../pages/Home/Home"));
 const Login = React.lazy(() => import("../pages/Auth/Login"));
 const Register = React.lazy(() => import("../pages/Auth/Register"));
+const RegisterMerchant = React.lazy(
+  () => import("../pages/Auth/RegisterMerchant")
+);
 const ResetRequest = React.lazy(() => import("../pages/Auth/ResetRequest"));
 const ResetPassword = React.lazy(() => import("../pages/Auth/ResetPassword"));
 const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
@@ -78,6 +81,7 @@ const RouteList = () => {
       <Route element={<AuthRoutes />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/register-merchant" element={<RegisterMerchant />} />
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Route>
