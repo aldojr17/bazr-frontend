@@ -47,29 +47,29 @@ export const handleHttpResponse = (status: string, message?: string) => {
   }
 };
 
-const handleFallback = (
-  method: string,
-  url: string,
-  payload?: AxiosRequestConfig
-) => {
-  switch (method) {
-    case "get":
-      instance.get(url, payload?.params);
-      return;
-    case "post":
-      instance.post(url, JSON.parse(payload?.data!)).catch((err) => {
-        console.log("Fallback Error: ", err);
-        // const error = err && err.response && err.response.data;
-        // if (error && error.message === "unauthorized") {
-        //   localStorage.clear()
-        //   window.location.replace("/login");
-        // }
-      });
-      return;
-    default:
-      return;
-  }
-};
+// const handleFallback = (
+//   method: string,
+//   url: string,
+//   payload?: AxiosRequestConfig
+// ) => {
+//   switch (method) {
+//     case "get":
+//       instance.get(url, payload?.params);
+//       return;
+//     case "post":
+//       instance.post(url, JSON.parse(payload?.data!)).catch((err) => {
+//         console.log("Fallback Error: ", err);
+//         // const error = err && err.response && err.response.data;
+//         // if (error && error.message === "unauthorized") {
+//         //   localStorage.clear()
+//         //   window.location.replace("/login");
+//         // }
+//       });
+//       return;
+//     default:
+//       return;
+//   }
+// };
 
 instance.interceptors.response.use(
   (res) => {
@@ -90,7 +90,7 @@ instance.interceptors.response.use(
       destroyCookie(null, "auth");
 
       if (localStorage.getItem("refresh")) {
-        instance
+        return instance
           .post(API_PATH.auth.REFRESH, {
             refresh_token: localStorage.getItem("refresh"),
           })
@@ -103,14 +103,16 @@ instance.interceptors.response.use(
                 path: "/",
               }
             );
-            handleFallback(err.config.method, err.config.url, err.config);
+
+            const originalRequest = err.config;
+            originalRequest._retry = true;
+
+            return instance(originalRequest);
           })
           .catch((error) => {
             localStorage.clear();
             window.location.replace("/login");
           });
-
-        return;
       }
 
       window.location.replace("/login");
