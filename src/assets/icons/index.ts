@@ -11,13 +11,14 @@ import Gear from "./Gear";
 import GeoMap from "./GeoMap";
 import Hamburger from "./Hamburger";
 import Heart from "./Heart";
-import Home from "./Home";
 import Hide from "./Hide";
+import Home from "./Home";
 import Instagram from "./Instagram";
 import LeftArrow from "./LeftArrow";
 import Linkedin from "./Linkedin";
 import Location from "./Location";
 import Lock from "./Lock";
+import Logout from "./Logout";
 import Minus from "./Minus";
 import Pencil from "./Pencil";
 import PersonCheck from "./PersonCheck";
@@ -51,13 +52,14 @@ const Icon = {
   GeoMap,
   Hamburger,
   Heart,
-  Home,
   Hide,
+  Home,
   Instagram,
   LeftArrow,
   Linkedin,
   Location,
   Lock,
+  Logout,
   Minus,
   PersonCheck,
   PinMap,

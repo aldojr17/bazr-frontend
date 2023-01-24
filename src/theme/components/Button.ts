@@ -47,6 +47,31 @@ const Button = defineStyleConfig({
         color: "white",
       },
     },
+    primaryGhost: {
+      bg: "primaryLighten",
+      color: "dark",
+      borderRadius: "xl",
+      _hover: {
+        bg: "teal.100",
+        color: "darkDarken",
+        textDecor: "none",
+      },
+      _active: {
+        bg: "primary",
+      },
+    },
+    primaryLink: {
+      bg: "transparent",
+      color: "primary",
+      _hover: {
+        color: "primaryDarken",
+        textDecor: "none",
+      },
+      _active: {
+        color: "primaryDarken",
+        bg: "primaryLighten",
+      },
+    },
     secondary: {
       bg: "secondary",
       color: "dark",
@@ -56,6 +81,19 @@ const Button = defineStyleConfig({
       },
       _active: {
         bg: "secondaryDarken",
+      },
+    },
+    lightGhost: {
+      bg: "lightLighten",
+      color: "dark",
+      borderRadius: "xl",
+      _hover: {
+        bg: "gray.100",
+        color: "darkDarken",
+        textDecor: "none",
+      },
+      _active: {
+        bg: "light",
       },
     },
     carousel: {
