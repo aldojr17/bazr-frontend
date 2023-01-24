@@ -21,8 +21,9 @@ export const customTheme = extendTheme({
     secondary: "#B794F4", //purple.300
     secondaryLighten: "#D6BCFA", //purple.200
     secondaryDarken: "#9F7AEA", //purple.400
-    dark: "RGBA(0, 0, 0, 0.64)",
-    darkLighten: "RGBA(0, 0, 0, 0.48)",
+    dark: "RGBA(0, 0, 0, 0.64)", //blackAlpha.700
+    darkLighten: "RGBA(0, 0, 0, 0.48)", //blackAlpha.600
+    darkDarken: "RGBA(0, 0, 0, 0.80)", //blackAlpha.800
     light: "#CBD5E0", //gray.300
     lightLighten: "#E2E8F0", //gray.200
   },
