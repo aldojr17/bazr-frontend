@@ -46,7 +46,7 @@ export interface IProductPayload {
   lowest_price: number;
   highest_price?: number;
   shop: IShopPayload;
-  variant_group?: null;
+  variant_group?: IVariantGroupPayload;
   product_photo?: IProductPhotoPayload;
   product_photos?: IProductPhotoPayload[];
   rating: number;

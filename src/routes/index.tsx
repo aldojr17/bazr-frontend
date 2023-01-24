@@ -48,6 +48,12 @@ const ProductDetail = React.lazy(
   () => import("../pages/ProductDetail/ProductDetail")
 );
 const ShopHome = React.lazy(() => import("../pages/Shop/ShopHome"));
+const SellerPromotion = React.lazy(
+  () => import("../pages/Seller/Promotion/Promotion")
+);
+const SellerPromotionCreate = React.lazy(
+  () => import("../pages/Seller/Promotion/PromotionCreate")
+);
 
 const RouteList = () => {
   let routes = (
@@ -104,6 +110,11 @@ const RouteList = () => {
         <Route
           path="/seller/voucher/:id/detail"
           element={<SellerVoucherDetail />}
+        />
+        <Route path="/seller/promotion" element={<SellerPromotion />} />
+        <Route
+          path="/seller/promotion/create"
+          element={<SellerPromotionCreate />}
         />
       </Route>
 

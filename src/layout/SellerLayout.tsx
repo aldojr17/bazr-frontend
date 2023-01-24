@@ -10,7 +10,7 @@ import { ILayoutProps } from "../interfaces/Layout";
 import SellerNavbar from "../components/Navbar/SellerNavbar";
 import { ISidebarMenu } from "../interfaces/Sidebar";
 
-import { IoTicket } from "react-icons/io5";
+import { IoTicket, IoPricetag } from "react-icons/io5";
 import { BsGearFill } from "react-icons/bs";
 import { HiCollection } from "react-icons/hi";
 import { MdHome } from "react-icons/md";
@@ -21,6 +21,7 @@ const SellerLayout = (props: ILayoutProps) => {
     { name: "Home", icon: MdHome, path: "/seller/home" },
     { name: "Product", icon: HiCollection, path: "/seller/product" },
     { name: "Voucher", icon: IoTicket, path: "/seller/voucher" },
+    { name: "Promotion", icon: IoPricetag, path: "/seller/promotion" },
     { name: "Settings", icon: BsGearFill, path: "/" },
   ];
 

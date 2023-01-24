@@ -25,6 +25,8 @@ const routes = {
   SELLER_VOUCHER_DETAIL: (id: number) => `/seller/voucher/${id}/detail`,
   SELLER_VOUCHER_DUPLICATE: (id: number) => `/seller/voucher/${id}/duplicate`,
   SELLER_VOUCHER_DELETE: (id: number) => `/seller/voucher/${id}/delete`,
+  SELLER_PROMOTION: "/seller/promotion",
+  SELLER_PROMOTION_CREATE: "/seller/promotion/create",
 };
 
 export default routes;
