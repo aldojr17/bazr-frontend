@@ -1,7 +1,7 @@
 import { Box, Divider, Heading, Select, Text, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
-import { IProductDetailVariantProps } from "../../interfaces/Product";
+import { IProductDetailVariantProps } from "../../interfaces/Components/PDP";
 
 function ProductDetailVariant(props: IProductDetailVariantProps) {
   const { variantGroup, onVariantChange, error } = props;
@@ -28,6 +28,16 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
     }
 
     setDisplayVariants(variants);
+
+    if (variantTypes.length === 1) {
+      let selectVariant = {};
+      Object.keys(variants).map(
+        (key) => ((selectVariant as any)[key] = (variants as any)[key][0])
+      );
+
+      setSelectedVariant(selectVariant);
+      findVariantType(selectVariant);
+    }
   };
 
   const findVariantType = (variant: {}) => {

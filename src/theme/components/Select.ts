@@ -11,7 +11,7 @@ const Select = defineStyleConfig({
         paddingStart: "2",
         paddingInlineEnd: "10",
         border: "3.5px solid",
-        borderColor: "teal.400",
+        borderColor: "primary",
         borderRadius: "lg",
         fontSize: "md",
         fontWeight: "extrabold",

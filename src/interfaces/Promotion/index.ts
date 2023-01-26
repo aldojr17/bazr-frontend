@@ -94,3 +94,18 @@ export interface IPromotionShopProductProps {
   onClose: () => void;
   onConfirm: (products: IPromotionProductForm[]) => void;
 }
+
+export interface IPromotionPayload {
+  id: number;
+  promotion_detail: IPromotionDetailPayload;
+}
+
+export interface IPromotionDetailPayload {
+  id: number;
+  shop_id: number;
+  quota: number;
+  start_date: string;
+  expiry_date: string;
+  benefit: number;
+  benefit_percentage: number;
+}

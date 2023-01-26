@@ -12,12 +12,46 @@ import { useNavigate } from "react-router-dom";
 import slugify from "slugify";
 import Icon from "../../assets/icons";
 import { ICategoryScrollableContainerProps } from "../../interfaces/Components";
+import routes from "../../routes/Routes";
 import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
 import CategoryCard from "../Card/CategoryCard";
 
 function CategoryScrollableContainer(props: ICategoryScrollableContainerProps) {
-  const { label, categories, isLoading, onError } = props;
+  const {
+    label,
+    categoryLevel,
+    categories,
+    primaryURL,
+    secondaryURL,
+    isLoading,
+    onError,
+  } = props;
   const navigate = useNavigate();
+
+  const handleCardOnClick = (categoryId: number, categoryURL: string) => {
+    switch (categoryLevel) {
+      case "primary":
+        navigate(routes.PRIMARY_CATEGORY(categoryURL));
+        return;
+      case "secondary":
+        navigate(
+          routes.SECONDARY_CATEGORY(primaryURL!, categoryURL, categoryId)
+        );
+        return;
+      case "tertiary":
+        navigate(
+          routes.TERTIARY_CATEGORY(
+            primaryURL!,
+            secondaryURL!,
+            categoryURL,
+            categoryId
+          )
+        );
+        return;
+      default:
+        return;
+    }
+  };
 
   return (
     <>
@@ -25,9 +59,8 @@ function CategoryScrollableContainer(props: ICategoryScrollableContainerProps) {
         <Flex direction={"column"} my={2}>
           <Flex justifyContent={"space-between"}>
             <Heading
-              fontWeight={"bold"}
+              variant={"sectionHeading"}
               fontSize={{ base: "md", sm: "xl", md: "2xl" }}
-              mb={3}
             >
               {label ?? "Category"}
             </Heading>
@@ -57,7 +90,9 @@ function CategoryScrollableContainer(props: ICategoryScrollableContainerProps) {
                   <CategoryCard
                     {...category!}
                     key={category.id!}
-                    onClick={() => navigate(`p/${slugify(category.name)}`)}
+                    onClick={() =>
+                      handleCardOnClick(category.id, slugify(category.name))
+                    }
                   />
                 ))}
               </XScrollableWrapper>

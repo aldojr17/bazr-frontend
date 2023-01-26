@@ -27,7 +27,7 @@ import {
   IPromotionProps,
   IShopPromotionPayload,
   IShopPromotionProductPayload,
-} from "../../../interfaces/promotion";
+} from "../../../interfaces/Promotion";
 import PromotionProductForm from "./PromotionProductForm";
 import PromotionShopProduct from "./PromotionShopProduct";
 

@@ -11,6 +11,7 @@ export const API_PATH = {
   user: {
     PROFILE: "/users/profile",
     AVATAR: "/users/avatar",
+    FAVORITE_PRODUCT: "users/favorite",
   },
   category: {
     CATEGORIES: "/categories",
@@ -19,6 +20,7 @@ export const API_PATH = {
   product: {
     PRODUCTS: "/products",
     PRODUCTS_SHOP: "/products/shop",
+    PRODUCTS_REVIEWS: "/products/reviews",
   },
   cart: {
     CART: "/cart",

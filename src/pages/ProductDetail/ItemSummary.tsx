@@ -1,12 +1,15 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Divider } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
+import useToast from "../../hooks/useToast";
 import {
   ICartAddUpdateRequestPayload,
   ICartPayload,
 } from "../../interfaces/Cart";
-import { IItemSummaryProps } from "../../interfaces/Product";
+import { IItemSummaryProps } from "../../interfaces/Components/PDP";
+import routes from "../../routes/Routes";
+import ProductAction from "./ProductAction";
 import ProductDetailQuantity from "./ProductDetailQuantity";
 import ProductDetailVariant from "./ProductDetailVariant";
 
@@ -14,6 +17,8 @@ function ItemSummary(props: IItemSummaryProps) {
   const {
     productId,
     productName,
+    productIsFavorite,
+    productFavoriteCount,
     variantGroup,
     onVariantChange,
     selectedVariant,
@@ -24,7 +29,7 @@ function ItemSummary(props: IItemSummaryProps) {
   } = props;
 
   const navigate = useNavigate();
-
+  const { successToast, errorToast } = useToast();
   const { getCart, setCheckoutCart, updateCart } = useCart();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +60,17 @@ function ItemSummary(props: IItemSummaryProps) {
       setIsLoading(true);
       updateCart(cartPayload)
         .then(() => getCart())
-        .finally(() => setIsLoading(false));
+        .catch((err) => {
+          if (err === "Invalid credential") {
+            navigate(routes.LOGIN, { state: window.location.pathname });
+          } else {
+            errorToast("Failed to add item to cart", err);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+          successToast("Item added to cart!");
+        });
     }
   };
 
@@ -75,6 +90,7 @@ function ItemSummary(props: IItemSummaryProps) {
       };
 
       setIsLoading(true);
+
       updateCart(cartPayload)
         .then((response) => {
           getCart();
@@ -92,7 +108,14 @@ function ItemSummary(props: IItemSummaryProps) {
           };
 
           setCheckoutCart([cartItem]);
-          navigate("/cart/shipment", { replace: true });
+          navigate(routes.CART_SHIPMENT);
+        })
+        .catch((err) => {
+          if (err === "Invalid credential") {
+            navigate(routes.LOGIN, { state: window.location.pathname });
+          } else {
+            errorToast("Failed to buy now", err);
+          }
         })
         .finally(() => {
           setIsLoading(false);
@@ -102,10 +125,10 @@ function ItemSummary(props: IItemSummaryProps) {
 
   return (
     <Box
-      border="2px"
-      borderColor={"light"}
+      border={"2px solid"}
+      borderColor={"lightLighten"}
       boxShadow={"default"}
-      borderRadius={"lg"}
+      borderRadius={"xl"}
       p={3}
     >
       <ProductDetailVariant
@@ -136,6 +159,12 @@ function ItemSummary(props: IItemSummaryProps) {
       >
         Buy Now
       </Button>
+      <Divider variant={"solidLight"} my={5} />
+      <ProductAction
+        productId={productId}
+        isFavorite={productIsFavorite}
+        favoriteCount={productFavoriteCount}
+      />
     </Box>
   );
 }

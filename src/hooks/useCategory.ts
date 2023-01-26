@@ -11,13 +11,21 @@ const useCategory = (isMounted: boolean = true) => {
   const [categoriesProduct, setCategoriesProduct] = useState<
     IPrimaryCategoryPayload[]
   >([]);
+  const [categoryLoading, setCategoryLoading] = useState(false);
 
   const fetchCategories = async () => {
+    setCategoryLoading(true);
     const response = await categoryService.getAllCategory();
 
     if (response.is_success) {
       dispatch(storeCategories(response.data));
+
+      setCategoryLoading(false);
+      return;
     }
+
+    setCategoryLoading(false);
+    return;
   };
 
   const fetchCategoriesProduct = async (name?: string) => {
@@ -75,6 +83,8 @@ const useCategory = (isMounted: boolean = true) => {
   return {
     categories,
     categoriesProduct,
+    categoryLoading,
+
     fetchCategoriesProduct,
     fetchPrimaryCategoryBySlugifiedName,
     fetchSecondaryCategoryBySlugifiedName,

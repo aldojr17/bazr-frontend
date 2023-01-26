@@ -98,7 +98,7 @@ function NavProfile() {
         <PopoverBody p={5}>
           <VStack gap={1}>
             <Button
-              variant={"primaryGhost"}
+              variant={"primaryNavbarGhost"}
               width={"100%"}
               py={8}
               as={Link}

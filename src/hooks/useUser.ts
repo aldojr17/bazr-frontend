@@ -3,6 +3,7 @@ import userService from "../api/service/user";
 import {
   IEditProfilePayload,
   IUploadAvatarPayload,
+  IUserFavoriteProductRequestPayload,
   IUserPayload,
 } from "../interfaces/User";
 import { storeUser } from "../redux/user";
@@ -18,7 +19,7 @@ const useUser = () => {
     setUserLoading(true);
 
     dispatch(storeUser(null));
-    const response = await userService.fetchProfile();
+    const response = await userService.getProfile();
 
     if (response.is_success) {
       dispatch(storeUser(response.data as IUserPayload));
@@ -43,6 +44,14 @@ const useUser = () => {
     return response;
   };
 
+  const setUserFavoriteProduct = async (
+    payload: IUserFavoriteProductRequestPayload
+  ) => {
+    const response = await userService.postUserFavoriteProduct(payload);
+
+    return response;
+  };
+
   return {
     user,
     userLoading,
@@ -50,6 +59,7 @@ const useUser = () => {
     fetchProfile,
     editProfile,
     uploadAvatar,
+    setUserFavoriteProduct,
   };
 };
 

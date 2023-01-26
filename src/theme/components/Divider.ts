@@ -6,16 +6,16 @@ const Divider = defineStyleConfig({
   },
   variants: {
     solidPrimary: {
-      borderWidth: "2px",
+      borderWidth: "1px",
       borderStyle: "solid",
       borderRadius: 10,
       borderColor: "primary",
     },
     solidLight: {
-      borderWidth: "2px",
+      borderWidth: "1px",
       borderStyle: "solid",
       borderRadius: 10,
-      borderColor: "light",
+      borderColor: "lightLighten",
     },
   },
   defaultProps: {

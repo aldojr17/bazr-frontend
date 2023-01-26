@@ -26,6 +26,18 @@ export const customTheme = extendTheme({
     darkDarken: "RGBA(0, 0, 0, 0.80)", //blackAlpha.800
     light: "#CBD5E0", //gray.300
     lightLighten: "#E2E8F0", //gray.200
+    lightDarken: "#A0AEC0", //gray.400
+    default: {
+      100: "#8DE2D9",
+      200: "#7DDED4",
+      300: "#6DD9CF",
+      400: "#5DD5C9",
+      500: "#4FD1C5",
+      600: "#3CCDBE",
+      700: "#32C3B4",
+      800: "#2EB2A5",
+      900: "#2AA296",
+    },
   },
   shadows: {
     default: "0px 8px 24px rgba(154, 170, 207, 0.15)",

@@ -113,7 +113,6 @@ instance.interceptors.response.use(
         return;
       }
 
-      window.location.replace("/login");
       throw Promise.reject("Invalid credential");
     } else {
       if (err.code === "ERR_NETWORK") {

@@ -2,7 +2,7 @@ import {
   IShopPromotionPayload,
   IShopPromotionResponsePayload,
   IShopPromotionsResponsePayload,
-} from "../../interfaces/promotion";
+} from "../../interfaces/Promotion";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
 

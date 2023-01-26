@@ -21,7 +21,7 @@ import {
 import { Field, FieldArray, getIn } from "formik";
 import React from "react";
 import { BsTrash } from "react-icons/bs";
-import { IPromotionProductFormProps } from "../../../interfaces/promotion";
+import { IPromotionProductFormProps } from "../../../interfaces/Promotion";
 
 function PromotionProductForm(props: IPromotionProductFormProps) {
   return (

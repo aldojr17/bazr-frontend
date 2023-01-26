@@ -1,15 +1,20 @@
 const routes = {
   HOME: "/",
-  SEARCH: "/search",
+  SEARCH: (query?: string, c?: number, cl?: number) =>
+    `/search?q=${query}${c && `&c=${c}`}${cl && `&cl=${cl}`}`,
   PDP: (id: number, title: string) => `/search/${id}/${title}`,
   PRIMARY_CATEGORY: (cPrimary: string) => `/p/${cPrimary}`,
-  SECONDARY_CATEGORY: (cPrimary: string, cSecondary: string) =>
-    `/p/${cPrimary}/${cSecondary}`,
+  SECONDARY_CATEGORY: (
+    cPrimary: string,
+    cSecondary: string,
+    cSecondaryId: number
+  ) => `/p/${cPrimary}/${cSecondary}?q=&c=${cSecondaryId}&cl=2`,
   TERTIARY_CATEGORY: (
     cPrimary: string,
     cSecondary: string,
-    cTertiary: string
-  ) => `/p/${cPrimary}/${cSecondary}/${cTertiary}`,
+    cTertiary: string,
+    cTertiaryId: number
+  ) => `/p/${cPrimary}/${cSecondary}/${cTertiary}?q=&c=${cTertiaryId}&cl=3`,
   CART: "/cart",
   CART_SHIPMENT: "/cart/shipment",
   SHOP: (shopUsername: string) => `/shop/${shopUsername}`,

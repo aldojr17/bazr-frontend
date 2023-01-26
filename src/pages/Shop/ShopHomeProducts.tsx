@@ -32,8 +32,8 @@ function ShopHomeProducts(props: IShopHomeProductsProps) {
     setPage,
   } = props;
 
-  const { getShopProducts } = useProduct();
-  const [shopProducts, setshopProducts] = useState<IProductPaginationPayload>({
+  const { fetchShopProducts } = useProduct();
+  const [shopProducts, setShopProducts] = useState<IProductPaginationPayload>({
     current_page: 0,
     data: [],
     limit: 0,
@@ -65,12 +65,12 @@ function ShopHomeProducts(props: IShopHomeProductsProps) {
         searchFilterPayload.category = props.category_id;
         searchFilterPayload.category_level = props.category_level;
       }
-      const shopProducts = await getShopProducts(
+      const shopProducts = await fetchShopProducts(
         props.shopId,
         searchFilterPayload
       );
       if (shopProducts) {
-        setshopProducts(shopProducts);
+        setShopProducts(shopProducts);
       }
     };
     _useEffectAsync();

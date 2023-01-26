@@ -12,7 +12,10 @@ const Home = () => {
   return (
     <Container maxW="container.xl">
       <MainCarousel />
-      <CategoryScrollableContainer categories={categories} />
+      <CategoryScrollableContainer
+        categories={categories}
+        categoryLevel={"primary"}
+      />
       <ProductShowcase />
     </Container>
   );

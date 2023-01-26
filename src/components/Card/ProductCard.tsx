@@ -59,24 +59,24 @@ const ProductCard = ({ ...props }: IProductPayload) => {
             marginTop: 0,
           }}
         >
-          Rp {formatCurrency(props.lowest_price)}
+          Rp {formatCurrency(props.lowest_price!)}
         </Text>
         <Flex gap={2} alignItems={"center"} wrap={"nowrap"}>
           <Icon.Shop fill={"secondary"} width={3.5} />
           <Text variant={"productCardRating"} noOfLines={1}>
-            {props.shop.name}
+            {props.shop?.name}
           </Text>
           <Center height="15px">
             <Divider orientation="vertical" />
           </Center>
           <Icon.Location fill={"secondary"} width={3.5} />
           <Text variant={"productCardRating"} noOfLines={1}>
-            {props.shop.location}
+            {props.shop?.location}
           </Text>
         </Flex>
         <Flex gap={2} alignItems={"center"} mt={5}>
           <Icon.Star fill={"yellow.300"} width={4} />
-          {props.rating > 0 ? (
+          {props.rating! > 0 ? (
             <>
               <Text variant={"productCardRating"}>{props.rating}</Text>
               <Text variant={"productCardReview"}>({props.total_review})</Text>
@@ -84,7 +84,7 @@ const ProductCard = ({ ...props }: IProductPayload) => {
           ) : (
             <Text variant={"productCardRating"}>-</Text>
           )}
-          {props.unit_sold > 0 && (
+          {props.unit_sold! > 0 && (
             <>
               <Center height="15px">
                 <Divider orientation="vertical" />

@@ -10,9 +10,8 @@ function ProductContainer(props: IProductContainerProps) {
     <Flex direction={{ base: "column", lg: "column" }} my={10}>
       <Flex justifyContent={"space-between"}>
         <Heading
-          fontWeight={"bold"}
+          variant={"sectionHeading"}
           fontSize={{ base: "md", sm: "xl", md: "2xl" }}
-          mb={3}
         >
           {label}
         </Heading>

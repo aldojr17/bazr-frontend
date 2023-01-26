@@ -63,7 +63,7 @@ function ShopHome() {
   const myConst = {
     indexUnset: -1,
     categoryIdUnset: 0,
-    categoryLevelUnset: "0",
+    categoryLevelUnset: 0,
     indexTabAllProduct: 0,
     indexTabOther: 5,
   };
@@ -126,7 +126,7 @@ function ShopHome() {
       return;
     }
     setCategoryId(shopCategories[index].id);
-    setCategoryLevel(shopCategories[index].level.toString());
+    setCategoryLevel(shopCategories[index].level);
   }
 
   const handleSelectChangeShopCategoryProducts = (
@@ -370,7 +370,7 @@ function ShopHome() {
             <ShopCategoryBeside
               shopCategories={shopCategories}
               activeCategoryId={categoryId}
-              activeCategoryLevel={parseInt(categoryLevel)}
+              activeCategoryLevel={categoryLevel}
               setCategoryId={setCategoryId}
               setCategoryLevel={setCategoryLevel}
               resetCategory={resetCategory}

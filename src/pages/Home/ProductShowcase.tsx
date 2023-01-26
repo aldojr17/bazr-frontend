@@ -5,11 +5,11 @@ import useProduct from "../../hooks/useProduct";
 
 function ProductShowcase() {
   const navigate = useNavigate();
-  const { products, getProducts } = useProduct();
+  const { products, fetchAllProducts } = useProduct();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getProducts({
+    fetchAllProducts({
       limit: 18,
     }).finally(() => setIsLoading(false));
   }, []);

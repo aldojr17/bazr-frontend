@@ -51,3 +51,13 @@ export interface IUserAvatarResponsePayload {
   data: string;
   message: string;
 }
+
+export interface IUserFavoriteProductRequestPayload {
+  product_id: number;
+}
+
+export interface IUserFavoriteProductResponsePayload {
+  is_success: boolean;
+  data: null;
+  message: string;
+}
