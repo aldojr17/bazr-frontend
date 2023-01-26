@@ -26,7 +26,7 @@ function NavCart() {
 
   const handleNavigateToCartPage = () => {
     if (parseCookies().auth) {
-      navigate(routes.CART, { replace: true });
+      navigate(routes.CART);
     } else {
       navigate(routes.LOGIN, { replace: true });
     }
@@ -62,7 +62,7 @@ function NavCart() {
             {cart.length !== 0 && <Divider mt={1} width={"25px"} />}
           </Flex>
           <Text
-            left={"1.2em"}
+            left={cart.length > 9 ? "1.2em" : "1.3em"}
             bottom={cart.length > 9 ? "1em" : "0.87em"}
             fontSize={
               cart.length > 9

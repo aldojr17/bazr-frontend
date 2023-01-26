@@ -22,6 +22,7 @@ import Location from "./Location";
 import Lock from "./Lock";
 import Logout from "./Logout";
 import Minus from "./Minus";
+import Percentage from "./Percentage";
 import Pencil from "./Pencil";
 import PersonCheck from "./PersonCheck";
 import PinMap from "./PinMap";
@@ -67,6 +68,7 @@ const Icon = {
   Logout,
   Minus,
   Pencil,
+  Percentage,
   PersonCheck,
   PinMap,
   Plus,

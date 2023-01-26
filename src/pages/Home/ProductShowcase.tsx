@@ -11,6 +11,7 @@ function ProductShowcase() {
   useEffect(() => {
     fetchAllProducts({
       limit: 18,
+      sortBy: "unit_sold",
     }).finally(() => setIsLoading(false));
   }, []);
 

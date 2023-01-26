@@ -1,30 +1,100 @@
+import { IAddressPayload } from "../Address";
+
+export interface ICheckoutRequestPayload {
+  address_id?: number;
+  user_voucher_id?: number;
+  orders: ICheckoutOrderPayload[];
+}
+
+export interface ICheckoutOrderPayload {
+  user_shop_voucher_id?: number;
+  courier_id?: number;
+  delivery_fee?: number;
+  shop_id: number;
+  order_details: ICheckoutOrderDetailPayload[];
+}
+
+export interface ICheckoutOrderDetailPayload {
+  // product_id: number;
+  // variant_id: number;
+  // quantity: number;
+  cart_id: number;
+  notes?: string;
+}
+
 export interface ITransactionRequestPayload {
   payment_method_id: number;
-  subtotal: number;
-  total: number;
-  orders: IOrderPayload[];
-}
-
-export interface IOrderPayload {
-  shop_id: number;
-  courier_id: number;
-  delivery_fee: number;
-  subtotal: number;
-  total: number;
-  order_details: IOrderDetailPayload[];
-}
-
-export interface IOrderDetailPayload {
-  product_id: number;
-  variant_id: number;
-  quantity: number;
-  total: number;
 }
 
 export interface ITransactionResponsePayload {
   is_success: boolean;
   data: null | ITransactionSuccessResponsePayload;
   message: string;
+}
+
+export interface ICheckoutResponsePayload {
+  is_success: boolean;
+  data: ICheckoutSuccessResponsePayload;
+  message: string;
+}
+
+export interface ICheckoutSuccessResponsePayload {
+  address_detail: IAddressPayload;
+  user_voucher_id: number;
+  voucher_discount: number;
+  subtotal: number;
+  total: number;
+  total_item: number;
+  total_delivery_fee: number;
+  total_discount: number;
+  cart: ICheckoutCartSuccessResponsePayload[];
+}
+
+export interface ICheckoutCartSuccessResponsePayload {
+  courier_id: number;
+  user_shop_voucher_id: number;
+  shop_voucher_detail: ICheckoutShopVoucherDetailResponse;
+  shop_id: number;
+  shop_city: number;
+  shop_city_name: string;
+  shop_name: string;
+  delivery_fee: number;
+  etd: string;
+  total_weight: number;
+  subtotal: number;
+  total: number;
+  shop_discount: number;
+  list_couriers: ICheckoutCourierPayload;
+  order_details: ICheckoutOrderDetailResponse[];
+}
+
+export interface ICheckoutShopVoucherDetailResponse {
+  code: string;
+  benefit: number;
+  benefit_percentage: number;
+  min_purchase: number;
+}
+
+export interface ICheckoutOrderDetailResponse {
+  cart_id: number;
+  product_id: number;
+  variant_id: number;
+  quantity: number;
+  total: number;
+  notes: string;
+  product_name: string;
+  variant_type_name: string;
+}
+
+export interface ICheckoutCourierPayload {
+  shop_id: number;
+  couriers: ICheckoutCourierListPayload[];
+}
+
+export interface ICheckoutCourierListPayload {
+  id: number;
+  code: string;
+  name: string;
 }
 
 export interface ITransactionSuccessResponsePayload {

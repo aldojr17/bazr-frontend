@@ -20,14 +20,20 @@ import EditUserEmailModal from "../../components/Modal/EditUserEmailModal";
 import Pencil from "../../assets/icons/Pencil";
 import EditUserPhotoModal from "../../components/Modal/EditUserPhotoModal";
 import useTitle from "../../hooks/useTitle";
+import EditUserChangePasswordModal from "../../components/Modal/EditUserChangePasswordModal";
 
 function UserProfile() {
   useTitle("Profile | BAZR");
   const { user } = useUser();
   const emailModal = useDisclosure();
+  const emailCodeModal = useDisclosure();
+  const logoutModal = useDisclosure();
   const userModal = useDisclosure();
   const phoneModal = useDisclosure();
   const photoModal = useDisclosure();
+  const changePasswordModal = useDisclosure();
+  const changePasswordTokenModal = useDisclosure();
+  const changePasswordLogoutModal = useDisclosure();
 
   return (
     <div>
@@ -73,6 +79,7 @@ function UserProfile() {
               borderColor={"blackAlpha.300"}
               color={"blackAlpha.700"}
               leftIcon={<Icon.Lock fill="blackAlpha.700" />}
+              onClick={changePasswordModal.onOpen}
             >
               <Text width={"100%"}>Change Password</Text>
             </Button>
@@ -170,6 +177,23 @@ function UserProfile() {
         isOpen={emailModal.isOpen}
         onClose={emailModal.onClose}
         email={user?.email ?? ""}
+        codeModalIsOpen={emailCodeModal.isOpen}
+        codeModalOnClose={emailCodeModal.onClose}
+        codeModalOnOpen={emailCodeModal.onOpen}
+        logoutModalIsOpen={logoutModal.isOpen}
+        logoutModalOnOpen={logoutModal.onOpen}
+        logoutModalOnClose={logoutModal.onClose}
+      />
+
+      <EditUserChangePasswordModal
+        isOpen={changePasswordModal.isOpen}
+        onClose={changePasswordModal.onClose}
+        tokenModalIsOpen={changePasswordTokenModal.isOpen}
+        tokenModalOnClose={changePasswordTokenModal.onClose}
+        tokenModalOnOpen={changePasswordTokenModal.onOpen}
+        logoutModalIsOpen={changePasswordLogoutModal.isOpen}
+        logoutModalOnOpen={changePasswordLogoutModal.onOpen}
+        logoutModalOnClose={changePasswordLogoutModal.onClose}
       />
 
       <EditUserProfileModal

@@ -4,6 +4,7 @@ import {
   IEditProfilePayload,
   IUploadAvatarPayload,
   IUserFavoriteProductRequestPayload,
+  IUserChangePasswordPayload,
   IUserPayload,
 } from "../interfaces/User";
 import { storeUser } from "../redux/user";
@@ -52,6 +53,32 @@ const useUser = () => {
     return response;
   };
 
+  const sendEmailVerification = async (payload: string) => {
+    const response = await userService.sendChangeEmailVerification(payload);
+
+    return response;
+  };
+
+  const changeEmail = async (payload: string) => {
+    const response = await userService.changeEmail(payload);
+
+    return response;
+  };
+
+  const sendChangePasswordToken = async (
+    payload: IUserChangePasswordPayload
+  ) => {
+    const response = await userService.sendChangePasswordToken(payload);
+
+    return response;
+  };
+
+  const changePassword = async (payload: string) => {
+    const response = await userService.changePassword(payload);
+
+    return response;
+  };
+
   return {
     user,
     userLoading,
@@ -60,6 +87,10 @@ const useUser = () => {
     editProfile,
     uploadAvatar,
     setUserFavoriteProduct,
+    sendEmailVerification,
+    changeEmail,
+    sendChangePasswordToken,
+    changePassword,
   };
 };
 

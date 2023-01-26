@@ -112,7 +112,10 @@ function NavProfile() {
                   flex={1}
                 >
                   <Text fontWeight={"semibold"} noOfLines={1}>
-                    Hi {user?.name}!
+                    Hi{" "}
+                    {user?.name.length! > 15
+                      ? `${user?.name.substring(0, 15).trim()}...`
+                      : `${user?.name}!`}
                   </Text>
                   <Text
                     fontSize={"sm"}

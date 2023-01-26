@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Container,
   Divider,
   Drawer,
   DrawerBody,
@@ -22,24 +23,36 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
+import StoreListItem from "../../components/Card/StoreListItem";
 import CartItem from "../../components/Cart/CartItem";
 import Toast from "../../components/Toast/Toast";
 import useCart from "../../hooks/useCart";
+import useOrder from "../../hooks/useOrder";
 import useTitle from "../../hooks/useTitle";
+import useUser from "../../hooks/useUser";
 import { ICartPayload } from "../../interfaces/Cart";
+import { ICheckoutOrderPayload } from "../../interfaces/Transaction";
+import routes from "../../routes/Routes";
 import { formatCurrency } from "../../util/util";
 
 const Cart = () => {
   useTitle("Cart | BAZR");
-  const { cart, setCheckoutCart, deleteCart, deleteItem, undoDeleteItem } =
-    useCart();
+  const {
+    cart,
+    setCheckoutData,
+    deleteCart,
+    deleteItem,
+    undoDeleteItem,
+    setCheckoutCartIds,
+  } = useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
   const toastIdRef = useRef<ToastId>();
+  const { createCheckout } = useOrder();
 
   const [undoDelete, setUndoDelete] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<
@@ -52,6 +65,7 @@ const Cart = () => {
     []
   );
   const [total, setTotal] = useState<number>(0);
+  const { user } = useUser();
 
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.checked) {
@@ -96,9 +110,45 @@ const Cart = () => {
     }
   };
 
-  const handleBuyNow = () => {
-    setCheckoutCart(checkoutCartState);
-    navigate("/cart/shipment", { replace: true });
+  const handleBuyNow = async () => {
+    let orders: ICheckoutOrderPayload[] = [];
+    let ids: number[] = [];
+
+    checkoutCartState.forEach((value) => {
+      if (
+        orders.length === 0 ||
+        orders.findIndex((val) => val.shop_id === value.shop_id) === -1
+      ) {
+        orders = [
+          ...orders,
+          {
+            shop_id: value.shop_id,
+            order_details: [
+              {
+                cart_id: value.cart_id,
+              },
+            ],
+          },
+        ];
+      } else {
+        orders
+          .find((val) => val.shop_id === value.shop_id)
+          ?.order_details.push({
+            cart_id: value.cart_id,
+          });
+      }
+
+      ids.push(value.cart_id);
+    });
+
+    const response = await createCheckout({
+      orders: orders,
+    });
+    if (response.is_success) {
+      setCheckoutData(response.data);
+      setCheckoutCartIds(ids);
+      navigate(routes.CART_SHIPMENT, { replace: true });
+    }
   };
 
   const handleDeleteItem = (id: number) => {
@@ -155,7 +205,7 @@ const Cart = () => {
     });
 
     let newTotal = checkoutCartState.reduce(
-      (acc, val) => acc + val.variant_type_price,
+      (acc, val) => acc + val.variant_type_price * val.quantity,
       0
     );
 
@@ -181,7 +231,7 @@ const Cart = () => {
   }, [cart]);
 
   return (
-    <>
+    <Container maxW="container.xl">
       <Box
         px={{
           base: "1em",
@@ -237,16 +287,22 @@ const Cart = () => {
                       <Checkbox
                         isChecked={isSelected["all"]}
                         onChange={handleSelectAll}
+                        textTransform={"uppercase"}
+                        fontWeight={"extrabold"}
+                        spacing={4}
+                        colorScheme={"default"}
                       >
                         Select All
                       </Checkbox>
                       <Button
                         variant={"unstyled"}
+                        color={"primary"}
+                        fontSize={"xs"}
                         visibility={
                           checkoutCartState.length !== 0 ? "initial" : "hidden"
                         }
                       >
-                        Remove
+                        Clear cart
                       </Button>
                     </HStack>
                     <Divider />
@@ -255,25 +311,19 @@ const Cart = () => {
                   {Object.entries(formattedCart).map(([key, val], index) => (
                     <Box key={key} width={"100%"}>
                       <Box width={"100%"}>
-                        <HStack>
+                        <HStack alignItems={"start"} gap={2}>
                           <Checkbox
                             isChecked={isSelected[key]}
                             onChange={(event) =>
                               handleSelectFromShop(event, parseInt(key))
                             }
+                            mt={1}
+                            colorScheme={"default"}
                           />
-                          <Box>
-                            <Box>
-                              <Button
-                                variant={"unstyled"}
-                                height={"fit-content"}
-                                fontWeight={"bold"}
-                              >
-                                {Object.values(val).at(0)?.shop_name}
-                              </Button>
-                            </Box>
-                            <Text display={"inline-flex"}>Bandung</Text>
-                          </Box>
+                          <StoreListItem
+                            shopName={Object.values(val).at(index)?.shop_name!}
+                            shopCityName={"Bandung"}
+                          />
                         </HStack>
 
                         <VStack>
@@ -289,19 +339,15 @@ const Cart = () => {
                                 }
                                 handleDeleteItem={handleDeleteItem}
                               />
-                              {childIndex < Object.values(val).length - 1 ? (
+                              {childIndex < Object.values(val).length - 1 && (
                                 <Divider borderBottomWidth={"0.1em"} />
-                              ) : (
-                                ""
                               )}
                             </Box>
                           ))}
                         </VStack>
                       </Box>
-                      {index < Object.entries(formattedCart).length ? (
+                      {index < Object.entries(formattedCart).length && (
                         <Divider />
-                      ) : (
-                        ""
                       )}
                     </Box>
                   ))}
@@ -328,7 +374,6 @@ const Cart = () => {
                       alignItems={"center"}
                       width={"100%"}
                     >
-                      <Icon.Plus />
                       <Text fontWeight={"semibold"}>Select Voucher</Text>
                       <Icon.ChevronRight />
                     </HStack>
@@ -337,11 +382,12 @@ const Cart = () => {
                   <Divider />
 
                   <Text
-                    fontWeight={"semibold"}
+                    fontWeight={"bold"}
                     textAlign={"start"}
                     width={"100%"}
+                    textTransform={"uppercase"}
                   >
-                    Shopping Summary
+                    Order Summary
                   </Text>
 
                   <VStack alignItems={"start"} width="100%" spacing={0}>
@@ -350,16 +396,40 @@ const Cart = () => {
                       alignItems={"center"}
                       width={"100%"}
                     >
-                      <Text>Total Price (Item)</Text>
-                      <Text>Rp{formatCurrency(total)}</Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Total Price (Item)
+                      </Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Rp{formatCurrency(total)}
+                      </Text>
                     </HStack>
                     <HStack
                       justifyContent={"space-between"}
                       alignItems={"center"}
                       width={"100%"}
                     >
-                      <Text>Total Discount Item(s)</Text>
-                      <Text>Rp{formatCurrency(0)}</Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Total Discount Item(s)
+                      </Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Rp{formatCurrency(0)}
+                      </Text>
                     </HStack>
                   </VStack>
 
@@ -369,10 +439,11 @@ const Cart = () => {
                     justifyContent={"space-between"}
                     alignItems={"center"}
                     width={"100%"}
-                    fontWeight={"semibold"}
+                    fontWeight={"bold"}
+                    textAlign={"start"}
                   >
-                    <Text>Grand Total</Text>
-                    <Text>Rp{formatCurrency(total)}</Text>
+                    <Text textTransform={"uppercase"}>Grand Total</Text>
+                    <Text color={"primary"}>Rp{formatCurrency(total)}</Text>
                   </HStack>
 
                   <Button
@@ -380,14 +451,10 @@ const Cart = () => {
                     width={"100%"}
                     shadow={"none"}
                     onClick={handleBuyNow}
-                    variant={
-                      checkoutCartState.length === 0
-                        ? "basicOutline"
-                        : "primary"
-                    }
+                    variant={"primary"}
                     isDisabled={checkoutCartState.length === 0}
                   >
-                    Buy ({checkoutCartState.length})
+                    Checkout ({checkoutCartState.length})
                   </Button>
                 </VStack>
               </GridItem>
@@ -495,14 +562,19 @@ const Cart = () => {
           <Center>
             <VStack>
               <Text>Your Cart is Empty</Text>
-              <Button borderRadius={"lg"} shadow={"none"} color="white">
+              <Button
+                borderRadius={"lg"}
+                shadow={"none"}
+                color="white"
+                onClick={() => navigate(routes.HOME, { replace: true })}
+              >
                 Shop Now
               </Button>
             </VStack>
           </Center>
         )}
       </Box>
-    </>
+    </Container>
   );
 };
 

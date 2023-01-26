@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode } from "react";
+import React, { ChangeEvent, Dispatch, ReactNode } from "react";
 import { ICartPayload } from "../Cart";
 import {
   IPrimaryCategoryPayload,
@@ -7,8 +7,9 @@ import {
   ITertiaryCategoryPayload,
 } from "../Category";
 import { IProductPayload, IProductPhotoPayload } from "../Product";
-import { ITransactionRequestPayload } from "../Transaction";
+import { ICheckoutSuccessResponsePayload } from "../Transaction";
 import { IUserPayload } from "../User";
+import { IMarketplaceVoucherPayload, IVoucherPayload } from "../Voucher";
 
 export interface IBreadCrumbProps {
   categories: IProductCategoryPayload;
@@ -60,13 +61,16 @@ export interface IPaymentPinProps {
 
 export interface IOrderSummaryCardProps {
   isLoading: boolean;
-  checkoutCart: ICartPayload[];
-  grandTotal: number;
   user: IUserPayload;
-  payload: ITransactionRequestPayload;
+  payload: ICheckoutSuccessResponsePayload;
   onOpen: () => void;
+  getMarketplaceVoucher: () => void;
   paymentMethod: number;
   setPaymentMethod: React.Dispatch<React.SetStateAction<number>>;
+  marketplaceVoucher: IMarketplaceVoucherPayload;
+  setMarketplaceVoucher: Dispatch<
+    React.SetStateAction<IMarketplaceVoucherPayload>
+  >;
 }
 export interface ICategoryScrollableContainerProps {
   label?: string;
@@ -124,6 +128,23 @@ export interface IEditUserEmailModalProps {
   email: string;
   isOpen: boolean;
   onClose: () => void;
+  codeModalIsOpen: boolean;
+  codeModalOnOpen: () => void;
+  codeModalOnClose: () => void;
+  logoutModalOnOpen: () => void;
+  logoutModalIsOpen: boolean;
+  logoutModalOnClose: () => void;
+}
+
+export interface IEditUserChangePasswordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  tokenModalIsOpen: boolean;
+  tokenModalOnOpen: () => void;
+  tokenModalOnClose: () => void;
+  logoutModalOnOpen: () => void;
+  logoutModalIsOpen: boolean;
+  logoutModalOnClose: () => void;
 }
 
 export interface IEditUserPhotoModalProps {
@@ -156,4 +177,40 @@ export interface IDeleteModalProps {
   isLoading: boolean;
   onClose: () => void;
   onDelete: () => void;
+}
+
+export interface IVoucherCardProps {
+  voucher?: IMarketplaceVoucherPayload;
+  shopVoucher?: IVoucherPayload;
+  setVoucher: Dispatch<React.SetStateAction<IMarketplaceVoucherPayload>>;
+  selectShopVoucher: (shopId: number, voucherId: number) => void;
+  onClose: () => void;
+  isDisabled: boolean;
+}
+
+export interface IProductListItemProps {
+  index: number;
+  name: string;
+  qty: number;
+  total: number;
+  variant_name: string;
+  onClick?: () => void;
+}
+
+export interface IStoreListItemProps {
+  shopName: string;
+  shopCityName: string;
+  // index: number;
+  // name: string;
+  // qty: number;
+  // total: number;
+  // variant_name: string;
+  // onClick?: () => void;
+}
+
+export interface IQuantitySelectorProps {
+  minQty?: number;
+  maxQty?: number;
+  stock?: number;
+  onQuantityChange: (qty: number) => void;
 }

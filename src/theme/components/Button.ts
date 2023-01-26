@@ -155,10 +155,16 @@ const Button = defineStyleConfig({
       },
     },
     outline: {
-      border: "3px solid",
+      border: "2px solid",
       borderColor: "primary",
       borderRadius: "lg",
       color: "teal.400",
+      _hover: {
+        backgroundColor: "teal.50",
+      },
+      _active: {
+        backgroundColor: "teal.100",
+      },
     },
     basicOutline: {
       border: "1px solid",

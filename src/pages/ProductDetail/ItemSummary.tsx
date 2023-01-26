@@ -3,34 +3,31 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import useToast from "../../hooks/useToast";
-import {
-  ICartAddUpdateRequestPayload,
-  ICartPayload,
-} from "../../interfaces/Cart";
+import useOrder from "../../hooks/useOrder";
+import { ICartAddUpdateRequestPayload } from "../../interfaces/Cart";
 import { IItemSummaryProps } from "../../interfaces/Components/PDP";
-import routes from "../../routes/Routes";
 import ProductAction from "./ProductAction";
+import routes from "../../routes/Routes";
 import ProductDetailQuantity from "./ProductDetailQuantity";
 import ProductDetailVariant from "./ProductDetailVariant";
 
 function ItemSummary(props: IItemSummaryProps) {
   const {
     productId,
-    productName,
     productIsFavorite,
     productFavoriteCount,
     variantGroup,
     onVariantChange,
     selectedVariant,
     shopId,
-    shopName,
     minQty,
     maxQty,
   } = props;
 
   const navigate = useNavigate();
   const { successToast, errorToast } = useToast();
-  const { getCart, setCheckoutCart, updateCart } = useCart();
+  const { getCart, updateCart, setCheckoutCartIds } = useCart();
+  const { createCheckout } = useOrder();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -50,6 +47,8 @@ function ItemSummary(props: IItemSummaryProps) {
       setTimeout(() => {
         setIsError(false);
       }, 5000);
+    } else if (selectedVariant.stock === 0) {
+      errorToast("Failed to add item to cart.", "Product is out of stock.");
     } else {
       const cartPayload: ICartAddUpdateRequestPayload = {
         shop_id: shopId,
@@ -74,7 +73,9 @@ function ItemSummary(props: IItemSummaryProps) {
     }
   };
 
-  const handleBuyNow = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleBuyNow = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
     if (selectedVariant.id === 0) {
@@ -94,28 +95,32 @@ function ItemSummary(props: IItemSummaryProps) {
       updateCart(cartPayload)
         .then((response) => {
           getCart();
-
-          const cartItem: ICartPayload = {
-            product_id: productId,
-            product_name: productName,
-            variant_type_id: selectedVariant.id,
-            variant_type_name: selectedVariant.name,
-            variant_type_price: selectedVariant.price,
-            quantity: selectedQuantity,
-            shop_name: shopName,
-            shop_id: shopId,
-            cart_id: response?.cart_item_id!,
-          };
-
-          setCheckoutCart([cartItem]);
-          navigate(routes.CART_SHIPMENT);
-        })
-        .catch((err) => {
-          if (err === "Invalid credential") {
-            navigate(routes.LOGIN, { state: window.location.pathname });
-          } else {
-            errorToast("Failed to buy now", err);
-          }
+          createCheckout({
+            orders: [
+              {
+                shop_id: shopId,
+                order_details: [
+                  {
+                    cart_id: response?.cart_item_id!,
+                  },
+                ],
+              },
+            ],
+          })
+            .then((resp) => {
+              if (resp.is_success) {
+                setCheckoutData(resp.data);
+                setCheckoutCartIds([response?.cart_item_id!]);
+                navigate(routes.CART_SHIPMENT, { replace: true });
+              }
+            })
+            .catch((err) => {
+              if (err === "Invalid credential") {
+                navigate(routes.LOGIN, { state: window.location.pathname });
+              } else {
+                errorToast("Failed to buy now", err);
+              }
+            });
         })
         .finally(() => {
           setIsLoading(false);
@@ -170,3 +175,6 @@ function ItemSummary(props: IItemSummaryProps) {
 }
 
 export default ItemSummary;
+function setCheckoutData(data: any) {
+  throw new Error("Function not implemented.");
+}

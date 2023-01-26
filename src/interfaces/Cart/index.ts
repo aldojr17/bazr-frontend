@@ -1,3 +1,5 @@
+import { ICheckoutSuccessResponsePayload } from "../Transaction";
+
 export interface ICartAddUpdateRequestPayload {
   shop_id: number;
   variant_type_id: number;
@@ -20,12 +22,17 @@ export interface ICartPayload {
   shop_id: number;
   cart_id: number;
   variant_type_id: number;
+  stock: number;
+  city_id: number;
+  min_buy_qty: number;
+  max_buy_qty: number;
 }
 
 export interface CartState {
   cart: ICartPayload[];
-  checkoutCart: ICartPayload[];
+  checkoutData: ICheckoutSuccessResponsePayload;
   deletedItem: ICartPayload;
+  checkoutCart: number[];
 }
 
 export interface IHoverCartProps {

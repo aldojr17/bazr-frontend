@@ -1,145 +1,101 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
+  Button,
+  Container,
+  Divider,
   Grid,
   GridItem,
   Heading,
-  Text,
-  Image,
-  VStack,
-  Divider,
   HStack,
-  AspectRatio,
-  Select,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Skeleton,
-  Link,
-  useToast,
+  Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import useCart from "../../hooks/useCart";
-import useTitle from "../../hooks/useTitle";
-import useUser from "../../hooks/useUser";
-import { ICartPayload } from "../../interfaces/Cart";
-import { IUserPayload } from "../../interfaces/User";
-import { formatCurrency } from "../../util/util";
-import {
-  IOrderDetailPayload,
-  IOrderPayload,
-  ITransactionRequestPayload,
-} from "../../interfaces/Transaction";
-import { IPinRequestPayload } from "../../interfaces/Auth";
-import useWallet from "../../hooks/useWallet";
-import { IPaymentWalletRequestPayload } from "../../interfaces/Wallet";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import OrderSummaryCard from "./OrderSummaryCard";
+import ProductListItem from "../../components/Card/ProductListItem";
+import StoreListItem from "../../components/Card/StoreListItem";
+import VoucherCard from "../../components/Card/VoucherCard";
 import PaymentPinModal from "../../components/Modal/PaymentPinModal";
+import useCart from "../../hooks/useCart";
 import useOrder from "../../hooks/useOrder";
+import useShipping from "../../hooks/useShipping";
+import useTitle from "../../hooks/useTitle";
+import useToast from "../../hooks/useToast";
+import useUser from "../../hooks/useUser";
+import useVoucher from "../../hooks/useVoucher";
+import useWallet from "../../hooks/useWallet";
+import { IPinRequestPayload } from "../../interfaces/Auth";
+import { MarketplaceVoucherInitial } from "../../interfaces/InitialState";
+import { ICheckoutOrderPayload } from "../../interfaces/Transaction";
+import { IUserPayload } from "../../interfaces/User";
+import { IMarketplaceVoucherPayload } from "../../interfaces/Voucher";
+import { IPaymentWalletRequestPayload } from "../../interfaces/Wallet";
+import { formatCurrency } from "../../util/util";
+import OrderSummaryCard from "./OrderSummaryCard";
 
 const Checkout = () => {
   useTitle("Checkout");
 
-  const { checkoutCart, cart, setCart, deleteCart } = useCart();
+  const {
+    cart,
+    setCart,
+    deleteCart,
+    checkoutData,
+    setCheckoutData,
+    checkoutCart,
+  } = useCart();
   const { fetchProfile } = useUser();
-  const toast = useToast();
+  const { errorToast } = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const voucherModal = useDisclosure();
+  const shopVoucherModal = useDisclosure();
   const { verifyPin, createPayment } = useWallet();
   const navigate = useNavigate();
-  const { createTransaction } = useOrder();
+  const { fetchShippingCost } = useShipping();
+  const { createCheckout, createTransaction } = useOrder();
 
-  const [formattedCart, setFormattedCart] = useState<
-    Record<number, Record<number, ICartPayload>>
-  >({});
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<IUserPayload | null>(null);
-  const [shopSubtotal, setShopSubtotal] = useState<Record<number, number>>({});
-  const [grandTotal, setGrandTotal] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState(1);
-  const [payload, setPayload] = useState<ITransactionRequestPayload>({
-    payment_method_id: 0,
-    subtotal: 0,
-    total: 0,
-    orders: [],
-  });
+  const [paymentMethod, setPaymentMethod] = useState<number>(0);
   const [pinInput, setPinInput] = useState("");
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetchProfile()
-      .then((response) => setUser(response))
-      .finally(() => setIsLoading(false));
-
-    if (checkoutCart.length !== 0) {
-      let newFormattedCart: Record<number, Record<number, ICartPayload>> = {};
-      let newShopSubtotal: Record<number, number> = {};
-      let total = 0;
-      let initialPayload: ITransactionRequestPayload;
-
-      checkoutCart.forEach((val) => {
-        newFormattedCart[val.shop_id] = {
-          ...newFormattedCart[val.shop_id],
-          [val.cart_id]: val,
-        };
-
-        newShopSubtotal[val.shop_id] = newShopSubtotal[val.shop_id]
-          ? newShopSubtotal[val.shop_id] + val.quantity * val.variant_type_price
-          : 0 + val.quantity * val.variant_type_price;
-
-        total += val.quantity * val.variant_type_price;
-      });
-
-      setShopSubtotal(newShopSubtotal);
-      setFormattedCart(newFormattedCart);
-      setGrandTotal(total);
-
-      initialPayload = {
-        payment_method_id: paymentMethod,
-        subtotal: total,
-        total: total + 10000,
-        orders: [],
-      };
-
-      Object.entries(newFormattedCart).map(([key, val], index) => {
-        let orderPayload: IOrderPayload = {
-          courier_id: 1,
-          delivery_fee: 8000,
-          subtotal: 0,
-          total: 0,
-          shop_id: parseInt(key),
-          order_details: [],
-        };
-
-        Object.values(val).map((childVal, childIndex) => {
-          let orderDetailPayload: IOrderDetailPayload;
-
-          orderDetailPayload = {
-            product_id: childVal.product_id!,
-            variant_id: childVal.variant_type_id,
-            quantity: childVal.quantity,
-            total: childVal.variant_type_price * childVal.quantity,
-          };
-
-          orderPayload.order_details.push(orderDetailPayload);
-        });
-
-        orderPayload.subtotal = newShopSubtotal[parseInt(key)];
-        orderPayload.total = orderPayload.subtotal + orderPayload.delivery_fee;
-
-        initialPayload.orders.push(orderPayload);
-      });
-      setPayload(initialPayload);
-    }
-  }, [checkoutCart]);
+  const {
+    marketplaceVouchers,
+    fetchAllMarketplaceVoucher,
+    vouchers,
+    fetchAllVoucher,
+  } = useVoucher();
+  const [selectedMarketplaceVoucher, setselectedMarketplaceVoucher] =
+    useState<IMarketplaceVoucherPayload>(MarketplaceVoucherInitial);
 
   const handlePinChange = async (value: string) => {
     if (value.length === 6) {
       let payloadPin: IPinRequestPayload = {
         pin: value,
       };
-
       const response = await verifyPin(payloadPin);
-
       if (response.is_success) {
-        let txnResponse = await createTransaction(payload, paymentMethod);
+        let txnResponse = await createTransaction({
+          payment_method_id: paymentMethod,
+        });
+
         if (!txnResponse.is_success) {
           return;
         }
@@ -150,248 +106,805 @@ const Checkout = () => {
         };
 
         let isSuccess = createPayment(paymentPayload);
+
         if (!isSuccess) {
           return;
         }
 
-        cart.forEach((c) =>
-          checkoutCart.forEach((cc) => {
-            if (c.cart_id === cc.cart_id) {
-              deleteCart(c.cart_id);
-            }
-          })
-        );
+        cart.forEach((c) => {
+          if (checkoutCart.includes(c.cart_id)) {
+            deleteCart(c.cart_id);
+          }
+        });
 
-        var temp = cart.filter(
-          (val) =>
-            checkoutCart.findIndex((q) => val.cart_id === q.cart_id) === -1
-        );
-
+        var temp = cart.filter((val) => !checkoutCart.includes(val.cart_id));
         setCart(temp);
-
         navigate("/", { replace: true });
       } else {
         setPinInput("");
-        toast({
-          title: "Pin Error",
-          description: response.message,
-          status: "error",
-          duration: 3000,
-          position: "top",
-          isClosable: true,
-        });
+        errorToast("Pin Error", response.message, 3000);
       }
     }
   };
 
+  const handleShippingOption = async (
+    courierCode: string,
+    shopCity: number,
+    totalWeight: number,
+    courierId: number,
+    shopId: number
+  ) => {
+    const cost = await fetchShippingCost({
+      origin: shopCity.toString(),
+      destination: checkoutData.address_detail.city_id.toString(),
+      weight: totalWeight,
+      courier: courierCode,
+    });
+
+    let orders: ICheckoutOrderPayload[];
+    orders = checkoutData.cart.map((value) =>
+      value.shop_id === shopId
+        ? {
+            ...value,
+            courier_id: courierId,
+            delivery_fee: cost.rajaongkir.results[0].costs.find(
+              (val) => val.service === "REG" || val.service === "Pos Reguler"
+            )?.cost[0].value,
+            etd: cost.rajaongkir.results[0].costs.find(
+              (val) => val.service === "REG" || val.service === "Pos Reguler"
+            )?.cost[0].etd,
+          }
+        : value
+    );
+
+    const response = await createCheckout({
+      orders: orders,
+      user_voucher_id: selectedMarketplaceVoucher.id,
+    });
+
+    if (response.is_success) {
+      setCheckoutData(response.data);
+    } else {
+      errorToast(response.message);
+    }
+  };
+
+  const handleGetShopVouchers = async (shopId: number) => {
+    const response = await fetchAllVoucher("user", 1, 10, shopId);
+
+    if (response.is_success) {
+      shopVoucherModal.onOpen();
+    } else {
+      errorToast(response.message);
+    }
+  };
+
+  const handleGetVouchers = async () => {
+    const response = await fetchAllMarketplaceVoucher();
+
+    if (response.is_success) {
+      voucherModal.onOpen();
+    } else {
+      errorToast(response.message);
+    }
+  };
+
+  const handleRemoveShopVoucher = async (shopId: number) => {
+    let orders: ICheckoutOrderPayload[];
+    orders = checkoutData.cart.map((value) =>
+      value.shop_id === shopId
+        ? {
+            ...value,
+            user_shop_voucher_id: 0,
+          }
+        : value
+    );
+
+    const response = await createCheckout({
+      orders: orders,
+      user_voucher_id: selectedMarketplaceVoucher.id,
+    });
+
+    if (response.is_success) {
+      setCheckoutData(response.data);
+    } else {
+      errorToast(response.message);
+    }
+  };
+
+  const handleSelectShopVoucher = async (shopId: number, voucherId: number) => {
+    let orders: ICheckoutOrderPayload[];
+    orders = checkoutData.cart.map((value) =>
+      value.shop_id === shopId
+        ? {
+            ...value,
+            user_shop_voucher_id: voucherId,
+          }
+        : value
+    );
+
+    const response = await createCheckout({
+      orders: orders,
+      user_voucher_id: selectedMarketplaceVoucher.id,
+    });
+
+    if (response.is_success) {
+      setCheckoutData(response.data);
+    } else {
+      errorToast(response.message);
+    }
+  };
+
+  useEffect(() => {
+    createCheckout({
+      user_voucher_id: selectedMarketplaceVoucher.id,
+      orders: checkoutData.cart,
+    })
+      .then((resp) => setCheckoutData(resp.data))
+      .catch((err) => errorToast(err));
+  }, [selectedMarketplaceVoucher]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchProfile()
+      .then((response) => {
+        setUser(response);
+        setPaymentMethod(response?.wallet_detail.is_activated ? 1 : 0);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
-    <Box
-      px={{
-        base: "1em",
-        sm: "2em",
-        md: "3em",
-        lg: "6em",
-        xl: "12em",
-      }}
-      py={{
-        base: "1em",
-        sm: "1.5em",
-        md: "2em",
-        lg: "2.5em",
-        xl: "4em",
-      }}
-    >
-      <Heading
-        pb={3}
-        size={{
-          base: "md",
-          sm: "lg",
+    <Container maxW="container.xl">
+      <Box
+        py={{
+          base: "1em",
+          sm: "1.5em",
+          md: "2em",
+          lg: "2.5em",
+          xl: "4em",
         }}
       >
-        Checkout
-      </Heading>
-      <Grid
-        templateColumns="repeat(3, 1fr)"
-        gap={10}
-        width="100%"
-        mb={{
-          base: "7em",
-          sm: "6em",
-          md: "6em",
-          lg: 0,
-          xl: 0,
-        }}
-      >
-        <GridItem
-          colSpan={{
-            base: 3,
-            sm: 3,
-            md: 3,
-            lg: 2,
-            xl: 2,
+        <Heading
+          pb={3}
+          size={{
+            base: "md",
+            sm: "lg",
           }}
         >
-          <VStack spacing={5}>
-            <Box width="100%">
-              <Skeleton isLoaded={!isLoading}>
-                <VStack alignItems={"flex-start"}>
-                  <Divider />
-                  <HStack width="100%">
-                    <Heading
-                      size={{
-                        base: "sm",
-                        sm: "sm",
-                      }}
-                      pt="5"
-                    >
-                      Delivery Address
-                    </Heading>
-                    <Link
-                      color="secondary"
-                      href="#"
-                      size={{
-                        base: "sm",
-                        sm: "sm",
-                      }}
-                      pt="5"
-                      pl="5"
-                    >
-                      Change Address
-                    </Link>
-                  </HStack>
-                  <Text fontSize="sm">
-                    {user?.address_detail.recipient_name}
-                  </Text>
-                  <Text fontSize="sm">
-                    {user?.address_detail.recipient_phone}
-                  </Text>
-                  <Text fontSize="sm" pb="5">
-                    {user?.address_detail.street_name}
-                    {", "}
-                    {user?.address_detail.district_ward}
-                    {", "}
-                    {user?.address_detail.sub_district}
-                    {", "}
-                    {user?.address_detail.city_name}
-                    {", "}
-                    {user?.address_detail.province_name}
-                    {", "}
-                    {user?.address_detail.zip_code}
-                  </Text>
-                </VStack>
-                <Divider />
-              </Skeleton>
-            </Box>
-            <Box width="100%">
-              <Skeleton isLoaded={!isLoading}>
-                {Object.entries(formattedCart).map(([key, val], index) => (
-                  <Box key={key} width={"100%"}>
-                    <Box width={"100%"}>
-                      <VStack alignItems={"flex-start"} py="5">
-                        <Text as="b">
-                          {Object.values(val).at(0)?.shop_name}
+          Checkout
+        </Heading>
+        <Grid
+          templateColumns="repeat(3, 1fr)"
+          gap={10}
+          width="100%"
+          mb={{
+            base: "7em",
+            sm: "6em",
+            md: "6em",
+            lg: 0,
+            xl: 0,
+          }}
+        >
+          <GridItem
+            colSpan={{
+              base: 3,
+              sm: 3,
+              md: 3,
+              lg: 2,
+              xl: 2,
+            }}
+          >
+            <VStack spacing={5}>
+              <Box width="100%">
+                <Skeleton isLoaded={!isLoading}>
+                  <VStack alignItems={"flex-start"} spacing={1} pb="3">
+                    <Divider />
+                    <HStack width="100%" alignItems={"center"} pb={2}>
+                      <Text
+                        textTransform={"uppercase"}
+                        fontWeight={"bold"}
+                        pt="5"
+                      >
+                        Delivery Address
+                      </Text>
+                      <Heading pt={"4"} px={"2"} color={"light"}>
+                        &#x2022;
+                      </Heading>
+                      <Button
+                        variant={"primaryLink"}
+                        p={0}
+                        height={0}
+                        pt="5"
+                        size={"sm"}
+                      >
+                        {user?.default_address_id !== 0
+                          ? "Change Address"
+                          : "Set Address"}
+                      </Button>
+                    </HStack>
+                    {user?.default_address_id !== 0 ? (
+                      <>
+                        <Text fontSize="md" fontWeight={"bold"}>
+                          {checkoutData.address_detail.recipient_name}
                         </Text>
-                        <Text>Jakarta Selatan</Text>
-                        {Object.values(val).map((childVal, childIndex) => (
-                          <Box key={childVal.cart_id} width={"100%"}>
-                            <HStack justifyContent={"space-between"} pb={4}>
-                              <AspectRatio
-                                ratio={1}
-                                width={{
-                                  base: "5em",
-                                  sm: "5em",
-                                  md: "6em",
-                                  lg: "6em",
-                                  xl: "7em",
+                        <Text
+                          fontSize="0.9rem"
+                          fontWeight={"bold"}
+                          color={"gray.500"}
+                        >
+                          {checkoutData.address_detail.recipient_phone}
+                        </Text>
+                        <Text fontSize="sm" fontWeight={"normal"}>
+                          {checkoutData.address_detail.street_name}
+                          {", "}
+                          {checkoutData.address_detail.district_ward}
+                        </Text>
+                        <Text fontSize="sm" fontWeight={"normal"}>
+                          {checkoutData.address_detail.sub_district}
+                          {", "}
+                          {checkoutData.address_detail.city_name}
+                          {", "}
+                          {checkoutData.address_detail.province_name}
+                          {", "}
+                          {checkoutData.address_detail.zip_code}
+                        </Text>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </VStack>
+                  <Divider />
+                </Skeleton>
+              </Box>
+              <Box width="100%">
+                <Skeleton isLoaded={!isLoading}>
+                  {checkoutData.cart.map((val, index) => (
+                    <Box key={val.shop_id} width={"100%"}>
+                      <Box width={"100%"}>
+                        <VStack
+                          alignItems={"flex-start"}
+                          pb="2"
+                          pt={index === 0 ? "0" : "5"}
+                        >
+                          {checkoutData.cart.length > 1 ? (
+                            <Text
+                              fontWeight={"bold"}
+                              textTransform={"uppercase"}
+                            >
+                              Order {index + 1}
+                            </Text>
+                          ) : (
+                            ""
+                          )}
+                          <StoreListItem
+                            shopName={val.shop_name}
+                            shopCityName={val.shop_city_name}
+                          />
+                          {val.order_details.map((childVal, childIndex) => (
+                            <>
+                              <Box
+                                pb={4}
+                                pt={childIndex !== 0 ? 3 : 0}
+                                width={"100%"}
+                              >
+                                <ProductListItem
+                                  key={childVal.variant_id}
+                                  index={childIndex}
+                                  name={childVal.product_name}
+                                  qty={childVal.quantity}
+                                  total={val.total}
+                                  variant_name={childVal.variant_type_name
+                                    .split(",")
+                                    .join(", ")}
+                                />
+                              </Box>
+                              <Divider />
+                            </>
+                          ))}
+                          <HStack
+                            width="100%"
+                            justifyContent={"space-between"}
+                            gap={3}
+                            pt={3}
+                            pb={5}
+                            alignItems={"start"}
+                          >
+                            <VStack
+                              alignItems={"start"}
+                              width={"50%"}
+                              spacing={0}
+                            >
+                              <HStack
+                                width={"100%"}
+                                justifyContent={"space-between"}
+                              >
+                                <Text
+                                  textTransform={"uppercase"}
+                                  fontWeight={"bold"}
+                                >
+                                  Voucher
+                                </Text>
+                                <Button
+                                  variant={"primaryLink"}
+                                  p={0}
+                                  height={0}
+                                  size={"sm"}
+                                  _active={{
+                                    bg: "none",
+                                  }}
+                                  onClick={() =>
+                                    val.user_shop_voucher_id !== 0
+                                      ? handleRemoveShopVoucher(val.shop_id)
+                                      : handleGetShopVouchers(val.shop_id)
+                                  }
+                                >
+                                  {val.user_shop_voucher_id !== 0
+                                    ? "Remove Voucher"
+                                    : "Select Voucher"}
+                                </Button>
+                              </HStack>
+                              {val.user_shop_voucher_id !== 0 ? (
+                                <>
+                                  <Text
+                                    fontWeight={"semibold"}
+                                    color={"darkLighten"}
+                                    fontSize={"sm"}
+                                  >
+                                    {val.shop_voucher_detail.code}
+                                  </Text>
+                                  <Text
+                                    color={"darkDarken"}
+                                    pt={2}
+                                    fontWeight={"bold"}
+                                  >
+                                    {val.shop_voucher_detail.benefit !== 0
+                                      ? `Rp${formatCurrency(
+                                          val.shop_voucher_detail.benefit
+                                        )}`
+                                      : `${val.shop_voucher_detail.benefit_percentage}%`}
+                                  </Text>
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </VStack>
+
+                            <Divider
+                              orientation="vertical"
+                              borderWidth={"1px"}
+                              height={
+                                val.user_shop_voucher_id !== 0 ||
+                                val.courier_id !== 0
+                                  ? "5em"
+                                  : "1.5em"
+                              }
+                              borderColor={"light"}
+                            />
+
+                            <VStack
+                              alignItems={"start"}
+                              width={"50%"}
+                              spacing={0}
+                            >
+                              <HStack
+                                width={"100%"}
+                                justifyContent={"space-between"}
+                              >
+                                <Text
+                                  textTransform={"uppercase"}
+                                  fontWeight={"bold"}
+                                >
+                                  Shipping
+                                </Text>
+                                <Popover
+                                  placement="bottom-end"
+                                  isLazy
+                                  offset={[0, 15]}
+                                >
+                                  <PopoverTrigger>
+                                    <Button
+                                      variant={"primaryLink"}
+                                      p={0}
+                                      height={0}
+                                      size={"sm"}
+                                      _active={{
+                                        bg: "none",
+                                      }}
+                                    >
+                                      {val.courier_id !== 0
+                                        ? "Change Courier"
+                                        : "Select Courier"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    width={"10em"}
+                                    bg={"gray.100"}
+                                    borderRadius={"lg"}
+                                  >
+                                    <PopoverBody p={0}>
+                                      <VStack
+                                        width={"100%"}
+                                        alignItems={"start"}
+                                      >
+                                        {val.list_couriers.couriers.map(
+                                          (courier) => (
+                                            <Box
+                                              justifyContent={"start"}
+                                              width={"100%"}
+                                              p={3}
+                                              cursor={"pointer"}
+                                              fontWeight={"bold"}
+                                              fontSize={"sm"}
+                                              onClick={() =>
+                                                handleShippingOption(
+                                                  courier.code,
+                                                  val.shop_city,
+                                                  val.total_weight,
+                                                  val.list_couriers.couriers.find(
+                                                    (val) =>
+                                                      val.code === courier.code
+                                                  )?.id!,
+                                                  val.shop_id
+                                                )
+                                              }
+                                              _hover={{
+                                                bg: "light",
+                                              }}
+                                            >
+                                              {courier.name}
+                                            </Box>
+                                          )
+                                        )}
+                                      </VStack>
+                                    </PopoverBody>
+                                  </PopoverContent>
+                                </Popover>
+                              </HStack>
+                              {val.courier_id !== 0 ? (
+                                <>
+                                  <Text
+                                    fontWeight={"semibold"}
+                                    color={"darkLighten"}
+                                    fontSize={"sm"}
+                                  >
+                                    {
+                                      val.list_couriers.couriers.find(
+                                        (v) => v.id === val.courier_id
+                                      )?.name
+                                    }{" "}
+                                    ({val.etd})
+                                  </Text>
+                                  <Text
+                                    color={"darkDarken"}
+                                    pt={2}
+                                    fontWeight={"bold"}
+                                  >
+                                    Rp{formatCurrency(val.delivery_fee)}
+                                  </Text>
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </VStack>
+                          </HStack>
+                          <Divider />
+                          <Accordion
+                            width={"100%"}
+                            allowMultiple
+                            border={"none"}
+                          >
+                            <AccordionItem border={"none"}>
+                              <AccordionButton
+                                px={0}
+                                _hover={{
+                                  background: "none",
                                 }}
                               >
-                                <Image
-                                  src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                                  alt="Caffe Latte"
-                                />
-                              </AspectRatio>
-                              <VStack alignItems={"flex-start"} width="40%">
-                                <Text>{childVal.product_name}</Text>
-                                <Text>{childVal.quantity} item(s)</Text>
-                                <Text>
-                                  Rp
-                                  {formatCurrency(
-                                    childVal.variant_type_price *
-                                      childVal.quantity
-                                  )}
-                                </Text>
-                              </VStack>
-                              <VStack alignItems={"flex-start"} width="40%">
-                                <Text fontSize="lg">Courier Option</Text>
-                                <Select
-                                  bg="primary"
-                                  borderColor="primary"
-                                  color="white"
+                                <HStack
+                                  justifyContent={"space-between"}
+                                  width="100%"
                                 >
-                                  <option style={{ color: "black" }} value="1">
-                                    JNE - Regular (Rp8.000)
-                                  </option>
-                                  <option style={{ color: "black" }} value="2">
-                                    Tiki - Regular (Rp8.000)
-                                  </option>
-                                  <option style={{ color: "black" }} value="3">
-                                    Pos Indonesia - Regular (Rp8.000)
-                                  </option>
-                                </Select>
-                                <Text fontSize="sm">
-                                  Estimated Delivery 1 Jan - 3 Jan
-                                </Text>
-                              </VStack>
-                            </HStack>
-                            <Divider borderBottomWidth={"0.1em"} />
-                          </Box>
-                        ))}
-                        <HStack justifyContent={"space-between"} width="100%">
-                          <Text as="b">Subtotal</Text>
-                          <Text as="b">
-                            Rp
-                            {formatCurrency(shopSubtotal[parseInt(key)] + 8000)}
-                          </Text>
-                        </HStack>
-                      </VStack>
+                                  <Text
+                                    fontWeight={"bold"}
+                                    textTransform={"uppercase"}
+                                  >
+                                    Total
+                                  </Text>
+                                  <Text fontWeight={"bold"}>
+                                    Rp
+                                    {formatCurrency(val.total)}
+                                  </Text>
+                                </HStack>
+                                <AccordionIcon />
+                              </AccordionButton>
+                              <AccordionPanel px={0}>
+                                <HStack
+                                  justifyContent={"space-between"}
+                                  width="100%"
+                                >
+                                  <Text
+                                    fontWeight={"semibold"}
+                                    fontSize={"sm"}
+                                    color={"gray.500"}
+                                  >
+                                    Subtotal
+                                  </Text>
+                                  <Text
+                                    fontWeight={"semibold"}
+                                    fontSize={"sm"}
+                                    color={"gray.500"}
+                                  >
+                                    Rp
+                                    {formatCurrency(val.subtotal)}
+                                  </Text>
+                                </HStack>
+                                <HStack
+                                  justifyContent={"space-between"}
+                                  width="100%"
+                                  py="2"
+                                >
+                                  <Text
+                                    fontSize={"sm"}
+                                    fontWeight={"semibold"}
+                                    color={"gray.500"}
+                                  >
+                                    Delivery Fee
+                                  </Text>
+                                  <Text
+                                    fontSize={"sm"}
+                                    fontWeight={"semibold"}
+                                    color={"gray.500"}
+                                  >
+                                    Rp
+                                    {formatCurrency(val.delivery_fee)}
+                                  </Text>
+                                </HStack>
+                                <HStack
+                                  justifyContent={"space-between"}
+                                  width="100%"
+                                >
+                                  <Text
+                                    fontSize={"sm"}
+                                    fontWeight={"semibold"}
+                                    color={"gray.500"}
+                                  >
+                                    Discount from shop
+                                  </Text>
+                                  <Text
+                                    fontSize={"sm"}
+                                    fontWeight={"semibold"}
+                                    color={"gray.500"}
+                                  >
+                                    Rp
+                                    {formatCurrency(val.shop_discount)}
+                                  </Text>
+                                </HStack>
+                              </AccordionPanel>
+                            </AccordionItem>
+                          </Accordion>
+                        </VStack>
+                      </Box>
+                      {index !== checkoutData.cart.length - 1 ? (
+                        <Divider />
+                      ) : (
+                        ""
+                      )}
                     </Box>
-                  </Box>
+                  ))}
+                </Skeleton>
+              </Box>
+            </VStack>
+          </GridItem>
+          <GridItem
+            colSpan={1}
+            display={{
+              base: "none",
+              sm: "none",
+              md: "none",
+              lg: "block",
+              xl: "block",
+            }}
+          >
+            <OrderSummaryCard
+              isLoading={isLoading}
+              user={user!}
+              payload={checkoutData}
+              onOpen={onOpen}
+              paymentMethod={paymentMethod}
+              setPaymentMethod={setPaymentMethod}
+              getMarketplaceVoucher={handleGetVouchers}
+              marketplaceVoucher={selectedMarketplaceVoucher}
+              setMarketplaceVoucher={setselectedMarketplaceVoucher}
+            />
+          </GridItem>
+        </Grid>
+        <PaymentPinModal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          handlePinChange={handlePinChange}
+          pinInput={pinInput}
+          setPinInput={setPinInput}
+        />
+      </Box>
+
+      <Modal
+        onClose={voucherModal.onClose}
+        isOpen={voucherModal.isOpen}
+        isCentered
+        scrollBehavior="inside"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textTransform={"uppercase"}>Select Voucher</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack width={"100%"} gap={3}>
+              {marketplaceVouchers?.filter(
+                (val) => checkoutData.subtotal > val.min_purchase
+              ).length > 0 ? (
+                <VStack width={"100%"}>
+                  <Text
+                    textAlign={"start"}
+                    fontWeight={"bold"}
+                    fontSize={"sm"}
+                    textTransform={"uppercase"}
+                    width="100%"
+                  >
+                    Available Vouchers
+                  </Text>
+                  <Divider borderColor={"light"} />
+                </VStack>
+              ) : (
+                ""
+              )}
+              {marketplaceVouchers
+                ?.filter((val) => checkoutData.subtotal > val.min_purchase)
+                .map((voucher) => (
+                  <VoucherCard
+                    selectShopVoucher={handleSelectShopVoucher}
+                    voucher={voucher}
+                    setVoucher={setselectedMarketplaceVoucher}
+                    onClose={voucherModal.onClose}
+                    isDisabled={false}
+                  />
                 ))}
-              </Skeleton>
-            </Box>
-          </VStack>
-        </GridItem>
-        <GridItem
-          colSpan={1}
-          display={{
-            base: "none",
-            sm: "none",
-            md: "none",
-            lg: "block",
-            xl: "block",
-          }}
-        >
-          <OrderSummaryCard
-            isLoading={isLoading}
-            checkoutCart={checkoutCart}
-            grandTotal={grandTotal}
-            user={user!}
-            payload={payload}
-            onOpen={onOpen}
-            paymentMethod={paymentMethod}
-            setPaymentMethod={setPaymentMethod}
-          />
-        </GridItem>
-      </Grid>
-      <PaymentPinModal
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        handlePinChange={handlePinChange}
-        pinInput={pinInput}
-        setPinInput={setPinInput}
-      />
-    </Box>
+
+              <VStack width={"100%"}>
+                {marketplaceVouchers?.filter(
+                  (val) => checkoutData.subtotal < val.min_purchase
+                ).length > 0 ? (
+                  <VStack width={"100%"}>
+                    <Text
+                      textAlign={"start"}
+                      fontWeight={"bold"}
+                      fontSize={"sm"}
+                      textTransform={"uppercase"}
+                      width="100%"
+                    >
+                      Unavailable Vouchers
+                    </Text>
+                    <Divider borderColor={"light"} />
+                  </VStack>
+                ) : (
+                  ""
+                )}
+              </VStack>
+              {marketplaceVouchers
+                ?.filter((val) => checkoutData.subtotal < val.min_purchase)
+                .map((voucher) => (
+                  <VoucherCard
+                    selectShopVoucher={handleSelectShopVoucher}
+                    voucher={voucher}
+                    setVoucher={setselectedMarketplaceVoucher}
+                    onClose={voucherModal.onClose}
+                    isDisabled={true}
+                  />
+                ))}
+            </VStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={voucherModal.onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        onClose={shopVoucherModal.onClose}
+        isOpen={shopVoucherModal.isOpen}
+        isCentered
+        scrollBehavior="inside"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textTransform={"uppercase"}>Select Voucher</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack width={"100%"} gap={3}>
+              {vouchers?.data?.filter(
+                (val) =>
+                  checkoutData.cart.find(
+                    (value) => val.shop_id === value.shop_id
+                  )?.subtotal! > val.min_purchase
+              ).length! > 0 ? (
+                <VStack width={"100%"}>
+                  <Text
+                    textAlign={"start"}
+                    fontWeight={"bold"}
+                    fontSize={"sm"}
+                    textTransform={"uppercase"}
+                    width="100%"
+                  >
+                    Available Vouchers
+                  </Text>
+                  <Divider borderColor={"light"} />
+                </VStack>
+              ) : (
+                ""
+              )}
+              {vouchers?.data
+                ?.filter(
+                  (val) =>
+                    checkoutData.cart.find(
+                      (value) => val.shop_id === value.shop_id
+                    )?.subtotal! > val.min_purchase
+                )
+                .map((voucher) => (
+                  <VoucherCard
+                    selectShopVoucher={handleSelectShopVoucher}
+                    setVoucher={setselectedMarketplaceVoucher}
+                    onClose={shopVoucherModal.onClose}
+                    shopVoucher={voucher}
+                    isDisabled={false}
+                  />
+                ))}
+
+              {vouchers?.data?.filter(
+                (val) =>
+                  checkoutData.cart.find(
+                    (value) => val.shop_id === value.shop_id
+                  )?.subtotal! < val.min_purchase
+              ).length! > 0 ? (
+                <VStack width={"100%"}>
+                  <Text
+                    textAlign={"start"}
+                    fontWeight={"bold"}
+                    fontSize={"sm"}
+                    textTransform={"uppercase"}
+                    width="100%"
+                  >
+                    Unavailable Vouchers
+                  </Text>
+                  <Divider borderColor={"light"} />
+                </VStack>
+              ) : (
+                ""
+              )}
+              {vouchers?.data
+                ?.filter(
+                  (val) =>
+                    checkoutData.cart.find(
+                      (value) => val.shop_id === value.shop_id
+                    )?.subtotal! < val.min_purchase
+                )
+                .map((voucher) => (
+                  <VoucherCard
+                    selectShopVoucher={handleSelectShopVoucher}
+                    setVoucher={setselectedMarketplaceVoucher}
+                    onClose={shopVoucherModal.onClose}
+                    shopVoucher={voucher}
+                    isDisabled={true}
+                  />
+                ))}
+            </VStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={shopVoucherModal.onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Container>
   );
 };
 

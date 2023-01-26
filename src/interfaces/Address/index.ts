@@ -1,4 +1,6 @@
 export interface IAddressPayload {
+  id: number;
+  city_id: number;
   city_name: string;
   sub_district: string;
   province_name: string;
