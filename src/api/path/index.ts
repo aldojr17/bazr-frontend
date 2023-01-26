@@ -12,6 +12,8 @@ export const API_PATH = {
     PROFILE: "/users/profile",
     AVATAR: "/users/avatar",
     FAVORITE_PRODUCT: "users/favorite",
+    EMAIL: "/users/email",
+    PASSWORD: "/users/password",
   },
   category: {
     CATEGORIES: "/categories",
@@ -26,6 +28,7 @@ export const API_PATH = {
     CART: "/cart",
   },
   transaction: {
+    CHECKOUT: "/checkout",
     TRANSACTIONS: "/transactions",
   },
   shop: {
@@ -40,6 +43,10 @@ export const API_PATH = {
     ACTIVATE_WALLET: "/wallets/activate",
   },
   voucher: {
+    VOUCHER: "/vouchers",
     SHOP_VOUCHER: "/shop-vouchers",
+  },
+  shipping: {
+    SHIPPING: "/shipping-cost",
   },
 };

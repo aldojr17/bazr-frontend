@@ -1,6 +1,7 @@
 import { useState } from "react";
 import voucherService from "../api/service/voucher";
 import {
+  IMarketplaceVoucherPayload,
   IVoucherPaginationPayload,
   IVoucherPayload,
 } from "../interfaces/Voucher";
@@ -9,6 +10,9 @@ const useVoucher = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [voucher, setVoucher] = useState<IVoucherPayload>();
   const [vouchers, setVouchers] = useState<IVoucherPaginationPayload>();
+  const [marketplaceVouchers, setMarketplaceVouchers] = useState<
+    IMarketplaceVoucherPayload[]
+  >([]);
 
   const createVoucher = async (payload: IVoucherPayload) => {
     setIsLoading(true);
@@ -49,14 +53,32 @@ const useVoucher = () => {
   const fetchAllVoucher = async (
     status: string,
     page: number,
-    limit: number
+    limit: number,
+    shopId: number
   ) => {
     setIsLoading(true);
-    const response = await voucherService.getAllVouchers(status, page, limit);
+    const response = await voucherService.getAllVouchers(
+      status,
+      page,
+      limit,
+      shopId
+    );
     setIsLoading(false);
 
     if (response.is_success) {
       setVouchers(response.data);
+    }
+
+    return response;
+  };
+
+  const fetchAllMarketplaceVoucher = async () => {
+    setIsLoading(true);
+    const response = await voucherService.getAllMarketplaceVouchers();
+    setIsLoading(false);
+
+    if (response.is_success) {
+      setMarketplaceVouchers(response.data.data);
     }
 
     return response;
@@ -71,6 +93,8 @@ const useVoucher = () => {
     isLoading,
     voucher,
     vouchers,
+    fetchAllMarketplaceVoucher,
+    marketplaceVouchers,
   };
 };
 

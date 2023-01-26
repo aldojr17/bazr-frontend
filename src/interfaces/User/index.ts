@@ -61,3 +61,14 @@ export interface IUserFavoriteProductResponsePayload {
   data: null;
   message: string;
 }
+
+export interface IBaseResponsePayload {
+  is_success: boolean;
+  data: null;
+  message: string;
+}
+
+export interface IUserChangePasswordPayload {
+  old_password: string;
+  new_password: string;
+}

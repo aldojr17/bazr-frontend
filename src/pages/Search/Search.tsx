@@ -28,12 +28,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Skeleton,
   Text,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Icon from "../../assets/icons";
 import {
@@ -45,7 +44,6 @@ import ProductCard from "../../components/Card/ProductCard";
 import Pagination from "../../components/Pagination/Pagination";
 import useCategory from "../../hooks/useCategory";
 import { IProductPaginationPayload } from "../../interfaces/Product";
-import productService from "../../api/service/product";
 import useTitle from "../../hooks/useTitle";
 import useProduct from "../../hooks/useProduct";
 

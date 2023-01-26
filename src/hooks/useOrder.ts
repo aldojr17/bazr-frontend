@@ -1,16 +1,20 @@
 import { useToast } from "@chakra-ui/react";
 import transactionService from "../api/service/transaction";
-import { ITransactionRequestPayload } from "../interfaces/Transaction";
+import {
+  ICheckoutRequestPayload,
+  ITransactionRequestPayload,
+} from "../interfaces/Transaction";
 
 const useOrder = () => {
   const toast = useToast();
 
-  const createTransaction = async (
-    payload: ITransactionRequestPayload,
-    paymentMethod: number
-  ) => {
-    payload.payment_method_id = paymentMethod;
+  const createCheckout = async (payload: ICheckoutRequestPayload) => {
+    const response = await transactionService.createCheckout(payload);
 
+    return response;
+  };
+
+  const createTransaction = async (payload: ITransactionRequestPayload) => {
     const response = await transactionService.createTransaction(payload);
 
     if (response.is_success) {
@@ -36,6 +40,7 @@ const useOrder = () => {
   };
 
   return {
+    createCheckout,
     createTransaction,
   };
 };

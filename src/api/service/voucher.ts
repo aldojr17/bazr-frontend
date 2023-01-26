@@ -1,4 +1,5 @@
 import {
+  IMarketplaceVouchersResponsePayload,
   IVoucherPayload,
   IVoucherResponsePayload,
   IVouchersResponsePayload,
@@ -63,12 +64,13 @@ const getVoucher = async (id: number): Promise<IVoucherResponsePayload> => {
 const getAllVouchers = async (
   status: string,
   page: number,
-  limit: number
+  limit: number,
+  shopId: number
 ): Promise<IVouchersResponsePayload> => {
   try {
     const response = await instance.get<IVouchersResponsePayload>(
       API_PATH.voucher.SHOP_VOUCHER +
-        `?status=${status}&page=${page}&limit=${limit}`
+        `?shopId=${shopId}&status=${status}&page=${page}&limit=${limit}&sortBy=min_purchase`
     );
 
     return response.data;
@@ -77,12 +79,26 @@ const getAllVouchers = async (
   }
 };
 
+const getAllMarketplaceVouchers =
+  async (): Promise<IMarketplaceVouchersResponsePayload> => {
+    try {
+      const response = await instance.get<IMarketplaceVouchersResponsePayload>(
+        API_PATH.voucher.VOUCHER + `?status=user&sortBy=min_purchase`
+      );
+
+      return response.data;
+    } catch (err) {
+      return err as IMarketplaceVouchersResponsePayload;
+    }
+  };
+
 const voucherService = {
   createVoucher,
   editVoucher,
   deleteVoucher,
   getVoucher,
   getAllVouchers,
+  getAllMarketplaceVouchers,
 };
 
 export default voucherService;

@@ -20,6 +20,7 @@ import { BsEye, BsFiles, BsPencil, BsTrash } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import useToast from "../../../hooks/useToast";
+import useUser from "../../../hooks/useUser";
 import useVoucher from "../../../hooks/useVoucher";
 import routes from "../../../routes/Routes";
 import { formatCurrency } from "../../../util/util";
@@ -29,6 +30,7 @@ function VoucherTable(props: { status: string }) {
   const { successToast, errorToast } = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [id, setId] = useState<number>(0);
+  const { user } = useUser();
   const navigate = useNavigate();
 
   const handleDeleteVocher = async (id: number) => {
@@ -36,7 +38,7 @@ function VoucherTable(props: { status: string }) {
     if (response.is_success) {
       successToast(response.message);
       onClose();
-      fetchAllVoucher(props.status, 1, 10);
+      fetchAllVoucher(props.status, 1, 10, user?.shop_id!);
     } else {
       errorToast(response.message);
     }
@@ -49,12 +51,12 @@ function VoucherTable(props: { status: string }) {
 
   const handleNextPage = () => {
     const page = (vouchers?.current_page ?? 0) + 1;
-    fetchAllVoucher(props.status, page, 10);
+    fetchAllVoucher(props.status, page, 10, user?.shop_id!);
   };
 
   const handlePrevPage = () => {
     const page = (vouchers?.current_page ?? 0) - 1;
-    fetchAllVoucher(props.status, page, 10);
+    fetchAllVoucher(props.status, page, 10, user?.shop_id!);
   };
 
   const isOngoing = (startDate: string, expiryDate: string): boolean => {
@@ -76,7 +78,7 @@ function VoucherTable(props: { status: string }) {
   };
 
   useEffect(() => {
-    fetchAllVoucher(props.status, 1, 10);
+    fetchAllVoucher(props.status, 1, 10, user?.shop_id!);
   }, []);
 
   return (
