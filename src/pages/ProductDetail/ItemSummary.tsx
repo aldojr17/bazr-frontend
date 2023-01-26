@@ -26,7 +26,8 @@ function ItemSummary(props: IItemSummaryProps) {
 
   const navigate = useNavigate();
   const { successToast, errorToast } = useToast();
-  const { getCart, updateCart, setCheckoutCartIds } = useCart();
+  const { getCart, updateCart, setCheckoutCartIds, setCheckoutData } =
+    useCart();
   const { createCheckout } = useOrder();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -175,6 +176,3 @@ function ItemSummary(props: IItemSummaryProps) {
 }
 
 export default ItemSummary;
-function setCheckoutData(data: any) {
-  throw new Error("Function not implemented.");
-}
