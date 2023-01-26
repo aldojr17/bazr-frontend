@@ -1,7 +1,6 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import { Suspense } from "react";
 import "./App.css";
-import NetworkStatus from "./components/NetworkStatus/NetworkStatus";
 import RouteList from "./routes";
 
 function App() {
