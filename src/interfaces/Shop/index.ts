@@ -33,7 +33,7 @@ export interface IPropsShopProfileDetail {
 export interface IShopHomeProductsProps {
   shopId: number;
   category_id?: number;
-  category_level?: string;
+  category_level?: number;
   is_auto_scroll_to_products?: boolean;
   scrollToSortOption: () => void;
   sortOptionRef: React.RefObject<HTMLDivElement>;
@@ -113,7 +113,7 @@ export interface IShopCategoryBesideProps {
   activeCategoryId: number;
   activeCategoryLevel: number;
   setCategoryId: (value: React.SetStateAction<number>) => void;
-  setCategoryLevel: (value: React.SetStateAction<string>) => void;
+  setCategoryLevel: (value: React.SetStateAction<number>) => void;
   resetCategory: () => void;
   setIndexActiveTab: (value: React.SetStateAction<number>) => void;
   setIndexCategorySelect: React.Dispatch<React.SetStateAction<number>>;

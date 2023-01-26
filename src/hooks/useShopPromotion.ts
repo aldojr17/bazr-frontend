@@ -3,7 +3,7 @@ import shopPromotion from "../api/service/shopPromotion";
 import {
   IShopPromotionPaginationPayload,
   IShopPromotionPayload,
-} from "../interfaces/promotion";
+} from "../interfaces/Promotion";
 
 const useShopPromotion = () => {
   const [isLoading, setIsLoading] = useState(false);

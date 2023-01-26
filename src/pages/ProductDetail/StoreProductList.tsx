@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import ProductScrollableContainer from "../../components/Container/ProductScrollableContainer";
 import useProduct from "../../hooks/useProduct";
-import {
-  IProductPayload,
-  IStoreProductListProps,
-} from "../../interfaces/Product";
+import { IStoreProductListProps } from "../../interfaces/Components/PDP";
+import { IProductPayload } from "../../interfaces/Product";
+import routes from "../../routes/Routes";
 
 function StoreProductList(props: IStoreProductListProps) {
-  const { shopId } = props;
-  const { getShopProducts } = useProduct();
+  const { shopId, shopName } = props;
+  const { fetchShopProducts } = useProduct();
 
   const [products, setProducts] = useState<IProductPayload[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getShopProducts(shopId, {
+    fetchShopProducts(shopId, {
       limit: 12,
     })
       .then((response) => setProducts(response!.data))
@@ -26,7 +25,7 @@ function StoreProductList(props: IStoreProductListProps) {
       products={products}
       label={"More from this store"}
       isLoading={isLoading}
-      link={"#"}
+      link={routes.SHOP(shopName)}
     />
   );
 }

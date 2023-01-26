@@ -25,10 +25,6 @@ export interface ICartItemProps {
   handleDeleteItem: (id: number) => void;
 }
 
-export interface IImagePreviewerProps {
-  data: IProductPhotoPayload[];
-}
-
 export interface IToastProps {
   description: ReactNode;
   onClick: () => void;
@@ -74,10 +70,13 @@ export interface IOrderSummaryCardProps {
 }
 export interface ICategoryScrollableContainerProps {
   label?: string;
+  categoryLevel: string;
   categories:
     | IPrimaryCategoryPayload[]
     | ISecondaryCategoryPayload[]
     | ITertiaryCategoryPayload[];
+  primaryURL?: string;
+  secondaryURL?: string;
   isLoading?: boolean;
   isError?: boolean;
   onError?: Function;
@@ -98,6 +97,12 @@ export interface IErrorContainerProps {
 
 export interface INoProductContainerProps {
   onReload?: Function;
+}
+
+export interface INoContentContainerProps {
+  message: string;
+  onReload?: Function;
+  innerPadding?: number;
 }
 
 export interface IEditUserPhoneModalProps {
@@ -126,6 +131,10 @@ export interface IEditUserPhotoModalProps {
   onClose: () => void;
 }
 
+export interface IProductShareModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 export interface IWalletPasswordModalProps {
   isOpen: boolean;
   onOpen: () => void;

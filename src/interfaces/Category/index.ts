@@ -28,12 +28,9 @@ export interface ITertiaryCategoryPayload {
 
 export interface IProductCategoryPayload {
   id: number;
-  primary_id?: number;
-  secondary_id?: number;
-  tertiary_id?: number;
-  primary_category: IPrimaryCategoryPayload;
-  secondary_category: ISecondaryCategoryPayload;
-  tertiary_category: ITertiaryCategoryPayload;
+  primary_category?: IPrimaryCategoryPayload;
+  secondary_category?: ISecondaryCategoryPayload;
+  tertiary_category?: ITertiaryCategoryPayload;
 }
 export interface ICategoryCardProps {
   icon?: string;

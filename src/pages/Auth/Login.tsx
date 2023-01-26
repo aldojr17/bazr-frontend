@@ -18,7 +18,7 @@ import {
 import { GoogleLogin } from "@react-oauth/google";
 import { Field, FieldProps, Formik } from "formik";
 import { useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import authService from "../../api/service/auth";
 import Icon from "../../assets/icons";
@@ -31,6 +31,7 @@ import {
 
 const Login = () => {
   useTitle("Login | BAZR");
+  const { state } = useLocation();
   const navigate = useNavigate();
   const { successToast, errorToast } = useToast();
 
@@ -45,7 +46,7 @@ const Login = () => {
 
     if (response.is_success) {
       successToast("Welcome back!");
-      navigate("/");
+      navigate(state ?? "/");
     } else {
       errorToast("Failed to login", response.message);
     }
@@ -59,7 +60,7 @@ const Login = () => {
     if (response.is_success) {
       if (response.data.is_registered) {
         successToast("Welcome back!");
-        navigate("/");
+        navigate(state ?? "/");
       } else {
         navigate("/register", { state: response.data });
       }

@@ -1,5 +1,5 @@
 import { Box, Divider, Heading } from "@chakra-ui/react";
-import { IDetailProps } from "../../interfaces/Product";
+import { IDetailProps } from "../../interfaces/Components/PDP";
 import Description from "./Description";
 import ProductDetailPricing from "./ProductDetailPricing";
 import ProductDetailRating from "./ProductDetailRating";
@@ -13,24 +13,29 @@ function Detail(props: IDetailProps) {
     productRating,
     productReview,
     productView,
+    productSoldCount,
     shopId,
     selectedVariant,
+    productDescription,
   } = props;
   return (
     <Box>
-      <ProductDetailRating rating={productRating} review={productReview} />
-      <Heading variant={"productTitle"} mt={2} mb={1}>
-        {productName}
-      </Heading>
+      <Heading variant={"productTitle"}>{productName}</Heading>
+      <ProductDetailRating
+        rating={productRating}
+        review={productReview}
+        soldCount={productSoldCount}
+      />
+
       <ProductDetailPricing
         showRange={selectedVariant.id === 0}
         minRange={productMinPrice!}
         maxRange={productMaxPrice!}
         normalPrice={selectedVariant.price!}
-        // discountedPrice={7000}
+        discountedPrice={selectedVariant.discounted_price!}
       />
-      <Divider variant={{ base: "solidPrimary", lg: "solidLight" }} my={10} />
-      <Description />
+      <Divider variant={{ base: "solidPrimary", lg: "solidLight" }} my={1} />
+      <Description description={productDescription} />
       <Divider variant={{ base: "solidPrimary", lg: "solidLight" }} my={10} />
       <ShopDetail shopId={shopId} />
     </Box>

@@ -2,12 +2,14 @@ import {
   IEditProfilePayload,
   IUploadAvatarPayload,
   IUserAvatarResponsePayload,
+  IUserFavoriteProductRequestPayload,
+  IUserFavoriteProductResponsePayload,
   IUserResponsePayload,
 } from "../../interfaces/User";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
 
-const fetchProfile = async (): Promise<IUserResponsePayload> => {
+const getProfile = async (): Promise<IUserResponsePayload> => {
   try {
     const response = await instance.get<IUserResponsePayload>(
       API_PATH.user.PROFILE
@@ -52,10 +54,25 @@ const uploadAvatar = async (
   }
 };
 
+const postUserFavoriteProduct = async (
+  payload: IUserFavoriteProductRequestPayload
+): Promise<IUserFavoriteProductResponsePayload> => {
+  try {
+    const response = await instance.post<IUserFavoriteProductResponsePayload>(
+      API_PATH.user.FAVORITE_PRODUCT,
+      payload
+    );
+    return response.data;
+  } catch (err) {
+    return err as IUserFavoriteProductResponsePayload;
+  }
+};
+
 const userService = {
-  fetchProfile,
+  getProfile,
   editProfile,
   uploadAvatar,
+  postUserFavoriteProduct,
 };
 
 export default userService;

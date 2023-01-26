@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
 import useDebounce from "../../hooks/useDebounce";
-import { IProductDetailQuantityProps } from "../../interfaces/Product";
+import { IProductDetailQuantityProps } from "../../interfaces/Components/PDP";
 
 function ProductDetailQuantity(props: IProductDetailQuantityProps) {
   const { stock, minQty, maxQty, onQuantityChange } = props;

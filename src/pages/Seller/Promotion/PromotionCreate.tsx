@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useShopPromotion from "../../../hooks/useShopPromotion";
 import useToast from "../../../hooks/useToast";
-import { IShopPromotionPayload } from "../../../interfaces/promotion";
+import { IShopPromotionPayload } from "../../../interfaces/Promotion";
 import routes from "../../../routes/Routes";
 import PromotionForm from "./PromotionForm";
 

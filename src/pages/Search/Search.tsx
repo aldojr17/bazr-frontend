@@ -47,12 +47,14 @@ import useCategory from "../../hooks/useCategory";
 import { IProductPaginationPayload } from "../../interfaces/Product";
 import productService from "../../api/service/product";
 import useTitle from "../../hooks/useTitle";
+import useProduct from "../../hooks/useProduct";
 
 const Search = () => {
   const [search, setSearch] = useSearchParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   useTitle(`Shop for ${search.get("q")} | BAZR`);
 
+  const { fetchAllProducts } = useProduct();
   const { categoriesProduct, fetchCategoriesProduct } = useCategory(false);
 
   const [params, setParams] = useState<ISearchParamsPayload>({
@@ -74,10 +76,10 @@ const Search = () => {
   const getProducts = async (filter?: ISearchFilterPayload) => {
     setIsLoading(true);
 
-    const response = await productService.fetchAllProducts(filter);
+    const response = await fetchAllProducts(filter);
 
-    if (response.is_success) {
-      setProducts(response.data);
+    if (response) {
+      setProducts(response);
     }
 
     setIsLoading(false);

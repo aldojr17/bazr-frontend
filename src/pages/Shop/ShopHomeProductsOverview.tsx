@@ -8,7 +8,7 @@ import { IShopHomeProductsOverviewProps } from "../../interfaces/Shop";
 import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
 
 function ShopHomeProductsOverview(props: IShopHomeProductsOverviewProps) {
-  const { getShopProducts } = useProduct();
+  const { fetchShopProducts } = useProduct();
   const [shopProducts, setshopProducts] = useState<IProductPaginationPayload>({
     current_page: 0,
     data: [],
@@ -36,7 +36,7 @@ function ShopHomeProductsOverview(props: IShopHomeProductsOverviewProps) {
         sort: requirement.sortBy.most,
         sortBy: requirement.sortBy.purchased,
       };
-      const shopProducts = await getShopProducts(
+      const shopProducts = await fetchShopProducts(
         props.shopId,
         searchFilterPayload
       );

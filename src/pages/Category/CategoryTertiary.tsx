@@ -1,82 +1,83 @@
-import {
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Heading,
-} from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
-import slugify from "slugify";
+import { Box, Heading } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
 import useCategory from "../../hooks/useCategory";
+import {
+  IPrimaryCategoryPayload,
+  ISecondaryCategoryPayload,
+  ITertiaryCategoryPayload,
+} from "../../interfaces/Category";
 import Search from "../Search/Search";
 
 function CategoryTertiary() {
   const { cPrimary, cSecondary, cTertiary } = useParams();
   const {
+    categoryLoading,
+    fetchCategoriesProduct,
     fetchPrimaryCategoryBySlugifiedName,
     fetchSecondaryCategoryBySlugifiedName,
     fetchTertiaryCategoryBySlugifiedName,
   } = useCategory();
+
+  const [primaryCategory, setPrimaryCategory] =
+    useState<IPrimaryCategoryPayload | null>(null);
+
+  const [secondaryCategory, setSecondaryCategory] =
+    useState<ISecondaryCategoryPayload | null>(null);
+
+  const [tertiaryCategory, setTertiaryCategory] =
+    useState<ITertiaryCategoryPayload | null>(null);
+
+  useEffect(() => {
+    let primary = fetchPrimaryCategoryBySlugifiedName(cPrimary!);
+    let secondary = fetchSecondaryCategoryBySlugifiedName(
+      cPrimary!,
+      cSecondary!
+    );
+    let tertiary = fetchTertiaryCategoryBySlugifiedName(
+      cPrimary!,
+      cSecondary!,
+      cTertiary!
+    );
+
+    setPrimaryCategory(primary ?? null);
+    setSecondaryCategory(secondary ?? null);
+    setTertiaryCategory(tertiary ?? null);
+  }, [categoryLoading]);
+
+  useEffect(() => {
+    fetchCategoriesProduct("");
+  }, []);
+
   return (
     <>
       <Box className="px-4 pt-4 px-lg-5 pt-lg-5">
+        {primaryCategory && secondaryCategory && tertiaryCategory && (
+          <BreadCrumb
+            categories={{
+              id: 0,
+              primary_category: {
+                id: primaryCategory.id,
+                name: primaryCategory.name,
+              },
+              secondary_category: {
+                id: secondaryCategory.id,
+                name: secondaryCategory.name,
+              },
+              tertiary_category: {
+                id: tertiaryCategory.id,
+                name: tertiaryCategory.name,
+              },
+            }}
+          />
+        )}
         <Heading
-          fontWeight={"medium"}
-          size={{ base: "sm", sm: "sm", md: "md", lg: "lg" }}
-          className="pb-4"
+          variant={"sectionHeading"}
+          fontSize={{ base: "md", sm: "xl", md: "2xl" }}
         >
-          <span>
-            {
-              fetchTertiaryCategoryBySlugifiedName(
-                cPrimary!,
-                cSecondary!,
-                cTertiary!
-              )?.name
-            }
-          </span>
+          {tertiaryCategory?.name}
         </Heading>
-        <Breadcrumb separator=">">
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              as={Link}
-              to={`/p/${slugify(
-                fetchPrimaryCategoryBySlugifiedName(cPrimary!)!.name
-              )}`}
-            >
-              {fetchPrimaryCategoryBySlugifiedName(cPrimary!)?.name}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              as={Link}
-              to={`/p/${slugify(
-                fetchPrimaryCategoryBySlugifiedName(cPrimary!)!.name
-              )}/${slugify(
-                fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)!
-                  .name
-              )}?q=&c=${
-                fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
-                  ?.id
-              }&cl=2`}
-            >
-              {
-                fetchSecondaryCategoryBySlugifiedName(cPrimary!, cSecondary!)
-                  ?.name
-              }
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink>
-              {
-                fetchTertiaryCategoryBySlugifiedName(
-                  cPrimary!,
-                  cSecondary!,
-                  cTertiary!
-                )?.name
-              }
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
       </Box>
       <Search />
     </>

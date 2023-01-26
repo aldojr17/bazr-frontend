@@ -1,62 +1,70 @@
-import { Box, Center, Flex, Text, Heading } from "@chakra-ui/react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Box, Center, Flex, Heading, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
+import ProductCard from "../../components/Card/ProductCard";
+import CategoryScrollableContainer from "../../components/Container/CategoryScrollableContainer";
 import useCategory from "../../hooks/useCategory";
-import { CategoryWrapper } from "../Home/style";
-import CategoryCard from "../../components/Card/CategoryCard";
-import { useEffect } from "react";
-import { ISearchFilterPayload } from "../../interfaces/Filter";
 import useProduct from "../../hooks/useProduct";
 import useTitle from "../../hooks/useTitle";
-import ProductCard from "../../components/Card/ProductCard";
-import slugify from "slugify";
+import { IPrimaryCategoryPayload } from "../../interfaces/Category";
+import { ISearchFilterPayload } from "../../interfaces/Filter";
+import { formatTitle } from "../../util/util";
 
 function CategoryPrimary() {
   const { cPrimary } = useParams();
-  const { fetchPrimaryCategoryBySlugifiedName } = useCategory();
-  useTitle("BAZR | " + fetchPrimaryCategoryBySlugifiedName(cPrimary!)?.name);
-  const { products, getProducts } = useProduct();
-  const navigate = useNavigate();
+  const {
+    categoryLoading,
+    fetchCategoriesProduct,
+    fetchPrimaryCategoryBySlugifiedName,
+  } = useCategory();
+  const { products, fetchAllProducts } = useProduct();
 
-  const slugifiedPrimary = fetchPrimaryCategoryBySlugifiedName(cPrimary!);
+  const [primaryCategory, setPrimaryCategory] =
+    useState<IPrimaryCategoryPayload | null>(null);
+
+  useTitle(formatTitle(primaryCategory?.name!));
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const category = fetchPrimaryCategoryBySlugifiedName(cPrimary!);
+    const primary = fetchPrimaryCategoryBySlugifiedName(cPrimary!);
     const filter: ISearchFilterPayload = {
-      category: category?.id,
-      category_level: "1",
+      category: primary?.id,
+      category_level: 1,
       limit: 30,
     };
-    getProducts(filter);
-  }, [cPrimary]);
+
+    setPrimaryCategory(primary ?? null);
+
+    fetchAllProducts(filter);
+  }, [categoryLoading]);
+
+  useEffect(() => {
+    fetchCategoriesProduct("");
+  }, []);
 
   return (
     <>
       <Box className="p-4 pb-5 p-lg-5">
-        <Heading
-          fontWeight={"medium"}
-          size={{ base: "sm", sm: "sm", md: "md", lg: "lg" }}
-          className="pb-4"
-        >
-          <span>{fetchPrimaryCategoryBySlugifiedName(cPrimary!)?.name}</span>
-        </Heading>
-        <CategoryWrapper>
-          {slugifiedPrimary?.secondary_category?.map((secondary_category) => {
-            return (
-              <CategoryCard
-                {...secondary_category}
-                key={secondary_category.id}
-                onClick={() => {
-                  navigate(
-                    `/p/${cPrimary}/${slugify(secondary_category.name)}?q=&c=${
-                      secondary_category.id
-                    }&cl=2`
-                  );
-                }}
-              />
-            );
-          })}
-        </CategoryWrapper>
+        {primaryCategory && (
+          <BreadCrumb
+            categories={{
+              id: 0,
+              primary_category: {
+                id: primaryCategory.id,
+                name: primaryCategory.name,
+              },
+            }}
+          />
+        )}
+        {primaryCategory && (
+          <CategoryScrollableContainer
+            categoryLevel="secondary"
+            primaryURL={cPrimary}
+            categories={primaryCategory?.secondary_category!}
+            label={primaryCategory?.name}
+          />
+        )}
       </Box>
 
       <Box className="px-4 px-lg-5">
@@ -79,7 +87,9 @@ function CategoryPrimary() {
           }}
         >
           {products.data.length !== 0 ? (
-            products.data.map((product) => <ProductCard {...product} />)
+            products.data.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))
           ) : (
             <Center>
               <Text>No products available.</Text>

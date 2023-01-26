@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import ProductScrollableContainer from "../../components/Container/ProductScrollableContainer";
 import useProduct from "../../hooks/useProduct";
-import {
-  IProductPayload,
-  ISimilarProductListProps,
-} from "../../interfaces/Product";
+import { ISimilarProductListProps } from "../../interfaces/Components/PDP";
+import { IProductPayload } from "../../interfaces/Product";
+import routes from "../../routes/Routes";
 
 function SimilarProductList(props: ISimilarProductListProps) {
-  const {} = props;
-  const { getProducts } = useProduct();
+  const { productCategoryId, productCategoryLevel } = props;
+  const { fetchAllProducts } = useProduct();
 
   const [products, setProducts] = useState<IProductPayload[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getProducts({
+    fetchAllProducts({
       limit: 24,
+      category: productCategoryId,
+      category_level: productCategoryLevel,
     })
       .then((response) => setProducts(response?.data!))
       .finally(() => setIsLoading(false));
@@ -26,7 +27,7 @@ function SimilarProductList(props: ISimilarProductListProps) {
       products={products}
       label={"Similar items"}
       isLoading={isLoading}
-      link={"#"}
+      link={routes.SEARCH("", productCategoryId, productCategoryLevel)}
     />
   );
 }

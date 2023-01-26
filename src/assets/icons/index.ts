@@ -5,12 +5,14 @@ import ChevronDown from "./ChevronDown";
 import ChevronRight from "./ChevronRight";
 import ChevronUp from "./ChevronUp";
 import Close from "./Close";
+import Copy from "./Copy";
 import Dots from "./Dots";
 import Facebook from "./Facebook";
 import Gear from "./Gear";
 import GeoMap from "./GeoMap";
 import Hamburger from "./Hamburger";
 import Heart from "./Heart";
+import HeartFilled from "./HeartFilled";
 import Hide from "./Hide";
 import Home from "./Home";
 import Instagram from "./Instagram";
@@ -29,6 +31,7 @@ import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
 import SeaPay from "./SeaPay";
 import Search from "./Search";
+import Share from "./Share";
 import Shop from "./Shop";
 import Show from "./Show";
 import Sort from "./Sort";
@@ -46,12 +49,14 @@ const Icon = {
   ChevronRight,
   ChevronUp,
   Close,
+  Copy,
   Dots,
   Facebook,
   Gear,
   GeoMap,
   Hamburger,
   Heart,
+  HeartFilled,
   Hide,
   Home,
   Instagram,
@@ -61,15 +66,16 @@ const Icon = {
   Lock,
   Logout,
   Minus,
+  Pencil,
   PersonCheck,
   PinMap,
   Plus,
   Profile,
-  Pencil,
   Refresh,
   RightArrow,
-  Search,
   SeaPay,
+  Search,
+  Share,
   Shop,
   Show,
   Sort,

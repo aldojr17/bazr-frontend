@@ -10,7 +10,7 @@ export interface ISearchFilterPayload extends IFilterPayload {
   min_price?: number;
   max_price?: number;
   category?: number;
-  category_level?: string;
+  category_level?: number;
   min_rating?: number;
   city?: string;
 }
@@ -27,7 +27,7 @@ export interface ISearchParamsPayload {
 
 export const SearchFilterState: ISearchFilterPayload = {
   category: 0,
-  category_level: "",
+  category_level: 0,
   city: "",
   max_price: 0,
   min_price: 0,
@@ -44,6 +44,10 @@ export const SearchParamsState: ISearchParamsPayload = {
   city: "",
 };
 
+export interface IReviewsParamsPayload extends IFilterPayload {
+  rating?: string;
+  type?: string;
+}
 export interface ITransactionHistoryParams extends IFilterPayload {
   status?: string;
 }

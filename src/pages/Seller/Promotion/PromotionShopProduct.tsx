@@ -28,11 +28,11 @@ import {
   IPromotionProductForm,
   IPromotionShopProductProps,
   IPromotionVariantForm,
-} from "../../../interfaces/promotion";
+} from "../../../interfaces/Promotion";
 import { formatCurrency } from "../../../util/util";
 
 function PromotionShopProduct(props: IPromotionShopProductProps) {
-  const { getShopProducts } = useProduct();
+  const { fetchShopProducts } = useProduct();
   const [products, setProducts] = useState<IProductPaginationPayload>();
   const [checked, setChecked] = useState<IPromotionProductForm[]>([]);
 
@@ -82,7 +82,7 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
   const handleNextPage = () => {
     const page = (products?.current_page ?? 0) + 1;
 
-    getShopProducts(1, { page: page, limit: 5 }).then((response) =>
+    fetchShopProducts(1, { page: page, limit: 5 }).then((response) =>
       setProducts(response as IProductPaginationPayload)
     );
   };
@@ -90,13 +90,13 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
   const handlePrevPage = () => {
     const page = (products?.current_page ?? 0) - 1;
 
-    getShopProducts(1, { page: page, limit: 5 }).then((response) =>
+    fetchShopProducts(1, { page: page, limit: 5 }).then((response) =>
       setProducts(response as IProductPaginationPayload)
     );
   };
 
   useEffect(() => {
-    getShopProducts(1, { page: 1, limit: 5 }).then((response) =>
+    fetchShopProducts(1, { page: 1, limit: 5 }).then((response) =>
       setProducts(response as IProductPaginationPayload)
     );
   }, []);
@@ -138,8 +138,8 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
                       <Td>{product.name}</Td>
                       <Td>{product.unit_sold}</Td>
                       <Td>
-                        Rp{formatCurrency(product.lowest_price)}- Rp
-                        {formatCurrency(product.lowest_price)}
+                        Rp{formatCurrency(product.lowest_price!)}- Rp
+                        {formatCurrency(product.lowest_price!)}
                       </Td>
                     </Tr>
                   ))}

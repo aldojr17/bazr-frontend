@@ -4,11 +4,11 @@ import {
   Flex,
   Heading,
   HStack,
-  Link,
   Skeleton,
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import Icon from "../../assets/icons";
 import { IProductScrollableContainerProps } from "../../interfaces/Components";
 import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
@@ -20,11 +20,14 @@ function ProductScrollableContainer(props: IProductScrollableContainerProps) {
   return (
     <Flex direction={{ base: "column", lg: "column" }} my={10}>
       <Flex justifyContent={"space-between"}>
-        <Heading variant={"sectionHeading"} mb={3}>
+        <Heading
+          variant={"sectionHeading"}
+          fontSize={{ base: "md", sm: "xl", md: "2xl" }}
+        >
           {label}
         </Heading>
         <HStack alignItems={"center"}>
-          <Text as={Link} href={link} variant={"link"}>
+          <Text as={Link} to={link} variant={"link"}>
             see more
             <Icon.ChevronRight width={4} pb={"2px"} />
           </Text>
@@ -37,7 +40,7 @@ function ProductScrollableContainer(props: IProductScrollableContainerProps) {
               <Text>Something has occurred..</Text>
               <Text
                 as={Link}
-                href={"#"}
+                to={"#"}
                 variant={"link"}
                 alignItems={"center"}
                 fontSize={"lg"}

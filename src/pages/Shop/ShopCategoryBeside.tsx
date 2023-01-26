@@ -45,7 +45,7 @@ function ShopCategoryBeside(props: IShopCategoryBesideProps) {
 
   const changeCategory = (category: IFlatShopCategories, index: number) => {
     setCategoryId(category.id);
-    setCategoryLevel(category.level.toString());
+    setCategoryLevel(category.level);
     let _index = index;
     if (index >= myConst.tabQuantityToBeDisplay) {
       _index = myConst.tabQuantityToBeDisplay;

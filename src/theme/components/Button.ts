@@ -34,12 +34,13 @@ const Button = defineStyleConfig({
       bg: "white",
       color: "primary",
       border: "3px solid",
-      borderColor: "teal.400",
+      borderColor: "primary",
       borderRadius: "lg",
       boxShadow: "default",
       _hover: {
-        bg: "primary",
+        bg: "primaryLighten",
         color: "white",
+        borderColor: "primaryLighten",
       },
       _active: {
         bg: "primaryDarken",
@@ -48,6 +49,18 @@ const Button = defineStyleConfig({
       },
     },
     primaryGhost: {
+      bg: "tranparent",
+      color: "dark",
+      _hover: {
+        bg: "teal.50",
+      },
+      _active: {
+        bg: "primaryDarken",
+        borderColor: "primaryDarken",
+        color: "white",
+      },
+    },
+    primaryNavbarGhost: {
       bg: "primaryLighten",
       color: "dark",
       borderRadius: "xl",

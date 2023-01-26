@@ -1,3 +1,5 @@
+import { IPromotionPayload } from "../Promotion";
+
 export interface IVariantGroupPayload {
   id: number;
   name: string;
@@ -10,5 +12,8 @@ export interface IVariantTypePayload {
   name: string;
   price: number;
   stock: number;
-  variant_group_id: number;
+  promotion?: IPromotionPayload;
+  discounted_price?: number;
+  discounted_percentage?: number;
+  variant_group_id?: number;
 }
