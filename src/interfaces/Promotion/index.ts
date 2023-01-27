@@ -1,9 +1,10 @@
 import { FormikErrors, FormikTouched } from "formik";
-import { IProductPayload } from "../Product";
 
 export interface IShopPromotionProductPayload {
   variant_type_id: number;
+  variant_type_name: string;
   product_id: number;
+  product_name: string;
   quota: number;
   benefit: number;
   benefit_percentage: number;
@@ -35,7 +36,7 @@ export interface IShopPromotionPaginationPayload {
 
 export interface IShopPromotionResponsePayload {
   is_success: boolean;
-  data: null | IShopPromotionPayload;
+  data: IShopPromotionPayload;
   message: string;
 }
 
@@ -83,6 +84,7 @@ export interface IPromotionProductFormProps {
   errors: FormikErrors<IPromotionForm>;
   touched: FormikTouched<IPromotionForm>;
   isLoading: boolean;
+  isDisabled: boolean;
   handleChange: (e: React.ChangeEvent<any>) => void;
   onDeleteProduct: (productId: number) => void;
 }

@@ -64,17 +64,19 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                           <Tr bgColor={"gray.100"}>
                             <Td colSpan={6}>{product.name}</Td>
                             <Td>
-                              <Tooltip label="Delete Product">
-                                <IconButton
-                                  aria-label="Delete"
-                                  bgColor={"red"}
-                                  icon={<BsTrash />}
-                                  onClick={() => {
-                                    props.onDeleteProduct(product.id);
-                                    arrayHelpers1.remove(index1);
-                                  }}
-                                />
-                              </Tooltip>
+                              {props.isDisabled ? null : (
+                                <Tooltip label="Delete Product">
+                                  <IconButton
+                                    aria-label="Delete"
+                                    bgColor={"red"}
+                                    icon={<BsTrash />}
+                                    onClick={() => {
+                                      props.onDeleteProduct(product.id);
+                                      arrayHelpers1.remove(index1);
+                                    }}
+                                  />
+                                </Tooltip>
+                              )}
                             </Td>
                           </Tr>
                           <FieldArray
@@ -104,6 +106,12 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                             as={Input}
                                             type="number"
                                             name={`products.${index1}.variants.${index2}.quota`}
+                                            variant={
+                                              props.isDisabled
+                                                ? "filled"
+                                                : "outline"
+                                            }
+                                            isReadOnly={props.isDisabled}
                                           />
                                           <FormErrorMessage>
                                             {getIn(
@@ -132,6 +140,12 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                               as={Input}
                                               type="number"
                                               name={`products.${index1}.variants.${index2}.benefit`}
+                                              variant={
+                                                props.isDisabled
+                                                  ? "filled"
+                                                  : "outline"
+                                              }
+                                              isReadOnly={props.isDisabled}
                                             />
                                           </InputGroup>
                                           <FormErrorMessage>
@@ -162,6 +176,12 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                               min={0}
                                               max={100}
                                               name={`products.${index1}.variants.${index2}.benefit_percentage`}
+                                              variant={
+                                                props.isDisabled
+                                                  ? "filled"
+                                                  : "outline"
+                                              }
+                                              isReadOnly={props.isDisabled}
                                             />
                                             <InputRightAddon children="%" />
                                           </InputGroup>
@@ -190,6 +210,12 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                             as={Input}
                                             type="number"
                                             name={`products.${index1}.variants.${index2}.max_buy_qty`}
+                                            variant={
+                                              props.isDisabled
+                                                ? "filled"
+                                                : "outline"
+                                            }
+                                            isReadOnly={props.isDisabled}
                                           />
                                           <FormErrorMessage>
                                             {getIn(
@@ -203,6 +229,7 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                         <Switch
                                           size="lg"
                                           name={`products.${index1}.variants.${index2}.is_active`}
+                                          isDisabled={props.isDisabled}
                                           isChecked={
                                             props.values.products[index1]
                                               .variants[index2].is_active
