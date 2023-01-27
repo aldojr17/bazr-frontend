@@ -135,13 +135,19 @@ const Navbar = ({ onOpen }: NavbarProps) => {
             }}
             alignItems={"center"}
           >
-            <NavCart />
+            <Box>
+              <NavCart />
+            </Box>
 
             {isLogged ? (
               <Skeleton isLoaded={!userLoading} borderRadius={"lg"}>
                 <HStack>
-                  <NavFavorite />
-                  <NavProfile />
+                  <Box>
+                    <NavFavorite />
+                  </Box>
+                  <Box>
+                    <NavProfile />
+                  </Box>
                 </HStack>
               </Skeleton>
             ) : (
