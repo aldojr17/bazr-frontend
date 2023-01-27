@@ -9,6 +9,7 @@ import {
 import { IProductPayload, IProductPhotoPayload } from "../Product";
 import { ICheckoutSuccessResponsePayload } from "../Transaction";
 import { IUserPayload } from "../User";
+import { ICreateVariantGroup, ICreateVariantType } from "../Variant";
 import { IMarketplaceVoucherPayload, IVoucherPayload } from "../Voucher";
 
 export interface IBreadCrumbProps {
@@ -179,6 +180,37 @@ export interface IDeleteModalProps {
   onDelete: () => void;
 }
 
+export interface ISelectCategoryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  categories: IPrimaryCategoryPayload[];
+  selectedCategory: IStateSelectedCategory;
+  setSelectedCategory: React.Dispatch<
+    React.SetStateAction<IStateSelectedCategory>
+  >;
+}
+
+export interface IStateSelectedCategory {
+  primaryCat: IPrimaryCategoryPayload | undefined;
+  secondaryCat: ISecondaryCategoryPayload | undefined;
+  tertiaryCat: ITertiaryCategoryPayload | undefined;
+}
+
+export interface ICreateProductVariationFormProps {
+  setVariation: (value: React.SetStateAction<boolean>) => void;
+  vgInput: ICreateVariantGroup[];
+  setVgInput: React.Dispatch<React.SetStateAction<ICreateVariantGroup[]>>;
+  vtList: ICreateVariantType[];
+  setVtList: React.Dispatch<React.SetStateAction<ICreateVariantType[]>>;
+}
+
+export interface IProductVariationListFormProps {
+  secVariation: boolean;
+  vgInput: ICreateVariantGroup[];
+  setVgInput: React.Dispatch<React.SetStateAction<ICreateVariantGroup[]>>;
+  vtList: ICreateVariantType[];
+  setVtList: React.Dispatch<React.SetStateAction<ICreateVariantType[]>>;
+}
 export interface IVoucherCardProps {
   voucher?: IMarketplaceVoucherPayload;
   shopVoucher?: IVoucherPayload;

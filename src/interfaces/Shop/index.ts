@@ -118,3 +118,23 @@ export interface IShopCategoryBesideProps {
   setIndexActiveTab: (value: React.SetStateAction<number>) => void;
   setIndexCategorySelect: React.Dispatch<React.SetStateAction<number>>;
 }
+
+export interface IProductUploadPhotoPayload {
+  photos: File[];
+}
+
+export interface IProductPhotoResponse {
+  data: ICloudinaryResponse;
+  is_success: boolean;
+  message: string;
+}
+
+export interface ICloudinaryResponse {
+  urls: string[];
+  error: string[];
+}
+
+export interface IFileInputBtnProps {
+  imgList: File[];
+  setImgList: React.Dispatch<React.SetStateAction<File[]>>;
+}

@@ -1,6 +1,6 @@
 import { IProductCategoryPayload } from "../Category";
 import { IShopPayload } from "../Shop";
-import { IVariantGroupPayload } from "../Variant";
+import { IVariantGroupPayload, IVariantTypePayload } from "../Variant";
 
 export interface ProductState {
   products: IProductPaginationPayload;
@@ -78,5 +78,83 @@ export interface IProductReviewsPaginationPayload {
 export interface IProductReviewsResponsePayload {
   is_success: boolean;
   data: IProductReviewsPaginationPayload;
+  message: string;
+}
+
+export interface IProductDetailVariantProps {
+  variantGroup: IVariantGroupPayload;
+  onVariantChange: Function;
+  error: boolean;
+}
+
+export interface IProductDetailVariantsProps {
+  variantGroup: IVariantGroupPayload;
+  onVariantChange: Function;
+}
+
+export interface IItemSummaryProps {
+  productId: number;
+  productName: string;
+  variantGroup: IVariantGroupPayload;
+  selectedVariant: IVariantTypePayload;
+  shopId: number;
+  shopName: string;
+  minQty: number;
+  maxQty: number;
+  onVariantChange: Function;
+}
+
+export interface IDetailProps {
+  productName: string;
+  productMinPrice: number;
+  productMaxPrice: number;
+  productRating: number;
+  productReview: number;
+  productView: number;
+  shopId: number;
+  selectedVariant: IVariantTypePayload;
+}
+
+export interface IStoreProductListProps {
+  shopId: number;
+}
+
+export interface ISimilarProductListProps {}
+
+export interface ICreateProductShopPayload {
+  name: string;
+  description: string;
+  primary_category_id: number;
+  secondary_category_id: number;
+  tertiary_category_id: number;
+  is_hazardous: boolean;
+  weight: number;
+  internal_sku: string;
+  condition: string;
+  min_buy_qty: number;
+  max_buy_qty?: number;
+  shop_id: number;
+  photos: ICreateProductPhotoPayload[];
+  variant_group: ICreateProductVGPayload;
+}
+
+export interface ICreateProductPhotoPayload {
+  url: string;
+}
+
+export interface ICreateProductVGPayload {
+  name: string;
+  variant_type: ICreateProductVTPayload[];
+}
+
+export interface ICreateProductVTPayload {
+  name: string;
+  stock: number;
+  price: number;
+}
+
+export interface ICreateProductResponse {
+  data: null;
+  is_success: boolean;
   message: string;
 }
