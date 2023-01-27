@@ -27,6 +27,7 @@ import Pencil from "./Pencil";
 import PersonCheck from "./PersonCheck";
 import PinMap from "./PinMap";
 import Plus from "./Plus";
+import PlusCircleFill from "./PlusCircleFill";
 import Profile from "./Profile";
 import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
@@ -72,6 +73,7 @@ const Icon = {
   PersonCheck,
   PinMap,
   Plus,
+  PlusCircleFill,
   Profile,
   Refresh,
   RightArrow,

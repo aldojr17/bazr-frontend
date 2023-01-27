@@ -17,3 +17,14 @@ export interface IVariantTypePayload {
   discounted_percentage?: number;
   variant_group_id?: number;
 }
+
+export interface ICreateVariantGroup {
+  vg_name: string;
+}
+
+export interface ICreateVariantType {
+  vtOne_name: string;
+  vtTwo_name?: string;
+  price: string;
+  stock: string;
+}

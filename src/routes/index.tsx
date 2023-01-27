@@ -32,6 +32,12 @@ const SellerHome = React.lazy(() => import("../pages/Seller/Home/Home"));
 const SellerVoucher = React.lazy(
   () => import("../pages/Seller/Voucher/Voucher")
 );
+const AddProductForm = React.lazy(
+  () => import("../pages/Seller/Product/AddProductForm")
+);
+const ProductDashboard = React.lazy(
+  () => import("../pages/Seller/Product/ProductDashboard")
+);
 const SellerVoucherCreate = React.lazy(
   () => import("../pages/Seller/Voucher/VoucherCreate")
 );
@@ -104,6 +110,8 @@ const RouteList = () => {
       <Route element={<SellerRoutes />}>
         <Route path="/seller/home" element={<SellerHome />} />
         <Route path="/seller/voucher" element={<SellerVoucher />} />
+        <Route path="/seller/product" element={<ProductDashboard />} />
+        <Route path="/seller/product/new" element={<AddProductForm />} />
         <Route
           path="/seller/voucher/create"
           element={<SellerVoucherCreate />}

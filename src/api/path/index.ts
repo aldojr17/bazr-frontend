@@ -33,6 +33,7 @@ export const API_PATH = {
   },
   shop: {
     SHOPS_PROFILE: "/shops/profile",
+    UPLOAD_PRODUCT_PHOTOS: "/upload/product",
     SHOPS_PROMOTION: "/shops/promotions",
   },
   wallet: {

@@ -1,4 +1,10 @@
 import {
+  ICreateProductResponse,
+  ICreateProductShopPayload,
+} from "../../interfaces/Product";
+import {
+  IProductPhotoResponse,
+  IProductUploadPhotoPayload,
   IShopCategoryResponsePayload,
   IShopsResponsePayload,
 } from "../../interfaces/Shop";
@@ -46,10 +52,48 @@ const getShopCategory = async (
   }
 };
 
+const uploadProductPhoto = async (
+  payload: IProductUploadPhotoPayload
+): Promise<IProductPhotoResponse> => {
+  try {
+    const formData = new FormData();
+
+    Array.from(payload.photos).forEach((file) =>
+      formData.append("photos[]", file)
+    );
+
+    const response = await instance.post<IProductPhotoResponse>(
+      API_PATH.shop.UPLOAD_PRODUCT_PHOTOS,
+      formData
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IProductPhotoResponse;
+  }
+};
+
+const createShopProduct = async (
+  payload: ICreateProductShopPayload
+): Promise<ICreateProductResponse> => {
+  try {
+    const response = await instance.post<ICreateProductResponse>(
+      API_PATH.product.PRODUCTS,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as ICreateProductResponse;
+  }
+};
+
 const shopsService = {
   getShopProfileById,
   getShopCategory,
   getShopProfileByShopUsername,
+  uploadProductPhoto,
+  createShopProduct,
 };
 
 export default shopsService;
