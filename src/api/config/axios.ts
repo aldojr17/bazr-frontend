@@ -117,7 +117,7 @@ instance.interceptors.response.use(
 
       throw Promise.reject("Invalid credential");
     } else {
-      if (err.code === "ERR_NETWORK") {
+      if (err.code === "ERR_NETWORK" || err.code === "ERR_CONNECTION_REFUSED") {
         return Promise.reject(handleHttpResponse("0"));
       } else {
         throw error;
