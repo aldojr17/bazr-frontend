@@ -54,6 +54,15 @@ const SellerPromotion = React.lazy(
 const SellerPromotionCreate = React.lazy(
   () => import("../pages/Seller/Promotion/PromotionCreate")
 );
+const SellerPromotionEdit = React.lazy(
+  () => import("../pages/Seller/Promotion/PromotionEdit")
+);
+const SellerPromotionDetail = React.lazy(
+  () => import("../pages/Seller/Promotion/PromotionDetail")
+);
+const SellerPromotionDuplicate = React.lazy(
+  () => import("../pages/Seller/Promotion/PromotionDuplicate")
+);
 
 const RouteList = () => {
   let routes = (
@@ -115,6 +124,18 @@ const RouteList = () => {
         <Route
           path="/seller/promotion/create"
           element={<SellerPromotionCreate />}
+        />
+        <Route
+          path="/seller/promotion/:id/edit"
+          element={<SellerPromotionEdit />}
+        />
+        <Route
+          path="/seller/promotion/:id/detail"
+          element={<SellerPromotionDetail />}
+        />
+        <Route
+          path="/seller/promotion/:id/duplicate"
+          element={<SellerPromotionDuplicate />}
         />
       </Route>
 

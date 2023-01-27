@@ -17,7 +17,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Field, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPlusCircle } from "react-icons/bs";
 import * as Yup from "yup";
 import useToast from "../../../hooks/useToast";
@@ -135,7 +135,9 @@ function PromotionForm(props: IPromotionProps) {
         if (variant.is_active) {
           const shopPromotionProduct: IShopPromotionProductPayload = {
             product_id: product.id,
+            product_name: product.name,
             variant_type_id: variant.variant_type_id,
+            variant_type_name: variant.variant_name,
             benefit: variant.benefit,
             benefit_percentage: variant.benefit_percentage,
             max_buy_qty: variant.max_buy_qty,
@@ -161,6 +163,10 @@ function PromotionForm(props: IPromotionProps) {
 
     props.onSubmit(payload);
   };
+
+  useEffect(() => {
+    setChecked(props.product);
+  }, [props.product]);
 
   return (
     <>
@@ -261,13 +267,16 @@ function PromotionForm(props: IPromotionProps) {
                       <Text fontWeight={"medium"} fontSize={"lg"}>
                         Product Promotion
                       </Text>
-                      <Button
-                        leftIcon={<BsPlusCircle />}
-                        variant={"outline"}
-                        onClick={onOpen}
-                      >
-                        Add Product
-                      </Button>
+                      {props.isDisabled ? null : (
+                        <Button
+                          leftIcon={<BsPlusCircle />}
+                          variant={"outline"}
+                          isDisabled={props.isDisabled}
+                          onClick={onOpen}
+                        >
+                          Add Product
+                        </Button>
+                      )}
                     </Flex>
 
                     <PromotionProductForm
@@ -275,6 +284,7 @@ function PromotionForm(props: IPromotionProps) {
                       errors={errors}
                       touched={touched}
                       isLoading={props.isLoading}
+                      isDisabled={props.isDisabled}
                       handleChange={handleChange}
                       onDeleteProduct={(productId) =>
                         handleDeleteProduct(productId)

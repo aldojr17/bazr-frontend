@@ -15,10 +15,13 @@ import {
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { useEffect } from "react";
-import { BsEye, BsFiles, BsPencil, BsTrash } from "react-icons/bs";
+import { BsEye, BsFiles, BsPencil } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import useShopPromotion from "../../../hooks/useShopPromotion";
+import routes from "../../../routes/Routes";
 
 function PromotionTable(props: { status: string }) {
+  const navigate = useNavigate();
   const { shopPromotions, isLoading, fetchAllShopPromotions } =
     useShopPromotion();
 
@@ -107,7 +110,11 @@ function PromotionTable(props: { status: string }) {
                             aria-label="Detail"
                             bgColor={"blue.300"}
                             icon={<BsEye />}
-                            onClick={() => {}}
+                            onClick={() => {
+                              navigate(
+                                routes.SELLER_PROMOTION_DETAIL(promotion.id)
+                              );
+                            }}
                           />
                         </Tooltip>
                       ) : null}
@@ -128,7 +135,11 @@ function PromotionTable(props: { status: string }) {
                             aria-label="Edit"
                             bgColor={"yellow.300"}
                             icon={<BsPencil />}
-                            onClick={() => {}}
+                            onClick={() => {
+                              navigate(
+                                routes.SELLER_PROMOTION_EDIT(promotion.id)
+                              );
+                            }}
                           />
                         </Tooltip>
                       ) : null}
@@ -144,29 +155,13 @@ function PromotionTable(props: { status: string }) {
                           aria-label="Duplicate"
                           bgColor={"green.400"}
                           icon={<BsFiles />}
-                          onClick={() => {}}
+                          onClick={() => {
+                            navigate(
+                              routes.SELLER_PROMOTION_DUPLICATE(promotion.id)
+                            );
+                          }}
                         />
                       </Tooltip>
-
-                      {isUpcoming(
-                        promotion.start_date,
-                        promotion.expiry_date
-                      ) ? (
-                        <Tooltip
-                          hasArrow
-                          label="Delete"
-                          bg="gray.300"
-                          color="black"
-                        >
-                          <IconButton
-                            mx={1}
-                            aria-label="Delete"
-                            bgColor={"red"}
-                            icon={<BsTrash />}
-                            onClick={() => {}}
-                          />
-                        </Tooltip>
-                      ) : null}
                     </Td>
                   </Tr>
                 );

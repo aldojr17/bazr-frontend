@@ -32,6 +32,10 @@ const routes = {
   SELLER_VOUCHER_DELETE: (id: number) => `/seller/voucher/${id}/delete`,
   SELLER_PROMOTION: "/seller/promotion",
   SELLER_PROMOTION_CREATE: "/seller/promotion/create",
+  SELLER_PROMOTION_EDIT: (id: number) => `/seller/promotion/${id}/edit`,
+  SELLER_PROMOTION_DETAIL: (id: number) => `/seller/promotion/${id}/detail`,
+  SELLER_PROMOTION_DUPLICATE: (id: number) =>
+    `/seller/promotion/${id}/duplicate`,
 };
 
 export default routes;

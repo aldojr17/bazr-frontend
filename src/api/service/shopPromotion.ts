@@ -23,6 +23,20 @@ const getAllShopPromotions = async (
   }
 };
 
+const getShopPromotion = async (
+  id: number
+): Promise<IShopPromotionResponsePayload> => {
+  try {
+    const response = await instance.get<IShopPromotionResponsePayload>(
+      API_PATH.shop.SHOPS_PROMOTION + `/${id}`
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IShopPromotionResponsePayload;
+  }
+};
+
 const postShopPromotion = async (
   payload: IShopPromotionPayload
 ): Promise<IShopPromotionResponsePayload> => {
@@ -38,9 +52,26 @@ const postShopPromotion = async (
   }
 };
 
-const shopPromotion = {
-  getAllShopPromotions,
-  postShopPromotion,
+const putShopPromotion = async (
+  payload: IShopPromotionPayload
+): Promise<IShopPromotionResponsePayload> => {
+  try {
+    const response = await instance.put<IShopPromotionResponsePayload>(
+      API_PATH.shop.SHOPS_PROMOTION + `/${payload.id}`,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IShopPromotionResponsePayload;
+  }
 };
 
-export default shopPromotion;
+const shopPromotionService = {
+  getAllShopPromotions,
+  getShopPromotion,
+  postShopPromotion,
+  putShopPromotion,
+};
+
+export default shopPromotionService;
