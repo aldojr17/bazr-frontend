@@ -14,6 +14,7 @@ export const API_PATH = {
     FAVORITE_PRODUCT: "users/favorite",
     EMAIL: "/users/email",
     PASSWORD: "/users/password",
+    ADDRESSES: "/users/addresses",
   },
   category: {
     CATEGORIES: "/categories",
@@ -35,6 +36,7 @@ export const API_PATH = {
     SHOPS_PROFILE: "/shops/profile",
     UPLOAD_PRODUCT_PHOTOS: "/upload/product",
     SHOPS_PROMOTION: "/shops/promotions",
+    SET_SHOP_DEFAULT_ADDRESS: "/shops/address",
   },
   wallet: {
     VERIFY_PIN: "/wallets/step-up/pin",
@@ -49,5 +51,13 @@ export const API_PATH = {
   },
   shipping: {
     SHIPPING: "/shipping-cost",
+  },
+  address: {
+    PROVINCES: "/address/region",
+    CITIES: (province_id: number) => `/address/region?province=${province_id}`,
+    SUBDISTRICTS: (city_id: number) => `/address/region?city=${city_id}`,
+    ADDRESS: "/address",
+    UPDATE_ADDRESS: (address_id: number) => `/address/${address_id}`,
+    SET_USER_DEFAULT_ADDRESS: "/address/default",
   },
 };

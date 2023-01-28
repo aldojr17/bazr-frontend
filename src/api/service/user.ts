@@ -2,6 +2,7 @@ import {
   IEditProfilePayload,
   IBaseResponsePayload,
   IUploadAvatarPayload,
+  IUserAddressesResponsePayload,
   IUserAvatarResponsePayload,
   IUserFavoriteProductRequestPayload,
   IUserFavoriteProductResponsePayload,
@@ -126,6 +127,17 @@ const changePassword = async (token: string): Promise<IBaseResponsePayload> => {
   }
 };
 
+const fetchUserAddresses = async (): Promise<IUserAddressesResponsePayload> => {
+  try {
+    const response = await instance.get<IUserAddressesResponsePayload>(
+      API_PATH.user.ADDRESSES
+    );
+    return response.data;
+  } catch (err) {
+    return err as IUserAddressesResponsePayload;
+  }
+};
+
 const userService = {
   getProfile,
   editProfile,
@@ -135,6 +147,7 @@ const userService = {
   changeEmail,
   sendChangePasswordToken,
   changePassword,
+  fetchUserAddresses,
 };
 
 export default userService;

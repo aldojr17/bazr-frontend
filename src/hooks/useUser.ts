@@ -11,7 +11,7 @@ import { storeUser } from "../redux/user";
 import { useAppDispatch, useAppSelector } from "./useSelector";
 
 const useUser = () => {
-  const user = useAppSelector((state) => state.user.user);
+  const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const [userLoading, setUserLoading] = useState(false);
@@ -79,6 +79,11 @@ const useUser = () => {
     return response;
   };
 
+  const getUserAddresses = async () => {
+    const response = await userService.fetchUserAddresses();
+    return response;
+  };
+
   return {
     user,
     userLoading,
@@ -91,6 +96,7 @@ const useUser = () => {
     changeEmail,
     sendChangePasswordToken,
     changePassword,
+    getUserAddresses,
   };
 };
 

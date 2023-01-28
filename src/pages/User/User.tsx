@@ -21,6 +21,7 @@ import { formatCurrency } from "../../util/util";
 import TransactionOrderHistory from "../TransactionOrderHistory/TransactionOrderHistory";
 import UserProfile from "./UserProfile";
 import "./style.css";
+import Address from "../Address/Address";
 
 function User() {
   const { user } = useUser();
@@ -62,7 +63,7 @@ function User() {
 
           <Box flex="1" borderWidth="1px" borderRadius="lg">
             <Skeleton isLoaded={user ? true : false}>
-              <Tabs padding={2} maxW="calc(100vw - 2rem)">
+              <Tabs padding={2} maxW="calc(100vw - 2rem)" isLazy>
                 <TabList
                   overflowX="scroll"
                   overflowY="hidden"
@@ -107,7 +108,7 @@ function User() {
                     <UserProfile />
                   </TabPanel>
                   <TabPanel>
-                    <p>Adress</p>
+                    <Address />
                   </TabPanel>
                   <TabPanel>
                     <p>Pembayaran</p>
