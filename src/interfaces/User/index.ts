@@ -72,3 +72,27 @@ export interface IUserChangePasswordPayload {
   old_password: string;
   new_password: string;
 }
+
+export interface IUserAddressesResponsePayload {
+  data: IUserAddress[];
+  is_success: boolean;
+  message: string;
+}
+
+export interface IUserAddress {
+  address_id: number;
+  user_id: number;
+  province_id: number;
+  province_name: string;
+  city_id: number;
+  city_name: string;
+  sub_district: string;
+  district_ward: string;
+  zip_code: string;
+  street_name: string;
+  notes: string;
+  recipient_name: string;
+  recipient_phone: string;
+  is_default: boolean;
+  is_shop_default: boolean;
+}
