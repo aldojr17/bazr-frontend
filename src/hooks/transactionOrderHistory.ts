@@ -42,6 +42,11 @@ const useTransactionOrderHistory = () => {
     dispatch(_setPage(payload));
   };
 
+  const getTransactionDetail = async (id: number) => {
+    const response = await transactionService.getTransactionDetail(id);
+    return response;
+  };
+
   return {
     fetchTransactionHistory,
 
@@ -51,6 +56,7 @@ const useTransactionOrderHistory = () => {
     setDeliveryStatus,
     page,
     setPage,
+    getTransactionDetail,
   };
 };
 

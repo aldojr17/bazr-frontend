@@ -6,6 +6,7 @@ import {
   ITransactionRequestPayload,
   ITransactionResponsePayload,
 } from "../../interfaces/Transaction";
+import { IWalletTransactionResponsePayload } from "../../interfaces/Wallet";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
 
@@ -52,10 +53,24 @@ const getTransactionHistory = async (
   }
 };
 
+const getTransactionDetail = async (
+  id: number
+): Promise<IWalletTransactionResponsePayload> => {
+  try {
+    const response = await instance.get(
+      API_PATH.transaction.TRANSACTIONS + "/" + id
+    );
+    return response.data;
+  } catch (err) {
+    return err as IWalletTransactionResponsePayload;
+  }
+};
+
 const transactionService = {
   createCheckout,
   getTransactionHistory,
   createTransaction,
+  getTransactionDetail,
 };
 
 export default transactionService;

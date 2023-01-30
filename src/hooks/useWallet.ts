@@ -5,6 +5,7 @@ import {
   IPinRequestPayload,
   IPinUpdateRequestPayload,
 } from "../interfaces/Auth";
+import { IWalletHistoryFilterPayload } from "../interfaces/Filter";
 import { IPaymentWalletRequestPayload } from "../interfaces/Wallet";
 
 const useWallet = () => {
@@ -67,6 +68,12 @@ const useWallet = () => {
     return response;
   };
 
+  const getWalletHistory = async (filter?: IWalletHistoryFilterPayload) => {
+    const response = await walletService.getWalletHistory(filter);
+
+    return response;
+  };
+
   return {
     verifyPin,
     paymentWallet,
@@ -74,6 +81,7 @@ const useWallet = () => {
     updatePin,
     activateWallet,
     verifyPasswordPin,
+    getWalletHistory,
   };
 };
 
