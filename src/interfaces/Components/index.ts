@@ -6,7 +6,7 @@ import {
   ISecondaryCategoryPayload,
   ITertiaryCategoryPayload,
 } from "../Category";
-import { IProductPayload, IProductPhotoPayload } from "../Product";
+import { IProductPayload } from "../Product";
 import { ICheckoutSuccessResponsePayload } from "../Transaction";
 import { IUserPayload } from "../User";
 import { ICreateVariantGroup, ICreateVariantType } from "../Variant";
@@ -68,6 +68,7 @@ export interface IOrderSummaryCardProps {
   getMarketplaceVoucher: () => void;
   paymentMethod: number;
   setPaymentMethod: React.Dispatch<React.SetStateAction<number>>;
+  onOpenSealabsPay: () => void;
   marketplaceVoucher: IMarketplaceVoucherPayload;
   setMarketplaceVoucher: Dispatch<
     React.SetStateAction<IMarketplaceVoucherPayload>
@@ -180,6 +181,34 @@ export interface IDeleteModalProps {
   onDelete: () => void;
 }
 
+export interface ISealabsPayTopupWalletProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onOpen: () => void;
+}
+
+export interface ISealabsPayChooseAccountModalProps {
+  isOpen: boolean;
+  isLoading: boolean;
+  onClose: () => void;
+  children?: React.ReactNode;
+}
+
+export interface ISealabsPayCardProps {
+  nameOnCard: string;
+  cardNumber: string;
+  activeDate: string;
+  onClick: () => void;
+  chosen: string;
+  id: number;
+  isDefault: boolean;
+  user_id: number;
+}
+
+export interface ISealabsPayAddNewAccountProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 export interface ISelectCategoryModalProps {
   isOpen: boolean;
   onClose: () => void;

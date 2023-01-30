@@ -18,6 +18,7 @@ import {
 import React, { useState, useEffect } from "react";
 import Icon from "../../assets/icons";
 import PaymentPinModal from "../../components/Modal/PaymentPinModal";
+import SealabsPayTopupWalletModal from "../../components/Modal/SealabsPayTopupWalletModal";
 import WalletActivationModal from "../../components/Modal/WalletActivationModal";
 import WalletPasswordModal from "../../components/Modal/WalletPasswordModal";
 import useToast from "../../hooks/useToast";
@@ -51,6 +52,11 @@ function UserWallet() {
     isOpen: isOpenAlert,
     onOpen: onOpenAlert,
     onClose: onCloseAlert,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenTopup,
+    onOpen: onOpenTopup,
+    onClose: onCloseTopup,
   } = useDisclosure();
   const [pinInput, setPinInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
@@ -120,8 +126,10 @@ function UserWallet() {
   };
 
   useEffect(() => {
-    if (!user?.wallet_detail.is_activated) {
-      onOpenAlert();
+    if (user) {
+      if (!user.wallet_detail.is_activated) {
+        onOpenAlert();
+      }
     }
   }, []);
 
@@ -142,11 +150,15 @@ function UserWallet() {
         xl: "4em",
       }}
     >
-      <Flex width={"100%"} justifyContent={"space-around"}>
+      <Flex
+        direction={{ base: "column", lg: "row" }}
+        width={"100%"}
+        justifyContent={{ base: "center", lg: "space-around" }}
+      >
         <VStack
           alignItems={"start"}
           border={"2px"}
-          width={"40%"}
+          width={{ base: "100%", lg: "40%" }}
           p={8}
           borderRadius={"15px"}
           height={"fit-content"}
@@ -183,13 +195,18 @@ function UserWallet() {
             </Popover>
           </HStack>
 
-          <Text fontSize={"2.5em"} as="b">
+          <Text fontSize={{ base: "2em", lg: "2.5em" }} as="b">
             Rp{formatCurrency(user?.wallet_detail.balance!)}
           </Text>
           <Divider />
           <Flex width={"100%"} pt={5}>
             {/* TODO: Link Top Up with BE */}
-            <Button variant="solid" colorScheme="blue">
+            <Button
+              width={"100%"}
+              variant="solid"
+              colorScheme="blue"
+              onClick={onOpenTopup}
+            >
               Top-up
             </Button>
           </Flex>
@@ -197,9 +214,10 @@ function UserWallet() {
         <VStack
           alignItems={"start"}
           border={"2px"}
-          width={"55%"}
+          width={{ base: "100%", lg: "55%" }}
           p={8}
           borderRadius={"15px"}
+          mt={{ base: "8", lg: "0" }}
         >
           <Heading
             pb={3}
@@ -210,7 +228,12 @@ function UserWallet() {
           >
             Transaction History
           </Heading>
-          <HStack width={"100%"} pb={7}>
+          <Flex
+            direction={{ base: "column", lg: "row" }}
+            gap={4}
+            width={"100%"}
+            pb={7}
+          >
             {/* TODO: update with transaction history pagination */}
             <Select placeholder="Select Date">
               <option value="option1">Option 1</option>
@@ -227,7 +250,7 @@ function UserWallet() {
               <option value="option2">Option 2</option>
               <option value="option3">Option 3</option>
             </Select>
-          </HStack>
+          </Flex>
           <Divider />
           <Box width={"100%"}>
             {/* TODO: update with transaction history */}
@@ -276,6 +299,11 @@ function UserWallet() {
         onOpen={onOpenAlert}
         onClose={onCloseAlert}
         nextModal={onOpenConfig}
+      />
+      <SealabsPayTopupWalletModal
+        isOpen={isOpenTopup}
+        onOpen={onOpenTopup}
+        onClose={onCloseTopup}
       />
     </Box>
   );

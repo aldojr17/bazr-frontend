@@ -8,6 +8,7 @@ import {
   Button,
   Container,
   Divider,
+  Flex,
   Grid,
   GridItem,
   Heading,
@@ -50,6 +51,9 @@ import { IMarketplaceVoucherPayload } from "../../interfaces/Voucher";
 import { IPaymentWalletRequestPayload } from "../../interfaces/Wallet";
 import { formatCurrency } from "../../util/util";
 import OrderSummaryCard from "./OrderSummaryCard";
+import SealabsPayChooseAccountModal from "../../components/Modal/SealabsPayChooseAccountModal";
+import useSealabsPay from "../../hooks/useSealabsPay";
+import { ISealabsPayDataResponsePayload } from "../../interfaces/SealabsPay";
 
 const Checkout = () => {
   useTitle("Checkout");
@@ -65,6 +69,13 @@ const Checkout = () => {
   const { fetchProfile } = useUser();
   const { errorToast } = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenSealabsPay,
+    onOpen: onOpenSealabsPay,
+    onClose: onCloseSealabsPay,
+  } = useDisclosure();
+
+  const { getSealabsPay, setChosenSealabsPay } = useSealabsPay();
   const voucherModal = useDisclosure();
   const shopVoucherModal = useDisclosure();
   const { verifyPin, createPayment } = useWallet();
@@ -246,10 +257,21 @@ const Checkout = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
     fetchProfile()
       .then((response) => {
         setUser(response);
         setPaymentMethod(response?.wallet_detail.is_activated ? 1 : 0);
+        getSealabsPay().then((res) =>
+          setChosenSealabsPay(
+            (res &&
+              res.filter(
+                (val) => val.id === response?.default_sealabs_pay_id
+              )[0]) ||
+              ({} as ISealabsPayDataResponsePayload)
+          )
+        );
+        return response?.default_sealabs_pay_id;
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -308,9 +330,7 @@ const Checkout = () => {
                       >
                         Delivery Address
                       </Text>
-                      <Heading pt={"4"} px={"2"} color={"light"}>
-                        &#x2022;
-                      </Heading>
+
                       <Button
                         variant={"primaryLink"}
                         p={0}
@@ -402,17 +422,18 @@ const Checkout = () => {
                               <Divider />
                             </>
                           ))}
-                          <HStack
+                          <Flex
                             width="100%"
                             justifyContent={"space-between"}
                             gap={3}
                             pt={3}
                             pb={5}
                             alignItems={"start"}
+                            direction={{ base: "column", sm: "row" }}
                           >
                             <VStack
                               alignItems={"start"}
-                              width={"50%"}
+                              width={{ base: "100% ", sm: "50%" }}
                               spacing={0}
                             >
                               <HStack
@@ -471,7 +492,7 @@ const Checkout = () => {
                             </VStack>
 
                             <Divider
-                              orientation="vertical"
+                              orientation={"vertical"}
                               borderWidth={"1px"}
                               height={
                                 val.user_shop_voucher_id !== 0 ||
@@ -480,11 +501,20 @@ const Checkout = () => {
                                   : "1.5em"
                               }
                               borderColor={"light"}
+                              display={{ base: "none", sm: "block" }}
+                            />
+
+                            <Divider
+                              orientation={"horizontal"}
+                              borderWidth={"1px"}
+                              height={"0.5em"}
+                              borderColor={"light"}
+                              display={{ base: "block", sm: "none" }}
                             />
 
                             <VStack
                               alignItems={"start"}
-                              width={"50%"}
+                              width={{ base: "100% ", sm: "50%" }}
                               spacing={0}
                             >
                               <HStack
@@ -587,7 +617,7 @@ const Checkout = () => {
                                 ""
                               )}
                             </VStack>
-                          </HStack>
+                          </Flex>
                           <Divider />
                           <Accordion
                             width={"100%"}
@@ -697,11 +727,14 @@ const Checkout = () => {
             </VStack>
           </GridItem>
           <GridItem
-            colSpan={1}
+            colSpan={{
+              base: 3,
+              lg: 1,
+            }}
             display={{
-              base: "none",
-              sm: "none",
-              md: "none",
+              base: "block",
+              sm: "block",
+              md: "block",
               lg: "block",
               xl: "block",
             }}
@@ -711,6 +744,7 @@ const Checkout = () => {
               user={user!}
               payload={checkoutData}
               onOpen={onOpen}
+              onOpenSealabsPay={onOpenSealabsPay}
               paymentMethod={paymentMethod}
               setPaymentMethod={setPaymentMethod}
               getMarketplaceVoucher={handleGetVouchers}
@@ -726,6 +760,11 @@ const Checkout = () => {
           handlePinChange={handlePinChange}
           pinInput={pinInput}
           setPinInput={setPinInput}
+        />
+        <SealabsPayChooseAccountModal
+          isLoading={isLoading}
+          isOpen={isOpenSealabsPay}
+          onClose={onCloseSealabsPay}
         />
       </Box>
 
