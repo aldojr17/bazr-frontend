@@ -70,6 +70,10 @@ const SellerPromotionDuplicate = React.lazy(
   () => import("../pages/Seller/Promotion/PromotionDuplicate")
 );
 
+const SealabsPayRedirect = React.lazy(
+  () => import("../pages/SealabsPay/Redirect")
+);
+
 const RouteList = () => {
   let routes = (
     <Routes>
@@ -95,6 +99,10 @@ const RouteList = () => {
           <Route path="/cart/shipment" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/wallet" element={<UserWallet />} />
+          <Route
+            path="/sealabs_pay/redirect"
+            element={<SealabsPayRedirect />}
+          />
         </Route>
         <Route path="/shop/:shopUsername" element={<ShopHome />} />
       </Route>

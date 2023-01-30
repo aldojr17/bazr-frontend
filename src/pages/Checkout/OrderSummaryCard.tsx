@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
+import useSealabsPay from "../../hooks/useSealabsPay";
 import { IOrderSummaryCardProps } from "../../interfaces/Components";
 import { MarketplaceVoucherInitial } from "../../interfaces/InitialState";
 import routes from "../../routes/Routes";
@@ -22,6 +23,7 @@ import { formatCurrency } from "../../util/util";
 
 const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
   const navigate = useNavigate();
+  const { chosenSealabsPay } = useSealabsPay();
 
   const handleRemoveVoucher = () => {
     props.setMarketplaceVoucher(MarketplaceVoucherInitial);
@@ -197,7 +199,11 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
               <Text pb={3} fontWeight={"bold"}>
                 Select Payment Method
               </Text>
-              <HStack width={"100%"} justifyContent={"space-between"}>
+              <Flex
+                justifyContent={"space-around"}
+                direction={{ base: "column", xl: "row" }}
+                gap={{ base: 3, xl: 3 }}
+              >
                 <Box
                   border={"2px solid"}
                   borderColor={
@@ -206,20 +212,18 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
                   backgroundColor={
                     props.paymentMethod === 1 ? "teal.100" : "white"
                   }
-                  width="11em"
+                  width={{ base: "100%", xl: "11em" }}
                   height={"4em"}
-                  p={0}
                   as={Button}
                   variant={"paymentMethod"}
-                  px={5}
                   onClick={() => {
                     props.user.wallet_detail.is_activated
                       ? props.setPaymentMethod(1)
                       : navigate(routes.WALLET);
                   }}
-                  justifyContent={"start"}
+                  justifyContent={"center"}
                 >
-                  <HStack gap={2}>
+                  <Flex gap={2} alignItems={"center"} justifyContent={"center"}>
                     <Icon.Wallet fill={"darkLighten"} boxSize={6} />
                     <VStack alignItems={"start"} spacing={1}>
                       <Text fontWeight={"bold"}>My Wallet </Text>
@@ -236,7 +240,7 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
                           : "Activate now!"}
                       </Text>
                     </VStack>
-                  </HStack>
+                  </Flex>
                 </Box>
                 <Box
                   border={"2px solid"}
@@ -246,21 +250,47 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
                   backgroundColor={
                     props.paymentMethod === 2 ? "teal.100" : "white"
                   }
-                  width="11em"
+                  width={{ base: "100%", xl: "11em" }}
                   height={"4em"}
-                  p={0}
+                  px={5}
                   as={Button}
                   variant={"paymentMethod"}
-                  px={3}
-                  onClick={() => props.setPaymentMethod(2)}
-                  justifyContent={"start"}
+                  onClick={() => {
+                    props.setPaymentMethod(2);
+                  }}
                 >
-                  <HStack gap={2}>
-                    <Icon.SeaPay boxSize={6} />
-                    <Text fontWeight={"bold"}>SeaLabs Pay</Text>
-                  </HStack>
+                  <Flex
+                    // flexWrap={"wrap"}
+                    direction={"column"}
+                    gap={2}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <Flex
+                      gap={4}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                    >
+                      <Icon.SeaPay boxSize={8} />
+                      <Text fontWeight={"bold"}>SeaLabs Pay</Text>
+                    </Flex>
+                    <Flex>
+                      <Text
+                        _hover={{
+                          color: "secondary",
+                          textDecoration: "underline",
+                        }}
+                        color={"teal"}
+                        onClick={props.onOpenSealabsPay}
+                      >
+                        {chosenSealabsPay.card_number
+                          ? chosenSealabsPay.card_number
+                          : "Choose Account"}
+                      </Text>
+                    </Flex>
+                  </Flex>
                 </Box>
-              </HStack>
+              </Flex>
             </Box>
             <Box pt={3}>
               <Button

@@ -12,6 +12,7 @@ export interface IUserPayload {
   role_id: number;
   address_detail: IAddressPayload;
   default_address_id: number;
+  default_sealabs_pay_id: number;
   shop_id: number;
   is_seller: boolean;
   gender_detail: IGenderPayload;
