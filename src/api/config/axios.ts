@@ -96,7 +96,7 @@ instance.interceptors.response.use(
       if (err.code === "ERR_NETWORK" || err.code === "ERR_CONNECTION_REFUSED") {
         return Promise.reject(handleHttpResponse("0"));
       } else {
-        throw Promise.reject(err.response.data.message);
+        throw err.response.data.message;
       }
     }
   }

@@ -4,9 +4,11 @@ import {
   IPinResponsePayload,
   IPinUpdateRequestPayload,
 } from "../../interfaces/Auth";
+import { IWalletHistoryFilterPayload } from "../../interfaces/Filter";
 import {
   IPaymentWalletRequestPayload,
   IPaymentWalletResponsePayload,
+  IWalletHistoryResponsePayload,
 } from "../../interfaces/Wallet";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
@@ -86,12 +88,30 @@ const activateWallet = async (
   }
 };
 
+const getWalletHistory = async (
+  filter?: IWalletHistoryFilterPayload
+): Promise<IWalletHistoryResponsePayload> => {
+  try {
+    const response = await instance.get<IWalletHistoryResponsePayload>(
+      API_PATH.wallet.WALLET_HISTORY,
+      {
+        params: filter,
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IWalletHistoryResponsePayload;
+  }
+};
+
 const walletService = {
   verifyPin,
   paymentWallet,
   updatePin,
   activateWallet,
   verifyPasswordWallet,
+  getWalletHistory,
 };
 
 export default walletService;

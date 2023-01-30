@@ -51,3 +51,7 @@ export interface IReviewsParamsPayload extends IFilterPayload {
 export interface ITransactionHistoryParams extends IFilterPayload {
   status?: string;
 }
+
+export interface IWalletHistoryFilterPayload extends IFilterPayload {
+  type?: string;
+}

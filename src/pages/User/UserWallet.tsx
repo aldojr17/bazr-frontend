@@ -14,13 +14,18 @@ import {
   Select,
   Divider,
   useDisclosure,
+  Spinner,
+  Center,
+  Container,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Icon from "../../assets/icons";
 import PaymentPinModal from "../../components/Modal/PaymentPinModal";
 import SealabsPayTopupWalletModal from "../../components/Modal/SealabsPayTopupWalletModal";
 import WalletActivationModal from "../../components/Modal/WalletActivationModal";
 import WalletPasswordModal from "../../components/Modal/WalletPasswordModal";
+import Pagination from "../../components/Pagination/Pagination";
+import WalletHistoryBtn from "../../components/Wallet/WalletHistoryBtn";
 import useToast from "../../hooks/useToast";
 import useUser from "../../hooks/useUser";
 import useWallet from "../../hooks/useWallet";
@@ -29,9 +34,16 @@ import {
   IPinRequestPayload,
   IPinUpdateRequestPayload,
 } from "../../interfaces/Auth";
+import {
+  IGroupedWalletHistory,
+  IWalletHistoryResponsePayload,
+} from "../../interfaces/Wallet";
 import { formatCurrency } from "../../util/util";
+import dayjs from "dayjs";
 
 function UserWallet() {
+  var localizedFormat = require("dayjs/plugin/localizedFormat");
+  dayjs.extend(localizedFormat);
   const { user } = useUser();
   const {
     isOpen: isOpenVerify,
@@ -61,7 +73,16 @@ function UserWallet() {
   const [pinInput, setPinInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [jwt, setJwt] = useState("");
-  const { verifyPasswordPin, updatePin, activateWallet } = useWallet();
+  const [walletHistory, setWalletHistory] =
+    useState<IWalletHistoryResponsePayload>();
+  const [groupedHistory, setGroupedHistory] = useState<IGroupedWalletHistory[]>(
+    []
+  );
+  const [page, setPage] = useState(1);
+  const [type, setType] = useState("all");
+
+  const { verifyPasswordPin, updatePin, activateWallet, getWalletHistory } =
+    useWallet();
   const { successToast, errorToast } = useToast();
 
   const verifyPassword = async () => {
@@ -79,7 +100,7 @@ function UserWallet() {
       onOpenNew();
     } else {
       setPasswordInput("");
-      errorToast("Pin error", response.message);
+      errorToast("Invalid password", response.message);
       onCloseVerify();
     }
   };
@@ -125,187 +146,225 @@ function UserWallet() {
     }
   };
 
+  const getHistory = async () => {
+    const response = await getWalletHistory({ type: type, page: page });
+    setWalletHistory(response);
+
+    const groups = response.data.data.reduce((groups: any, transaction) => {
+      const date = transaction.transaction_date.split("T")[0];
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(transaction);
+      return groups;
+    }, {});
+
+    const groupArrays = Object.keys(groups).map((date) => {
+      return {
+        date,
+        transactions: groups[date],
+      };
+    });
+    setGroupedHistory(groupArrays);
+  };
+
   useEffect(() => {
     if (user) {
       if (!user.wallet_detail.is_activated) {
         onOpenAlert();
       }
     }
-  }, []);
+
+    getHistory();
+  }, [page, type]);
 
   return (
-    <Box
-      px={{
-        base: "1em",
-        sm: "2em",
-        md: "3em",
-        lg: "6em",
-        xl: "12em",
-      }}
-      py={{
-        base: "1em",
-        sm: "1.5em",
-        md: "2em",
-        lg: "2.5em",
-        xl: "4em",
-      }}
-    >
-      <Flex
-        direction={{ base: "column", lg: "row" }}
-        width={"100%"}
-        justifyContent={{ base: "center", lg: "space-around" }}
+    <Container maxW="container.xl">
+      <Box
+        py={{
+          base: "1em",
+          sm: "1.5em",
+          md: "2em",
+          lg: "2.5em",
+          xl: "4em",
+        }}
       >
-        <VStack
-          alignItems={"start"}
-          border={"2px"}
-          width={{ base: "100%", lg: "40%" }}
-          p={8}
-          borderRadius={"15px"}
-          height={"fit-content"}
+        <Flex
+          width={"100%"}
+          justifyContent={{ base: "center", lg: "space-around" }}
+          direction={{ base: "column", lg: "row" }}
         >
-          <HStack justifyContent={"space-between"} pb={5} width={"100%"}>
+          <VStack
+            alignItems={"start"}
+            boxShadow={"default"}
+            border="2px"
+            borderColor={"light"}
+            borderRadius={"lg"}
+            width={{ base: "100%", lg: "40%" }}
+            p={8}
+            height={"fit-content"}
+          >
+            <HStack justifyContent={"space-between"} pb={5} width={"100%"}>
+              <VStack justifyContent={"start"}>
+                <Heading
+                  size={{
+                    base: "md",
+                    sm: "lg",
+                  }}
+                >
+                  My Wallet
+                </Heading>
+                <HStack width="100%">
+                  <Icon.Wallet fill={"darkLighten"} boxSize={6} />
+                  <Text fontSize={"md"} fontWeight={"semibold"}>
+                    Wallet ID: {user?.wallet_detail.id}
+                  </Text>
+                </HStack>
+              </VStack>
+              <Popover placement="bottom-end">
+                <PopoverTrigger>
+                  <Button
+                    backgroundColor={"white"}
+                    boxShadow={"none"}
+                    variant={"unstyled"}
+                  >
+                    <Icon.Gear boxSize={6} fill={"primary"} />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent width={"fit-content"}>
+                  <PopoverArrow />
+                  <PopoverBody>
+                    <Button onClick={onOpenVerify}>Change Wallet Pin</Button>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </HStack>
+            <Divider />
+            <Flex direction={"column"} alignItems={"center"} width="100%">
+              <Text
+                fontSize={{ base: "2em", lg: "2.5em" }}
+                fontWeight="bold"
+                color={"primary"}
+                py={7}
+              >
+                Rp{formatCurrency(user?.wallet_detail.balance!)}
+              </Text>
+              <Button
+                width={"100%"}
+                variant="solid"
+                colorScheme="green"
+                onClick={onOpenTopup}
+              >
+                Top-up
+              </Button>
+            </Flex>
+          </VStack>
+          <VStack
+            alignItems={"start"}
+            width={{ base: "100%", lg: "55%" }}
+            p={8}
+            boxShadow={"default"}
+            border="2px"
+            borderColor={"light"}
+            borderRadius={"15px"}
+            mt={{ base: "8", lg: "0" }}
+          >
             <Heading
+              pb={3}
               size={{
                 base: "md",
                 sm: "lg",
               }}
-              textAlign={"center"}
             >
-              <Icon.Wallet boxSize={8} /> My Wallet{" "}
-              <Text fontSize={"md"} as="b">
-                ID: {user?.wallet_detail.id}
-              </Text>
+              Wallet History
             </Heading>
-            <Popover placement="bottom-end">
-              <PopoverTrigger>
-                <Button
-                  backgroundColor={"white"}
-                  boxShadow={"none"}
-                  variant={"unstyled"}
-                >
-                  <Icon.Gear boxSize={6} fill={"primary"} />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent width={"fit-content"}>
-                <PopoverArrow />
-                <PopoverBody>
-                  <Button onClick={onOpenVerify}>Change Wallet Pin</Button>
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
-          </HStack>
-
-          <Text fontSize={{ base: "2em", lg: "2.5em" }} as="b">
-            Rp{formatCurrency(user?.wallet_detail.balance!)}
-          </Text>
-          <Divider />
-          <Flex width={"100%"} pt={5}>
-            {/* TODO: Link Top Up with BE */}
-            <Button
-              width={"100%"}
-              variant="solid"
-              colorScheme="blue"
-              onClick={onOpenTopup}
-            >
-              Top-up
-            </Button>
-          </Flex>
-        </VStack>
-        <VStack
-          alignItems={"start"}
-          border={"2px"}
-          width={{ base: "100%", lg: "55%" }}
-          p={8}
-          borderRadius={"15px"}
-          mt={{ base: "8", lg: "0" }}
-        >
-          <Heading
-            pb={3}
-            size={{
-              base: "md",
-              sm: "lg",
-            }}
-          >
-            Transaction History
-          </Heading>
-          <Flex
-            direction={{ base: "column", lg: "row" }}
-            gap={4}
-            width={"100%"}
-            pb={7}
-          >
-            {/* TODO: update with transaction history pagination */}
-            <Select placeholder="Select Date">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
-            <Select placeholder="Payment Method">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
-            <Select placeholder="Transaction Type">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
-          </Flex>
-          <Divider />
-          <Box width={"100%"}>
-            {/* TODO: update with transaction history */}
-            <Text fontSize={"x-large"} py={6}>
-              Friday, Jan 11 2021
-            </Text>
-            <HStack width={"100%"} justifyContent={"space-between"}>
-              <Text>SeaLabs Pay Topup</Text>
-              <Text>+Rp10.000</Text>
+            <HStack width={"100%"} pb={7}>
+              <Select value={type} onChange={(e) => setType(e.target.value)}>
+                <option disabled={true} value="">
+                  Transaction Type
+                </option>
+                <option value="all">All</option>
+                <option value="topup">Topup</option>
+                <option value="payment">Payment</option>
+              </Select>
             </HStack>
-            <HStack width={"100%"} justifyContent={"space-between"}>
-              <Text>Payment</Text>
-              <Text>-Rp150.000</Text>
-            </HStack>
-          </Box>
-        </VStack>
-      </Flex>
-      <WalletPasswordModal
-        isOpen={isOpenVerify}
-        onOpen={onOpenVerify}
-        onClose={onCloseVerify}
-        setPasswordInput={setPasswordInput}
-        verifyPasswordKb={verifyPassword}
-        verifyPasswordMs={verifyPassword}
-      />
-      <PaymentPinModal
-        isOpen={isOpenNew}
-        onOpen={onOpenNew}
-        onClose={onCloseNew}
-        handlePinChange={handleNewPin}
-        pinInput={pinInput}
-        setPinInput={setPinInput}
-        title={"Enter Your New 6 Digit Pin"}
-      />
-      <PaymentPinModal
-        isOpen={isOpenConfig}
-        onOpen={onOpenConfig}
-        onClose={onCloseConfig}
-        handlePinChange={handleNewWallet}
-        pinInput={pinInput}
-        setPinInput={setPinInput}
-        title={"Please Enter A 6 Digit Pin"}
-      />
-      <WalletActivationModal
-        isOpen={isOpenAlert}
-        onOpen={onOpenAlert}
-        onClose={onCloseAlert}
-        nextModal={onOpenConfig}
-      />
-      <SealabsPayTopupWalletModal
-        isOpen={isOpenTopup}
-        onOpen={onOpenTopup}
-        onClose={onCloseTopup}
-      />
-    </Box>
+            <Divider />
+            {walletHistory && groupedHistory ? (
+              <>
+                <Box width={"100%"}>
+                  {groupedHistory.map((data) => {
+                    return (
+                      <>
+                        <Text
+                          textTransform={"uppercase"}
+                          fontWeight={"bold"}
+                          p={2}
+                        >
+                          {dayjs(data.date).format("ll")}
+                        </Text>
+                        {data.transactions.map((detail) => {
+                          return <WalletHistoryBtn data={detail} />;
+                        })}
+                      </>
+                    );
+                  })}
+                  <Center>
+                    <Pagination
+                      data={{
+                        total_page: walletHistory.data.total_page!,
+                        current_page: page,
+                      }}
+                      setPage={setPage}
+                    />
+                  </Center>
+                </Box>
+              </>
+            ) : (
+              <Flex width={"100%"} justifyContent={"center"}>
+                <Spinner mt={10} size="xl" />
+              </Flex>
+            )}
+          </VStack>
+        </Flex>
+        <WalletPasswordModal
+          isOpen={isOpenVerify}
+          onOpen={onOpenVerify}
+          onClose={onCloseVerify}
+          setPasswordInput={setPasswordInput}
+          verifyPasswordKb={verifyPassword}
+          verifyPasswordMs={verifyPassword}
+        />
+        <PaymentPinModal
+          isOpen={isOpenNew}
+          onOpen={onOpenNew}
+          onClose={onCloseNew}
+          handlePinChange={handleNewPin}
+          pinInput={pinInput}
+          setPinInput={setPinInput}
+          title={"Enter Your New 6 Digit Pin"}
+        />
+        <PaymentPinModal
+          isOpen={isOpenConfig}
+          onOpen={onOpenConfig}
+          onClose={onCloseConfig}
+          handlePinChange={handleNewWallet}
+          pinInput={pinInput}
+          setPinInput={setPinInput}
+          title={"Please Enter A 6 Digit Pin"}
+        />
+        <WalletActivationModal
+          isOpen={isOpenAlert}
+          onOpen={onOpenAlert}
+          onClose={onCloseAlert}
+          nextModal={onOpenConfig}
+        />
+        <SealabsPayTopupWalletModal
+          isOpen={isOpenTopup}
+          onOpen={onOpenTopup}
+          onClose={onCloseTopup}
+        />
+      </Box>
+    </Container>
   );
 }
 

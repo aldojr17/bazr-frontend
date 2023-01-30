@@ -47,6 +47,7 @@ export const API_PATH = {
     PAYMENT_WALLET: "/payments/wallet-pay",
     UPDATE_PIN: "/wallets/pin",
     ACTIVATE_WALLET: "/wallets/activate",
+    WALLET_HISTORY: "/wallets/history",
   },
   voucher: {
     VOUCHER: "/vouchers",
