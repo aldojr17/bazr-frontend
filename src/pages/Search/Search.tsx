@@ -8,6 +8,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Container,
   Flex,
   Grid,
   GridItem,
@@ -46,6 +47,7 @@ import useCategory from "../../hooks/useCategory";
 import { IProductPaginationPayload } from "../../interfaces/Product";
 import useTitle from "../../hooks/useTitle";
 import useProduct from "../../hooks/useProduct";
+import NoProductContainer from "../../components/Default/NoProductContainer";
 
 const Search = () => {
   const [search, setSearch] = useSearchParams();
@@ -83,7 +85,7 @@ const Search = () => {
     setIsLoading(false);
   };
 
-  const handleChangeLocation = (id: number, isChecked: boolean) => {
+  const handleChangeLocation = (id: number[], isChecked: boolean) => {
     let newParams: Record<string, string> = {
       q: search.get("q") !== null ? String(search.get("q")) : "",
     };
@@ -93,25 +95,25 @@ const Search = () => {
         ...params,
         city: params.city
           ?.split(",")
-          .filter((val) => parseInt(val) !== id)
+          .filter((val) => !id.includes(parseInt(val)))
           .join(","),
       });
       newParams["city"] = params.city
         ?.split(",")
-        .filter((val) => parseInt(val) !== id)
+        .filter((val) => !id.includes(parseInt(val)))
         .join(",")!;
     } else {
       setParams({
         ...params,
         city:
           params.city?.split(",").length !== 0
-            ? [...params.city?.split(",")!, id].join(",")
-            : `${id}`,
+            ? [...params.city?.split(",")!, ...id].join(",")
+            : `${id.join(",")}`,
       });
       newParams["city"] =
         params.city?.split(",").length !== 0
-          ? [...params.city?.split(",")!, id].join(",")
-          : `${id}`;
+          ? [...params.city?.split(",")!, ...id].join(",")
+          : `${id.join(",")}`;
     }
 
     if (newParams["city"].at(0) === ",") {
@@ -133,13 +135,13 @@ const Search = () => {
     setSearch(newParams, { replace: true });
   };
 
-  const handleChangeLocationModal = (id: number, isChecked: boolean) => {
+  const handleChangeLocationModal = (id: number[], isChecked: boolean) => {
     if (!isChecked) {
       setParams({
         ...params,
         city: params.city
           ?.split(",")
-          .filter((val) => parseInt(val) !== id)
+          .filter((val) => !id.includes(parseInt(val)))
           .join(","),
       });
     } else {
@@ -147,8 +149,8 @@ const Search = () => {
         ...params,
         city:
           params.city?.split(",").length !== 0
-            ? [...params.city?.split(",")!, id].join(",")
-            : `${id}`,
+            ? [...params.city?.split(",")!, ...id].join(",")
+            : `${id.join(",")}`,
       });
     }
   };
@@ -365,7 +367,7 @@ const Search = () => {
   }, [search]);
 
   return (
-    <>
+    <Container maxW="container.xl">
       <Box
         padding={{
           base: 5,
@@ -667,6 +669,7 @@ const Search = () => {
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
                         <Checkbox
+                          colorScheme={"default"}
                           onChange={handleChangeRating}
                           isChecked={params.rt !== ""}
                         >
@@ -703,36 +706,153 @@ const Search = () => {
                       <AccordionPanel pb={4} px={1}>
                         <VStack alignItems={"start"}>
                           <Checkbox
-                            value="1"
+                            colorScheme={"default"}
+                            value="151"
                             onChange={(e) => {
-                              handleChangeLocation(1, e.currentTarget.checked);
+                              handleChangeLocation(
+                                [151, 152, 153, 154, 155, 189],
+                                e.currentTarget.checked
+                              );
                             }}
-                            isChecked={params.city?.includes("1")}
+                            isChecked={params.city?.includes("151")}
                           >
                             <Text as={"span"} noOfLines={1}>
                               DKI Jakarta
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="2"
+                            colorScheme={"default"}
+                            value="444"
                             onChange={(e) => {
-                              handleChangeLocation(2, e.currentTarget.checked);
+                              handleChangeLocation(
+                                [444],
+                                e.currentTarget.checked
+                              );
                             }}
-                            isChecked={params.city?.includes("2")}
+                            isChecked={params.city?.includes("444")}
                           >
                             <Text as={"span"} noOfLines={1}>
-                              Bali
+                              Surabaya
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="3"
+                            colorScheme={"default"}
+                            value="278"
                             onChange={(e) => {
-                              handleChangeLocation(3, e.currentTarget.checked);
+                              handleChangeLocation(
+                                [278],
+                                e.currentTarget.checked
+                              );
                             }}
-                            isChecked={params.city?.includes("3")}
+                            isChecked={params.city?.includes("278")}
                           >
                             <Text as={"span"} noOfLines={1}>
-                              Jawa Barat
+                              Medan
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="22"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [22, 23, 24],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("22")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Bandung
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="254"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [254],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("254")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Makassar
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="398"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [398, 399],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("398")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Semarang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="327"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [327],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("327")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Palembang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="48"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [48],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("48")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Batam
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="350"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [350],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("350")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Pekanbaru
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="255"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [255, 256],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("255")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Malang
                             </Text>
                           </Checkbox>
                         </VStack>
@@ -828,7 +948,10 @@ const Search = () => {
                     lg: "xs",
                     xl: "md",
                   }}
-                  onClick={() => handleChangeSortBy("unit_sold")}
+                  onClick={() => {
+                    handleChangeSortBy("unit_sold");
+                    handleChangeSort("desc");
+                  }}
                 >
                   <Text
                     fontSize={{
@@ -840,13 +963,13 @@ const Search = () => {
                   </Text>
                 </Button>
                 <Button
-                  fontWeight={sortBy === "price" ? "bold" : "normal"}
+                  fontWeight={sortBy === "lowest_price" ? "bold" : "normal"}
                   variant={"unstyled"}
                   size={{
                     lg: "xs",
                     xl: "md",
                   }}
-                  onClick={() => handleChangeSortBy("price")}
+                  onClick={() => handleChangeSortBy("lowest_price")}
                 >
                   <Text
                     fontSize={{
@@ -936,7 +1059,7 @@ const Search = () => {
                         ? "Newest"
                         : sortBy === "unit_sold"
                         ? "Most buy"
-                        : "Price"}
+                        : "lowest_price"}
                     </MenuButton>
                     <MenuList>
                       <MenuItem
@@ -947,10 +1070,17 @@ const Search = () => {
                       <MenuItem onClick={() => handleChangeSortBy("date")}>
                         Newest
                       </MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("unit_sold")}>
+                      <MenuItem
+                        onClick={() => {
+                          handleChangeSortBy("unit_sold");
+                          handleChangeSort("desc");
+                        }}
+                      >
                         Most buy
                       </MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("price")}>
+                      <MenuItem
+                        onClick={() => handleChangeSortBy("lowest_price")}
+                      >
                         Price
                       </MenuItem>
                     </MenuList>
@@ -1032,7 +1162,9 @@ const Search = () => {
               }}
             >
               {products?.data.length !== 0 ? (
-                products?.data.map((product) => <ProductCard {...product} />)
+                products?.data.map((product) => (
+                  <ProductCard key={product.id} {...product} />
+                ))
               ) : (
                 <Center>
                   <Text>No products available.</Text>
@@ -1311,6 +1443,7 @@ const Search = () => {
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
                         <Checkbox
+                          colorScheme={"default"}
                           onChange={(e) => {
                             handleChangeRatingModal(e);
                           }}
@@ -1349,45 +1482,153 @@ const Search = () => {
                       <AccordionPanel pb={4} px={1}>
                         <VStack alignItems={"start"}>
                           <Checkbox
-                            value="1"
+                            colorScheme={"default"}
+                            value="151"
                             onChange={(e) => {
                               handleChangeLocationModal(
-                                1,
+                                [151, 152, 153, 154, 155, 189],
                                 e.currentTarget.checked
                               );
                             }}
-                            isChecked={params.city?.includes("1")}
+                            isChecked={params.city?.includes("151")}
                           >
                             <Text as={"span"} noOfLines={1}>
                               DKI Jakarta
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="2"
+                            colorScheme={"default"}
+                            value="444"
                             onChange={(e) => {
                               handleChangeLocationModal(
-                                2,
+                                [444],
                                 e.currentTarget.checked
                               );
                             }}
-                            isChecked={params.city?.includes("2")}
+                            isChecked={params.city?.includes("444")}
                           >
                             <Text as={"span"} noOfLines={1}>
-                              Bali
+                              Surabaya
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="3"
+                            colorScheme={"default"}
+                            value="278"
                             onChange={(e) => {
                               handleChangeLocationModal(
-                                3,
+                                [278],
                                 e.currentTarget.checked
                               );
                             }}
-                            isChecked={params.city?.includes("3")}
+                            isChecked={params.city?.includes("278")}
                           >
                             <Text as={"span"} noOfLines={1}>
-                              Jawa Barat
+                              Medan
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="22"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [22, 23, 24],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("22")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Bandung
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="254"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [254],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("254")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Makassar
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="398"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [398, 399],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("398")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Semarang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="327"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [327],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("327")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Palembang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="48"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [48],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("48")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Batam
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="350"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [350],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("350")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Pekanbaru
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="255"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [255, 256],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("255")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Malang
                             </Text>
                           </Checkbox>
                         </VStack>
@@ -1417,7 +1658,7 @@ const Search = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Container>
   );
 };
 

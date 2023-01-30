@@ -65,7 +65,7 @@ const Layout = ({ children }: ILayoutProps) => {
               <Icon.Search fill="primary" width={"1.2em"} height={"1.2em"} />
             </InputLeftElement>
             <Input
-              placeholder="Search something"
+              placeholder={`Look for "Bunga Natal Merah" in BAZR`}
               border={"none"}
               _focusVisible={{
                 outline: "none",
