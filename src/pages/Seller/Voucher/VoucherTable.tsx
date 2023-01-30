@@ -99,7 +99,7 @@ function VoucherTable(props: { status: string }) {
           <Tbody>
             {isLoading ? (
               <Tr>
-                <Td colSpan={6} textAlign="center">
+                <Td colSpan={7} textAlign="center">
                   <Spinner />
                 </Td>
               </Tr>
@@ -107,7 +107,7 @@ function VoucherTable(props: { status: string }) {
 
             {!isLoading && vouchers?.data.length === 0 ? (
               <Tr>
-                <Td colSpan={6} textAlign="center">
+                <Td colSpan={7} textAlign="center">
                   Empty Data
                 </Td>
               </Tr>

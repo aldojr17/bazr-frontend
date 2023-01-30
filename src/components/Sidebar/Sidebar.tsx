@@ -1,6 +1,6 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import SidebarItem from "./SidebarItem";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ISidebarProps } from "../../interfaces/Sidebar";
 
 function Sidebar(props: ISidebarProps) {
@@ -34,7 +34,9 @@ function Sidebar(props: ISidebarProps) {
         {...props}
       >
         <Flex px="8" py="7">
-          <Image src="/logo.svg" width={"7em"} />
+          <Link to={"/"}>
+            <Image src="/logo.svg" width={"7em"} />
+          </Link>
         </Flex>
         <Flex
           direction="column"

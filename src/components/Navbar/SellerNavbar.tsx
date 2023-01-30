@@ -1,8 +1,11 @@
 import { Avatar, Flex, IconButton } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
+import useUser from "../../hooks/useUser";
 import { NavbarProps } from "../../interfaces/Navbar";
 
 const SellerNavbar = (props: NavbarProps) => {
+  const { user } = useUser();
+
   return (
     <Flex
       as="header"
@@ -23,8 +26,8 @@ const SellerNavbar = (props: NavbarProps) => {
 
       <Flex align="center">
         <Avatar
-          name="Dan Abrahmov"
-          src="https://bit.ly/dan-abramov"
+          name="Profile Picture"
+          src={user?.profile_picture}
           cursor="pointer"
         />
       </Flex>
