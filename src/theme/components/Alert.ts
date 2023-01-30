@@ -13,7 +13,7 @@ const Alert = defineStyleConfig({
     },
     errorToast: {
       container: {
-        bg: "red.400",
+        bg: "danger",
         color: "white",
         boxShadow: "default",
       },

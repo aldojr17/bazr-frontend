@@ -11,6 +11,9 @@ const useToast = () => {
       position: "top",
       variant: "successToast",
       isClosable: true,
+      containerStyle: {
+        marginTop: "100px",
+      },
     });
   };
 
@@ -27,6 +30,9 @@ const useToast = () => {
       position: "top",
       variant: "errorToast",
       isClosable: true,
+      containerStyle: {
+        marginTop: "100px",
+      },
     });
   };
 
@@ -38,6 +44,9 @@ const useToast = () => {
       position: "top",
       variant: "infoToast",
       isClosable: true,
+      containerStyle: {
+        marginTop: "100px",
+      },
     });
   };
 

@@ -6,7 +6,7 @@ import { IProductPayload } from "../../interfaces/Product";
 import routes from "../../routes/Routes";
 
 function StoreProductList(props: IStoreProductListProps) {
-  const { shopId, shopName } = props;
+  const { shopId, shopName, shopUsername } = props;
   const { fetchShopProducts } = useProduct();
 
   const [products, setProducts] = useState<IProductPayload[]>([]);
@@ -23,9 +23,9 @@ function StoreProductList(props: IStoreProductListProps) {
   return (
     <ProductScrollableContainer
       products={products}
-      label={"More from this store"}
+      label={`More from ${shopName}`}
       isLoading={isLoading}
-      link={routes.SHOP(shopName)}
+      link={routes.SHOP(shopUsername)}
     />
   );
 }

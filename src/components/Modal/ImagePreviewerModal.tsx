@@ -8,13 +8,32 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IImagePreviewerModalProps } from "../../interfaces/Components/PDP";
 import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
 
 function ImagePreviewerModal(props: IImagePreviewerModalProps) {
-  const { data, isOpen, onClose } = props;
-  const [selectedImage, setSelectedImage] = useState(data[0]?.url);
+  const { data, isOpen, onClose, selectedId } = props;
+
+  const [selectedImage, setSelectedImage] = useState(data[0]);
+
+  const handleSetSelectedImage = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    let image = data.find(
+      (img) => img.id === parseInt(e.currentTarget.children[0].id)
+    );
+
+    setSelectedImage(image ?? data[0]);
+  };
+
+  useEffect(() => {
+    const image = data.find((img) => img.id === selectedId);
+
+    setSelectedImage(image ?? data[0]);
+  }, [selectedId]);
 
   return (
     <>
@@ -32,35 +51,33 @@ function ImagePreviewerModal(props: IImagePreviewerModalProps) {
               backgroundColor={"white"}
             >
               <Image
-                src={selectedImage}
+                src={selectedImage.url}
                 __css={{
                   objectFit: "scale-down !important",
                 }}
               />
             </AspectRatio>
-            <XScrollableWrapper>
+            <XScrollableWrapper showScrollbar={data.length > 3}>
               {data.map((productPhoto, index) => (
                 <AspectRatio
                   key={index}
                   ratio={1}
                   minW="25%"
-                  onClick={(e) =>
-                    setSelectedImage(
-                      (e.currentTarget.children[0] as HTMLImageElement).src
-                    )
-                  }
+                  onClick={handleSetSelectedImage}
                   filter="auto"
                   brightness={`${
-                    productPhoto.url === selectedImage ? "85%" : "100%"
+                    productPhoto.id === selectedImage.id ? "85%" : "100%"
                   }`}
                   borderRadius="xl"
                   boxShadow="default"
+                  backgroundColor={"white"}
                 >
                   <Image
+                    id={productPhoto.id.toString()}
                     src={productPhoto.url}
                     borderRadius="xl"
                     border={`${
-                      productPhoto.url === selectedImage ? "4px" : "none"
+                      productPhoto.id === selectedImage.id ? "4px" : "none"
                     }`}
                     borderColor={`teal.300`}
                   />

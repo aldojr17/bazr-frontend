@@ -1,4 +1,4 @@
-import { Box, Divider, HStack, Text } from "@chakra-ui/react";
+import { Box, Divider, Heading, HStack, Text } from "@chakra-ui/react";
 import QuantitySelector from "../../components/Default/QuantitySelector";
 import { IProductDetailQuantityProps } from "../../interfaces/Components/PDP";
 
@@ -8,14 +8,16 @@ function ProductDetailQuantity(props: IProductDetailQuantityProps) {
   return (
     <>
       <Box p={3}>
-        <Text fontWeight={"semibold"} fontSize={"lg"}>
+        <Heading fontSize={"md"} mb={3}>
           Select amount:
-        </Text>
+        </Heading>
         <QuantitySelector
           minQty={minQty}
           maxQty={maxQty}
           stock={stock!}
           onQuantityChange={onQuantityChange}
+          defaultValue={minQty}
+          disabled={!stock || stock < minQty}
         />
 
         {stock !== null && (

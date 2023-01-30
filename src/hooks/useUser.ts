@@ -1,10 +1,11 @@
+import { destroyCookie } from "nookies";
 import { useState } from "react";
 import userService from "../api/service/user";
 import {
   IEditProfilePayload,
   IUploadAvatarPayload,
-  IUserFavoriteProductRequestPayload,
   IUserChangePasswordPayload,
+  IUserFavoriteProductRequestPayload,
   IUserPayload,
 } from "../interfaces/User";
 import { storeUser } from "../redux/user";
@@ -27,6 +28,11 @@ const useUser = () => {
 
       setUserLoading(false);
       return response.data;
+    } else {
+      if (response.message === "record not found") {
+        localStorage.clear();
+        destroyCookie(null, "auth");
+      }
     }
 
     setUserLoading(false);

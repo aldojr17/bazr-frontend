@@ -115,6 +115,7 @@ function ProductDetail() {
           <StoreProductList
             shopId={product?.shop?.id!}
             shopName={product?.shop?.name!}
+            shopUsername={product?.shop?.username!}
           />
           <SimilarProductList
             productCategoryId={product?.category_detail?.primary_category?.id!}

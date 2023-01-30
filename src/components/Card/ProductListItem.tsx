@@ -3,39 +3,41 @@ import { IProductListItemProps } from "../../interfaces/Components";
 import { formatCurrency } from "../../util/util";
 
 const ProductListItem = (props: IProductListItemProps) => {
+  const { name, qty, total, variantName, onClick, disabled, productPhoto } =
+    props;
+
   return (
     <HStack alignItems={"start"} gap={3} width={"100%"}>
-      <AspectRatio
-        ratio={1}
-        width={{
-          base: "2em",
-          sm: "2em",
-          md: "3em",
-          lg: "3em",
-          xl: "4em",
-        }}
-        borderRadius={"lg"}
-      >
+      <AspectRatio ratio={1} minWidth={"4em"} borderRadius={"lg"}>
         <Image
-          src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-          alt="Caffe Latte"
+          src={productPhoto}
+          alt={name}
+          fallbackSrc={"./image-fallback.png"}
           borderRadius={"lg"}
+          opacity={disabled ? 0.5 : 1}
         />
       </AspectRatio>
       <VStack alignItems={"flex-start"} width="40%" spacing={1}>
         <Text
           textTransform={"uppercase"}
           fontWeight={"bold"}
-          onClick={props.onClick}
+          onClick={onClick}
+          opacity={disabled ? 0.5 : 1}
+          _hover={{ textDecoration: disabled ? "none" : "underline" }}
         >
-          {props.name}
+          {name}
         </Text>
         <Text fontWeight={"semibold"} fontSize={"xs"} color={"gray.500"}>
-          {props.variant_name} - {props.qty} item(s)
+          {variantName} - {qty} item(s)
         </Text>
-        <Text color={"darkDarken"} fontSize={"sm"} fontWeight={"bold"}>
+        <Text
+          color={"darkDarken"}
+          fontSize={"sm"}
+          fontWeight={"bold"}
+          opacity={disabled ? 0.5 : 1}
+        >
           Rp
-          {formatCurrency(props.total)}
+          {formatCurrency(total)}
         </Text>
       </VStack>
     </HStack>

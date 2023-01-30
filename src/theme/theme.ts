@@ -1,12 +1,13 @@
 import { extendTheme } from "@chakra-ui/react";
 import {
+  Alert,
   Button,
   Divider,
   Heading,
   Input,
   Select,
+  Tabs,
   Text,
-  Alert,
 } from "./components";
 
 export const customTheme = extendTheme({
@@ -21,6 +22,7 @@ export const customTheme = extendTheme({
     secondary: "#B794F4", //purple.300
     secondaryLighten: "#D6BCFA", //purple.200
     secondaryDarken: "#9F7AEA", //purple.400
+    danger: "#F1435A",
     dark: "RGBA(0, 0, 0, 0.64)", //blackAlpha.700
     darkLighten: "RGBA(0, 0, 0, 0.48)", //blackAlpha.600
     darkDarken: "RGBA(0, 0, 0, 0.80)", //blackAlpha.800
@@ -57,12 +59,13 @@ export const customTheme = extendTheme({
     },
   },
   components: {
-    Button,
-    Heading,
-    Select,
-    Divider,
-    Input,
-    Text,
     Alert,
+    Button,
+    Divider,
+    Heading,
+    Input,
+    Select,
+    Tabs,
+    Text,
   },
 });

@@ -6,8 +6,22 @@ import ImagePreviewerModal from "../Modal/ImagePreviewerModal";
 
 function ImagePreviewer(props: IImagePreviewerProps) {
   const { data } = props;
-  const [selectedImage, setSelectedImage] = useState(data[0]?.url);
+
+  const [selectedImage, setSelectedImage] = useState(data[0]);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleSetSelectedImage = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    let image = data.find(
+      (img) => img.id === parseInt(e.currentTarget.children[0].id)
+    );
+
+    setSelectedImage(image ?? data[0]);
+  };
 
   return (
     <>
@@ -22,36 +36,34 @@ function ImagePreviewer(props: IImagePreviewerProps) {
           onClick={onOpen}
         >
           <Image
-            src={selectedImage}
+            src={selectedImage.url}
             __css={{
               objectFit: "scale-down !important",
             }}
           />
         </AspectRatio>
 
-        <XScrollableWrapper>
-          {data.map((productPhoto, index) => (
+        <XScrollableWrapper showScrollbar={data.length > 3}>
+          {data.map((productPhoto) => (
             <AspectRatio
-              key={index}
+              key={productPhoto.id}
               ratio={1}
               minW="25%"
-              onClick={(e) =>
-                setSelectedImage(
-                  (e.currentTarget.children[0] as HTMLImageElement).src
-                )
-              }
+              onClick={handleSetSelectedImage}
               filter="auto"
               brightness={`${
-                productPhoto.url === selectedImage ? "85%" : "100%"
+                productPhoto.id === selectedImage.id ? "85%" : "100%"
               }`}
               borderRadius="xl"
               boxShadow="default"
+              backgroundColor={"white"}
             >
               <Image
+                id={productPhoto.id.toString()}
                 src={productPhoto.url}
                 borderRadius="xl"
                 border={`${
-                  productPhoto.url === selectedImage ? "4px" : "none"
+                  productPhoto.id === selectedImage.id ? "4px" : "none"
                 }`}
                 borderColor={`teal.300`}
               />
@@ -60,7 +72,12 @@ function ImagePreviewer(props: IImagePreviewerProps) {
         </XScrollableWrapper>
       </Box>
 
-      <ImagePreviewerModal data={data} isOpen={isOpen} onClose={onClose} />
+      <ImagePreviewerModal
+        data={data}
+        isOpen={isOpen}
+        onClose={onClose}
+        selectedId={selectedImage.id}
+      />
     </>
   );
 }

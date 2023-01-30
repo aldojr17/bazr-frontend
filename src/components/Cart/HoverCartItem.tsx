@@ -1,9 +1,9 @@
-import { AspectRatio, HStack, Image, Text } from "@chakra-ui/react";
+import { AspectRatio, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { IHoverCartProps } from "../../interfaces/Cart";
-import { formatCurrency, handleImageOnError } from "../../util/util";
+import { formatCurrency } from "../../util/util";
 
 const HoverCartItem = (props: IHoverCartProps) => {
-  const { image, name, price } = props;
+  const { image, name, variantName, quantity, price } = props;
 
   return (
     <HStack
@@ -12,43 +12,35 @@ const HoverCartItem = (props: IHoverCartProps) => {
       spacing={3}
       width="100%"
     >
-      <AspectRatio
-        ratio={1}
-        flex={"2"}
-        maxWidth={14}
-        border={"1px solid"}
-        borderColor={"light"}
-        borderRadius={"xl"}
-        boxShadow={"default"}
-      >
+      <AspectRatio ratio={1} minWidth={"4em"} borderRadius={"lg"}>
         <Image
           src={image}
-          objectFit={"cover"}
-          onError={handleImageOnError}
-          borderRadius={"xl"}
+          alt={name}
+          fallbackSrc={"./image-fallback.png"}
+          borderRadius={"lg"}
         />
       </AspectRatio>
+      <VStack flex={2} alignItems={"flex-start"} width="40%" spacing={1}>
+        <Text textTransform={"uppercase"} fontWeight={"bold"}>
+          {name}
+        </Text>
+        <Text fontWeight={"semibold"} fontSize={"xs"} color={"gray.500"}>
+          {variantName !== "DEFAULT" && `${variantName} - `}
+          {quantity} {quantity > 1 ? "items" : "item"}
+        </Text>
+        <Text color={"dark"} fontSize={"sm"} fontWeight={"semibold"}>
+          Rp {formatCurrency(price)}
+        </Text>
+      </VStack>
       <Text
         as="span"
-        fontWeight={"semibold"}
-        color={"dark"}
-        textTransform={"uppercase"}
-        noOfLines={1}
-        textAlign={"start"}
-        pt={1}
-        flex={"1"}
-      >
-        {name}
-      </Text>
-      <Text
-        as="span"
-        fontWeight={"semibold"}
+        fontWeight={"bold"}
         color={"primary"}
         noOfLines={1}
         textAlign={"end"}
         pt={1}
       >
-        Rp{formatCurrency(price!)}
+        Rp {formatCurrency(price * quantity)}
       </Text>
     </HStack>
   );

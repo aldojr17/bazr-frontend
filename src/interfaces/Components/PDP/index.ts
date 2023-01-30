@@ -61,6 +61,7 @@ export interface IImagePreviewerModalProps {
   data: IProductPhotoPayload[];
   isOpen: boolean;
   onClose: () => void;
+  selectedId: number;
 }
 
 export interface ISingleImagePreviewerModalProps {
@@ -98,6 +99,7 @@ export interface IProductDetailVariantsProps {
 export interface IStoreProductListProps {
   shopId: number;
   shopName: string;
+  shopUsername: string;
 }
 
 export interface ISimilarProductListProps {

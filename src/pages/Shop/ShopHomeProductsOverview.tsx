@@ -1,15 +1,21 @@
-import { Box, Center, Flex, GridItem, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import ProductCard from "../../components/Card/ProductCard";
+import ProductContainer from "../../components/Container/ProductContainer";
 import useProduct from "../../hooks/useProduct";
-import { ISearchFilterPayload } from "../../interfaces/Filter";
 import { IProductPaginationPayload } from "../../interfaces/Product";
 import { IShopHomeProductsOverviewProps } from "../../interfaces/Shop";
-import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
 
 function ShopHomeProductsOverview(props: IShopHomeProductsOverviewProps) {
+  const {
+    shopId,
+    resetCategory,
+    setIndexActiveTab,
+    scrollToSortOption,
+    resetSortBy,
+    resetSort,
+    resetPage,
+  } = props;
   const { fetchShopProducts } = useProduct();
-  const [shopProducts, setshopProducts] = useState<IProductPaginationPayload>({
+  const [shopProducts, setShopProducts] = useState<IProductPaginationPayload>({
     current_page: 0,
     data: [],
     limit: 0,
@@ -25,92 +31,30 @@ function ShopHomeProductsOverview(props: IShopHomeProductsOverviewProps) {
     },
   };
 
-  const myConst = {
-    indexTabAllProduct: 0,
+  const handleMoreProducts = () => {
+    resetCategory();
+    setIndexActiveTab(0);
+    resetSortBy();
+    resetSort();
+    resetPage();
+    scrollToSortOption();
   };
 
   useEffect(() => {
-    const _useEffectAsync = async () => {
-      const searchFilterPayload: ISearchFilterPayload = {
-        limit: requirement.quantityProductToDisplay,
-        sort: requirement.sortBy.most,
-        sortBy: requirement.sortBy.purchased,
-      };
-      const shopProducts = await fetchShopProducts(
-        props.shopId,
-        searchFilterPayload
-      );
-      if (shopProducts) {
-        setshopProducts(shopProducts);
-      }
-    };
-    _useEffectAsync();
-  }, [props.shopId]);
+    fetchShopProducts(shopId, {
+      limit: requirement.quantityProductToDisplay,
+      sort: requirement.sortBy.most,
+      sortBy: requirement.sortBy.purchased,
+    }).then((response) => setShopProducts(response!));
+  }, [shopId]);
 
   return (
-    <Box className="py-3">
-      <Flex justifyContent="space-between">
-        <Heading
-          size={{ base: "sm", sm: "sm", md: "md", lg: "lg" }}
-          className="pb-4"
-        >
-          Best Selling Products
-        </Heading>
-        <Box
-          onClick={() => {
-            props.resetCategory();
-            props.setIndexActiveTab(myConst.indexTabAllProduct);
-            props.resetSortBy();
-            props.resetSort();
-            props.resetPage();
-            props.scrollToSortOption();
-          }}
-          paddingEnd={{
-            base: "",
-            sm: "2",
-            md: "15",
-            lg: "30",
-          }}
-          color="primary"
-          role="button"
-        >
-          More Best Selling {">"}
-        </Box>
-      </Flex>
-      <Flex
-        wrap="wrap"
-        direction="row"
-        justifyContent="space-evenly"
-        rowGap={{ base: 1, sm: 3, lg: 2 }}
-        columnGap={{ base: 1, sm: 2, lg: 1 }}
-        _after={{
-          md: { content: '""', flex: "auto" },
-          lg: { content: "none" },
-        }}
-      >
-        {shopProducts.data.length !== 0 ? (
-          <XScrollableWrapper>
-            {shopProducts.data.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </XScrollableWrapper>
-        ) : (
-          <GridItem
-            colSpan={{
-              base: 2,
-              sm: 2,
-              md: 3,
-              lg: 4,
-              xl: 4,
-            }}
-          >
-            <Center>
-              <Text>No products available.</Text>
-            </Center>
-          </GridItem>
-        )}
-      </Flex>
-    </Box>
+    <ProductContainer
+      products={shopProducts.data}
+      label={"Best Seller"}
+      seeMoreLabel={"more best sellers"}
+      onSeeMore={handleMoreProducts}
+    />
   );
 }
 

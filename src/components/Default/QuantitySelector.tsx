@@ -5,16 +5,23 @@ import useDebounce from "../../hooks/useDebounce";
 import { IQuantitySelectorProps } from "../../interfaces/Components";
 
 function QuantitySelector(props: IQuantitySelectorProps) {
-  const { minQty = 1, maxQty = 99, stock = 0, onQuantityChange } = props;
+  const { disabled, minQty, maxQty, stock, defaultValue, onQuantityChange } =
+    props;
 
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(defaultValue ?? 1);
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       focusInputOnChange: false,
-      defaultValue: 1,
-      min: minQty > 1 ? minQty : 1,
-      max: maxQty > 0 && maxQty < stock! ? maxQty : stock! > 0 ? stock! : 1,
+      defaultValue: defaultValue ?? 1,
+      min: minQty && minQty > 1 ? minQty : 1,
+      max:
+        maxQty && maxQty > 0 && maxQty < stock!
+          ? maxQty
+          : stock! > 0
+          ? stock!
+          : 1,
+      isDisabled: disabled,
       onChange: (string, number) => {
         if (string !== "") {
           setQuantity(number);
@@ -30,7 +37,7 @@ function QuantitySelector(props: IQuantitySelectorProps) {
   }, [quantity]);
 
   useEffect(() => {
-    setQuantity(1);
+    setQuantity(defaultValue ?? 1);
   }, [stock]);
 
   return (

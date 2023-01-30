@@ -23,18 +23,32 @@ function ProductAction(props: IProductActionProps) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [favCount, setFavCount] = useState(favoriteCount);
   const [isFavorited, setIsFavorited] = useState(isFavorite);
 
   const handleFavoriteProduct = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (isFavorited) {
+      setFavCount(favCount - 1);
+    } else {
+      setFavCount(favCount + 1);
+    }
+    setIsFavorited(!isFavorited);
+
     setUserFavoriteProduct({ product_id: productId }).catch((err) => {
       if (err === "Invalid credential") {
         navigate(routes.LOGIN, { state: window.location.pathname });
       } else {
-        errorToast("Failed to add item to favorite", err);
+        errorToast("Failed to favorite item", err);
+
+        if (isFavorite) {
+          setFavCount(favCount - 1);
+        } else {
+          setFavCount(favCount + 1);
+        }
+        setIsFavorited(!isFavorited);
       }
     });
-    setIsFavorited(!isFavorited);
   };
 
   return (
@@ -62,7 +76,7 @@ function ProductAction(props: IProductActionProps) {
         >
           Favorite
           <Text color={"darkLighten"} ms={1}>
-            ({favoriteCount})
+            ({favCount})
           </Text>
         </Button>
         <Center display={{ base: "none", lg: "block" }} height="25px">

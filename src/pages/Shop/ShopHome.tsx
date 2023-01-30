@@ -1,51 +1,53 @@
-import { useParams } from "react-router-dom";
 import {
+  Box,
+  Button,
   Container,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Select,
   Skeleton,
   Tab,
   TabList,
   Tabs,
   Text,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  Box,
-  Grid,
-  GridItem,
-  Flex,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Button,
-  Select,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Icon from "../../assets/icons";
+import { useScroll } from "../../hooks/useScroll";
 import useShop from "../../hooks/useShop";
+import useTitle from "../../hooks/useTitle";
 import {
   IFlatShopCategories,
   IShopHomeProductsProps,
   IShopProfilePayload,
 } from "../../interfaces/Shop";
-import ShopHomeProducts from "./ShopHomeProducts";
-import ShopProfile from "./ShopProfile";
-import ShopHomeProductsOverview from "./ShopHomeProductsOverview";
-import { useScroll } from "../../hooks/useScroll";
+import { formatTitle } from "../../util/util";
 import ShopCategoryBeside from "./ShopCategoryBeside";
-import Icon from "../../assets/icons";
-import useTitle from "../../hooks/useTitle";
+import ShopHomeProducts from "./ShopHomeProducts";
+import ShopHomeProductsOverview from "./ShopHomeProductsOverview";
+import ShopProfile from "./ShopProfile";
 
 function ShopHome() {
   const { shopUsername } = useParams();
-  useTitle(`BAZR | ${shopUsername}`);
+  useTitle(formatTitle(shopUsername!));
   const [isFetchShopProfileLoaded, setIsFetchShopProfileLoaded] =
-    useState(true);
+    useState(false);
   const [shopProfile, setShopProfile] = useState<IShopProfilePayload | null>({
     id: 0,
     name: "",
     username: "",
+    profile_picture: "",
     city: "",
     joined_at: "",
     total_product: 0,
@@ -59,7 +61,7 @@ function ShopHome() {
     []
   );
   const [isShopCategoriesLoaded, setIsShopCategoriesLoaded] =
-    useState<boolean>(true);
+    useState<boolean>(false);
   const myConst = {
     indexUnset: -1,
     categoryIdUnset: 0,
@@ -142,25 +144,23 @@ function ShopHome() {
   };
 
   useEffect(() => {
-    const _useEffectAsync = async () => {
-      setIsFetchShopProfileLoaded(false);
-      const response = await fetchShopProfileByShopUsername(shopUsername!);
+    fetchShopProfileByShopUsername(shopUsername!).then((response) => {
       setShopProfile(response);
       setIsFetchShopProfileLoaded(true);
 
-      setIsShopCategoriesLoaded(false);
-      const shopCategories = await fetchShopCategories(response?.id!);
-      if (shopCategories) {
-        setshopCategories2(flattenShopCategories(shopCategories));
-      }
-      setIsShopCategoriesLoaded(true);
-    };
-    _useEffectAsync();
+      fetchShopCategories(response?.id!).then((res) => {
+        setshopCategories2(flattenShopCategories(res!));
+        setIsShopCategoriesLoaded(true);
+      });
+    });
   }, [shopUsername]);
+
+  console.log(categoryId, shopCategories);
+
   return (
-    <Container maxW="8xl">
+    <Container maxW="container.xl">
       <ShopProfile
-        isFetchShopProfileLoaded={isFetchShopProfileLoaded}
+        isLoaded={isFetchShopProfileLoaded}
         shopProfile={shopProfile}
       />
       <Tabs
@@ -168,11 +168,11 @@ function ShopHome() {
         isLazy
         onChange={() => setIsAutoScrollToProducts(true)}
         index={indexActiveTab}
-        colorScheme="red"
         display={{
           base: "none",
           md: "block",
         }}
+        variant={"default"}
       >
         <TabList>
           <Tab
@@ -182,7 +182,7 @@ function ShopHome() {
               setIndexCategorySelect(myConst.indexUnset);
             }}
           >
-            All Products
+            <Text noOfLines={1}>All Products</Text>
           </Tab>
           {shopCategories
             .slice(0, requirements.tabQuantityToBeDisplay)
@@ -195,26 +195,33 @@ function ShopHome() {
                 }}
                 key={`${category.id};${index}`}
               >
-                <Skeleton isLoaded={isShopCategoriesLoaded}>
+                <Skeleton isLoaded={isShopCategoriesLoaded} noOfLines={1}>
                   {category.name}
                 </Skeleton>
               </Tab>
             ))}
-          {shopCategories.length > requirements.tabQuantityToBeDisplay ? (
+          {shopCategories.length > requirements.tabQuantityToBeDisplay && (
             <Tab>
-              <Popover trigger="hover">
+              <Popover offset={[15, 12]} placement={"bottom-end"}>
                 <PopoverTrigger>
-                  <Text>
-                    Others
-                    <Icon.ArrowDown />
-                  </Text>
+                  <HStack
+                    gap={1}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    width={"100%"}
+                  >
+                    <Text>Others</Text>
+                    <Icon.ChevronDown pt={1} fill={"currentcolor"} />
+                  </HStack>
                 </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverBody>
+                <PopoverContent width={"fit-content"}>
+                  <PopoverBody width={"200px"} display={"block"}>
                     {shopCategories
                       .slice(requirements.tabQuantityToBeDisplay)
                       .map((category, index) => (
                         <Text
+                          align={"end"}
+                          mb={1}
                           onClick={() => {
                             changeCategory(
                               index + requirements.tabQuantityToBeDisplay
@@ -224,15 +231,21 @@ function ShopHome() {
                               index + requirements.tabQuantityToBeDisplay
                             );
                           }}
-                          textColor={
+                          color={
                             categoryId ===
-                            shopCategories[
-                              index + requirements.tabQuantityToBeDisplay
-                            ].id
+                              shopCategories[
+                                index + requirements.tabQuantityToBeDisplay
+                              ].id &&
+                            categoryLevel ===
+                              shopCategories[
+                                index + requirements.tabQuantityToBeDisplay
+                              ].level
                               ? ""
-                              : "black"
+                              : "darkLighten"
                           }
+                          fontSize={"md"}
                           key={`${category.id};${index}`}
+                          _hover={{ color: "dark" }}
                         >
                           {category.name}
                         </Text>
@@ -241,8 +254,6 @@ function ShopHome() {
                 </PopoverContent>
               </Popover>
             </Tab>
-          ) : (
-            ""
           )}
         </TabList>
       </Tabs>

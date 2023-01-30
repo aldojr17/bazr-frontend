@@ -7,27 +7,18 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import { IProductPayload } from "../../interfaces/Product";
+import routes from "../../routes/Routes";
 import { formatCurrency, handleImageOnError } from "../../util/util";
 
 const ProductCard = ({ ...props }: IProductPayload) => {
   const navigate = useNavigate();
 
-  const [isHover, setIsHover] = useState(false);
-
   return (
     <Box
-      onClick={() =>
-        navigate(
-          `/pdp/${props.id}/${props.name
-            .replace(/[^\w]+/gm, " ")
-            .split(" ")
-            .join("-")}`
-        )
-      }
+      onClick={() => navigate(routes.PDP(props.id, props.name))}
       flexShrink={0}
       w={{
         base: "49%",
@@ -39,8 +30,6 @@ const ProductCard = ({ ...props }: IProductPayload) => {
       borderColor={"light"}
       borderRadius={"lg"}
       boxShadow={"default"}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
     >
       <AspectRatio ratio={1} objectFit={"cover"} borderRadius={"lg"}>
         <Image
@@ -50,32 +39,41 @@ const ProductCard = ({ ...props }: IProductPayload) => {
         />
       </AspectRatio>
       <Flex p={3} direction={"column"}>
-        <Text variant={"productCardTitle"} noOfLines={1}>
+        <Text
+          fontSize={"xl"}
+          fontWeight={"semibold"}
+          textTransform={"uppercase"}
+          noOfLines={1}
+        >
           {props.name}
         </Text>
-        <Text
-          variant={"productCardPrice"}
-          __css={{
-            marginTop: 0,
-          }}
-        >
+        <Text variant={"productCardPrice"} mb={1}>
           Rp {formatCurrency(props.lowest_price!)}
         </Text>
-        <Flex gap={2} alignItems={"center"} wrap={"nowrap"}>
-          <Icon.Shop fill={"secondary"} width={3.5} />
-          <Text variant={"productCardRating"} noOfLines={1}>
+        <Flex gap={2} alignItems={"center"} wrap={"nowrap"} mb={1}>
+          <Icon.Shop fill={"primaryDarken"} width={3.5} />
+          <Text
+            fontSize={"xs"}
+            fontWeight={"semibold"}
+            color={"dark"}
+            noOfLines={1}
+          >
             {props.shop?.name}
           </Text>
-          <Center height="15px">
-            <Divider orientation="vertical" />
-          </Center>
-          <Icon.Location fill={"secondary"} width={3.5} />
-          <Text variant={"productCardRating"} noOfLines={1}>
+        </Flex>
+        <Flex gap={2} alignItems={"center"} wrap={"nowrap"} mb={1}>
+          <Icon.Location fill={"primaryDarken"} width={3.5} />
+          <Text
+            fontSize={"xs"}
+            fontWeight={"semibold"}
+            color={"dark"}
+            noOfLines={1}
+          >
             {props.shop?.location}
           </Text>
         </Flex>
         <Flex gap={2} alignItems={"center"} mt={5}>
-          <Icon.Star fill={"yellow.300"} width={4} />
+          <Icon.Star fill={"yellow.200"} width={4} />
           {props.rating! > 0 ? (
             <>
               <Text variant={"productCardRating"}>{props.rating}</Text>
@@ -89,7 +87,9 @@ const ProductCard = ({ ...props }: IProductPayload) => {
               <Center height="15px">
                 <Divider orientation="vertical" />
               </Center>
-              <Text variant={"productCardReview"}>{props.unit_sold} sold</Text>
+              <Text variant={"productCardReview"} noOfLines={1}>
+                {props.unit_sold} sold
+              </Text>
             </>
           )}
         </Flex>

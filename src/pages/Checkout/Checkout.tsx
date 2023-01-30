@@ -410,11 +410,10 @@ const Checkout = () => {
                               >
                                 <ProductListItem
                                   key={childVal.variant_id}
-                                  index={childIndex}
                                   name={childVal.product_name}
                                   qty={childVal.quantity}
                                   total={val.total}
-                                  variant_name={childVal.variant_type_name
+                                  variantName={childVal.variant_type_name
                                     .split(",")
                                     .join(", ")}
                                 />

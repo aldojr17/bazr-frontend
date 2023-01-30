@@ -4,11 +4,11 @@ export interface IShopsResponsePayload {
   message: string;
 }
 
-// TODO: Wait aldo to update API, he will add shop foto profile.
 export interface IShopProfilePayload {
   id: number;
   name: string;
   username: string;
+  profile_picture: string;
   city: string;
   joined_at: string;
   total_product: number;
@@ -17,6 +17,7 @@ export interface IShopProfilePayload {
 export interface IShopPayload {
   id: number;
   name: string;
+  username: string;
   location: string;
 }
 
@@ -94,8 +95,8 @@ export interface IFlatShopCategories {
 }
 
 export interface IShopProfileProps {
-  isFetchShopProfileLoaded: boolean;
   shopProfile: IShopProfilePayload | null;
+  isLoaded: boolean;
 }
 
 export interface IShopHomeProductsOverviewProps {

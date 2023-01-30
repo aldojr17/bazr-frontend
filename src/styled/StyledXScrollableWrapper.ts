@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const XScrollableWrapper = styled.div`
+export const XScrollableWrapper = styled.div<{ showScrollbar?: boolean }>`
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 0.5rem;
   padding-bottom: 5px;
   overflow-x: scroll;
 
@@ -13,12 +13,13 @@ export const XScrollableWrapper = styled.div`
     }
 
     ::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 2px #319795;
+      display: ${(props) => (props.showScrollbar ? "flex" : "none")};
+      box-shadow: inset 0 0 2px #4fd1c5;
       border-radius: 10px;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #38b2ac;
+      background: #4fd1c5;
       border-radius: 10px;
     }
   }
@@ -32,6 +33,6 @@ export const XScrollableWrapper = styled.div`
   }
 
   ::-webkit-scrollbar-thumb {
-    background: white;
+    background: transparent;
   }
 `;
