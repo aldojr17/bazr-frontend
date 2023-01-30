@@ -3,7 +3,6 @@ import { Icon, IconProps } from "@chakra-ui/react";
 const GeoMap = (props: IconProps) => {
   return (
     <Icon
-      viewBox="0 0 24 24"
       width={props.width ? props.width : "1.2em"}
       height={props.height ? props.height : "1.2em"}
       {...props}

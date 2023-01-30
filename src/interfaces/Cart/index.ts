@@ -15,6 +15,7 @@ export interface ICartResponsePayload {
 export interface ICartPayload {
   product_id?: number;
   product_name: string;
+  product_photo: string;
   variant_type_name: string;
   variant_type_price: number;
   quantity: number;
@@ -38,6 +39,8 @@ export interface CartState {
 export interface IHoverCartProps {
   image: string;
   name: string;
+  variantName: string;
+  quantity: number;
   price: number;
 }
 

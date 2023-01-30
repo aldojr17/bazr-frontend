@@ -14,7 +14,7 @@ const Text = defineStyleConfig({
       fontWeight: "semibold",
     },
     productCardPrice: {
-      fontSize: "lg",
+      fontSize: "xl",
       fontWeight: "bold",
       color: "primary",
     },
@@ -32,6 +32,9 @@ const Text = defineStyleConfig({
       fontSize: "sm",
       fontWeight: "semibold",
       color: "primary",
+      _hover: {
+        color: "primaryDarken",
+      },
     },
     footerItem: {
       marginY: 3,

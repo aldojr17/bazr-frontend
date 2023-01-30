@@ -32,6 +32,7 @@ const initialState: CartState = {
     product_id: 0,
     cart_id: 0,
     product_name: "",
+    product_photo: "",
     quantity: 0,
     shop_id: 0,
     shop_name: "",

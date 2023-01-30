@@ -94,7 +94,10 @@ export interface IProductContainerProps {
   isLoading?: boolean;
   isError?: boolean;
   onError?: Function;
+  loadMoreLabel?: string;
   onLoadMore?: Function;
+  seeMoreLabel?: string;
+  onSeeMore?: () => void;
 }
 
 export interface IErrorContainerProps {
@@ -250,28 +253,25 @@ export interface IVoucherCardProps {
 }
 
 export interface IProductListItemProps {
-  index: number;
   name: string;
   qty: number;
   total: number;
-  variant_name: string;
+  variantName: string;
   onClick?: () => void;
+  disabled?: boolean;
+  productPhoto?: string;
 }
 
 export interface IStoreListItemProps {
   shopName: string;
   shopCityName: string;
-  // index: number;
-  // name: string;
-  // qty: number;
-  // total: number;
-  // variant_name: string;
-  // onClick?: () => void;
 }
 
 export interface IQuantitySelectorProps {
+  disabled?: boolean;
   minQty?: number;
   maxQty?: number;
   stock?: number;
+  defaultValue?: number;
   onQuantityChange: (qty: number) => void;
 }

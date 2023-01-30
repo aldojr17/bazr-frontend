@@ -1,6 +1,8 @@
 import {
   Avatar,
   Flex,
+  Heading,
+  HStack,
   SimpleGrid,
   Skeleton,
   Stack,
@@ -10,15 +12,15 @@ import dayjs from "dayjs";
 import Icon from "../../assets/icons";
 import ShopProfileDetail from "../../components/Shop/ShopProfileDetail";
 import { IShopProfileProps } from "../../interfaces/Shop";
-import { customTheme } from "../../theme/theme";
 
 function ShopProfile(props: IShopProfileProps) {
-  const { isFetchShopProfileLoaded, shopProfile } = props;
+  const { shopProfile, isLoaded } = props;
+
   return (
-    <Skeleton isLoaded={isFetchShopProfileLoaded}>
+    <Skeleton isLoaded={isLoaded}>
       <Stack
-        align="center"
-        className="p-3"
+        align="start"
+        p={8}
         direction={{ base: "column", md: "row" }}
         maxW="8xl"
         backgroundColor="lightLighten"
@@ -26,60 +28,48 @@ function ShopProfile(props: IShopProfileProps) {
         my={10}
         boxShadow="default"
       >
-        <Flex
-          className="p-2"
+        <HStack
           width={{ base: "100%", md: "50%", lg: "30%" }}
-          align="center"
+          align="start"
+          gap={5}
         >
           <Avatar
             borderRadius="full"
-            boxSize={{
-              base: "75px",
-              md: "100px",
-              lg: "150px",
-            }}
-            // TODO: update shop profile
-            src=""
+            boxSize={20}
+            src={shopProfile?.profile_picture}
           />
-          <Flex className="px-4" direction="column">
+          <Flex direction="column">
+            <Heading variant={"productTitle"}>{shopProfile?.name}</Heading>
             <Text
-              maxWidth="15rem"
-              noOfLines={2}
-              fontSize="x-large"
-              className="px-1"
-              as="b"
+              noOfLines={1}
+              color={"darkLighten"}
+              fontWeight={"semibold"}
+              fontSize={"lg"}
             >
-              {shopProfile?.name}
+              @{shopProfile?.username}
             </Text>
-            <Flex direction="row">
-              <Text color={customTheme.colors.darkLighten}>@</Text>
-              <Text noOfLines={1} color={customTheme.colors.darkLighten}>
-                {shopProfile?.username}
-              </Text>
-            </Flex>
           </Flex>
-        </Flex>
+        </HStack>
         <SimpleGrid
           columns={{
             base: 1,
             lg: 2,
           }}
           width={{ base: "100%", md: "50", lg: "70%" }}
-          spacingY="20px"
-          justifyContent="space-evenly"
+          spacingY={3}
         >
           <ShopProfileDetail
-            icon={<Icon.Shop />}
-            title="Products"
-            value={shopProfile!.total_product.toString()}
-          />
-          <ShopProfileDetail
-            icon={<Icon.GeoMap />}
+            icon={<Icon.GeoMap boxSize={5} />}
             title="City"
             value={shopProfile!.city}
           />
           <ShopProfileDetail
-            icon={<Icon.PersonCheck />}
+            icon={<Icon.Shop boxSize={5} />}
+            title="Products"
+            value={shopProfile!.total_product.toString()}
+          />
+          <ShopProfileDetail
+            icon={<Icon.PersonCheck boxSize={5} />}
             title="Joined At"
             value={dayjs(shopProfile?.joined_at).format("MMMM YYYY")}
           />

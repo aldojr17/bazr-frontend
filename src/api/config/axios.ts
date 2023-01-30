@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { API_PATH } from "../path";
 
@@ -46,30 +46,6 @@ export const handleHttpResponse = (status: string, message?: string) => {
     }
   }
 };
-
-// const handleFallback = (
-//   method: string,
-//   url: string,
-//   payload?: AxiosRequestConfig
-// ) => {
-//   switch (method) {
-//     case "get":
-//       instance.get(url, payload?.params);
-//       return;
-//     case "post":
-//       instance.post(url, JSON.parse(payload?.data!)).catch((err) => {
-//         console.log("Fallback Error: ", err);
-//         // const error = err && err.response && err.response.data;
-//         // if (error && error.message === "unauthorized") {
-//         //   localStorage.clear()
-//         //   window.location.replace("/login");
-//         // }
-//       });
-//       return;
-//     default:
-//       return;
-//   }
-// };
 
 instance.interceptors.response.use(
   (res) => {
@@ -120,7 +96,7 @@ instance.interceptors.response.use(
       if (err.code === "ERR_NETWORK" || err.code === "ERR_CONNECTION_REFUSED") {
         return Promise.reject(handleHttpResponse("0"));
       } else {
-        throw error;
+        throw Promise.reject(err.response.data.message);
       }
     }
   }

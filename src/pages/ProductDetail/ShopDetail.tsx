@@ -72,7 +72,7 @@ function ShopDetail(props: IShopDetailProps) {
                 <Divider orientation="vertical" />
               </Center>
               <HStack>
-                <Text>Product: </Text>
+                <Text fontWeight={"semibold"}>Product: </Text>
                 <Text>{shopDetail?.total_product!}</Text>
               </HStack>
             </Flex>

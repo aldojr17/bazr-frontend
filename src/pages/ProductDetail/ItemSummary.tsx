@@ -2,12 +2,12 @@ import { Box, Button, Divider } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
-import useToast from "../../hooks/useToast";
 import useOrder from "../../hooks/useOrder";
+import useToast from "../../hooks/useToast";
 import { ICartAddUpdateRequestPayload } from "../../interfaces/Cart";
 import { IItemSummaryProps } from "../../interfaces/Components/PDP";
-import ProductAction from "./ProductAction";
 import routes from "../../routes/Routes";
+import ProductAction from "./ProductAction";
 import ProductDetailQuantity from "./ProductDetailQuantity";
 import ProductDetailVariant from "./ProductDetailVariant";
 
@@ -59,7 +59,10 @@ function ItemSummary(props: IItemSummaryProps) {
 
       setIsLoading(true);
       updateCart(cartPayload)
-        .then(() => getCart())
+        .then(() => {
+          getCart();
+          successToast("Item added to cart!");
+        })
         .catch((err) => {
           if (err === "Invalid credential") {
             navigate(routes.LOGIN, { state: window.location.pathname });
@@ -67,10 +70,7 @@ function ItemSummary(props: IItemSummaryProps) {
             errorToast("Failed to add item to cart", err);
           }
         })
-        .finally(() => {
-          setIsLoading(false);
-          successToast("Item added to cart!");
-        });
+        .finally(() => setIsLoading(false));
     }
   };
 
@@ -107,21 +107,20 @@ function ItemSummary(props: IItemSummaryProps) {
                 ],
               },
             ],
-          })
-            .then((resp) => {
-              if (resp.is_success) {
-                setCheckoutData(resp.data);
-                setCheckoutCartIds([response?.cart_item_id!]);
-                navigate(routes.CART_SHIPMENT, { replace: true });
-              }
-            })
-            .catch((err) => {
-              if (err === "Invalid credential") {
-                navigate(routes.LOGIN, { state: window.location.pathname });
-              } else {
-                errorToast("Failed to buy now", err);
-              }
-            });
+          }).then((resp) => {
+            if (resp.is_success) {
+              setCheckoutData(resp.data);
+              setCheckoutCartIds([response?.cart_item_id!]);
+              navigate(routes.CART_SHIPMENT, { replace: true });
+            }
+          });
+        })
+        .catch((err) => {
+          if (err === "Invalid credential") {
+            navigate(routes.LOGIN, { state: window.location.pathname });
+          } else {
+            errorToast("Failed to buy now", err);
+          }
         })
         .finally(() => {
           setIsLoading(false);

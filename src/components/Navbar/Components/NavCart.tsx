@@ -24,6 +24,11 @@ function NavCart() {
   const navigate = useNavigate();
   const { cart } = useCart();
 
+  const cartLength = cart.reduce(
+    (total, cartItem) => total + cartItem.quantity,
+    0
+  );
+
   const handleNavigateToCartPage = () => {
     if (parseCookies().auth) {
       navigate(routes.CART);
@@ -59,13 +64,13 @@ function NavCart() {
                 sm: "1.4em",
               }}
             />
-            {cart.length !== 0 && <Divider mt={1} width={"25px"} />}
+            {cartLength !== 0 && <Divider mt={1} width={"25px"} />}
           </Flex>
           <Text
-            left={cart.length > 9 ? "1.2em" : "1.3em"}
-            bottom={cart.length > 9 ? "1em" : "0.87em"}
+            left={cartLength > 9 ? "0.9rem" : "1.3em"}
+            bottom={cartLength > 9 ? "1em" : "0.87em"}
             fontSize={
-              cart.length > 9
+              cartLength > 9
                 ? {
                     base: "0.65em",
                     sm: "0.7em",
@@ -75,7 +80,7 @@ function NavCart() {
             as={"span"}
             position={"absolute"}
           >
-            {cart.length !== 0 ? (cart.length > 9 ? "9+" : cart.length) : ""}
+            {cartLength !== 0 ? (cartLength > 9 ? "9+" : cartLength) : ""}
           </Text>
         </Button>
       </PopoverTrigger>
@@ -107,8 +112,10 @@ function NavCart() {
                 {cart.slice(0, 5).map((value, index) => (
                   <HoverCartItem
                     key={index}
-                    image=""
+                    image={value.product_photo}
                     name={value.product_name}
+                    variantName={value.variant_type_name}
+                    quantity={value.quantity}
                     price={value.variant_type_price}
                   />
                 ))}

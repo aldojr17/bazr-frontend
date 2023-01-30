@@ -85,7 +85,7 @@ function CategoryScrollableContainer(props: ICategoryScrollableContainerProps) {
             </Box>
           ) : (
             <Skeleton isLoaded={!isLoading} borderRadius={"lg"}>
-              <XScrollableWrapper>
+              <XScrollableWrapper showScrollbar>
                 {categories.map((category) => (
                   <CategoryCard
                     {...category!}

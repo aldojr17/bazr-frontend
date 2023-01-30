@@ -2,7 +2,7 @@ const routes = {
   HOME: "/",
   SEARCH: (query?: string, c?: number, cl?: number) =>
     `/search?q=${query}${c && `&c=${c}`}${cl && `&cl=${cl}`}`,
-  PDP: (id: number, title: string) => `/search/${id}/${title}`,
+  PDP: (id: number, productName: string) => `/pdp/${id}/${productName}`,
   PRIMARY_CATEGORY: (cPrimary: string) => `/p/${cPrimary}`,
   SECONDARY_CATEGORY: (
     cPrimary: string,

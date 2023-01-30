@@ -134,7 +134,13 @@ function Review(props: IReviewProps) {
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
+                    <Box
+                      as="span"
+                      flex="1"
+                      textAlign="left"
+                      fontWeight={"semibold"}
+                      fontSize={"sm"}
+                    >
                       Rating
                     </Box>
                     <AccordionIcon />
@@ -149,7 +155,7 @@ function Review(props: IReviewProps) {
                     >
                       <Icon.Star
                         mt={"-.3em"}
-                        fill={"orange"}
+                        fill={"yellow.200"}
                         width={"1em"}
                         marginEnd={2}
                       />
@@ -162,7 +168,7 @@ function Review(props: IReviewProps) {
                     >
                       <Icon.Star
                         mt={"-.3em"}
-                        fill={"orange"}
+                        fill={"yellow.200"}
                         width={"1em"}
                         marginEnd={2}
                       />
@@ -175,7 +181,7 @@ function Review(props: IReviewProps) {
                     >
                       <Icon.Star
                         mt={"-.3em"}
-                        fill={"orange"}
+                        fill={"yellow.200"}
                         width={"1em"}
                         marginEnd={2}
                       />
@@ -188,7 +194,7 @@ function Review(props: IReviewProps) {
                     >
                       <Icon.Star
                         mt={"-.3em"}
-                        fill={"orange"}
+                        fill={"yellow.200"}
                         width={"1em"}
                         marginEnd={2}
                       />
@@ -201,7 +207,7 @@ function Review(props: IReviewProps) {
                     >
                       <Icon.Star
                         mt={"-.3em"}
-                        fill={"orange"}
+                        fill={"yellow.200"}
                         width={"1em"}
                         marginEnd={2}
                       />
@@ -213,7 +219,13 @@ function Review(props: IReviewProps) {
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
+                    <Box
+                      as="span"
+                      flex="1"
+                      textAlign="left"
+                      fontWeight={"semibold"}
+                      fontSize={"sm"}
+                    >
                       Comment
                     </Box>
                     <AccordionIcon />
@@ -225,7 +237,7 @@ function Review(props: IReviewProps) {
                     colorScheme={"default"}
                     onChange={handleChangeType}
                   >
-                    <Text as={"span"} fontWeight={"normal"}>
+                    <Text as={"span"} fontWeight={"normal"} fontSize={"sm"}>
                       With comments
                     </Text>
                   </Checkbox>
@@ -235,7 +247,13 @@ function Review(props: IReviewProps) {
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
+                    <Box
+                      as="span"
+                      flex="1"
+                      textAlign="left"
+                      fontWeight={"semibold"}
+                      fontSize={"sm"}
+                    >
                       Media
                     </Box>
                     <AccordionIcon />
@@ -247,7 +265,7 @@ function Review(props: IReviewProps) {
                     colorScheme={"default"}
                     onChange={handleChangeType}
                   >
-                    <Text as={"span"} fontWeight={"normal"}>
+                    <Text as={"span"} fontWeight={"normal"} fontSize={"sm"}>
                       With photo
                     </Text>
                   </Checkbox>

@@ -217,7 +217,7 @@ function AddProductForm() {
       }
       productPayload.min_buy_qty = Number(formInput.minQty);
 
-      if (formInput.maxQty !== "" && Number(formInput.maxQty) < 1) {
+      if (formInput.maxQty !== "" && !(Number(formInput.maxQty) < 1)) {
         productPayload.max_buy_qty = Number(formInput.maxQty);
       }
 

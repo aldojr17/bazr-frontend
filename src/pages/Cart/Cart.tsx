@@ -32,7 +32,6 @@ import Toast from "../../components/Toast/Toast";
 import useCart from "../../hooks/useCart";
 import useOrder from "../../hooks/useOrder";
 import useTitle from "../../hooks/useTitle";
-import useUser from "../../hooks/useUser";
 import { ICartPayload } from "../../interfaces/Cart";
 import { ICheckoutOrderPayload } from "../../interfaces/Transaction";
 import routes from "../../routes/Routes";
@@ -65,7 +64,6 @@ const Cart = () => {
     []
   );
   const [total, setTotal] = useState<number>(0);
-  const { user } = useUser();
 
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.checked) {
@@ -321,7 +319,7 @@ const Cart = () => {
                             colorScheme={"default"}
                           />
                           <StoreListItem
-                            shopName={Object.values(val).at(index)?.shop_name!}
+                            shopName={Object.values(val).at(0)?.shop_name!}
                             shopCityName={"Bandung"}
                           />
                         </HStack>
