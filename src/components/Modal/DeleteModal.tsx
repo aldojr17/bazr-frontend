@@ -30,7 +30,12 @@ function DeleteModal(props: IDeleteModalProps) {
           </ModalBody>
 
           <ModalFooter justifyContent={"center"} mb={"30px"}>
-            <Button variant="ghost" mr={3} onClick={props.onClose}>
+            <Button
+              variant="solid"
+              colorScheme={"gray"}
+              mr={3}
+              onClick={props.onClose}
+            >
               Cancel
             </Button>
             <Button

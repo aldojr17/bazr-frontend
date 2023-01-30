@@ -32,24 +32,23 @@ function VoucherForm(props: IVoucherFormProps) {
   });
 
   const voucherValidationSchema = Yup.object().shape({
-    code: Yup.string().length(5).required("Required"),
+    code: Yup.string().min(1).max(5).required("Required"),
     quota: Yup.number().min(1).required("Required"),
-    benefit: Yup.number().min(0).required("Required"),
+    benefit: Yup.number().min(0),
     benefit_percentage: Yup.number()
       .min(0)
       .max(100)
-      .required("Required")
       .when("benefit", {
         is: (benefit: number) => benefit > 0,
         then: (b) =>
           b.test(
             "benefit_percentage",
             "fill in one of the benefit or benefit percentage fields",
-            (value) => value !== undefined && value === 0
+            (value) => value === undefined || value === 0
           ),
       })
       .when("benefit", {
-        is: (benefit: number) => benefit === 0,
+        is: (benefit: number) => benefit === 0 || benefit === undefined,
         then: (b) =>
           b.test(
             "benefit_percentage",
@@ -64,6 +63,13 @@ function VoucherForm(props: IVoucherFormProps) {
       .min(
         Yup.ref("start_date"),
         "expiry date must be greater or equal than start date"
+      )
+      .test(
+        "current date",
+        "expiry date must be greater or equal than current date",
+        (value) => {
+          return value !== undefined && value >= new Date();
+        }
       ),
   });
 
@@ -112,11 +118,13 @@ function VoucherForm(props: IVoucherFormProps) {
           onSubmit={(values) => {
             props.onSubmit({
               ...values,
+              benefit: Number(values.benefit),
+              benefit_percentage: Number(values.benefit_percentage),
               code: values.code.toUpperCase(),
             } as IVoucherPayload);
           }}
         >
-          {({ handleSubmit, errors, touched }) => {
+          {({ handleSubmit, errors, touched, values }) => {
             return (
               <form onSubmit={handleSubmit}>
                 <CardBody>
@@ -137,6 +145,7 @@ function VoucherForm(props: IVoucherFormProps) {
                           <InputLeftAddon children={voucherCode.prefix} />
                           <Field
                             as={Input}
+                            borderStartRadius={0}
                             type="text"
                             name="code"
                             textTransform="uppercase"
@@ -146,7 +155,10 @@ function VoucherForm(props: IVoucherFormProps) {
                                 ? "filled"
                                 : "outline"
                             }
-                            isReadOnly={props.isDisabled || props.isEdit}
+                            _disabled={{
+                              opacity: 1,
+                            }}
+                            isDisabled={props.isDisabled || props.isEdit}
                           />
                         </InputGroup>
                       </Skeleton>
@@ -160,7 +172,10 @@ function VoucherForm(props: IVoucherFormProps) {
                           type="number"
                           name="quota"
                           variant={props.isDisabled ? "filled" : "outline"}
-                          isReadOnly={props.isDisabled}
+                          _disabled={{
+                            opacity: 1,
+                          }}
+                          isDisabled={props.isDisabled}
                         />
                       </Skeleton>
                       <FormErrorMessage>{errors.quota}</FormErrorMessage>
@@ -174,10 +189,20 @@ function VoucherForm(props: IVoucherFormProps) {
                           <InputLeftAddon children="Rp" />
                           <Field
                             as={Input}
+                            borderStartRadius={0}
                             type="number"
                             name="benefit"
-                            variant={props.isDisabled ? "filled" : "outline"}
-                            isReadOnly={props.isDisabled}
+                            variant={
+                              props.isDisabled || values.benefit_percentage > 0
+                                ? "filled"
+                                : "outline"
+                            }
+                            _disabled={{
+                              opacity: 1,
+                            }}
+                            isDisabled={
+                              props.isDisabled || values.benefit_percentage > 0
+                            }
                           />
                         </InputGroup>
                       </Skeleton>
@@ -194,10 +219,18 @@ function VoucherForm(props: IVoucherFormProps) {
                         <InputGroup>
                           <Field
                             as={Input}
+                            borderEndRadius={0}
                             type="number"
                             name="benefit_percentage"
-                            variant={props.isDisabled ? "filled" : "outline"}
-                            isReadOnly={props.isDisabled}
+                            variant={
+                              props.isDisabled || values.benefit > 0
+                                ? "filled"
+                                : "outline"
+                            }
+                            _disabled={{
+                              opacity: 1,
+                            }}
+                            isDisabled={props.isDisabled || values.benefit > 0}
                           />
                           <InputRightAddon children="%" />
                         </InputGroup>
@@ -226,10 +259,14 @@ function VoucherForm(props: IVoucherFormProps) {
                           <InputLeftAddon children="Rp" />
                           <Field
                             as={Input}
+                            borderStartRadius={0}
                             type="number"
                             name="min_purchase"
                             variant={props.isDisabled ? "filled" : "outline"}
-                            isReadOnly={props.isDisabled}
+                            _disabled={{
+                              opacity: 1,
+                            }}
+                            isDisabled={props.isDisabled}
                           />
                         </InputGroup>
                       </Skeleton>
@@ -245,7 +282,10 @@ function VoucherForm(props: IVoucherFormProps) {
                           type="datetime-local"
                           name="start_date"
                           variant={props.isDisabled ? "filled" : "outline"}
-                          isReadOnly={props.isDisabled}
+                          _disabled={{
+                            opacity: 1,
+                          }}
+                          isDisabled={props.isDisabled}
                         />
                       </Skeleton>
                       <FormErrorMessage>{errors.start_date}</FormErrorMessage>
@@ -260,7 +300,10 @@ function VoucherForm(props: IVoucherFormProps) {
                           type="datetime-local"
                           name="expiry_date"
                           variant={props.isDisabled ? "filled" : "outline"}
-                          isReadOnly={props.isDisabled}
+                          _disabled={{
+                            opacity: 1,
+                          }}
+                          isDisabled={props.isDisabled}
                         />
                       </Skeleton>
                       <FormErrorMessage>{errors.expiry_date}</FormErrorMessage>
