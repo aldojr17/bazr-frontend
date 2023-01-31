@@ -11,9 +11,10 @@ import SellerNavbar from "../components/Navbar/SellerNavbar";
 import { ISidebarMenu } from "../interfaces/Sidebar";
 
 import { IoTicket, IoPricetag } from "react-icons/io5";
-import { BsGearFill } from "react-icons/bs";
 import { HiCollection } from "react-icons/hi";
-import { MdHome } from "react-icons/md";
+import { MdHome, MdOutlineLocalShipping } from "react-icons/md";
+import useUser from "../hooks/useUser";
+import { useEffect } from "react";
 
 const SellerLayout = (props: ILayoutProps) => {
   const sidebar = useDisclosure();
@@ -22,8 +23,17 @@ const SellerLayout = (props: ILayoutProps) => {
     { name: "Product", icon: HiCollection, path: "/seller/product" },
     { name: "Voucher", icon: IoTicket, path: "/seller/voucher" },
     { name: "Promotion", icon: IoPricetag, path: "/seller/promotion" },
-    { name: "Settings", icon: BsGearFill, path: "/" },
+    {
+      name: "Shipment",
+      icon: MdOutlineLocalShipping,
+      path: "/seller/shipment",
+    },
   ];
+  const { fetchProfile } = useUser();
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <>

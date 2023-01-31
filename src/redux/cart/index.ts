@@ -40,6 +40,7 @@ const initialState: CartState = {
     variant_type_name: "",
     variant_type_price: 0,
     city_id: 0,
+    city_name: "",
     max_buy_qty: 0,
     min_buy_qty: 0,
     stock: 0,

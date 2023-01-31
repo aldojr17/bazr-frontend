@@ -40,6 +40,7 @@ export const API_PATH = {
     UPLOAD_PRODUCT_PHOTOS: "/upload/product",
     SHOPS_PROMOTION: "/shops/promotions",
     SET_SHOP_DEFAULT_ADDRESS: "/shops/address",
+    COURIER: "/shops/couriers",
   },
   wallet: {
     VERIFY_PIN: "/wallets/step-up/pin",

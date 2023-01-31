@@ -412,10 +412,11 @@ const Checkout = () => {
                                   key={childVal.variant_id}
                                   name={childVal.product_name}
                                   qty={childVal.quantity}
-                                  total={val.total}
+                                  total={childVal.total}
                                   variantName={childVal.variant_type_name
                                     .split(",")
                                     .join(", ")}
+                                  productPhoto={childVal.product_photo}
                                 />
                               </Box>
                               <Divider />

@@ -25,6 +25,7 @@ export interface ICartPayload {
   variant_type_id: number;
   stock: number;
   city_id: number;
+  city_name: string;
   min_buy_qty: number;
   max_buy_qty: number;
 }

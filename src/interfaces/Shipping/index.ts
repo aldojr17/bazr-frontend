@@ -36,3 +36,20 @@ export interface IShippingCostETDValueResponse {
   note: string;
   value: number;
 }
+
+export interface ICourierListResponse {
+  data: ICourierListDataResponse[];
+  is_success: boolean;
+  message: string;
+}
+
+export interface ICourierListDataResponse {
+  shop_id: number;
+  couriers: ICourierDataResponse[];
+}
+
+export interface ICourierDataResponse {
+  id: number;
+  code: string;
+  name: string;
+}
