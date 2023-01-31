@@ -83,6 +83,7 @@ export interface ICheckoutOrderDetailResponse {
   total: number;
   notes: string;
   product_name: string;
+  product_photo: string;
   variant_type_name: string;
 }
 

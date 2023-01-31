@@ -435,8 +435,8 @@ const Search = () => {
             <VStack spacing={5}>
               <VStack alignItems={"start"} spacing={5} width={"100%"}>
                 <Heading
-                  size={{
-                    lg: "sm",
+                  fontSize={{
+                    lg: "md",
                     xl: "md",
                   }}
                 >
@@ -449,8 +449,18 @@ const Search = () => {
                       xl: "md",
                     }}
                   >
-                    <InputLeftAddon children="Rp" />
+                    <InputLeftAddon
+                      style={{
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                      }}
+                      children="Rp"
+                    />
                     <Input
+                      style={{
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      }}
                       type="number"
                       placeholder="Minimum Price"
                       _focusVisible={{
@@ -467,8 +477,18 @@ const Search = () => {
                       xl: "md",
                     }}
                   >
-                    <InputLeftAddon children="Rp" />
+                    <InputLeftAddon
+                      children="Rp"
+                      style={{
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                      }}
+                    />
                     <Input
+                      style={{
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      }}
                       type="number"
                       placeholder="Maximum Price"
                       _focusVisible={{
@@ -500,8 +520,8 @@ const Search = () => {
                       <AccordionButton py={2} px={1}>
                         <Box as="span" flex="1" textAlign="left">
                           <Heading
-                            size={{
-                              lg: "sm",
+                            fontSize={{
+                              lg: "md",
                               xl: "md",
                             }}
                           >
@@ -529,13 +549,19 @@ const Search = () => {
                                       role={"button"}
                                       fontSize={{
                                         lg: "sm",
-                                        xl: "md",
+                                        xl: "sm",
                                       }}
                                       fontWeight={
                                         params.c! === String(category.id) &&
                                         params.cl === "1"
                                           ? "bold"
-                                          : "normal"
+                                          : "semibold"
+                                      }
+                                      color={
+                                        params.c! === String(category.id) &&
+                                        params.cl === "1"
+                                          ? "primary"
+                                          : "dark"
                                       }
                                     >
                                       {category.name}
@@ -571,14 +597,21 @@ const Search = () => {
                                                     role={"button"}
                                                     fontSize={{
                                                       lg: "sm",
-                                                      xl: "md",
+                                                      xl: "sm",
                                                     }}
                                                     fontWeight={
                                                       params.c! ===
                                                         String(secondary.id) &&
                                                       params.cl === "2"
                                                         ? "bold"
-                                                        : "normal"
+                                                        : "semibold"
+                                                    }
+                                                    color={
+                                                      params.c! ===
+                                                        String(secondary.id) &&
+                                                      params.cl === "2"
+                                                        ? "primary"
+                                                        : "dark"
                                                     }
                                                   >
                                                     {secondary.name}
@@ -615,7 +648,7 @@ const Search = () => {
                                                               role={"button"}
                                                               fontSize={{
                                                                 lg: "sm",
-                                                                xl: "md",
+                                                                xl: "sm",
                                                               }}
                                                               fontWeight={
                                                                 params.c! ===
@@ -625,7 +658,17 @@ const Search = () => {
                                                                 params.cl ===
                                                                   "3"
                                                                   ? "bold"
-                                                                  : "normal"
+                                                                  : "semibold"
+                                                              }
+                                                              color={
+                                                                params.c! ===
+                                                                  String(
+                                                                    tertiary.id
+                                                                  ) &&
+                                                                params.cl ===
+                                                                  "3"
+                                                                  ? "primary"
+                                                                  : "dark"
                                                               }
                                                             >
                                                               {tertiary.name}
@@ -657,8 +700,8 @@ const Search = () => {
                       <AccordionButton py={2} px={1}>
                         <Box as="span" flex="1" textAlign="left">
                           <Heading
-                            size={{
-                              lg: "sm",
+                            fontSize={{
+                              lg: "md",
                               xl: "md",
                             }}
                           >
@@ -675,7 +718,7 @@ const Search = () => {
                         >
                           <Icon.Star
                             mt={"-.3em"}
-                            fill={"orange"}
+                            fill={"yellow.200"}
                             width={"1.2em"}
                             marginEnd={2}
                           />
@@ -693,8 +736,8 @@ const Search = () => {
                       <AccordionButton py={2} px={1}>
                         <Box as="span" flex="1" textAlign="left">
                           <Heading
-                            size={{
-                              lg: "sm",
+                            fontSize={{
+                              lg: "md",
                               xl: "md",
                             }}
                           >
@@ -716,7 +759,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("151")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               DKI Jakarta
                             </Text>
                           </Checkbox>
@@ -731,7 +779,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("444")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Surabaya
                             </Text>
                           </Checkbox>
@@ -746,7 +799,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("278")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Medan
                             </Text>
                           </Checkbox>
@@ -761,7 +819,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("22")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Bandung
                             </Text>
                           </Checkbox>
@@ -776,7 +839,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("254")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Makassar
                             </Text>
                           </Checkbox>
@@ -791,7 +859,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("398")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Semarang
                             </Text>
                           </Checkbox>
@@ -806,7 +879,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("327")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Palembang
                             </Text>
                           </Checkbox>
@@ -821,7 +899,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("48")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Batam
                             </Text>
                           </Checkbox>
@@ -836,7 +919,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("350")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Pekanbaru
                             </Text>
                           </Checkbox>
@@ -851,7 +939,12 @@ const Search = () => {
                             }}
                             isChecked={params.city?.includes("255")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               Malang
                             </Text>
                           </Checkbox>
@@ -900,13 +993,16 @@ const Search = () => {
                 <Text
                   fontSize={{
                     lg: "sm",
-                    xl: "lg",
+                    xl: "sm",
                   }}
+                  fontWeight={"semibold"}
+                  color={"lightDarken"}
                 >
                   Sort by:
                 </Text>
                 <Button
-                  fontWeight={sortBy === "view_count" ? "bold" : "normal"}
+                  fontWeight={sortBy === "view_count" ? "bold" : "semibold"}
+                  color={sortBy === "view_count" ? "primary" : "dark"}
                   variant={"unstyled"}
                   size={{
                     lg: "sm",
@@ -917,36 +1013,38 @@ const Search = () => {
                   <Text
                     fontSize={{
                       lg: "sm",
-                      xl: "lg",
+                      xl: "sm",
                     }}
                   >
                     Recommended
                   </Text>
                 </Button>
                 <Button
-                  fontWeight={sortBy === "date" ? "bold" : "normal"}
+                  fontWeight={sortBy === "date" ? "bold" : "semibold"}
+                  color={sortBy === "date" ? "primary" : "dark"}
                   variant={"unstyled"}
                   size={{
                     lg: "xs",
-                    xl: "md",
+                    xl: "sm",
                   }}
                   onClick={() => handleChangeSortBy("date")}
                 >
                   <Text
                     fontSize={{
                       lg: "sm",
-                      xl: "lg",
+                      xl: "sm",
                     }}
                   >
                     Newest
                   </Text>
                 </Button>
                 <Button
-                  fontWeight={sortBy === "unit_sold" ? "bold" : "normal"}
+                  fontWeight={sortBy === "unit_sold" ? "bold" : "semibold"}
+                  color={sortBy === "unit_sold" ? "primary" : "dark"}
                   variant={"unstyled"}
                   size={{
                     lg: "xs",
-                    xl: "md",
+                    xl: "sm",
                   }}
                   onClick={() => {
                     handleChangeSortBy("unit_sold");
@@ -956,14 +1054,15 @@ const Search = () => {
                   <Text
                     fontSize={{
                       lg: "sm",
-                      xl: "lg",
+                      xl: "sm",
                     }}
                   >
                     Most buy
                   </Text>
                 </Button>
                 <Button
-                  fontWeight={sortBy === "lowest_price" ? "bold" : "normal"}
+                  fontWeight={sortBy === "lowest_price" ? "bold" : "semibold"}
+                  color={sortBy === "lowest_price" ? "primary" : "dark"}
                   variant={"unstyled"}
                   size={{
                     lg: "xs",
@@ -974,7 +1073,7 @@ const Search = () => {
                   <Text
                     fontSize={{
                       lg: "sm",
-                      xl: "lg",
+                      xl: "sm",
                     }}
                   >
                     Price
@@ -1010,7 +1109,7 @@ const Search = () => {
                 borderRadius={"md"}
                 size={{
                   lg: "sm",
-                  xl: "md",
+                  xl: "sm",
                 }}
                 onClick={handleClearFilter}
                 display={{
@@ -1024,7 +1123,7 @@ const Search = () => {
                 <Text
                   fontSize={{
                     lg: "sm",
-                    xl: "lg",
+                    xl: "sm",
                   }}
                 >
                   Clear Filter

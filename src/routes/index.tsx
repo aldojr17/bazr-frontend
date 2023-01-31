@@ -69,6 +69,7 @@ const SellerPromotionDetail = React.lazy(
 const SellerPromotionDuplicate = React.lazy(
   () => import("../pages/Seller/Promotion/PromotionDuplicate")
 );
+const Shipment = React.lazy(() => import("../pages/Seller/Shipment/Shipment"));
 
 const SealabsPayRedirect = React.lazy(
   () => import("../pages/SealabsPay/Redirect")
@@ -117,6 +118,7 @@ const RouteList = () => {
 
       <Route element={<SellerRoutes />}>
         <Route path="/seller/home" element={<SellerHome />} />
+        <Route path="/seller/shipment" element={<Shipment />} />
         <Route path="/seller/voucher" element={<SellerVoucher />} />
         <Route path="/seller/product" element={<ProductDashboard />} />
         <Route path="/seller/product/new" element={<AddProductForm />} />

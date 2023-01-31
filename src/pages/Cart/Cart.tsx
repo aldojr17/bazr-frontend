@@ -320,7 +320,7 @@ const Cart = () => {
                           />
                           <StoreListItem
                             shopName={Object.values(val).at(0)?.shop_name!}
-                            shopCityName={"Bandung"}
+                            shopCityName={Object.values(val).at(0)?.city_name!}
                           />
                         </HStack>
 
