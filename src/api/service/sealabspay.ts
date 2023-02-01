@@ -7,6 +7,7 @@ import {
   ISealabsPayDeletePayload,
   ISealabsPayDeleteResponsePayload,
   ISealabsPayTopupPayload,
+  ISealabsPayPaymentPayload,
 } from "../../interfaces/SealabsPay";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
@@ -51,6 +52,21 @@ const topUpWalletSealabsPay = async (
   }
 };
 
+const paymentSealabsPay = async (
+  payload: ISealabsPayPaymentPayload,
+  transactionId: number
+): Promise<ISealabsPayAddNewResponsePayload> => {
+  try {
+    const response = await instance.post<ISealabsPayAddNewResponsePayload>(
+      API_PATH.sealabs_pay.SEALABS_PAY + `/payment/${transactionId}`,
+      payload
+    );
+    return response.data;
+  } catch (err) {
+    return err as ISealabsPayAddNewResponsePayload;
+  }
+};
+
 const updateUserDefaultSealabsPay = async (
   payload: ISealabsPayUpdateDefaultPayload
 ): Promise<ISealabsPayUpdateDefaultResponsePayload> => {
@@ -85,6 +101,7 @@ const sealabsPayService = {
   updateUserDefaultSealabsPay,
   deleteSealabsPay,
   topUpWalletSealabsPay,
+  paymentSealabsPay,
 };
 
 export default sealabsPayService;

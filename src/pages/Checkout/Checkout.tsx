@@ -53,7 +53,11 @@ import { formatCurrency } from "../../util/util";
 import OrderSummaryCard from "./OrderSummaryCard";
 import SealabsPayChooseAccountModal from "../../components/Modal/SealabsPayChooseAccountModal";
 import useSealabsPay from "../../hooks/useSealabsPay";
-import { ISealabsPayDataResponsePayload } from "../../interfaces/SealabsPay";
+import {
+  ISealabsPayDataResponsePayload,
+  ISealabsPayTopupPayload,
+} from "../../interfaces/SealabsPay";
+import sealabsPayService from "../../api/service/sealabspay";
 
 const Checkout = () => {
   useTitle("Checkout");
@@ -67,7 +71,7 @@ const Checkout = () => {
     checkoutCart,
   } = useCart();
   const { fetchProfile } = useUser();
-  const { errorToast } = useToast();
+  const { infoToast, errorToast } = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenSealabsPay,

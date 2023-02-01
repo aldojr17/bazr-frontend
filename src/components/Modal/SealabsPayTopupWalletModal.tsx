@@ -1,6 +1,5 @@
 import {
   Button,
-  Center,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -16,6 +15,7 @@ import sealabsPayService from "../../api/service/sealabspay";
 import useToast from "../../hooks/useToast";
 import useSealabsPay from "../../hooks/useSealabsPay";
 import useUser from "../../hooks/useUser";
+import SealabsPayOTP from "../IFrame/SealabsPayOTP";
 
 const SealabsPayTopupWalletModal = ({
   ...props
@@ -53,20 +53,20 @@ const SealabsPayTopupWalletModal = ({
       redirect_url: `${window.location.origin}/sealabs_pay/redirect`,
     };
 
-    const response = await sealabsPayService
+    const res = await sealabsPayService
       .topUpWalletSealabsPay(payload)
       .finally(() => setIsLoading(false));
 
-    if (response.is_success) {
+    if (res.is_success) {
       infoToast("Please enter the OTP");
-      setIframeUrl(response.data);
+      setIframeUrl(res.data);
     } else {
-      if (response.message === "user:insufficient-fund") {
+      if (res.message === "user:insufficient-fund") {
         errorToast("Insufficient balance, please top up!");
-      } else if (response.message === "user:user-not-found") {
+      } else if (res.message === "user:not-found") {
         errorToast("Invalid SeaLabs Pay account");
       } else {
-        errorToast("Failed to topup your wallet. \n ", response.message);
+        errorToast("Failed to topup your wallet. \n ", res.message);
       }
     }
   };
@@ -82,19 +82,6 @@ const SealabsPayTopupWalletModal = ({
       );
     }
   }, [redirectParams]);
-
-  useEffect(() => {
-    if (redirected >= 1) {
-      const searchParams = new URLSearchParams(params);
-      let message = searchParams.get("message");
-      let status = searchParams.get("status");
-      if (message && status) {
-        setRedirectParams({ message, status });
-        setRedirected(0);
-        setIframeUrl("");
-      }
-    }
-  }, [redirected, params]);
   return (
     <>
       <SealabsPayChooseAccountModal
@@ -145,18 +132,15 @@ const SealabsPayTopupWalletModal = ({
           )}
         </Formik>
         {iframeUrl !== "" && (
-          <Center mt={8}>
-            <iframe
-              title="Sealabs OTP"
-              src={iframeUrl}
-              height={"700px"}
-              hidden={redirected >= 1}
-              onLoad={(e) => {
-                setParams(e.currentTarget.contentWindow?.location.search);
-                setRedirected(redirected + 1);
-              }}
-            ></iframe>
-          </Center>
+          <SealabsPayOTP
+            setRedirectParams={setRedirectParams}
+            setIframeUrl={setIframeUrl}
+            iframeUrl={iframeUrl}
+            setParams={setParams}
+            params={params}
+            redirected={redirected}
+            setRedirected={setRedirected}
+          />
         )}
       </SealabsPayChooseAccountModal>
     </>

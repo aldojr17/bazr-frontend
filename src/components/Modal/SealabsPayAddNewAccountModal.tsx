@@ -11,7 +11,6 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
-  Center,
   AlertIcon,
   Alert,
 } from "@chakra-ui/react";
@@ -23,6 +22,7 @@ import useSealabsPay from "../../hooks/useSealabsPay";
 import useToast from "../../hooks/useToast";
 import { ISealabsPayAddNewAccountProps } from "../../interfaces/Components";
 import { ISealabsPayAddNewPayload } from "../../interfaces/SealabsPay";
+import SealabsPayOTP from "../IFrame/SealabsPayOTP";
 
 const SealabsPayAddNewAccountModal = ({
   ...props
@@ -70,14 +70,14 @@ const SealabsPayAddNewAccountModal = ({
       infoToast("Please enter the OTP");
       setIframeUrl(response.data);
     } else {
-      if (response.message === "user:insufficient-fund") {
+      if ((response as unknown as string) === "user:insufficient-fund") {
         errorToast("Insufficient balance, please top up!");
-      } else if (response.message === "user:user-not-found") {
+      } else if ((response as unknown as string) === "user:not-found") {
         errorToast("Invalid SeaLabs Pay account");
       } else {
         errorToast(
-          "Failed to add your sealabs pay account. \n ",
-          response.message
+          "Failed to add your Sealabs Pay account. \n ",
+          response as unknown as string
         );
       }
     }
@@ -99,19 +99,6 @@ const SealabsPayAddNewAccountModal = ({
       );
     }
   }, [redirectParams]);
-
-  useEffect(() => {
-    if (redirected >= 1) {
-      const searchParams = new URLSearchParams(params);
-      let message = searchParams.get("message");
-      let status = searchParams.get("status");
-      if (message && status) {
-        setRedirectParams({ message, status });
-        setRedirected(0);
-        setIframeUrl("");
-      }
-    }
-  }, [redirected, params]);
 
   return (
     <Modal
@@ -182,18 +169,15 @@ const SealabsPayAddNewAccountModal = ({
           </Formik>
 
           {iframeUrl !== "" && (
-            <Center mt={8}>
-              <iframe
-                title="Sealabs OTP"
-                src={iframeUrl}
-                height={"700px"}
-                hidden={redirected >= 1}
-                onLoad={(e) => {
-                  setParams(e.currentTarget.contentWindow?.location.search);
-                  setRedirected(redirected + 1);
-                }}
-              ></iframe>
-            </Center>
+            <SealabsPayOTP
+              setRedirectParams={setRedirectParams}
+              setIframeUrl={setIframeUrl}
+              iframeUrl={iframeUrl}
+              setParams={setParams}
+              params={params}
+              redirected={redirected}
+              setRedirected={setRedirected}
+            />
           )}
         </ModalBody>
 
