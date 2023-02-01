@@ -53,11 +53,9 @@ import { formatCurrency } from "../../util/util";
 import OrderSummaryCard from "./OrderSummaryCard";
 import SealabsPayChooseAccountModal from "../../components/Modal/SealabsPayChooseAccountModal";
 import useSealabsPay from "../../hooks/useSealabsPay";
-import {
-  ISealabsPayDataResponsePayload,
-  ISealabsPayTopupPayload,
-} from "../../interfaces/SealabsPay";
-import sealabsPayService from "../../api/service/sealabspay";
+import routes from "../../routes/Routes";
+import { IUserAddress } from "../../interfaces/User";
+import { ISealabsPayDataResponsePayload } from "../../interfaces/SealabsPay";
 
 const Checkout = () => {
   useTitle("Checkout");
@@ -71,7 +69,7 @@ const Checkout = () => {
     checkoutCart,
   } = useCart();
   const { fetchProfile } = useUser();
-  const { infoToast, errorToast } = useToast();
+  const { errorToast } = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenSealabsPay,
@@ -86,11 +84,14 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { fetchShippingCost } = useShipping();
   const { createCheckout, createTransaction } = useOrder();
+  const { getUserAddresses } = useUser();
 
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<IUserPayload | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<number>(0);
   const [pinInput, setPinInput] = useState("");
+  const [userAddresses, setUserAddresses] = useState<IUserAddress[]>([]);
+  const [addressNotif, setAddressNotif] = useState<number>(0);
   const {
     marketplaceVouchers,
     fetchAllMarketplaceVoucher,
@@ -149,6 +150,13 @@ const Checkout = () => {
     courierId: number,
     shopId: number
   ) => {
+    if (checkoutData.address_detail.city_id === 0) {
+      errorToast("Please set a delivery address");
+      return;
+    }
+
+    setIsLoading(true);
+
     const cost = await fetchShippingCost({
       origin: shopCity.toString(),
       destination: checkoutData.address_detail.city_id.toString(),
@@ -173,14 +181,17 @@ const Checkout = () => {
     );
 
     const response = await createCheckout({
+      address_id: addressNotif,
       orders: orders,
       user_voucher_id: selectedMarketplaceVoucher.id,
     });
 
     if (response.is_success) {
       setCheckoutData(response.data);
+      setIsLoading(false);
     } else {
       errorToast(response.message);
+      setIsLoading(false);
     }
   };
 
@@ -216,6 +227,7 @@ const Checkout = () => {
     );
 
     const response = await createCheckout({
+      address_id: addressNotif,
       orders: orders,
       user_voucher_id: selectedMarketplaceVoucher.id,
     });
@@ -239,6 +251,7 @@ const Checkout = () => {
     );
 
     const response = await createCheckout({
+      address_id: addressNotif,
       orders: orders,
       user_voucher_id: selectedMarketplaceVoucher.id,
     });
@@ -250,14 +263,51 @@ const Checkout = () => {
     }
   };
 
+  const handleSetAddress = async () => {
+    if (user?.default_address_id === 0) {
+      navigate(routes.PROFILE);
+      return;
+    }
+
+    const response = await getUserAddresses();
+
+    if (response.is_success) {
+      setUserAddresses(response.data);
+    } else {
+      errorToast(response.message);
+    }
+  };
+
   useEffect(() => {
     createCheckout({
+      address_id: addressNotif,
       user_voucher_id: selectedMarketplaceVoucher.id,
       orders: checkoutData.cart,
     })
       .then((resp) => setCheckoutData(resp.data))
       .catch((err) => errorToast(err));
   }, [selectedMarketplaceVoucher]);
+
+  useEffect(() => {
+    let orders: ICheckoutOrderPayload[];
+    orders = checkoutData.cart.map(
+      (value) =>
+        (value = {
+          ...value,
+          courier_id: 0,
+          delivery_fee: 0,
+          etd: "",
+        })
+    );
+
+    createCheckout({
+      address_id: addressNotif,
+      user_voucher_id: selectedMarketplaceVoucher.id,
+      orders: orders,
+    })
+      .then((resp) => setCheckoutData(resp.data))
+      .catch((err) => errorToast(err));
+  }, [addressNotif]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -335,17 +385,61 @@ const Checkout = () => {
                         Delivery Address
                       </Text>
 
-                      <Button
-                        variant={"primaryLink"}
-                        p={0}
-                        height={0}
-                        pt="5"
-                        size={"sm"}
-                      >
-                        {user?.default_address_id !== 0
-                          ? "Change Address"
-                          : "Set Address"}
-                      </Button>
+                      <Popover placement="bottom-end" isLazy offset={[0, 15]}>
+                        <PopoverTrigger>
+                          <Button
+                            variant={"primaryLink"}
+                            pt="5"
+                            size={"sm"}
+                            onClick={handleSetAddress}
+                            height={0}
+                            _active={{
+                              bg: "none",
+                            }}
+                          >
+                            {user?.default_address_id !== 0
+                              ? "Change Address"
+                              : "Set Address"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          width={"10em"}
+                          bg={"gray.100"}
+                          borderRadius={"lg"}
+                        >
+                          <PopoverBody p={0} maxHeight="30%">
+                            <VStack
+                              width={"100%"}
+                              alignItems={"start"}
+                              maxHeight="20vh"
+                              overflowY={"scroll"}
+                            >
+                              {userAddresses.map((data) => {
+                                return (
+                                  <Box
+                                    justifyContent={"start"}
+                                    width={"100%"}
+                                    p={3}
+                                    cursor={"pointer"}
+                                    fontWeight={"bold"}
+                                    fontSize={"sm"}
+                                    _hover={{
+                                      bg: "light",
+                                    }}
+                                    onClick={async () => {
+                                      setAddressNotif(data.address_id);
+                                    }}
+                                  >
+                                    {data.street_name +
+                                      ", " +
+                                      data.district_ward}
+                                  </Box>
+                                );
+                              })}
+                            </VStack>
+                          </PopoverBody>
+                        </PopoverContent>
+                      </Popover>
                     </HStack>
                     {user?.default_address_id !== 0 ? (
                       <>
@@ -545,6 +639,7 @@ const Checkout = () => {
                                       _active={{
                                         bg: "none",
                                       }}
+                                      disabled={isLoading}
                                     >
                                       {val.courier_id !== 0
                                         ? "Change Courier"

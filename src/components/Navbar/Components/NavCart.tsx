@@ -51,6 +51,7 @@ function NavCart() {
             base: 0,
             sm: "initial",
           }}
+          bottom={cartLength > 9 ? "0" : "0.23em"}
           onClick={handleNavigateToCartPage}
         >
           <Flex direction={"column"} alignItems={"center"} pt={1}>
