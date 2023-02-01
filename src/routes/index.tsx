@@ -71,6 +71,10 @@ const SellerPromotionDuplicate = React.lazy(
 );
 const Shipment = React.lazy(() => import("../pages/Seller/Shipment/Shipment"));
 
+const SellerFinance = React.lazy(
+  () => import("../pages/Seller/Finance/Finance")
+);
+
 const SealabsPayRedirect = React.lazy(
   () => import("../pages/SealabsPay/Redirect")
 );
@@ -159,6 +163,7 @@ const RouteList = () => {
           path="/seller/promotion/:id/duplicate"
           element={<SellerPromotionDuplicate />}
         />
+        <Route path="/seller/finance" element={<SellerFinance />} />
         <Route path="/seller/order" element={<SellerOrder />} />
         <Route
           path="/seller/order/:id/detail"

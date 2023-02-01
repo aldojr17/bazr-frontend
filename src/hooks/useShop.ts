@@ -1,5 +1,6 @@
 import shopsService from "../api/service/shop";
 import { ICreateProductShopPayload } from "../interfaces/Product";
+import { ICreateShopTransferPayload } from "../interfaces/Shop";
 import {
   IPrimaryCategory,
   IFlatShopCategories,
@@ -78,6 +79,18 @@ const useShop = () => {
     return response;
   };
 
+  const fetchShopWithdrawal = async () => {
+    const response = await shopsService.getShopWithdrawal();
+
+    return response;
+  };
+
+  const transferShopBalance = async (payload: ICreateShopTransferPayload) => {
+    const response = await shopsService.transferShopBalance(payload);
+
+    return response;
+  };
+
   return {
     fetchShopProfileById,
     fetchShopCategories,
@@ -85,6 +98,8 @@ const useShop = () => {
     flattenShopCategories,
     uploadProductPhoto,
     createShopProduct,
+    fetchShopWithdrawal,
+    transferShopBalance,
   };
 };
 
