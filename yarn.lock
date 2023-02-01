@@ -6947,6 +6947,11 @@ js-yaml@^4.1.0:
   dependencies:
     argparse "^2.0.1"
 
+jsbarcode@^3.8.0:
+  version "3.11.5"
+  resolved "https://registry.yarnpkg.com/jsbarcode/-/jsbarcode-3.11.5.tgz#390b3efd0271f35b9d68c7b8af6e972445969014"
+  integrity sha512-zv3KsH51zD00I/LrFzFSM6dst7rDn0vIMzaiZFL7qusTjPZiPtxg3zxetp0RR7obmjTw4f6NyGgbdkBCgZUIrA==
+
 jsdom@^16.6.0:
   version "16.7.0"
   resolved "https://registry.npmjs.org/jsdom/-/jsdom-16.7.0.tgz"
@@ -8518,6 +8523,14 @@ react-app-polyfill@^3.0.0:
     regenerator-runtime "^0.13.9"
     whatwg-fetch "^3.6.2"
 
+react-barcode@^1.4.6:
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/react-barcode/-/react-barcode-1.4.6.tgz#a2ffd8717d1b7df6b482872f1692020c235463a0"
+  integrity sha512-56WCPqjgpExPVi5LgKOfxM6uSCB4Wd1r94jY2VEwkIdigPjLp8P9RyIBIyQmDraxtYGOHE0e4Uer4+QrmOIy7Q==
+  dependencies:
+    jsbarcode "^3.8.0"
+    prop-types "^15.6.2"
+
 react-clientside-effect@^1.2.6:
   version "1.2.6"
   resolved "https://registry.npmjs.org/react-clientside-effect/-/react-clientside-effect-1.2.6.tgz"
@@ -8739,6 +8752,13 @@ react-style-singleton@^2.2.1:
     get-nonce "^1.0.0"
     invariant "^2.2.4"
     tslib "^2.0.0"
+
+react-to-print@^2.14.11:
+  version "2.14.11"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.14.11.tgz#14ce17fce6ed238ae08c8c375c13847eb1aefbac"
+  integrity sha512-sePHBaCtZLp8/g4d/gRyI9XQZkveZq6xoukanAHfkzlXOa7sTuXCEQOYq37lIa5MkUoxySdJxYuyClaXPa9Zpg==
+  dependencies:
+    prop-types "^15.8.1"
 
 react@^18.2.0:
   version "18.2.0"

@@ -83,6 +83,10 @@ const SellerOrderDetail = React.lazy(
   () => import("../pages/Seller/Order/OrderDetail")
 );
 
+const DeliveryLabel = React.lazy(
+  () => import("../pages/Seller/Shipment/DeliveryLabel")
+);
+
 const RouteList = () => {
   let routes = (
     <Routes>
@@ -163,6 +167,7 @@ const RouteList = () => {
           path="/seller/promotion/:id/duplicate"
           element={<SellerPromotionDuplicate />}
         />
+        <Route path="/seller/order/:id/label" element={<DeliveryLabel />} />
         <Route path="/seller/finance" element={<SellerFinance />} />
         <Route path="/seller/order" element={<SellerOrder />} />
         <Route
@@ -170,7 +175,6 @@ const RouteList = () => {
           element={<SellerOrderDetail />}
         />
       </Route>
-
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

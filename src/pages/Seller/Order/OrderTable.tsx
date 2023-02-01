@@ -275,7 +275,9 @@ function OrderTable(props: { status: string }) {
                             aria-label="Print Delivery Label"
                             bgColor={"blackAlpha.500"}
                             icon={<BsPrinter />}
-                            onClick={() => {}}
+                            onClick={() => {
+                              navigate(routes.SELLER_ORDER_LABEL(order.id));
+                            }}
                           />
                         </Tooltip>
                       ) : null}
