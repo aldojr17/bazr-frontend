@@ -36,6 +36,7 @@ export const API_PATH = {
     SEALABS_PAY: "/sealabs_pay",
   },
   shop: {
+    SHOPS: "/shops",
     SHOPS_PROFILE: "/shops/profile",
     UPLOAD_PRODUCT_PHOTOS: "/upload/product",
     SHOPS_PROMOTION: "/shops/promotions",

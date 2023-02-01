@@ -74,6 +74,10 @@ const Shipment = React.lazy(() => import("../pages/Seller/Shipment/Shipment"));
 const SealabsPayRedirect = React.lazy(
   () => import("../pages/SealabsPay/Redirect")
 );
+const SellerOrder = React.lazy(() => import("../pages/Seller/Order/Order"));
+const SellerOrderDetail = React.lazy(
+  () => import("../pages/Seller/Order/OrderDetail")
+);
 
 const RouteList = () => {
   let routes = (
@@ -154,6 +158,11 @@ const RouteList = () => {
         <Route
           path="/seller/promotion/:id/duplicate"
           element={<SellerPromotionDuplicate />}
+        />
+        <Route path="/seller/order" element={<SellerOrder />} />
+        <Route
+          path="/seller/order/:id/detail"
+          element={<SellerOrderDetail />}
         />
       </Route>
 

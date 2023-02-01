@@ -11,7 +11,7 @@ import SellerNavbar from "../components/Navbar/SellerNavbar";
 import { ISidebarMenu } from "../interfaces/Sidebar";
 
 import { IoTicket, IoPricetag } from "react-icons/io5";
-import { HiCollection } from "react-icons/hi";
+import { HiCollection, HiClipboardList } from "react-icons/hi";
 import { MdHome, MdOutlineLocalShipping } from "react-icons/md";
 import useUser from "../hooks/useUser";
 import { useEffect } from "react";
@@ -23,6 +23,7 @@ const SellerLayout = (props: ILayoutProps) => {
     { name: "Product", icon: HiCollection, path: "/seller/product" },
     { name: "Voucher", icon: IoTicket, path: "/seller/voucher" },
     { name: "Promotion", icon: IoPricetag, path: "/seller/promotion" },
+    { name: "Order", icon: HiClipboardList, path: "/seller/order" },
     {
       name: "Shipment",
       icon: MdOutlineLocalShipping,

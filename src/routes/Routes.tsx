@@ -38,6 +38,8 @@ const routes = {
     `/seller/promotion/${id}/duplicate`,
   SELLER_PRODUCT: "/seller/product",
   SELLER_PRODUCT_CREATE: "/seller/product/new",
+  SELLER_ORDER: "/seller/order",
+  SELLER_ORDER_DETAIL: (id: number) => `/seller/order/${id}/detail`,
 };
 
 export default routes;
