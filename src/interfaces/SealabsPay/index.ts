@@ -29,6 +29,7 @@ export interface ISealabsPayTopupPayload {
   redirect_url: string;
 }
 
+export type ISealabsPayPaymentPayload = Omit<ISealabsPayTopupPayload, "amount">;
 export interface ISealabsPayAddNewResponsePayload {
   is_success: boolean;
   data: string;

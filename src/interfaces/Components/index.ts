@@ -275,3 +275,25 @@ export interface IQuantitySelectorProps {
   defaultValue?: number;
   onQuantityChange: (qty: number) => void;
 }
+
+export interface ISealabsPayOTPProps {
+  iframeUrl: string;
+  setIframeUrl: React.Dispatch<React.SetStateAction<string>>;
+  redirected: number;
+  setRedirected: React.Dispatch<React.SetStateAction<number>>;
+  params: string;
+  setParams: React.Dispatch<any>;
+  setRedirectParams: React.Dispatch<
+    React.SetStateAction<{
+      message: string;
+      status: string;
+    }>
+  >;
+}
+
+export interface ISealabsPayPaymentProps {
+  isOpen: boolean;
+  onClose: () => void;
+  isOrderPlaced: boolean;
+  setIsOrderPlaced: React.Dispatch<React.SetStateAction<boolean>>;
+}
