@@ -362,23 +362,6 @@ const Cart = () => {
                 }}
               >
                 <VStack boxShadow={"md"} p={4} spacing={5} borderRadius={"lg"}>
-                  <Button
-                    variant={"outline"}
-                    width={"100%"}
-                    borderRadius={"lg"}
-                  >
-                    <HStack
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      width={"100%"}
-                    >
-                      <Text fontWeight={"semibold"}>Select Voucher</Text>
-                      <Icon.ChevronRight />
-                    </HStack>
-                  </Button>
-
-                  <Divider />
-
                   <Text
                     fontWeight={"bold"}
                     textAlign={"start"}
