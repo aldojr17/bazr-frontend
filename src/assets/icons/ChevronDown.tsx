@@ -3,14 +3,13 @@ import { Icon, IconProps } from "@chakra-ui/react";
 const ChevronDown = (props: IconProps) => {
   return (
     <Icon
+      viewBox="0 0 24 24"
       width={props.width ? props.width : "1.2em"}
       height={props.height ? props.height : "1.2em"}
       {...props}
     >
-      <path
-        fillRule="evenodd"
-        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-      />
+      <path fill="none" d="M0 0h24v24H0V0z"></path>
+      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
     </Icon>
   );
 };

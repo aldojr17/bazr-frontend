@@ -10,6 +10,7 @@ import { IVariantTypePayload } from "../../interfaces/Variant";
 import { formatTitle } from "../../util/util";
 import Detail from "./Detail";
 import ItemSummary from "./ItemSummary";
+import MobileItemSummary from "./MobileItemSummary";
 import Review from "./Review";
 import SimilarProductList from "./SimilarProductList";
 import StoreProductList from "./StoreProductList";
@@ -32,10 +33,16 @@ function ProductDetail() {
   useTitle(formatTitle(product?.name!));
 
   const handleSetSelectedVariantType = (variantType: IVariantTypePayload) => {
-    setSelectedVariantType(variantType);
+    if (product?.variant_group?.variant_types.length === 1) {
+      setSelectedVariantType(product?.variant_group?.variant_types[0]);
+    } else {
+      setSelectedVariantType(variantType);
+    }
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     setIsLoading(true);
     fetchProduct(parseInt(id!))
       .then((response) => setProduct(response))
@@ -43,23 +50,24 @@ function ProductDetail() {
   }, [id]);
 
   return (
-    <Container maxW="container.xl">
+    <Container maxW={{ base: "container.sm", lg: "container.xl" }}>
       {isLoading ? (
         <>loading</>
       ) : (
-        <>
+        <Box mb={{ base: 24, lg: 0 }}>
           <BreadCrumb categories={product?.category_detail!} />
           <Flex
             direction={{ base: "column", lg: "row" }}
-            gap={8}
+            gap={5}
             position={"relative"}
             mb={20}
+            mt={{ base: 5, lg: 0 }}
           >
             <Flex w={{ base: "100%", lg: "75%" }} direction={"column"}>
               <Flex
                 w={"100%"}
                 direction={{ base: "column", lg: "row" }}
-                gap={5}
+                gap={{ base: 0, lg: 5 }}
                 justifyContent={"space-between"}
                 position={"relative"}
               >
@@ -73,6 +81,7 @@ function ProductDetail() {
                 </Box>
                 <Box w={{ base: "100%", lg: "60%" }} px={{ base: 0, lg: 3 }}>
                   <Detail
+                    productId={product?.id!}
                     productName={product?.name!}
                     productMinPrice={product?.lowest_price!}
                     productMaxPrice={product?.highest_price!}
@@ -83,6 +92,8 @@ function ProductDetail() {
                     productDescription={product?.description!}
                     shopId={product?.shop?.id!}
                     selectedVariant={selectedVariantType}
+                    productIsFavorite={product?.is_favorite!}
+                    productFavoriteCount={product?.favorite_count!}
                   />
                 </Box>
               </Flex>
@@ -92,6 +103,7 @@ function ProductDetail() {
               />
             </Flex>
             <Box
+              display={{ base: "none", lg: "flex" }}
               w={{ base: "100%", lg: "25%" }}
               height={"fit-content"}
               position={"sticky"}
@@ -121,7 +133,24 @@ function ProductDetail() {
             productCategoryId={product?.category_detail?.primary_category?.id!}
             productCategoryLevel={1}
           />
-        </>
+          <Box display={{ base: "block", lg: "none" }}>
+            <MobileItemSummary
+              productName={product?.name!}
+              productPhoto={
+                (product?.product_photos &&
+                  product.product_photos[0] &&
+                  product.product_photos[0].url!) ??
+                ""
+              }
+              variantGroup={product?.variant_group!}
+              onVariantChange={handleSetSelectedVariantType}
+              selectedVariant={selectedVariantType}
+              shopId={product?.shop?.id!}
+              minQty={product?.min_buy_qty!}
+              maxQty={product?.max_buy_qty!}
+            />
+          </Box>
+        </Box>
       )}
     </Container>
   );

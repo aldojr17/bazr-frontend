@@ -1,4 +1,4 @@
-import { Center, Divider, Flex, Heading, HStack, Text } from "@chakra-ui/react";
+import { Center, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import Icon from "../../assets/icons";
 import { IProductDetailRatingProps } from "../../interfaces/Components/PDP";
 
@@ -14,7 +14,7 @@ function ProductDetailRating(props: IProductDetailRatingProps) {
         ) : (
           <>
             <Text
-              fontSize={"lg"}
+              fontSize={{ base: "sm", lg: "lg" }}
               fontWeight={"bold"}
               color={"dark"}
               borderBottom={"2px solid"}
@@ -24,10 +24,18 @@ function ProductDetailRating(props: IProductDetailRatingProps) {
             </Text>
             <Flex direction={"row"} pb={1} gap={0.5} alignItems={"center"}>
               {[...Array(Math.round(rating))].map((_, index) => (
-                <Icon.Star key={`starFilled-${index}`} fill={"yellow.200"} />
+                <Icon.Star
+                  key={`starFilled-${index}`}
+                  fill={"yellow.200"}
+                  boxSize={{ base: 4, lg: 5 }}
+                />
               ))}
               {[...Array(5 - Math.round(rating))].map((_, index) => (
-                <Icon.Star key={`star-${index}`} fill={"light"} />
+                <Icon.Star
+                  key={`star-${index}`}
+                  fill={"light"}
+                  boxSize={{ base: 4, lg: 5 }}
+                />
               ))}
             </Flex>
           </>
@@ -51,7 +59,7 @@ function ProductDetailRating(props: IProductDetailRatingProps) {
         ) : (
           <>
             <Text
-              fontSize={"lg"}
+              fontSize={{ base: "sm", lg: "lg" }}
               fontWeight={"bold"}
               color={"dark"}
               borderBottom={"2px solid"}
@@ -59,7 +67,11 @@ function ProductDetailRating(props: IProductDetailRatingProps) {
             >
               {review}
             </Text>
-            <Text fontSize={"md"} fontWeight={"semibold"} color={"darkLighten"}>
+            <Text
+              fontSize={{ base: "sm", lg: "md" }}
+              fontWeight={"semibold"}
+              color={"darkLighten"}
+            >
               {review > 1 ? "reviews" : "review"}
             </Text>
           </>
@@ -79,7 +91,7 @@ function ProductDetailRating(props: IProductDetailRatingProps) {
 
           <HStack alignItems={"center"}>
             <Text
-              fontSize={"lg"}
+              fontSize={{ base: "sm", lg: "lg" }}
               fontWeight={"bold"}
               color={"dark"}
               borderBottom={"2px solid"}
@@ -87,7 +99,11 @@ function ProductDetailRating(props: IProductDetailRatingProps) {
             >
               {soldCount}
             </Text>
-            <Text fontSize={"md"} fontWeight={"semibold"} color={"darkLighten"}>
+            <Text
+              fontSize={{ base: "sm", lg: "md" }}
+              fontWeight={"semibold"}
+              color={"darkLighten"}
+            >
               sold
             </Text>
           </HStack>

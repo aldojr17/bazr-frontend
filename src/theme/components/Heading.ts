@@ -32,6 +32,7 @@ const Heading = defineStyleConfig({
     variantName: {
       fontSize: "sm",
       fontWeight: "semibold",
+      color: "dark",
     },
     productShopName: {
       fontSize: "xl",

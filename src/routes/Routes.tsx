@@ -1,8 +1,11 @@
+import { formatProductUrl } from "../util/util";
+
 const routes = {
   HOME: "/",
   SEARCH: (query?: string, c?: number, cl?: number) =>
     `/search?q=${query}${c && `&c=${c}`}${cl && `&cl=${cl}`}`,
-  PDP: (id: number, productName: string) => `/pdp/${id}/${productName}`,
+  PDP: (id: number, productName: string) =>
+    `/pdp/${id}/${formatProductUrl(productName)}`,
   PRIMARY_CATEGORY: (cPrimary: string) => `/p/${cPrimary}`,
   SECONDARY_CATEGORY: (
     cPrimary: string,

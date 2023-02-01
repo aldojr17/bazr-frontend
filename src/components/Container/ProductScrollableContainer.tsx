@@ -3,7 +3,6 @@ import {
   Center,
   Flex,
   Heading,
-  HStack,
   Skeleton,
   Text,
   VStack,
@@ -19,19 +18,19 @@ function ProductScrollableContainer(props: IProductScrollableContainerProps) {
 
   return (
     <Flex direction={{ base: "column", lg: "column" }} my={10}>
-      <Flex justifyContent={"space-between"}>
+      <Flex justifyContent={"space-between"} alignItems={"center"} gap={3}>
         <Heading
           variant={"sectionHeading"}
           fontSize={{ base: "md", sm: "xl", md: "2xl" }}
+          noOfLines={1}
+          wordBreak={"break-all"}
         >
           {label}
         </Heading>
-        <HStack alignItems={"center"}>
-          <Text as={Link} to={link} variant={"link"}>
-            see more
-            <Icon.ChevronRight width={4} pb={"2px"} />
-          </Text>
-        </HStack>
+        <Text as={Link} to={link} variant={"link"} mb={3} minW={"max-content"}>
+          see more
+          <Icon.ChevronRight width={4} pb={"1px"} />
+        </Text>
       </Flex>
       {onError ? (
         <Box bgColor={"lightLighten"} py={28} borderRadius={"lg"}>
@@ -54,11 +53,10 @@ function ProductScrollableContainer(props: IProductScrollableContainerProps) {
       ) : (
         <Skeleton isLoaded={!isLoading} borderRadius={"lg"}>
           <XScrollableWrapper showScrollbar={products.length > 6}>
-            {products.length !== 0
-              ? products.map((product) => (
-                  <ProductCard key={product.id} {...product} />
-                ))
-              : ""}
+            {products.length !== 0 &&
+              products.map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
           </XScrollableWrapper>
         </Skeleton>
       )}

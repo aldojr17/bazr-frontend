@@ -29,10 +29,8 @@ const useUser = () => {
       setUserLoading(false);
       return response.data;
     } else {
-      if (response.message === "record not found") {
-        localStorage.clear();
-        destroyCookie(null, "auth");
-      }
+      localStorage.clear();
+      destroyCookie(null, "auth");
     }
 
     setUserLoading(false);

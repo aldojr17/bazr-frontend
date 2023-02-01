@@ -23,3 +23,10 @@ export const handleImageOnError = (
   event.currentTarget.src =
     "https://pertaniansehat.com/v01/wp-content/uploads/2015/08/default-placeholder.png";
 };
+
+export const formatProductUrl = (title: string) => {
+  return title
+    .replace(/[^\w ]+/, " ")
+    .split(" ")
+    .join("-");
+};

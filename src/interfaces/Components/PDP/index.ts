@@ -2,6 +2,7 @@ import { IProductPhotoPayload, IProductReviewPayload } from "../../Product";
 import { IVariantGroupPayload, IVariantTypePayload } from "../../Variant";
 
 export interface IDetailProps {
+  productId: number;
   productName: string;
   productMinPrice: number;
   productMaxPrice: number;
@@ -12,6 +13,8 @@ export interface IDetailProps {
   productDescription: string;
   shopId: number;
   selectedVariant: IVariantTypePayload;
+  productIsFavorite: boolean;
+  productFavoriteCount: number;
 }
 
 export interface IProductDetailRatingProps {
@@ -61,7 +64,7 @@ export interface IImagePreviewerModalProps {
   data: IProductPhotoPayload[];
   isOpen: boolean;
   onClose: () => void;
-  selectedId: number;
+  selectedDefaultId: number;
 }
 
 export interface ISingleImagePreviewerModalProps {
@@ -74,14 +77,15 @@ export interface IProductDetailPricingProps {
   normalPrice: number;
   discountedPrice?: number;
   showRange: boolean;
-  minRange: number;
-  maxRange: number;
+  minRange?: number;
+  maxRange?: number;
 }
 
 export interface IProductDetailQuantityProps {
   stock: number | null;
   minQty: number;
   maxQty: number;
+  isVariantSelected: boolean;
   onQuantityChange: (qty: number) => void;
 }
 
@@ -105,4 +109,15 @@ export interface IStoreProductListProps {
 export interface ISimilarProductListProps {
   productCategoryId: number;
   productCategoryLevel: number;
+}
+
+export interface IMobileItemSummaryProps {
+  productName: string;
+  productPhoto: string;
+  variantGroup: IVariantGroupPayload;
+  onVariantChange: Function;
+  selectedVariant: IVariantTypePayload;
+  shopId: number;
+  minQty: number;
+  maxQty: number;
 }

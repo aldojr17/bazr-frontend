@@ -33,7 +33,7 @@ const Button = defineStyleConfig({
     primaryOutline: {
       bg: "white",
       color: "primary",
-      border: "3px solid",
+      border: "2px solid",
       borderColor: "primary",
       borderRadius: "lg",
       boxShadow: "default",
@@ -41,6 +41,11 @@ const Button = defineStyleConfig({
         bg: "primaryLighten",
         color: "white",
         borderColor: "primaryLighten",
+
+        _disabled: {
+          color: "primaryDarken",
+          borderColor: "primaryDarken",
+        },
       },
       _active: {
         bg: "primaryDarken",
