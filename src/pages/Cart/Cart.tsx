@@ -361,7 +361,14 @@ const Cart = () => {
                   xl: "block",
                 }}
               >
-                <VStack boxShadow={"md"} p={4} spacing={5} borderRadius={"lg"}>
+                <VStack
+                  boxShadow={"md"}
+                  p={4}
+                  spacing={5}
+                  borderRadius={"lg"}
+                  border={"2px solid"}
+                  borderColor={"lightLighten"}
+                >
                   <Text
                     fontWeight={"bold"}
                     textAlign={"start"}
