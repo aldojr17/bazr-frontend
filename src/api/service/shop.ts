@@ -3,10 +3,12 @@ import {
   ICreateProductShopPayload,
 } from "../../interfaces/Product";
 import {
+  ICreateShopTransferPayload,
   IProductPhotoResponse,
   IProductUploadPhotoPayload,
   IShopCategoryResponsePayload,
   IShopsResponsePayload,
+  IShopWithdrawalResponse,
 } from "../../interfaces/Shop";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
@@ -88,12 +90,41 @@ const createShopProduct = async (
   }
 };
 
+const getShopWithdrawal = async (): Promise<IShopWithdrawalResponse> => {
+  try {
+    const response = await instance.get<IShopWithdrawalResponse>(
+      API_PATH.shop.SHOPS_WITHDRAWAL
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IShopWithdrawalResponse;
+  }
+};
+
+const transferShopBalance = async (
+  payload: ICreateShopTransferPayload
+): Promise<IShopWithdrawalResponse> => {
+  try {
+    const response = await instance.post<IShopWithdrawalResponse>(
+      API_PATH.shop.SHOPS_WITHDRAWAL,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IShopWithdrawalResponse;
+  }
+};
+
 const shopsService = {
   getShopProfileById,
   getShopCategory,
   getShopProfileByShopUsername,
   uploadProductPhoto,
   createShopProduct,
+  getShopWithdrawal,
+  transferShopBalance,
 };
 
 export default shopsService;

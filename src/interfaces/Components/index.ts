@@ -276,6 +276,12 @@ export interface IQuantitySelectorProps {
   onQuantityChange: (qty: number) => void;
 }
 
+export interface IShopWithdrawalModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  updateWithdrawal: () => Promise<void>;
+}
+
 export interface ISealabsPayOTPProps {
   iframeUrl: string;
   setIframeUrl: React.Dispatch<React.SetStateAction<string>>;

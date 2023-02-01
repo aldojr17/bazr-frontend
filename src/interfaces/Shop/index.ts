@@ -139,3 +139,23 @@ export interface IFileInputBtnProps {
   imgList: File[];
   setImgList: React.Dispatch<React.SetStateAction<File[]>>;
 }
+
+export interface ICreateShopTransferPayload {
+  amount: number;
+}
+
+export interface IShopWithdrawalResponse {
+  data: IShopFinance;
+  is_success: boolean;
+  message: string;
+}
+
+export interface IShopFinance {
+  balance: number;
+  withdrawal_details: IShopWithdrawal[];
+}
+
+export interface IShopWithdrawal {
+  amount: number;
+  withdrawal_date: string;
+}

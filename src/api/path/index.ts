@@ -41,6 +41,7 @@ export const API_PATH = {
     UPLOAD_PRODUCT_PHOTOS: "/upload/product",
     SHOPS_PROMOTION: "/shops/promotions",
     SET_SHOP_DEFAULT_ADDRESS: "/shops/address",
+    SHOPS_WITHDRAWAL: "/shops/withdrawal",
     COURIER: "/shops/couriers",
   },
   wallet: {
