@@ -46,8 +46,12 @@ function ReviewItem(props: IReviewItemProps) {
               <Icon.Star key={`star-${index}`} fill={"light"} />
             ))}
           </Flex>
-          {review.feedback.length != 0 && (
-            <Text as={"i"} my={2}>
+          {review.feedback.length !== 0 && (
+            <Text
+              my={2}
+              fontWeight={"medium"}
+              fontSize={{ base: "sm", lg: "md" }}
+            >
               {review.feedback}
             </Text>
           )}

@@ -130,6 +130,7 @@ function ItemSummary(props: IItemSummaryProps) {
 
   return (
     <Box
+      width={"100%"}
       border={"2px solid"}
       borderColor={"lightLighten"}
       boxShadow={"default"}
@@ -145,6 +146,7 @@ function ItemSummary(props: IItemSummaryProps) {
         stock={selectedVariant.id !== 0 ? selectedVariant.stock : null}
         minQty={minQty}
         maxQty={maxQty}
+        isVariantSelected={selectedVariant.id !== 0}
         onQuantityChange={handleSetQuantity}
       />
       <Button
@@ -153,6 +155,7 @@ function ItemSummary(props: IItemSummaryProps) {
         onClick={(e) => handleAddToCart(e)}
         my={1}
         isLoading={isLoading}
+        disabled={selectedVariant.stock === 0}
       >
         Add to Cart
       </Button>
@@ -161,10 +164,11 @@ function ItemSummary(props: IItemSummaryProps) {
         variant="primary"
         my={1}
         onClick={(e) => handleBuyNow(e)}
+        disabled={selectedVariant.stock === 0}
       >
         Buy Now
       </Button>
-      <Divider variant={"solidLight"} my={5} />
+      <Divider variant={"solidLight"} my={3} />
       <ProductAction
         productId={productId}
         isFavorite={productIsFavorite}

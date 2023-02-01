@@ -3,12 +3,12 @@ import { Icon, IconProps } from "@chakra-ui/react";
 const HeartFilled = (props: IconProps) => {
   return (
     <Icon
-      viewBox="0 0 16 16"
+      viewBox="0 0 512 512"
       width={props.width ? props.width : "1.2em"}
       height={props.height ? props.height : "1.2em"}
       {...props}
     >
-      <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
+      <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>
     </Icon>
   );
 };

@@ -9,31 +9,42 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { Navigation, Pagination } from "swiper";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { IImagePreviewerModalProps } from "../../interfaces/Components/PDP";
 import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
+import "../Image/style-image-previewer.css";
 
 function ImagePreviewerModal(props: IImagePreviewerModalProps) {
-  const { data, isOpen, onClose, selectedId } = props;
+  const { data, isOpen, onClose, selectedDefaultId } = props;
 
-  const [selectedImage, setSelectedImage] = useState(data[0]);
+  const [swiperMain, setSwiperMain] = useState<any>(null);
+  const [selectedId, setSelectedId] = useState(selectedDefaultId);
 
   const handleSetSelectedImage = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
 
-    let image = data.find(
-      (img) => img.id === parseInt(e.currentTarget.children[0].id)
-    );
+    slideTo(parseInt(e.currentTarget.children[0].id));
+    setSelectedId(parseInt(e.currentTarget.children[0].id));
+  };
 
-    setSelectedImage(image ?? data[0]);
+  const slideTo = (index: number) => {
+    if (swiperMain) {
+      swiperMain.slideTo(index);
+    }
   };
 
   useEffect(() => {
-    const image = data.find((img) => img.id === selectedId);
-
-    setSelectedImage(image ?? data[0]);
-  }, [selectedId]);
+    if (isOpen) {
+      slideTo(selectedDefaultId);
+      setSelectedId(selectedDefaultId);
+    }
+  }, [swiperMain, selectedDefaultId]);
 
   return (
     <>
@@ -43,20 +54,30 @@ function ImagePreviewerModal(props: IImagePreviewerModalProps) {
           <ModalHeader></ModalHeader>
           <ModalCloseButton color={"white"} size={"xl"} />
           <ModalBody>
-            <AspectRatio
-              ratio={1}
-              borderRadius="xl"
-              mb={5}
-              boxShadow="default"
-              backgroundColor={"white"}
+            <Swiper
+              slidesPerView={1}
+              spaceBetween={0}
+              pagination={{ clickable: true }}
+              navigation={true}
+              modules={[Pagination, Navigation]}
+              onSlideChange={(swiper) => setSelectedId(swiper.realIndex)}
+              onSwiper={(swiper) => setSwiperMain(swiper)}
+              className={"swiper-image-preview"}
             >
-              <Image
-                src={selectedImage.url}
-                __css={{
-                  objectFit: "scale-down !important",
-                }}
-              />
-            </AspectRatio>
+              {data.map((productPhoto, index) => (
+                <SwiperSlide key={index} id={index.toString()}>
+                  <AspectRatio ratio={1} backgroundColor={"white"}>
+                    <Image
+                      src={productPhoto.url}
+                      __css={{
+                        objectFit: "scale-down !important",
+                      }}
+                    />
+                  </AspectRatio>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
             <XScrollableWrapper showScrollbar={data.length > 3}>
               {data.map((productPhoto, index) => (
                 <AspectRatio
@@ -65,20 +86,16 @@ function ImagePreviewerModal(props: IImagePreviewerModalProps) {
                   minW="25%"
                   onClick={handleSetSelectedImage}
                   filter="auto"
-                  brightness={`${
-                    productPhoto.id === selectedImage.id ? "85%" : "100%"
-                  }`}
+                  brightness={`${index === selectedId ? "85%" : "100%"}`}
                   borderRadius="xl"
                   boxShadow="default"
                   backgroundColor={"white"}
                 >
                   <Image
-                    id={productPhoto.id.toString()}
+                    id={index.toString()}
                     src={productPhoto.url}
                     borderRadius="xl"
-                    border={`${
-                      productPhoto.id === selectedImage.id ? "4px" : "none"
-                    }`}
+                    border={`${index === selectedId ? "4px" : "none"}`}
                     borderColor={`teal.300`}
                   />
                 </AspectRatio>

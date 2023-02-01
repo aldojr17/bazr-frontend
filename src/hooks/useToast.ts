@@ -12,7 +12,7 @@ const useToast = () => {
       variant: "successToast",
       isClosable: true,
       containerStyle: {
-        marginTop: "100px",
+        marginTop: { base: "10px", lg: "100px" },
       },
     });
   };

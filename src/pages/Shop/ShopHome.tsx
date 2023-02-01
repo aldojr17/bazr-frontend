@@ -155,8 +155,6 @@ function ShopHome() {
     });
   }, [shopUsername]);
 
-  console.log(categoryId, shopCategories);
-
   return (
     <Container maxW="container.xl">
       <ShopProfile

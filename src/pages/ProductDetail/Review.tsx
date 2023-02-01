@@ -153,52 +153,56 @@ function Review(props: IReviewProps) {
                       colorScheme={"default"}
                       onChange={handleChangeRating}
                     >
-                      <Icon.Star
-                        mt={"-.3em"}
-                        fill={"yellow.200"}
-                        width={"1em"}
-                        marginEnd={2}
-                      />
-                      <Text as={"span"}>5</Text>
+                      {[...Array(5)].map((_, index) => (
+                        <Icon.Star
+                          key={`starFilled-${index}`}
+                          fill={"yellow.200"}
+                          width={"1em"}
+                          marginEnd={1}
+                        />
+                      ))}
                     </Checkbox>
                     <Checkbox
                       value={4}
                       colorScheme={"default"}
                       onChange={handleChangeRating}
                     >
-                      <Icon.Star
-                        mt={"-.3em"}
-                        fill={"yellow.200"}
-                        width={"1em"}
-                        marginEnd={2}
-                      />
-                      <Text as={"span"}>4</Text>
+                      {[...Array(4)].map((_, index) => (
+                        <Icon.Star
+                          key={`starFilled-${index}`}
+                          fill={"yellow.200"}
+                          width={"1em"}
+                          marginEnd={1}
+                        />
+                      ))}
                     </Checkbox>
                     <Checkbox
                       value={3}
                       colorScheme={"default"}
                       onChange={handleChangeRating}
                     >
-                      <Icon.Star
-                        mt={"-.3em"}
-                        fill={"yellow.200"}
-                        width={"1em"}
-                        marginEnd={2}
-                      />
-                      <Text as={"span"}>3</Text>
+                      {[...Array(3)].map((_, index) => (
+                        <Icon.Star
+                          key={`starFilled-${index}`}
+                          fill={"yellow.200"}
+                          width={"1em"}
+                          marginEnd={1}
+                        />
+                      ))}
                     </Checkbox>
                     <Checkbox
                       value={2}
                       colorScheme={"default"}
                       onChange={handleChangeRating}
                     >
-                      <Icon.Star
-                        mt={"-.3em"}
-                        fill={"yellow.200"}
-                        width={"1em"}
-                        marginEnd={2}
-                      />
-                      <Text as={"span"}>2</Text>
+                      {[...Array(2)].map((_, index) => (
+                        <Icon.Star
+                          key={`starFilled-${index}`}
+                          fill={"yellow.200"}
+                          width={"1em"}
+                          marginEnd={1}
+                        />
+                      ))}
                     </Checkbox>
                     <Checkbox
                       value={1}
@@ -206,12 +210,10 @@ function Review(props: IReviewProps) {
                       onChange={handleChangeRating}
                     >
                       <Icon.Star
-                        mt={"-.3em"}
                         fill={"yellow.200"}
                         width={"1em"}
-                        marginEnd={2}
+                        marginEnd={1}
                       />
-                      <Text as={"span"}>1</Text>
                     </Checkbox>
                   </VStack>
                 </AccordionPanel>

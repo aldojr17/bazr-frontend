@@ -1,7 +1,3 @@
-import React, { KeyboardEvent } from "react";
-import Navbar from "../components/Navbar/Navbar";
-import { ILayoutProps } from "../interfaces/Layout";
-import Footer from "./Footer/Footer";
 import {
   Box,
   Flex,
@@ -14,9 +10,12 @@ import {
   Show,
   useDisclosure,
 } from "@chakra-ui/react";
-import Icon from "../assets/icons";
+import { KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import MobileBottomNavbar from "../components/Navbar/MobileBottomNavbar";
+import Icon from "../assets/icons";
+import Navbar from "../components/Navbar/Navbar";
+import { ILayoutProps } from "../interfaces/Layout";
+import Footer from "./Footer/Footer";
 
 const Layout = ({ children }: ILayoutProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,9 +37,9 @@ const Layout = ({ children }: ILayoutProps) => {
       <Show above={"lg"}>
         <Footer />
       </Show>
-      <Show below={"lg"}>
+      {/* <Show below={"lg"}>
         <MobileBottomNavbar />
-      </Show>
+      </Show> */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent

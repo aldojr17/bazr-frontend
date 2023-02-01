@@ -3,6 +3,7 @@ import {
   Center,
   Divider,
   HStack,
+  IconButton,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -54,11 +55,13 @@ function ProductAction(props: IProductActionProps) {
   return (
     <>
       <HStack
-        justifyContent={"space-between"}
+        justifyContent={{ base: "end", lg: "space-between" }}
         alignItems={"center"}
-        width={"100%"}
+        width={{ base: "fit-content", lg: "100%" }}
+        gap={{ base: 1, lg: 0 }}
       >
         <Button
+          display={{ base: "none", lg: "flex" }}
           leftIcon={
             isFavorited ? (
               <Icon.HeartFilled fill={"secondary"} />
@@ -70,7 +73,6 @@ function ProductAction(props: IProductActionProps) {
           size={"sm"}
           py={5}
           onClick={handleFavoriteProduct}
-          display={"flex"}
           flexDirection={"row"}
           alignItems={"center"}
         >
@@ -79,6 +81,22 @@ function ProductAction(props: IProductActionProps) {
             ({favCount})
           </Text>
         </Button>
+        <IconButton
+          display={{ base: "block", lg: "none" }}
+          variant={"unstyled"}
+          aria-label="fav"
+          icon={
+            isFavorited ? (
+              <Icon.HeartFilled fill={"secondary"} boxSize={7} />
+            ) : (
+              <Icon.Heart fill={"secondary"} boxSize={7} />
+            )
+          }
+          onClick={handleFavoriteProduct}
+          __css={{
+            marginInlineStart: 0,
+          }}
+        />
         <Center display={{ base: "none", lg: "block" }} height="25px">
           <Divider
             orientation="vertical"
@@ -88,6 +106,7 @@ function ProductAction(props: IProductActionProps) {
           />
         </Center>
         <Button
+          display={{ base: "none", lg: "flex" }}
           leftIcon={<Icon.Share fill={"primary"} />}
           variant="primaryGhost"
           size={"sm"}
@@ -96,7 +115,18 @@ function ProductAction(props: IProductActionProps) {
         >
           Share
         </Button>
+        <IconButton
+          display={{ base: "block", lg: "none" }}
+          variant={"unstyled"}
+          aria-label="share"
+          icon={<Icon.Share fill={"primary"} boxSize={7} />}
+          onClick={onOpen}
+          __css={{
+            marginInlineStart: 0,
+          }}
+        />
       </HStack>
+
       <ProductShareModal isOpen={isOpen} onClose={onClose} />
     </>
   );

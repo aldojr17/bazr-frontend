@@ -1,0 +1,106 @@
+.swiper-image-preview {
+  margin: 0px 0px 10px !important;
+  border-radius: 10px;
+  box-shadow: 0px 8px 24px rgba(154, 170, 207, 0.15) !important;
+  border: 2px solid #e2e8f0;
+}
+
+.swiper-slide {
+  border-radius: 10px;
+}
+
+.swiper-button-prev {
+  background-image: url(/public/chevron-left.svg);
+  left: 0;
+  border-radius: 0px 5px 5px 0px;
+}
+
+.swiper-button-next {
+  background-image: url(/public/chevron-right.svg);
+  right: 0;
+  border-radius: 5px 0px 0px 5px;
+}
+
+.swiper-image-preview .swiper-button-prev,
+.swiper-image-preview .swiper-button-next {
+  background-repeat: no-repeat;
+  background-size: 60% auto;
+  background-position: center;
+  background-color: #ffffff;
+  aspect-ratio: 1;
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  box-shadow: 0px 8px 24px rgba(154, 170, 207, 0.75);
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  display: none;
+}
+
+.swiper-pagination {
+  bottom: 5px !important;
+}
+
+.swiper-image-preview .swiper-pagination-bullet-active {
+  background-color: #4fd1c5;
+}
+
+@media only screen and (min-width: 30em) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 40px;
+    height: 40px;
+    top: 50%;
+  }
+}
+
+@media only screen and (min-width: 48em) {
+  .swiper-image-preview {
+    margin: 0px;
+    border-radius: 20px;
+  }
+
+  .swiper-button-prev {
+    border-radius: 0px 8px 8px 0px;
+  }
+
+  .swiper-button-next {
+    border-radius: 8px 0px 0px 8px;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 40px;
+    height: 40px;
+    top: 50%;
+  }
+}
+
+@media only screen and (min-width: 62em) {
+  .swiper-image-preview {
+    margin: 0px 0px 20px !important;
+    border-radius: 30px;
+  }
+
+  .swiper-button-prev {
+    border-radius: 0px 10px 10px 0px;
+  }
+
+  .swiper-button-next {
+    border-radius: 10px 0px 0px 10px;
+  }
+
+  .swiper-image-preview .swiper-button-prev,
+  .swiper-image-preview .swiper-button-next {
+    width: 40px;
+    height: 40px;
+    top: 50%;
+  }
+
+  .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+  }
+}

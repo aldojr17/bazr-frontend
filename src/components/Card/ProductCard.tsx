@@ -40,14 +40,19 @@ const ProductCard = ({ ...props }: IProductPayload) => {
       </AspectRatio>
       <Flex p={3} direction={"column"}>
         <Text
-          fontSize={"xl"}
+          fontSize={{ base: "md", lg: "lg" }}
           fontWeight={"semibold"}
           textTransform={"uppercase"}
           noOfLines={1}
         >
           {props.name}
         </Text>
-        <Text variant={"productCardPrice"} mb={1}>
+        <Text
+          fontSize={{ base: "lg", lg: "xl" }}
+          fontWeight={"bold"}
+          color={"primary"}
+          mb={1}
+        >
           Rp {formatCurrency(props.lowest_price!)}
         </Text>
         <Flex gap={2} alignItems={"center"} wrap={"nowrap"} mb={1}>
@@ -73,21 +78,39 @@ const ProductCard = ({ ...props }: IProductPayload) => {
           </Text>
         </Flex>
         <Flex gap={2} alignItems={"center"} mt={5}>
-          <Icon.Star fill={"yellow.200"} width={4} />
+          <Icon.Star fill={"yellow.200"} boxSize={{ base: 3, lg: 4 }} />
           {props.rating! > 0 ? (
-            <>
-              <Text variant={"productCardRating"}>{props.rating}</Text>
-              <Text variant={"productCardReview"}>({props.total_review})</Text>
-            </>
+            <Text
+              fontSize={{ base: "xs", lg: "sm" }}
+              fontWeight={"semibold"}
+              color={"dark"}
+            >
+              {props.rating}
+            </Text>
           ) : (
-            <Text variant={"productCardRating"}>-</Text>
+            <Text
+              fontSize={{ base: "xs", lg: "sm" }}
+              fontWeight={"semibold"}
+              color={"dark"}
+            >
+              -
+            </Text>
           )}
           {props.unit_sold! > 0 && (
             <>
-              <Center height="15px">
-                <Divider orientation="vertical" />
+              <Center height={{ base: "10px", lg: "12px" }}>
+                <Divider
+                  orientation="vertical"
+                  borderWidth={1}
+                  borderColor={"lightDarken"}
+                />
               </Center>
-              <Text variant={"productCardReview"} noOfLines={1}>
+              <Text
+                fontSize={{ base: "xs", lg: "sm" }}
+                fontWeight={"semibold"}
+                color={"darkLighten"}
+                noOfLines={1}
+              >
                 {props.unit_sold} sold
               </Text>
             </>

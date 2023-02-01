@@ -1,12 +1,14 @@
-import { Box, Divider, Heading } from "@chakra-ui/react";
+import { Box, Divider, Heading, HStack, Show } from "@chakra-ui/react";
 import { IDetailProps } from "../../interfaces/Components/PDP";
 import Description from "./Description";
+import ProductAction from "./ProductAction";
 import ProductDetailPricing from "./ProductDetailPricing";
 import ProductDetailRating from "./ProductDetailRating";
 import ShopDetail from "./ShopDetail";
 
 function Detail(props: IDetailProps) {
   const {
+    productId,
     productName,
     productMinPrice,
     productMaxPrice,
@@ -17,10 +19,18 @@ function Detail(props: IDetailProps) {
     shopId,
     selectedVariant,
     productDescription,
+    productIsFavorite,
+    productFavoriteCount,
   } = props;
   return (
     <Box>
-      <Heading variant={"productTitle"}>{productName}</Heading>
+      <Heading
+        fontSize={{ base: "2xl", lg: "3xl" }}
+        textTransform={"uppercase"}
+        fontWeight={"bold"}
+      >
+        {productName}
+      </Heading>
       <ProductDetailRating
         rating={productRating}
         review={productReview}
@@ -34,9 +44,26 @@ function Detail(props: IDetailProps) {
         normalPrice={selectedVariant.price!}
         discountedPrice={selectedVariant.discounted_price!}
       />
-      <Divider variant={{ base: "solidPrimary", lg: "solidLight" }} my={1} />
+      <Show below={"lg"}>
+        <HStack>
+          <Divider
+            variant={{ base: "solidPrimary", lg: "solidLight" }}
+            my={1}
+          />
+          <ProductAction
+            productId={productId}
+            isFavorite={productIsFavorite}
+            favoriteCount={productFavoriteCount}
+          />
+        </HStack>
+      </Show>
+      <Divider
+        variant={"solidLight"}
+        display={{ base: "none", lg: "block" }}
+        my={1}
+      />
       <Description description={productDescription} />
-      <Divider variant={{ base: "solidPrimary", lg: "solidLight" }} my={10} />
+      <Divider variant={{ base: "solidPrimary", lg: "solidLight" }} my={5} />
       <ShopDetail shopId={shopId} />
     </Box>
   );

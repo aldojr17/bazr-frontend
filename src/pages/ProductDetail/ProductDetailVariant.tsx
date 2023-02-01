@@ -88,16 +88,26 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
         <>
           <VStack
             backgroundColor={`${error ? "purple.100" : "transparent"}`}
-            p={3}
+            px={3}
+            py={{ base: 0, lg: 3 }}
             borderRadius={"lg"}
             alignItems={"start"}
           >
-            <Heading fontSize={"md"} mb={3}>
+            <Heading
+              fontSize={{ base: "sm", lg: "md" }}
+              mb={{ base: 0, lg: 3 }}
+            >
               Select variant:
             </Heading>
             {Object.keys(displayVariants).map((name: string) => (
               <Box key={name} mb={5}>
-                <Heading variant={"variantName"} my={1}>
+                <Heading
+                  fontSize={{ base: "xs", lg: "sm" }}
+                  fontWeight={"semibold"}
+                  color={"dark"}
+                  textTransform={"none"}
+                  my={1}
+                >
                   {name}:
                 </Heading>
                 <Select
