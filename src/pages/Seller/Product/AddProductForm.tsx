@@ -18,6 +18,7 @@ import {
   Wrap,
   WrapItem,
   useDisclosure,
+  IconButton,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +42,7 @@ import {
   ICreateVariantType,
 } from "../../../interfaces/Variant";
 import routes from "../../../routes/Routes";
+import "./style.css";
 
 function AddProductForm() {
   const [imgList, setImgList] = useState<File[]>([]);
@@ -253,6 +255,7 @@ function AddProductForm() {
       navigate(routes.SELLER_PRODUCT);
     } catch (e: any) {
       errorToast(e.message);
+      window.scrollTo(0, 0);
       setDisableBtn(false);
     }
   };
@@ -272,12 +275,25 @@ function AddProductForm() {
             <Wrap width="70%">
               {imgList.map((file, index) => {
                 return (
-                  <WrapItem key={index}>
-                    {/* TODO: Delete Image Button */}
+                  <WrapItem key={index} className="imgContainer">
                     <Image
                       src={URL.createObjectURL(file)}
                       width="120px"
                       height="120px"
+                    />
+                    <IconButton
+                      className="deleteImgBtn"
+                      icon={<Icon.Trash />}
+                      variant="solid"
+                      colorScheme="orange"
+                      aria-label={"Delete Image"}
+                      onClick={() => {
+                        setImgList(
+                          imgList.filter((_, idx) => {
+                            return idx !== index;
+                          })
+                        );
+                      }}
                     />
                   </WrapItem>
                 );
