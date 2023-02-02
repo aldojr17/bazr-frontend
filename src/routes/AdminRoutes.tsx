@@ -1,16 +1,31 @@
-import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
-import { RootState } from "../redux";
+import { parseCookies } from "nookies";
+import { useEffect } from "react";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import useUser from "../hooks/useUser";
+import AdminLayout from "../layout/AdminLayout";
+import { userRole } from "../util/constant";
+import routes from "./Routes";
 
 const AdminRoutes = () => {
-  // const { user } = useSelector((state: RootState) => state.userReducer);
-  const isLogged = localStorage.getItem("sessionId");
+  const navigate = useNavigate();
+  const { userLoading, fetchProfile } = useUser();
+  const isLogged = parseCookies().auth;
 
-  // if (user.role === 1 || isLogged === null) {
-  // return <Navigate to="/" />;
-  //   }
+  useEffect(() => {
+    fetchProfile().then((data) => {
+      if (data?.role_id !== userRole.ADMIN) {
+        navigate(routes.HOME);
+      }
+    });
+  }, []);
 
-  return <Outlet />;
+  if (!isLogged) {
+    return <Navigate to={routes.HOME} />;
+  }
+
+  return (
+    <AdminLayout>{userLoading ? <>Loading...</> : <Outlet />}</AdminLayout>
+  );
 };
 
 export default AdminRoutes;

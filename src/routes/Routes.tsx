@@ -45,6 +45,8 @@ const routes = {
   SELLER_ORDER: "/seller/order",
   SELLER_ORDER_DETAIL: (id: number) => `/seller/order/${id}/detail`,
   SELLER_ORDER_LABEL: (id: number) => `/seller/order/${id}/label`,
+
+  ADMIN_DASHBOARD: "admin/dashboard",
 };
 
 export default routes;

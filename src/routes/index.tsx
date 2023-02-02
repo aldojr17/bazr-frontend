@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import AdminRoutes from "./AdminRoutes";
 import AuthRoutes from "./AuthRoutes";
 import LayoutRoutes from "./LayoutRoutes";
 import SellerRoutes from "./SellerRoutes";
@@ -175,6 +176,11 @@ const RouteList = () => {
           element={<SellerOrderDetail />}
         />
       </Route>
+
+      <Route element={<AdminRoutes />}>
+        <Route path="/admin/dashboard" element={<>admin dashboard</>} />
+      </Route>
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
