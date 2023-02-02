@@ -1,9 +1,9 @@
 import shopsService from "../api/service/shop";
 import { ICreateProductShopPayload } from "../interfaces/Product";
-import { ICreateShopTransferPayload } from "../interfaces/Shop";
 import {
-  IPrimaryCategory,
+  ICreateShopTransferPayload,
   IFlatShopCategories,
+  IPrimaryCategory,
   IProductUploadPhotoPayload,
 } from "../interfaces/Shop";
 
@@ -34,6 +34,16 @@ const useShop = () => {
     if (response.is_success) {
       return response.data;
     }
+  };
+
+  const fetchShopDashboard = async () => {
+    const response = await shopsService.getShopDashboard();
+
+    if (response.is_success) {
+      return response.data;
+    }
+
+    return null;
   };
 
   const flattenShopCategories = (
@@ -95,6 +105,7 @@ const useShop = () => {
     fetchShopProfileById,
     fetchShopCategories,
     fetchShopProfileByShopUsername,
+    fetchShopDashboard,
     flattenShopCategories,
     uploadProductPhoto,
     createShopProduct,

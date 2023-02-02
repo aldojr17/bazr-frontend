@@ -159,3 +159,24 @@ export interface IShopWithdrawal {
   amount: number;
   withdrawal_date: string;
 }
+
+export interface IShopDashboardResponsePayload {
+  data: IShopDashboard;
+  is_success: boolean;
+  message: string;
+}
+
+export interface IShopDashboard {
+  id: number;
+  name: string;
+  username: string;
+  profile_picture: string;
+  city: string;
+  joined_at: string;
+  total_product_sold: number;
+  total_sales: number;
+  total_order: number;
+  new_order: number;
+  ongoing_order: number;
+  completed_order: number;
+}
