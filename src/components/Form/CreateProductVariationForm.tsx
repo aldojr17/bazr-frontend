@@ -94,6 +94,15 @@ function CreateProductVariationForm(props: ICreateProductVariationFormProps) {
       type = event.target.value.charAt(0).toUpperCase();
     }
 
+    if (event.target.value.length === 0) {
+      setOneVarInput(
+        oneVarInput.filter((_, idx) => {
+          return idx !== index;
+        })
+      );
+      return;
+    }
+
     if (index !== oneVarInput.length - 1) {
       setOneVarInput([
         ...oneVarInput.map((input, idx) => {
@@ -134,6 +143,15 @@ function CreateProductVariationForm(props: ICreateProductVariationFormProps) {
         event.target.value.slice(1).toLowerCase();
     } else {
       type = event.target.value.charAt(0).toUpperCase();
+    }
+
+    if (event.target.value.length === 0) {
+      setSecVarInput(
+        secVarInput.filter((_, idx) => {
+          return idx !== index;
+        })
+      );
+      return;
     }
 
     if (index !== secVarInput.length - 1) {
@@ -209,11 +227,11 @@ function CreateProductVariationForm(props: ICreateProductVariationFormProps) {
               <Flex
                 width="70%"
                 justifyContent={"space-between"}
-                alignItems={"center"}
+                alignItems={"flex-start"}
                 direction={"row"}
               >
                 <Text>Options</Text>
-                <Flex width={"75%"} direction={"column"}>
+                <Flex width={"75%"} direction={"column"} gap={1}>
                   {oneVarInput.map((string, index) => {
                     return (
                       <Input
@@ -322,7 +340,7 @@ function CreateProductVariationForm(props: ICreateProductVariationFormProps) {
                   direction={"row"}
                 >
                   <Text>Options</Text>
-                  <Flex width={"75%"} direction={"column"}>
+                  <Flex width={"75%"} direction={"column"} gap={1}>
                     {secVarInput.map((string, index) => {
                       return (
                         <Input
