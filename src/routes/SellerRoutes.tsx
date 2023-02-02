@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import SellerLayout from "../layout/SellerLayout";
+import { userRole } from "../util/constant";
+import routes from "./Routes";
 
 function SellerRoutes() {
   const navigate = useNavigate();
@@ -11,14 +13,16 @@ function SellerRoutes() {
 
   useEffect(() => {
     fetchProfile().then((data) => {
-      if (!data?.is_seller || data?.shop_id === 0) {
-        navigate("/register-merchant");
+      if (data?.role_id === userRole.ADMIN) {
+        navigate(routes.ADMIN_DASHBOARD);
+      } else if (!data?.is_seller || data?.shop_id === 0) {
+        navigate(routes.REGISTER_MERCHANT);
       }
     });
   }, []);
 
   if (!isLogged) {
-    return <Navigate to="/login" />;
+    return <Navigate to={routes.HOME} />;
   }
 
   return (
