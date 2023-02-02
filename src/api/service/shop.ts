@@ -7,6 +7,7 @@ import {
   IProductPhotoResponse,
   IProductUploadPhotoPayload,
   IShopCategoryResponsePayload,
+  IShopDashboardResponsePayload,
   IShopsResponsePayload,
   IShopWithdrawalResponse,
 } from "../../interfaces/Shop";
@@ -51,6 +52,18 @@ const getShopCategory = async (
     return response.data;
   } catch (err) {
     return err as IShopCategoryResponsePayload;
+  }
+};
+
+const getShopDashboard = async (): Promise<IShopDashboardResponsePayload> => {
+  try {
+    const response = await instance.get<IShopDashboardResponsePayload>(
+      API_PATH.shop.DASHBOARD
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IShopDashboardResponsePayload;
   }
 };
 
@@ -121,6 +134,7 @@ const shopsService = {
   getShopProfileById,
   getShopCategory,
   getShopProfileByShopUsername,
+  getShopDashboard,
   uploadProductPhoto,
   createShopProduct,
   getShopWithdrawal,

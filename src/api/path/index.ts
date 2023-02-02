@@ -43,6 +43,7 @@ export const API_PATH = {
     SET_SHOP_DEFAULT_ADDRESS: "/shops/address",
     SHOPS_WITHDRAWAL: "/shops/withdrawal",
     COURIER: "/shops/couriers",
+    DASHBOARD: "/shops/dashboard",
   },
   wallet: {
     VERIFY_PIN: "/wallets/step-up/pin",
