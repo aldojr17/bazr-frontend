@@ -1,4 +1,5 @@
 import { Container } from "@chakra-ui/react";
+import { parseCookies } from "nookies";
 import { useEffect } from "react";
 import MainCarousel from "../../components/Carousel/MainCarousel";
 import CategoryScrollableContainer from "../../components/Container/CategoryScrollableContainer";
@@ -13,7 +14,9 @@ const Home = () => {
   const { fetchProfile } = useUser();
 
   useEffect(() => {
-    fetchProfile();
+    if (parseCookies().auth) {
+      fetchProfile();
+    }
   }, []);
 
   return (
