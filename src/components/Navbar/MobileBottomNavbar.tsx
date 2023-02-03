@@ -53,30 +53,6 @@ function MobileBottomNavbar() {
         </Flex>
       </Button>
       <Button
-        id={"/categories"}
-        width={"20%"}
-        variant={"unstyled"}
-        height={"fit-content"}
-        onClick={handleSelectMenu}
-      >
-        <Flex direction={"column"} alignItems={"center"}>
-          <Icon.Dots
-            boxSize={5}
-            fill={`${selectedMenu === "/categories" ? "primary" : "dark"}`}
-          />
-          <Text
-            variant={"unstyled"}
-            fontSize={"2xs"}
-            color={`${
-              selectedMenu === "/categories" ? "darkDarken" : "darkLighten"
-            }`}
-            my={1}
-          >
-            Categories
-          </Text>
-        </Flex>
-      </Button>
-      <Button
         id={"/favourites"}
         width={"20%"}
         variant={"unstyled"}

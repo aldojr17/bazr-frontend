@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Center,
-  Flex,
   HStack,
   Image,
   SimpleGrid,
@@ -61,15 +60,12 @@ const Navbar = ({ onOpen }: NavbarProps) => {
             lg: "block",
           }}
         >
-          <Button variant={"ghost"}>
-            <Flex justifyContent={"center"} alignItems={"center"} gap={"3"}>
-              <Icon.Dots />
-            </Flex>
-          </Button>
-          <Button variant={"ghost"} onClick={onOpen}>
-            <Flex justifyContent={"center"} alignItems={"center"} gap={"3"}>
-              <Icon.Search />
-            </Flex>
+          <Button
+            variant={"lightLink"}
+            onClick={onOpen}
+            leftIcon={<Icon.Search />}
+          >
+            Search
           </Button>
         </HStack>
 
