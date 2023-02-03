@@ -180,3 +180,8 @@ export interface IShopDashboard {
   ongoing_order: number;
   completed_order: number;
 }
+
+export interface IEditProductStatusPayload {
+  status: boolean;
+  product_ids: number[];
+}

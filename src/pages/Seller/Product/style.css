@@ -1,16 +1,16 @@
 .deleteImgBtn {
-  display: none;
+  display: none !important;
 }
 
 .imgContainer:hover .deleteImgBtn {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 85%;
+  display: block !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  opacity: 85% !important;
 }
 
 .imgContainer {
-  position: relative;
+  position: relative !important;
 }

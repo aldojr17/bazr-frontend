@@ -1,9 +1,12 @@
 import {
   ICreateProductResponse,
   ICreateProductShopPayload,
+  IEditProductResponse,
+  IEditProductShopPayload,
 } from "../../interfaces/Product";
 import {
   ICreateShopTransferPayload,
+  IEditProductStatusPayload,
   IProductPhotoResponse,
   IProductUploadPhotoPayload,
   IShopCategoryResponsePayload,
@@ -130,6 +133,36 @@ const transferShopBalance = async (
   }
 };
 
+const putShopProduct = async (
+  payload: IEditProductShopPayload
+): Promise<IEditProductResponse> => {
+  try {
+    const response = await instance.put<IEditProductResponse>(
+      API_PATH.product.PRODUCTS + `/${payload.id}`,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IEditProductResponse;
+  }
+};
+
+const putShopProductStatus = async (
+  payload: IEditProductStatusPayload
+): Promise<IEditProductResponse> => {
+  try {
+    const response = await instance.put<IEditProductResponse>(
+      API_PATH.shop.SHOPS_PRODUCTS,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IEditProductResponse;
+  }
+};
+
 const shopsService = {
   getShopProfileById,
   getShopCategory,
@@ -139,6 +172,8 @@ const shopsService = {
   createShopProduct,
   getShopWithdrawal,
   transferShopBalance,
+  putShopProduct,
+  putShopProductStatus,
 };
 
 export default shopsService;

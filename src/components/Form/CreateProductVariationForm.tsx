@@ -1,13 +1,35 @@
 import { Flex, Text, Button, Input } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { ICreateProductVariationFormProps } from "../../interfaces/Components";
-import { ICreateVariantType } from "../../interfaces/Variant";
+import {
+  ICreateVariantGroup,
+  ICreateVariantType,
+} from "../../interfaces/Variant";
 import ProductVariationListForm from "./ProductVariationListForm";
 
 function CreateProductVariationForm(props: ICreateProductVariationFormProps) {
   const [secVariationEnable, setSecVariationEnable] = useState(false);
   const [oneVarInput, setOneVarInput] = useState<string[]>([""]);
   const [secVarInput, setSecVarInput] = useState<string[]>([""]);
+  const [isInit, setIsInit] = useState<boolean>(true);
+
+  const mapVariant = (vList: ICreateVariantType[]) => {
+    let oneVar: string[] = [];
+    let twoVar: string[] = [];
+
+    vList.forEach((v) => {
+      oneVar.push(v.vtOne_name);
+      twoVar.push(v.vtTwo_name ?? "");
+    });
+    oneVar.push("");
+    twoVar.push("");
+
+    const uniqueOneVar: string[] = Array.from(new Set(oneVar));
+    const uniqueTwoVar: string[] = Array.from(new Set(twoVar));
+
+    setOneVarInput(uniqueOneVar);
+    setSecVarInput(uniqueTwoVar);
+  };
 
   useEffect(() => {
     props.setVgInput([
@@ -15,9 +37,28 @@ function CreateProductVariationForm(props: ICreateProductVariationFormProps) {
         vg_name: "Variant 1",
       },
     ]);
+
+    if (props.vgInput.length > 1) {
+      setSecVariationEnable(true);
+
+      const initVgInput: ICreateVariantGroup[] = [];
+      props.vgInput.forEach((val) => {
+        initVgInput.push(val);
+      });
+
+      props.setVgInput(initVgInput);
+
+      mapVariant(props.vtList);
+    }
+
+    setTimeout(() => setIsInit(false));
   }, []);
 
   useEffect(() => {
+    if (isInit) {
+      return;
+    }
+
     var vtList: ICreateVariantType[] = [];
 
     oneVarInput.forEach((one, oneIdx) => {
@@ -53,7 +94,27 @@ function CreateProductVariationForm(props: ICreateProductVariationFormProps) {
       }
     });
 
-    props.setVtList(vtList);
+    const mapVtList = vtList.map((val1) => {
+      const vtTemp = props.vtList.find(
+        (val2) =>
+          val1.vtOne_name === val2.vtOne_name &&
+          val1.vtTwo_name === val2.vtTwo_name
+      );
+
+      if (vtTemp) {
+        return {
+          ...vtTemp,
+        } as ICreateVariantType;
+      }
+
+      return val1;
+    });
+
+    if (oneVarInput.length > 1) {
+      props.setVtList([...mapVtList]);
+    } else {
+      props.setVtList([]);
+    }
   }, [oneVarInput, secVarInput]);
 
   const handleVgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
