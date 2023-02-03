@@ -196,9 +196,9 @@ const userService = {
   sendChangePasswordToken,
   changePassword,
   fetchUserAddresses,
-  getUserFavoriteProduct,
   postConfirmUserReceivedOrder,
   postAddUserReview,
+  getUserFavoriteProduct,
 };
 
 export default userService;

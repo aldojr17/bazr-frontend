@@ -90,6 +90,8 @@ const DeliveryLabel = React.lazy(
   () => import("../pages/Seller/Shipment/DeliveryLabel")
 );
 
+const AdminPage = React.lazy(() => import("../pages/Admin/AdminPage"));
+
 const RouteList = () => {
   let routes = (
     <Routes>
@@ -182,7 +184,7 @@ const RouteList = () => {
       </Route>
 
       <Route element={<AdminRoutes />}>
-        <Route path="/admin/dashboard" element={<>admin dashboard</>} />
+        <Route path="/admin" element={<AdminPage />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

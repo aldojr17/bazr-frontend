@@ -19,6 +19,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
 import TransactionDetailActionButton from "../../components/Button/TransactionDetailActionButton";
+import CreateRefundModal from "../../components/Modal/CreateRefundModal";
 import TableData from "../../components/TableData/TableData";
 import useTransactionOrderHistory from "../../hooks/transactionOrderHistory";
 import useToast from "../../hooks/useToast";
@@ -50,6 +51,12 @@ function TransactionDetails() {
     onClose: closeAddReviewModal,
   } = useDisclosure();
   const [productOrderIdToReview, setProductOrderIdToReview] = useState(-1);
+  const [refundOrderId, setRefundOrderId] = useState(0);
+  const {
+    isOpen: isRefundOpen,
+    onOpen: onRefundOpen,
+    onClose: onRefundClose,
+  } = useDisclosure();
 
   const refetch = () => {
     setVarToRefetch(Math.random());
@@ -175,18 +182,6 @@ function TransactionDetails() {
                           <Box>Rp</Box>
                           <Box>{formatCurrency(item.price)}</Box>
                         </Flex>
-                        {CListToShowRefund.includes(order.delivery_status) ? (
-                          <TransactionDetailActionButton
-                            label="Refund"
-                            role="button"
-                            // TODO: handle when click
-                            onClick={() => {
-                              console.log('"Refund" clicked');
-                            }}
-                          />
-                        ) : (
-                          ""
-                        )}
                         {CListToShowAddReview.includes(
                           order.delivery_status
                         ) ? (
@@ -220,6 +215,18 @@ function TransactionDetails() {
                         successToast("Confirm Order Received Success");
                         refetch();
                       });
+                    }}
+                  />
+                ) : (
+                  ""
+                )}
+                {CListToShowRefund.includes(order.delivery_status) ? (
+                  <TransactionDetailActionButton
+                    label="Refund"
+                    role="button"
+                    onClick={() => {
+                      onRefundOpen();
+                      setRefundOrderId(order.id);
                     }}
                   />
                 ) : (
@@ -313,6 +320,11 @@ function TransactionDetails() {
           />
         </Flex>
       </Flex>
+      <CreateRefundModal
+        orderId={refundOrderId}
+        isOpen={isRefundOpen}
+        onClose={onRefundClose}
+      />
       <Modal
         closeOnOverlayClick={false}
         isOpen={isAddReviewModalOpen}

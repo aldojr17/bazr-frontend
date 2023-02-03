@@ -1,4 +1,3 @@
-import { useToast } from "@chakra-ui/react";
 import walletService from "../api/service/wallet";
 import {
   IPinPasswordRequestPayload,
@@ -7,9 +6,10 @@ import {
 } from "../interfaces/Auth";
 import { IWalletHistoryFilterPayload } from "../interfaces/Filter";
 import { IPaymentWalletRequestPayload } from "../interfaces/Wallet";
+import useToast from "./useToast";
 
 const useWallet = () => {
-  const toast = useToast();
+  const { successToast, errorToast } = useToast();
 
   const verifyPin = async (payload: IPinRequestPayload) => {
     const response = await walletService.verifyPin(payload);
@@ -41,22 +41,9 @@ const useWallet = () => {
     const response = await paymentWallet(paymentPayload);
 
     if (response.is_success) {
-      toast({
-        title: "Payment successful",
-        status: "success",
-        duration: 3000,
-        position: "top",
-        isClosable: true,
-      });
+      successToast("Payment successful");
     } else {
-      toast({
-        title: "Failed to create payment",
-        description: response.message,
-        status: "error",
-        duration: 3000,
-        position: "top",
-        isClosable: true,
-      });
+      errorToast("Failed to create payment", response.message);
     }
 
     return response.is_success;

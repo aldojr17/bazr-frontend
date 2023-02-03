@@ -92,11 +92,6 @@ const useUser = () => {
     return response;
   };
 
-  const fetchUserFavouriteProduct = async (filter?: ISearchFilterPayload) => {
-    const response = await userService.getUserFavoriteProduct(filter);
-    return response;
-  };
-
   const addConfirmUserReceivedOrder = async (orderId: number) => {
     const response = await userService.postConfirmUserReceivedOrder(orderId);
     if (response.is_success) {
@@ -119,6 +114,11 @@ const useUser = () => {
     }
     errorToast("Add Review Failed");
     return null;
+  };
+
+  const fetchUserFavouriteProduct = async (filter?: ISearchFilterPayload) => {
+    const response = await userService.getUserFavoriteProduct(filter);
+    return response;
   };
 
   return {
