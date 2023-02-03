@@ -57,8 +57,8 @@ function EditUserEmailModal(props: IEditUserEmailModalProps) {
     const response = await changeEmail(payload);
     if (response.is_success) {
       props.codeModalOnClose();
-      props.logoutModalOnOpen();
-      successToast(response.message, 3000);
+      successToast(`${response.message}. Please login again`, 3000);
+      handleLogout();
     } else {
       errorToast(response.message, undefined, 3000);
     }
@@ -117,7 +117,11 @@ function EditUserEmailModal(props: IEditUserEmailModalProps) {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={props.codeModalIsOpen} onClose={props.codeModalOnClose}>
+      <Modal
+        closeOnOverlayClick={false}
+        isOpen={props.codeModalIsOpen}
+        onClose={props.codeModalOnClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Verification Code</ModalHeader>
