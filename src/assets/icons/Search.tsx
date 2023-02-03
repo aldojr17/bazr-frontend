@@ -4,6 +4,7 @@ const Search = (props: IconProps) => {
   return (
     <Icon
       viewBox="0 0 512 512"
+      fill="currentcolor"
       width={props.width ? props.width : "1.2em"}
       height={props.height ? props.height : "1.2em"}
       {...props}

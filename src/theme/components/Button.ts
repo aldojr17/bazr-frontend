@@ -90,6 +90,18 @@ const Button = defineStyleConfig({
         bg: "primaryLighten",
       },
     },
+    lightLink: {
+      bg: "transparent",
+      color: "dark",
+      _hover: {
+        color: "primary",
+        textDecor: "none",
+      },
+      _active: {
+        color: "primaryDarken",
+        bg: "primaryLighten",
+      },
+    },
     secondary: {
       bg: "secondary",
       color: "dark",
