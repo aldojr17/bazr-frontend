@@ -8,6 +8,8 @@ import {
   IUserFavoriteProductResponsePayload,
   IUserResponsePayload,
   IUserChangePasswordPayload,
+  IUserChatRequestPayload,
+  IUserChatResponsePayload,
   IConfirmUserReceivedOrderResponsePayload,
   IAddUserReviewRequestPayload,
   IAddUserReviewResponsePayload,
@@ -149,7 +151,7 @@ const changePassword = async (token: string): Promise<IBaseResponsePayload> => {
   }
 };
 
-const fetchUserAddresses = async (): Promise<IUserAddressesResponsePayload> => {
+const getUserAddresses = async (): Promise<IUserAddressesResponsePayload> => {
   try {
     const response = await instance.get<IUserAddressesResponsePayload>(
       API_PATH.user.ADDRESSES
@@ -157,6 +159,20 @@ const fetchUserAddresses = async (): Promise<IUserAddressesResponsePayload> => {
     return response.data;
   } catch (err) {
     return err as IUserAddressesResponsePayload;
+  }
+};
+
+const postUserRefundChat = async (
+  payload: IUserChatRequestPayload
+): Promise<IUserChatResponsePayload> => {
+  try {
+    const response = await instance.post<IUserChatResponsePayload>(
+      API_PATH.refund.CHAT,
+      payload
+    );
+    return response.data;
+  } catch (err) {
+    return err as IUserChatResponsePayload;
   }
 };
 
@@ -195,7 +211,8 @@ const userService = {
   changeEmail,
   sendChangePasswordToken,
   changePassword,
-  fetchUserAddresses,
+  getUserAddresses,
+  postUserRefundChat,
   postConfirmUserReceivedOrder,
   postAddUserReview,
   getUserFavoriteProduct,

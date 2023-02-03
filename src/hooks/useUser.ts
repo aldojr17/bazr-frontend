@@ -7,6 +7,7 @@ import {
   IEditProfilePayload,
   IUploadAvatarPayload,
   IUserChangePasswordPayload,
+  IUserChatRequestPayload,
   IUserFavoriteProductRequestPayload,
   IUserPayload,
 } from "../interfaces/User";
@@ -87,7 +88,13 @@ const useUser = () => {
   };
 
   const getUserAddresses = async () => {
-    const response = await userService.fetchUserAddresses();
+    const response = await userService.getUserAddresses();
+    return response;
+  };
+
+  const sendUserRefundChat = async (payload: IUserChatRequestPayload) => {
+    const response = await userService.postUserRefundChat(payload);
+
     return response;
   };
 
@@ -134,6 +141,7 @@ const useUser = () => {
     sendChangePasswordToken,
     changePassword,
     getUserAddresses,
+    sendUserRefundChat,
     addConfirmUserReceivedOrder,
     addUserReview,
   };

@@ -14,6 +14,7 @@ function Detail(props: IDetailProps) {
     productMaxPrice,
     productRating,
     productReview,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     productView,
     productSoldCount,
     shopId,

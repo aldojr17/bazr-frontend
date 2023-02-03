@@ -2,15 +2,13 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Text,
+  Container,
   HStack,
   Switch,
+  Text,
   VStack,
-  Container,
-  Button,
 } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useShipping from "../../../hooks/useShipping";
 import useToast from "../../../hooks/useToast";
 import useUser from "../../../hooks/useUser";
@@ -20,7 +18,6 @@ const Shipment = () => {
   const { fetchCourierList, updateCourierList } = useShipping();
   const { successToast, errorToast } = useToast();
   const { user } = useUser();
-  const navigate = useNavigate();
 
   const handleSelectCourier = (
     e: ChangeEvent<HTMLInputElement>,

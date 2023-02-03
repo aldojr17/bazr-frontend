@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
+import { Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { Component, ErrorInfo, ReactNode } from "react";
 
 interface Props {

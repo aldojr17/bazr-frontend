@@ -15,6 +15,26 @@ const Tabs = defineStyleConfig({
         },
       },
     },
+    customEnclosed: {
+      tab: {
+        mb: "-2px",
+        borderColor: "transparent",
+        borderTopRadius: "md",
+        color: "darkLighten",
+        fontWeight: "semibold",
+        _selected: {
+          color: "primary",
+          border: "2px solid",
+          borderColor: "lightLighten",
+          borderBottomColor: "white",
+        },
+      },
+      tablist: {
+        mb: "-2px",
+        borderBottom: "2px solid",
+        borderColor: "lightLighten",
+      },
+    },
   },
 });
 

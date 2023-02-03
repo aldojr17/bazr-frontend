@@ -6,9 +6,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { HiClipboardList, HiCollection } from "react-icons/hi";
-import { IoPricetag, IoTicket } from "react-icons/io5";
-import { MdHome, MdOutlineLocalShipping, MdPayments } from "react-icons/md";
+import { MdHome } from "react-icons/md";
 import AdminNavbar from "../components/Navbar/AdminNavbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import useUser from "../hooks/useUser";

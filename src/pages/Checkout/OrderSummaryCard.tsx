@@ -1,20 +1,20 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
+  Button,
   Card,
   CardBody,
   Divider,
+  Flex,
   Grid,
   GridItem,
+  HStack,
   Skeleton,
   Stack,
   Text,
-  Flex,
-  HStack,
-  Button,
-  VStack,
-  Alert,
-  AlertIcon,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,12 +22,9 @@ import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import SealabsPay from "../../assets/icons/SealabsPay";
 import SealabsPayPaymentModal from "../../components/Modal/SealabsPayPaymentModal";
-import useOrder from "../../hooks/useOrder";
 import useSealabsPay from "../../hooks/useSealabsPay";
-import useToast from "../../hooks/useToast";
 import { IOrderSummaryCardProps } from "../../interfaces/Components";
 import { MarketplaceVoucherInitial } from "../../interfaces/InitialState";
-import { ISealabsPayTopupPayload } from "../../interfaces/SealabsPay";
 
 import routes from "../../routes/Routes";
 import { formatCurrency } from "../../util/util";

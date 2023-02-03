@@ -34,18 +34,18 @@ import {
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Icon from "../../assets/icons";
+import ProductCard from "../../components/Card/ProductCard";
+import NoProductContainer from "../../components/Default/NoProductContainer";
+import Pagination from "../../components/Pagination/Pagination";
+import useCategory from "../../hooks/useCategory";
+import useProduct from "../../hooks/useProduct";
+import useTitle from "../../hooks/useTitle";
 import {
   ISearchFilterPayload,
   ISearchParamsPayload,
   SearchParamsState,
 } from "../../interfaces/Filter";
-import ProductCard from "../../components/Card/ProductCard";
-import Pagination from "../../components/Pagination/Pagination";
-import useCategory from "../../hooks/useCategory";
 import { IProductPaginationPayload } from "../../interfaces/Product";
-import useTitle from "../../hooks/useTitle";
-import useProduct from "../../hooks/useProduct";
-import NoProductContainer from "../../components/Default/NoProductContainer";
 
 const Search = () => {
   const [search, setSearch] = useSearchParams();
@@ -67,6 +67,7 @@ const Search = () => {
   const [sortBy, setSortBy] = useState<string>("view_count");
   const [sort, setSort] = useState<string>("desc");
   const [products, setProducts] = useState<IProductPaginationPayload>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
   const [display, setDisplay] = useState<string>("none");
   const [page, setPage] = useState<number>(1);

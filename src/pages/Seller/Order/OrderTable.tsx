@@ -31,6 +31,7 @@ import {
   IShopOrderStatusPayload,
 } from "../../../interfaces/Order";
 import routes from "../../../routes/Routes";
+import { orderStatusses } from "../../../util/constant";
 import { formatCurrency } from "../../../util/util";
 import OrderEditModal from "./OrderEditModal";
 
@@ -46,51 +47,57 @@ function OrderTable(props: { status: string }) {
 
   const handleTagStatus = (orderStatus: IShopOrderStatusPayload) => {
     switch (orderStatus.status) {
-      case "Waiting for Seller":
+      case orderStatusses.WAITING_FOR_SELLER:
         return (
           <Tag variant={"solid"} colorScheme={"gray"}>
             {orderStatus.status}
           </Tag>
         );
-      case "Cancelled":
+      case orderStatusses.CANCELLED:
         return (
           <Tag variant={"solid"} colorScheme={"purple"}>
             {orderStatus.status}
           </Tag>
         );
-      case "Processed":
+      case orderStatusses.PROCESSED:
         return (
           <Tag variant={"solid"} colorScheme={"pink"}>
             {orderStatus.status}
           </Tag>
         );
-      case "On Delivery":
+      case orderStatusses.ON_DELIVERY:
         return (
           <Tag variant={"solid"} colorScheme={"red"}>
             {orderStatus.status}
           </Tag>
         );
-      case "Delivered":
+      case orderStatusses.DELIVERED:
         return (
           <Tag variant={"solid"} colorScheme={"teal"}>
             {orderStatus.status}
           </Tag>
         );
-      case "Received":
+      case orderStatusses.RECEIVED:
         return (
           <Tag variant={"solid"} colorScheme={"messenger"}>
             {orderStatus.status}
           </Tag>
         );
-      case "Refunded":
+      case orderStatusses.REFUNDED:
         return (
           <Tag variant={"solid"} colorScheme={"cyan"}>
             {orderStatus.status}
           </Tag>
         );
-      case "Completed":
+      case orderStatusses.COMPLETED:
         return (
           <Tag variant={"solid"} colorScheme={"green"}>
+            {orderStatus.status}
+          </Tag>
+        );
+      case orderStatusses.REFUND_IN_PROGRESS:
+        return (
+          <Tag variant={"solid"} colorScheme={"orange"}>
             {orderStatus.status}
           </Tag>
         );

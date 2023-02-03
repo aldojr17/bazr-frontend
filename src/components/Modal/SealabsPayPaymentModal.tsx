@@ -1,12 +1,12 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,8 @@ const SealabsPayPaymentModal: React.FC<ISealabsPayPaymentProps> = ({
   ...props
 }) => {
   const { isOpen, onClose, isOrderPlaced, setIsOrderPlaced } = props;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
 
   const [redirected, setRedirected] = useState(0);
@@ -45,7 +47,7 @@ const SealabsPayPaymentModal: React.FC<ISealabsPayPaymentProps> = ({
 
   const { successToast, infoToast, errorToast } = useToast();
 
-  const { createCheckout, createTransaction } = useOrder();
+  const { createTransaction } = useOrder();
 
   const handleSubmitPaymentSealabsPay = async (
     formData: Omit<ISealabsPayPaymentPayload, "redirect_url">
