@@ -79,6 +79,7 @@ const PaymentPinModal = ({ ...props }: IPaymentPinProps) => {
                         backgroundColor={"gray.100"}
                         borderColor="black"
                         tabIndex={i + 1}
+                        key={i}
                       />
                     );
                   })}

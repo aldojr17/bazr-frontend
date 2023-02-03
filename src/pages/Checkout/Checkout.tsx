@@ -279,35 +279,45 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    createCheckout({
-      address_id: addressNotif,
-      user_voucher_id: selectedMarketplaceVoucher.id,
-      orders: checkoutData.cart,
-    })
-      .then((resp) => setCheckoutData(resp.data))
-      .catch((err) => errorToast(err));
+    if (checkoutData.cart.length !== 0) {
+      createCheckout({
+        address_id: addressNotif,
+        user_voucher_id: selectedMarketplaceVoucher.id,
+        orders: checkoutData.cart,
+      })
+        .then((resp) => setCheckoutData(resp.data))
+        .catch((err) => errorToast(err));
+    }
   }, [selectedMarketplaceVoucher]);
 
   useEffect(() => {
-    let orders: ICheckoutOrderPayload[];
-    orders = checkoutData.cart.map(
-      (value) =>
-        (value = {
-          ...value,
-          courier_id: 0,
-          delivery_fee: 0,
-          etd: "",
-        })
-    );
+    if (checkoutData.cart.length !== 0) {
+      let orders: ICheckoutOrderPayload[];
+      orders = checkoutData.cart.map(
+        (value) =>
+          (value = {
+            ...value,
+            courier_id: 0,
+            delivery_fee: 0,
+            etd: "",
+          })
+      );
 
-    createCheckout({
-      address_id: addressNotif,
-      user_voucher_id: selectedMarketplaceVoucher.id,
-      orders: orders,
-    })
-      .then((resp) => setCheckoutData(resp.data))
-      .catch((err) => errorToast(err));
+      createCheckout({
+        address_id: addressNotif,
+        user_voucher_id: selectedMarketplaceVoucher.id,
+        orders: orders,
+      })
+        .then((resp) => setCheckoutData(resp.data))
+        .catch((err) => errorToast(err));
+    }
   }, [addressNotif]);
+
+  useEffect(() => {
+    if (checkoutData.cart.length === 0) {
+      navigate(routes.CART, { replace: true });
+    }
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -429,6 +439,7 @@ const Checkout = () => {
                                     onClick={async () => {
                                       setAddressNotif(data.address_id);
                                     }}
+                                    key={data.address_id}
                                   >
                                     {data.street_name +
                                       ", " +
@@ -500,14 +511,13 @@ const Checkout = () => {
                             shopCityName={val.shop_city_name}
                           />
                           {val.order_details.map((childVal, childIndex) => (
-                            <>
+                            <Box key={childVal.variant_id}>
                               <Box
                                 pb={4}
                                 pt={childIndex !== 0 ? 3 : 0}
                                 width={"100%"}
                               >
                                 <ProductListItem
-                                  key={childVal.variant_id}
                                   name={childVal.product_name}
                                   qty={childVal.quantity}
                                   total={childVal.total}
@@ -518,7 +528,7 @@ const Checkout = () => {
                                 />
                               </Box>
                               <Divider />
-                            </>
+                            </Box>
                           ))}
                           <Flex
                             width="100%"
@@ -680,6 +690,7 @@ const Checkout = () => {
                                               _hover={{
                                                 bg: "light",
                                               }}
+                                              key={courier.id}
                                             >
                                               {courier.name}
                                             </Box>
@@ -901,6 +912,7 @@ const Checkout = () => {
                 ?.filter((val) => checkoutData.subtotal > val.min_purchase)
                 .map((voucher) => (
                   <VoucherCard
+                    key={voucher.id}
                     selectShopVoucher={handleSelectShopVoucher}
                     voucher={voucher}
                     setVoucher={setselectedMarketplaceVoucher}
@@ -933,6 +945,7 @@ const Checkout = () => {
                 ?.filter((val) => checkoutData.subtotal < val.min_purchase)
                 .map((voucher) => (
                   <VoucherCard
+                    key={voucher.id}
                     selectShopVoucher={handleSelectShopVoucher}
                     voucher={voucher}
                     setVoucher={setselectedMarketplaceVoucher}
@@ -990,6 +1003,7 @@ const Checkout = () => {
                 )
                 .map((voucher) => (
                   <VoucherCard
+                    key={voucher.id}
                     selectShopVoucher={handleSelectShopVoucher}
                     setVoucher={setselectedMarketplaceVoucher}
                     onClose={shopVoucherModal.onClose}
@@ -1028,6 +1042,7 @@ const Checkout = () => {
                 )
                 .map((voucher) => (
                   <VoucherCard
+                    key={voucher.id}
                     selectShopVoucher={handleSelectShopVoucher}
                     setVoucher={setselectedMarketplaceVoucher}
                     onClose={shopVoucherModal.onClose}

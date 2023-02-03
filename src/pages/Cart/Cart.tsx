@@ -92,7 +92,7 @@ const Cart = () => {
   ) => {
     if (event.currentTarget.checked) {
       setCheckoutCartState([
-        ...checkoutCartState,
+        ...checkoutCartState.filter((val) => val.shop_id !== id),
         ...cart.filter((val) => val.shop_id === id),
       ]);
     } else {
@@ -110,13 +110,11 @@ const Cart = () => {
     if (event.currentTarget.checked) {
       setCheckoutCartState([
         ...checkoutCartState,
-        cart.find((val) => val.cart_id === id && val.shop_id === shopId)!,
+        cart.find((val) => val.cart_id === id)!,
       ]);
     } else {
       setCheckoutCartState(
-        checkoutCartState.filter(
-          (val) => val.cart_id !== id && val.shop_id !== shopId
-        )
+        checkoutCartState.filter((val) => val.cart_id !== id)
       );
     }
   };
@@ -236,7 +234,7 @@ const Cart = () => {
     setIsSelected({
       ...newIsSelected,
     });
-  }, [checkoutCartState]);
+  }, [checkoutCartState, cart]);
 
   useEffect(() => {
     if (cart.length !== 0) {
