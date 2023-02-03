@@ -26,6 +26,7 @@ const routes = {
   REGISTER_MERCHANT: "/register-merchant",
   PROFILE: "/profile",
   WALLET: "/wallet",
+  FAVORITE: "/favorite",
   SELLER_HOME: "/seller/home",
   SELLER_VOUCHER: "/seller/voucher",
   SELLER_VOUCHER_CREATE: "/seller/voucher/create",

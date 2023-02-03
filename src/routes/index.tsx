@@ -27,6 +27,7 @@ const CategorySecondary = React.lazy(
 const CategoryTertiary = React.lazy(
   () => import("../pages/Category/CategoryTertiary")
 );
+const UserFavorite = React.lazy(() => import("../pages/User/UserFavorite"));
 const Profile = React.lazy(() => import("../pages/User/User"));
 const UserWallet = React.lazy(() => import("../pages/User/UserWallet"));
 const SellerHome = React.lazy(() => import("../pages/Seller/Home/Home"));
@@ -113,6 +114,7 @@ const RouteList = () => {
           <Route path="/cart/shipment" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/wallet" element={<UserWallet />} />
+          <Route path="/favorite" element={<UserFavorite />} />
           <Route
             path="/sealabs_pay/redirect"
             element={<SealabsPayRedirect />}

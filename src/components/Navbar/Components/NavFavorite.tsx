@@ -1,7 +1,11 @@
 import { Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import Icon from "../../../assets/icons";
+import routes from "../../../routes/Routes";
 
 function NavFavorite() {
+  const navigate = useNavigate();
+
   return (
     <Button
       display={{
@@ -19,6 +23,7 @@ function NavFavorite() {
         lg: "initial",
         xl: "initial",
       }}
+      onClick={() => navigate(routes.FAVORITE)}
     >
       <Icon.Heart
         width={{
