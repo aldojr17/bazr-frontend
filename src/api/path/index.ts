@@ -15,6 +15,8 @@ export const API_PATH = {
     EMAIL: "/users/email",
     PASSWORD: "/users/password",
     ADDRESSES: "/users/addresses",
+    ORDER: (orderId: number) => `/users/orders/${orderId}`,
+    REVIEW: (productOrderId: number) => `/users/reviews/${productOrderId}`,
   },
   category: {
     CATEGORIES: "/categories",
@@ -31,6 +33,9 @@ export const API_PATH = {
   transaction: {
     CHECKOUT: "/checkout",
     TRANSACTIONS: "/transactions",
+    ORDER_DETAILS: (orderId: number) => `/transactions/orders/${orderId}`,
+    TRANSACTION_DETAILS: (transactionId: number) =>
+      `/transactions/${transactionId}`,
   },
   sealabs_pay: {
     SEALABS_PAY: "/sealabs_pay",

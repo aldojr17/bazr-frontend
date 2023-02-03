@@ -97,3 +97,19 @@ export interface IUserAddress {
   is_default: boolean;
   is_shop_default: boolean;
 }
+
+export interface IConfirmUserReceivedOrderResponsePayload {
+  data: null;
+  is_success: boolean;
+  message: string;
+}
+
+export interface IAddUserReviewRequestPayload {
+  rating_score: number;
+}
+
+export interface IAddUserReviewResponsePayload {
+  data: null;
+  is_success: boolean;
+  message: string;
+}

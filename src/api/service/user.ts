@@ -8,6 +8,9 @@ import {
   IUserFavoriteProductResponsePayload,
   IUserResponsePayload,
   IUserChangePasswordPayload,
+  IConfirmUserReceivedOrderResponsePayload,
+  IAddUserReviewRequestPayload,
+  IAddUserReviewResponsePayload,
 } from "../../interfaces/User";
 import { IProductsResponsePayload } from "../../interfaces/Product";
 import { ISearchFilterPayload } from "../../interfaces/Filter";
@@ -157,6 +160,32 @@ const fetchUserAddresses = async (): Promise<IUserAddressesResponsePayload> => {
   }
 };
 
+const postConfirmUserReceivedOrder = async (
+  orderId: number
+): Promise<IConfirmUserReceivedOrderResponsePayload> => {
+  try {
+    const response = await instance.post(API_PATH.user.ORDER(orderId));
+    return response.data;
+  } catch (err) {
+    return err as IConfirmUserReceivedOrderResponsePayload;
+  }
+};
+
+const postAddUserReview = async (
+  productOrderId: number,
+  payload: IAddUserReviewRequestPayload
+): Promise<IAddUserReviewResponsePayload> => {
+  try {
+    const response = await instance.post<IAddUserReviewResponsePayload>(
+      API_PATH.user.REVIEW(productOrderId),
+      payload
+    );
+    return response.data;
+  } catch (err) {
+    return err as IAddUserReviewResponsePayload;
+  }
+};
+
 const userService = {
   getProfile,
   editProfile,
@@ -168,6 +197,8 @@ const userService = {
   changePassword,
   fetchUserAddresses,
   getUserFavoriteProduct,
+  postConfirmUserReceivedOrder,
+  postAddUserReview,
 };
 
 export default userService;

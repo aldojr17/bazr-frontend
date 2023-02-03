@@ -6,11 +6,11 @@ function PaginationTransactionOrderHistory() {
   const { transactionOrderHistory, setPage } = useTransactionOrderHistory();
   return (
     <Box>
-      {transactionOrderHistory.data.data.length !== 0 ? (
+      {transactionOrderHistory.data.length !== 0 ? (
         <Pagination
           data={{
-            current_page: transactionOrderHistory.data.current_page,
-            total_page: transactionOrderHistory.data.total_page,
+            current_page: transactionOrderHistory.current_page,
+            total_page: transactionOrderHistory.total_page,
           }}
           setPage={setPage}
         />
