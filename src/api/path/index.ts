@@ -44,6 +44,7 @@ export const API_PATH = {
     SHOPS_WITHDRAWAL: "/shops/withdrawal",
     COURIER: "/shops/couriers",
     DASHBOARD: "/shops/dashboard",
+    SHOPS_PRODUCTS: "/shops/products",
   },
   wallet: {
     VERIFY_PIN: "/wallets/step-up/pin",

@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AdminRoutes from "./AdminRoutes";
+import EditProductForm from "../pages/Seller/Product/EditProductForm";
 import AuthRoutes from "./AuthRoutes";
 import LayoutRoutes from "./LayoutRoutes";
 import SellerRoutes from "./SellerRoutes";
@@ -135,6 +136,7 @@ const RouteList = () => {
         <Route path="/seller/voucher" element={<SellerVoucher />} />
         <Route path="/seller/product" element={<ProductDashboard />} />
         <Route path="/seller/product/new" element={<AddProductForm />} />
+        <Route path="/seller/product/:id/edit" element={<EditProductForm />} />
         <Route
           path="/seller/voucher/create"
           element={<SellerVoucherCreate />}

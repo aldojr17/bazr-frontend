@@ -1,10 +1,14 @@
 import shopsService from "../api/service/shop";
-import { ICreateProductShopPayload } from "../interfaces/Product";
+import {
+  ICreateProductShopPayload,
+  IEditProductShopPayload,
+} from "../interfaces/Product";
 import {
   ICreateShopTransferPayload,
   IFlatShopCategories,
   IPrimaryCategory,
   IProductUploadPhotoPayload,
+  IEditProductStatusPayload,
 } from "../interfaces/Shop";
 
 const useShop = () => {
@@ -101,6 +105,20 @@ const useShop = () => {
     return response;
   };
 
+  const updateShopProduct = async (payload: IEditProductShopPayload) => {
+    const response = await shopsService.putShopProduct(payload);
+
+    return response;
+  };
+
+  const updateShopProductStatus = async (
+    payload: IEditProductStatusPayload
+  ) => {
+    const response = await shopsService.putShopProductStatus(payload);
+
+    return response;
+  };
+
   return {
     fetchShopProfileById,
     fetchShopCategories,
@@ -111,6 +129,8 @@ const useShop = () => {
     createShopProduct,
     fetchShopWithdrawal,
     transferShopBalance,
+    updateShopProduct,
+    updateShopProductStatus,
   };
 };
 
