@@ -17,7 +17,7 @@ import { IProductActionProps } from "../../interfaces/Components/PDP";
 import routes from "../../routes/Routes";
 
 function ProductAction(props: IProductActionProps) {
-  const { productId, isFavorite, favoriteCount } = props;
+  const { productId, isFavorite, favoriteCount, isOwnedProduct } = props;
   const navigate = useNavigate();
   const { errorToast } = useToast();
   const { setUserFavoriteProduct } = useUser();
@@ -60,27 +60,31 @@ function ProductAction(props: IProductActionProps) {
         width={{ base: "fit-content", lg: "100%" }}
         gap={{ base: 1, lg: 0 }}
       >
-        <Button
-          display={{ base: "none", lg: "flex" }}
-          leftIcon={
-            isFavorited ? (
-              <Icon.HeartFilled fill={"secondary"} />
-            ) : (
-              <Icon.Heart fill={"secondary"} />
-            )
-          }
-          variant="primaryGhost"
-          size={"sm"}
-          py={5}
-          onClick={handleFavoriteProduct}
-          flexDirection={"row"}
-          alignItems={"center"}
-        >
-          Favorite
-          <Text color={"darkLighten"} ms={1}>
-            ({favCount})
-          </Text>
-        </Button>
+        {!isOwnedProduct ? (
+          <Button
+            display={{ base: "none", lg: "flex" }}
+            leftIcon={
+              isFavorited ? (
+                <Icon.HeartFilled fill={"secondary"} />
+              ) : (
+                <Icon.Heart fill={"secondary"} />
+              )
+            }
+            variant="primaryGhost"
+            size={"sm"}
+            py={5}
+            onClick={handleFavoriteProduct}
+            flexDirection={"row"}
+            alignItems={"center"}
+          >
+            Favorite
+            <Text color={"darkLighten"} ms={1}>
+              ({favCount})
+            </Text>
+          </Button>
+        ) : (
+          ""
+        )}
         <IconButton
           display={{ base: "block", lg: "none" }}
           variant={"unstyled"}
@@ -97,14 +101,18 @@ function ProductAction(props: IProductActionProps) {
             marginInlineStart: 0,
           }}
         />
-        <Center display={{ base: "none", lg: "block" }} height="25px">
-          <Divider
-            orientation="vertical"
-            borderWidth={"1px"}
-            borderColor={"light"}
-            bgColor={"light"}
-          />
-        </Center>
+        {!isOwnedProduct ? (
+          <Center display={{ base: "none", lg: "block" }} height="25px">
+            <Divider
+              orientation="vertical"
+              borderWidth={"1px"}
+              borderColor={"light"}
+              bgColor={"light"}
+            />
+          </Center>
+        ) : (
+          ""
+        )}
         <Button
           display={{ base: "none", lg: "flex" }}
           leftIcon={<Icon.Share fill={"primary"} />}

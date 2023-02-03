@@ -1,9 +1,10 @@
 import { Box, Button, Divider } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import useOrder from "../../hooks/useOrder";
 import useToast from "../../hooks/useToast";
+import useUser from "../../hooks/useUser";
 import { ICartAddUpdateRequestPayload } from "../../interfaces/Cart";
 import { IItemSummaryProps } from "../../interfaces/Components/PDP";
 import routes from "../../routes/Routes";
@@ -29,10 +30,12 @@ function ItemSummary(props: IItemSummaryProps) {
   const { getCart, updateCart, setCheckoutCartIds, setCheckoutData } =
     useCart();
   const { createCheckout } = useOrder();
+  const { user } = useUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [isOwnedProduct, setIsOwnedProduct] = useState<boolean>(false);
 
   const handleSetQuantity = (quantity: number) => {
     setSelectedQuantity(quantity);
@@ -128,6 +131,12 @@ function ItemSummary(props: IItemSummaryProps) {
     }
   };
 
+  useEffect(() => {
+    if (user?.is_seller && user.shop_id === shopId) {
+      setIsOwnedProduct(true);
+    }
+  }, []);
+
   return (
     <Box
       width={"100%"}
@@ -149,30 +158,37 @@ function ItemSummary(props: IItemSummaryProps) {
         isVariantSelected={selectedVariant.id !== 0}
         onQuantityChange={handleSetQuantity}
       />
-      <Button
-        w={{ base: "100%", lg: "100%" }}
-        variant="primaryOutline"
-        onClick={(e) => handleAddToCart(e)}
-        my={1}
-        isLoading={isLoading}
-        disabled={selectedVariant.stock === 0}
-      >
-        Add to Cart
-      </Button>
-      <Button
-        w={{ base: "100%", lg: "100%" }}
-        variant="primary"
-        my={1}
-        onClick={(e) => handleBuyNow(e)}
-        disabled={selectedVariant.stock === 0}
-      >
-        Buy Now
-      </Button>
-      <Divider variant={"solidLight"} my={3} />
+      {!isOwnedProduct ? (
+        <>
+          <Button
+            w={{ base: "100%", lg: "100%" }}
+            variant="primaryOutline"
+            onClick={(e) => handleAddToCart(e)}
+            my={1}
+            isLoading={isLoading}
+            disabled={selectedVariant.stock === 0}
+          >
+            Add to Cart
+          </Button>
+          <Button
+            w={{ base: "100%", lg: "100%" }}
+            variant="primary"
+            my={1}
+            onClick={(e) => handleBuyNow(e)}
+            disabled={selectedVariant.stock === 0}
+          >
+            Buy Now
+          </Button>
+          <Divider variant={"solidLight"} my={3} />
+        </>
+      ) : (
+        ""
+      )}
       <ProductAction
         productId={productId}
         isFavorite={productIsFavorite}
         favoriteCount={productFavoriteCount}
+        isOwnedProduct={isOwnedProduct}
       />
     </Box>
   );

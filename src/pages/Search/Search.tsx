@@ -1249,27 +1249,27 @@ const Search = () => {
               </HStack>
             </HStack>
 
-            <Flex
-              wrap={"wrap"}
-              direction={"row"}
-              justifyContent={"space-between"}
-              rowGap={{ base: 1, sm: 3, lg: 2 }}
-              columnGap={{ base: 1, sm: 2, lg: 1 }}
-              _after={{
-                md: { content: '""', flex: "auto" },
-                lg: { content: "none" },
-              }}
-            >
+            <Box>
               {products?.data.length !== 0 ? (
-                products?.data.map((product) => (
-                  <ProductCard key={product.id} {...product} />
-                ))
+                <Flex
+                  wrap={"wrap"}
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                  rowGap={{ base: 1, sm: 3, lg: 2 }}
+                  columnGap={{ base: 1, sm: 2, lg: 1 }}
+                  _after={{
+                    md: { content: '""', flex: "auto" },
+                    lg: { content: "none" },
+                  }}
+                >
+                  {products?.data.map((product) => (
+                    <ProductCard key={product.id} {...product} />
+                  ))}
+                </Flex>
               ) : (
-                <Center>
-                  <Text>No products available.</Text>
-                </Center>
+                <NoProductContainer />
               )}
-            </Flex>
+            </Box>
 
             {products?.data.length !== 0 ? (
               <Pagination

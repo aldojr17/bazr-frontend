@@ -10,15 +10,19 @@ function NoProductContainer(props: INoProductContainerProps) {
       <Center>
         <VStack>
           <Text>No products to display.</Text>
-          <Text
-            as={Button}
-            onClick={() => onReload && onReload()}
-            alignItems={"center"}
-            fontSize={"lg"}
-          >
-            <Icon.Refresh width={4} pb={"2px"} me={2} />
-            Refresh
-          </Text>
+          {onReload ? (
+            <Text
+              as={Button}
+              onClick={() => onReload && onReload()}
+              alignItems={"center"}
+              fontSize={"lg"}
+            >
+              <Icon.Refresh width={4} pb={"2px"} me={2} />
+              Refresh
+            </Text>
+          ) : (
+            ""
+          )}
         </VStack>
       </Center>
     </Box>
