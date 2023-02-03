@@ -1,7 +1,8 @@
-import { Box, Tab, TabList, Tabs } from "@chakra-ui/react";
+import { Box, TabList, Tabs } from "@chakra-ui/react";
 import useTransactionOrderHistory from "../../hooks/transactionOrderHistory";
 import { EOrderHistoryStatus } from "../../interfaces/Transaction";
 import "../User/style.css";
+import TabFilter from "./TabFilter";
 
 function TabsTransactionOrderHistory() {
   const { setDeliveryStatus, setPage } = useTransactionOrderHistory();
@@ -20,63 +21,48 @@ function TabsTransactionOrderHistory() {
           overflowY="hidden"
           className="example"
         >
-          <Tab
-            w="max-content"
-            whiteSpace="nowrap"
-            _selected={{
-              color: "primary",
-              borderBottomColor: "primary",
-            }}
+          <TabFilter
+            text="All"
             onClick={() => setDeliveryStatusPage(EOrderHistoryStatus.ALL)}
-          >
-            All
-          </Tab>
-          <Tab
-            w="max-content"
-            whiteSpace="nowrap"
-            _selected={{
-              color: "primary",
-              borderBottomColor: "primary",
-            }}
+          />
+          <TabFilter
+            text="Waiting For Seller"
+            onClick={() =>
+              setDeliveryStatusPage(EOrderHistoryStatus.WAITING_SELLER)
+            }
+          />
+          <TabFilter
+            text="On Process"
             onClick={() =>
               setDeliveryStatusPage(EOrderHistoryStatus.ON_PROCESS)
             }
-          >
-            On Process
-          </Tab>
-          <Tab
-            w="max-content"
-            whiteSpace="nowrap"
-            _selected={{
-              color: "primary",
-              borderBottomColor: "primary",
-            }}
+          />
+          <TabFilter
+            text="On Delivery"
+            onClick={() =>
+              setDeliveryStatusPage(EOrderHistoryStatus.ON_DELIVERY)
+            }
+          />
+          <TabFilter
+            text="Delivered"
             onClick={() => setDeliveryStatusPage(EOrderHistoryStatus.DELIVERED)}
-          >
-            Delivered
-          </Tab>
-          <Tab
-            w="max-content"
-            whiteSpace="nowrap"
-            _selected={{
-              color: "primary",
-              borderBottomColor: "primary",
-            }}
+          />
+          <TabFilter
+            text="Received"
+            onClick={() => setDeliveryStatusPage(EOrderHistoryStatus.RECEIVED)}
+          />
+          <TabFilter
+            text="Completed"
             onClick={() => setDeliveryStatusPage(EOrderHistoryStatus.COMPLETED)}
-          >
-            Completed
-          </Tab>
-          <Tab
-            w="max-content"
-            whiteSpace="nowrap"
-            _selected={{
-              color: "primary",
-              borderBottomColor: "primary",
-            }}
+          />
+          <TabFilter
+            text="Canceled"
             onClick={() => setDeliveryStatusPage(EOrderHistoryStatus.CANCELED)}
-          >
-            Canceled
-          </Tab>
+          />
+          <TabFilter
+            text="Refunded"
+            onClick={() => setDeliveryStatusPage(EOrderHistoryStatus.REFUNDED)}
+          />
         </TabList>
       </Tabs>
     </Box>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import userService from "../api/service/user";
 import { ISearchFilterPayload } from "../interfaces/Filter";
 import {
+  IAddUserReviewRequestPayload,
   IEditProfilePayload,
   IUploadAvatarPayload,
   IUserChangePasswordPayload,
@@ -11,10 +12,12 @@ import {
 } from "../interfaces/User";
 import { storeUser } from "../redux/user";
 import { useAppDispatch, useAppSelector } from "./useSelector";
+import useToast from "./useToast";
 
 const useUser = () => {
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const { successToast, errorToast } = useToast();
 
   const [userLoading, setUserLoading] = useState(false);
 
@@ -94,6 +97,30 @@ const useUser = () => {
     return response;
   };
 
+  const addConfirmUserReceivedOrder = async (orderId: number) => {
+    const response = await userService.postConfirmUserReceivedOrder(orderId);
+    if (response.is_success) {
+      return response.data;
+    }
+    return null;
+  };
+
+  const addUserReview = async (
+    productOrderId: number,
+    payload: IAddUserReviewRequestPayload
+  ) => {
+    const response = await userService.postAddUserReview(
+      productOrderId,
+      payload
+    );
+    if (response.is_success) {
+      successToast("Add Review Success");
+      return response.data;
+    }
+    errorToast("Add Review Failed");
+    return null;
+  };
+
   return {
     user,
     userLoading,
@@ -108,6 +135,8 @@ const useUser = () => {
     sendChangePasswordToken,
     changePassword,
     getUserAddresses,
+    addConfirmUserReceivedOrder,
+    addUserReview,
   };
 };
 

@@ -15,6 +15,7 @@ import Heart from "./Heart";
 import HeartFilled from "./HeartFilled";
 import Hide from "./Hide";
 import Home from "./Home";
+import InfoCircle from "./InfoCircle";
 import Instagram from "./Instagram";
 import LeftArrow from "./LeftArrow";
 import Linkedin from "./Linkedin";
@@ -61,6 +62,7 @@ const Icon = {
   HeartFilled,
   Hide,
   Home,
+  InfoCircle,
   Instagram,
   LeftArrow,
   Linkedin,

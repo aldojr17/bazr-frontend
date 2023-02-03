@@ -1,3 +1,5 @@
+import { EDeliveryStatus } from "../Transaction";
+
 export interface IPaymentWalletRequestPayload {
   token: string;
   user_transaction_id: number;
@@ -48,18 +50,51 @@ export interface IWalletTransactionResponsePayload {
 }
 
 export interface IWalletTransactionDetail {
+  address: ITransactionAddress;
+  id: number;
+  marketplace_discount: number;
   orders: IWalletOrderDetail[];
   payment_method: string;
-  total_delivery_fee: number;
+  subtotal: number;
   total: number;
+  total_delivery_fee: number;
+  total_discount: number;
+  total_qty: number;
+  total_weight: number;
+  transaction_date: string;
+}
+
+export interface ITransactionAddress {
+  id: number;
+  recipient_name: string;
+  recipient_phone: string;
+  province_name: string;
+  city_name: string;
+  sub_district: string;
+  district_ward: string;
+  zip_code: string;
+  street_name: string;
 }
 
 export interface IWalletOrderDetail {
+  courier_name: string;
+  delivery_fee: number;
+  delivery_status: EDeliveryStatus;
+  id: number;
   items: IWalletOrderItemDetail[];
+  shop_name: string;
+  subtotal: number;
+  total: number;
+  total_discount: number;
 }
 
 export interface IWalletOrderItemDetail {
+  id: number;
+  is_reviewed: boolean;
   name: string;
-  total_price: number;
+  photo: string;
+  price: number;
+  product_id: number;
   qty: number;
+  total_price: number;
 }

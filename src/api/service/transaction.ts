@@ -2,7 +2,8 @@ import { ITransactionHistoryParams } from "../../interfaces/Filter";
 import {
   ICheckoutRequestPayload,
   ICheckoutResponsePayload,
-  ITransactionHistoryPagination,
+  IOrderDetailsResponsePayload,
+  ITransactionHistoryResponse,
   ITransactionRequestPayload,
   ITransactionResponsePayload,
 } from "../../interfaces/Transaction";
@@ -42,14 +43,17 @@ const createTransaction = async (
 
 const getTransactionHistory = async (
   filter?: ITransactionHistoryParams
-): Promise<ITransactionHistoryPagination> => {
+): Promise<ITransactionHistoryResponse> => {
   try {
-    const response = await instance.get(API_PATH.transaction.TRANSACTIONS, {
-      params: filter,
-    });
+    const response = await instance.get<ITransactionHistoryResponse>(
+      API_PATH.transaction.TRANSACTIONS,
+      {
+        params: filter,
+      }
+    );
     return response.data;
   } catch (err) {
-    return err as ITransactionHistoryPagination;
+    return err as ITransactionHistoryResponse;
   }
 };
 
@@ -58,11 +62,24 @@ const getTransactionDetail = async (
 ): Promise<IWalletTransactionResponsePayload> => {
   try {
     const response = await instance.get(
-      API_PATH.transaction.TRANSACTIONS + "/" + id
+      API_PATH.transaction.TRANSACTION_DETAILS(id)
     );
     return response.data;
   } catch (err) {
     return err as IWalletTransactionResponsePayload;
+  }
+};
+
+const getOrderDetails = async (
+  orderId: number
+): Promise<IOrderDetailsResponsePayload> => {
+  try {
+    const response = await instance.get<IOrderDetailsResponsePayload>(
+      API_PATH.transaction.ORDER_DETAILS(orderId)
+    );
+    return response.data;
+  } catch (err) {
+    return err as IOrderDetailsResponsePayload;
   }
 };
 
@@ -71,6 +88,7 @@ const transactionService = {
   getTransactionHistory,
   createTransaction,
   getTransactionDetail,
+  getOrderDetails,
 };
 
 export default transactionService;

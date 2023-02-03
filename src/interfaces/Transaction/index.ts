@@ -102,70 +102,158 @@ export interface ITransactionSuccessResponsePayload {
   id: number;
 }
 
-export interface IOrder {
-  photo: string;
-  name: string;
-  qty: number;
-  price: number;
+export enum EOrderHistoryStatus {
+  ALL = "",
+  WAITING_SELLER = "waitingseller",
+  ON_PROCESS = "onprocess",
+  ON_DELIVERY = "ondelivery",
+  DELIVERED = "delivered",
+  RECEIVED = "received",
+  COMPLETED = "completed",
+  CANCELED = "canceled",
+  REFUNDED = "refunded",
 }
 
-export interface ITransaction {
-  shop_name: string;
-  delivery_status: string;
-  transaction_date: string;
-  total: number;
-  list_of_products: IOrder[];
+export interface propsOrderDetails {
+  showOrderDetailShopName: string;
+  showOrderDetailId: number;
+  showOrderDetailDeliveryStatus: string;
 }
 
-export interface ITransactionHistoryPagination {
-  data: {
-    data: ITransaction[];
-    current_page: number;
-    total: number;
-    total_page: number;
-    limit: number;
-  };
+export interface IOrderDetailsResponsePayload {
+  data: IOrderDetails;
   is_success: boolean;
   message: string;
 }
 
-export const initialStateTransactionHistory: ITransactionHistoryPagination = {
-  data: {
-    data: [
-      {
-        shop_name: "",
-        delivery_status: "",
-        transaction_date: "",
-        total: 0,
-        list_of_products: [
-          {
-            photo: "",
-            name: "",
-            qty: 0,
-            price: 0,
-          },
-        ],
-      },
-    ],
-    current_page: 0,
-    total: 0,
-    total_page: 0,
-    limit: 0,
-  },
-  is_success: false,
-  message: "",
+export interface IOrderDetails {
+  payment_method: string;
+  subtotal: number;
+  total: number;
+  total_delivery_fee: number;
+  total_item: number;
+  total_weight: number;
+  total_discount: number;
+  courier_name: string;
+  items: IOrderItems[];
+}
+
+export interface IOrderItems {
+  product_name: string;
+  variant_name: string;
+  qty: number;
+  price: number;
+  total_price: number;
+  photo: {
+    id: number;
+    url: string;
+  };
+}
+
+export const initialOrderDetails: IOrderDetails = {
+  payment_method: "",
+  subtotal: 0,
+  total: 0,
+  total_delivery_fee: 0,
+  total_item: 0,
+  total_weight: 0,
+  total_discount: 0,
+  courier_name: "",
+  items: [],
 };
 
-export enum EOrderHistoryStatus {
-  ALL = "",
-  ON_PROCESS = "onprocess",
-  DELIVERED = "delivered",
-  COMPLETED = "completed",
-  CANCELED = "canceled",
+export interface ITransactionHistoryResponse {
+  data: ITransactionHistoryPagination;
+  is_success: boolean;
+  message: string;
 }
+export interface ITransactionHistoryPagination {
+  data: ITransaction[];
+  current_page: number;
+  total: number;
+  total_page: number;
+  limit: number;
+}
+
+export interface ITransaction {
+  grand_total: number;
+  id: number;
+  transaction_date: string;
+  payment_method: string;
+  orders: IOrder[];
+}
+
+export interface IOrder {
+  delivery_status: EDeliveryStatus;
+  id: number;
+  list_of_products: IProduct[];
+  order_is_reviewed: boolean;
+  shop_name: string;
+  total: number;
+}
+
+export enum EDeliveryStatus {
+  WAITING_FOR_PAYMENT = "Waiting for Payment",
+  WAITING_FOR_SELLER = "Waiting for Seller",
+  CANCELLED = "Cancelled",
+  PROCESSED = "Processed",
+  ON_DELIVERY = "On Delivery",
+  DELIVERED = "Delivered",
+  RECEIVED = "Received",
+  REFUNDED = "Refunded",
+  COMPLETED = "Completed",
+}
+
+export const CListToShowAddReview = [
+  EDeliveryStatus.RECEIVED,
+  EDeliveryStatus.COMPLETED,
+];
+
+export const CListToShowOrderReceived = [EDeliveryStatus.DELIVERED];
+
+export const CListToShowRefund = [EDeliveryStatus.RECEIVED];
+
+export interface IProduct {
+  id: number;
+  photo: string;
+  name: string;
+  qty: number;
+  price: number;
+  is_reviewed: boolean;
+}
+
+export const initialStateTransactionHistory: ITransactionHistoryPagination = {
+  data: [],
+  current_page: 0,
+  total: 0,
+  total_page: 0,
+  limit: 0,
+};
 
 export interface ITransactionOrderHistoryState {
   transactionOrderHistory: ITransactionHistoryPagination;
   deliveryStatus: EOrderHistoryStatus;
   page: number;
+  showOrderDetail: propsOrderDetails | undefined;
+  showTransactionDetail: IPropsTransactionDetails | undefined;
+}
+
+export interface IPropsTransactionDetails {
+  transactionId: number;
+}
+
+export interface IPropsTableData {
+  rows: IRow[];
+}
+
+export interface IRow {
+  key: string;
+  value: string | number | undefined;
+  justifyContentValue?: string | undefined;
+  fontSizeKey?: string | undefined;
+  fontSizeValue?: string | undefined;
+  colorValue?: string | undefined;
+  fontWeightKey?: string | undefined;
+  fontWeightValue?: string | undefined;
+  addOn?: JSX.Element | undefined;
 }
