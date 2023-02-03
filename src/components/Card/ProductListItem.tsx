@@ -19,6 +19,7 @@ const ProductListItem = (props: IProductListItemProps) => {
       </AspectRatio>
       <VStack alignItems={"flex-start"} width="40%" spacing={1}>
         <Text
+          role="button"
           textTransform={"uppercase"}
           fontWeight={"bold"}
           onClick={onClick}

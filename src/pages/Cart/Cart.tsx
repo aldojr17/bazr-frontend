@@ -16,6 +16,13 @@ import {
   Heading,
   HStack,
   IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   RenderProps,
   Text,
   ToastId,
@@ -46,6 +53,7 @@ const Cart = () => {
     deleteItem,
     undoDeleteItem,
     setCheckoutCartIds,
+    getCart,
   } = useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
@@ -64,6 +72,11 @@ const Cart = () => {
     []
   );
   const [total, setTotal] = useState<number>(0);
+  const {
+    isOpen: isRemoveItemFromCartModalOpen,
+    onOpen: openRemoveItemFromCartModal,
+    onClose: closeRemoveItemFromCartModal,
+  } = useDisclosure();
 
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.checked) {
@@ -168,6 +181,18 @@ const Cart = () => {
           onClick={() => setUndoDelete(true)}
         />
       ),
+    });
+  };
+
+  const clearCartItems = () => {
+    Object.entries(formattedCart).forEach(([_, val]) => {
+      Object.values(val).forEach((childVal) => {
+        const cart_id = childVal.cart_id;
+        deleteItem(cart_id);
+        deleteCart(cart_id).then(() => {
+          getCart();
+        });
+      });
     });
   };
 
@@ -295,10 +320,10 @@ const Cart = () => {
                       <Button
                         variant={"unstyled"}
                         color={"primary"}
+                        onClick={() => {
+                          openRemoveItemFromCartModal();
+                        }}
                         fontSize={"xs"}
-                        visibility={
-                          checkoutCartState.length !== 0 ? "initial" : "hidden"
-                        }
                       >
                         Clear cart
                       </Button>
@@ -562,6 +587,29 @@ const Cart = () => {
           </Center>
         )}
       </Box>
+      <Modal
+        isOpen={isRemoveItemFromCartModalOpen}
+        onClose={closeRemoveItemFromCartModal}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Are You Sure?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>Are you sure want to clear cart?</ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => {
+                closeRemoveItemFromCartModal();
+                clearCartItems();
+              }}
+            >
+              Clear Cart
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };
