@@ -18,17 +18,7 @@ import { ISidebarMenu } from "../interfaces/Sidebar";
 const AdminLayout = (props: ILayoutProps) => {
   const sidebar = useDisclosure();
   const sidebarMenus: Array<ISidebarMenu> = [
-    { name: "Home", icon: MdHome, path: "/seller/home" },
-    { name: "Product", icon: HiCollection, path: "/seller/product" },
-    { name: "Voucher", icon: IoTicket, path: "/seller/voucher" },
-    { name: "Promotion", icon: IoPricetag, path: "/seller/promotion" },
-    { name: "Finance", icon: MdPayments, path: "/seller/finance" },
-    { name: "Order", icon: HiClipboardList, path: "/seller/order" },
-    {
-      name: "Shipment",
-      icon: MdOutlineLocalShipping,
-      path: "/seller/shipment",
-    },
+    { name: "Home", icon: MdHome, path: "/admin" },
   ];
   const { fetchProfile } = useUser();
 

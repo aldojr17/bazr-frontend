@@ -22,6 +22,7 @@ import TransactionOrderHistory from "../TransactionOrderHistory/TransactionOrder
 import UserProfile from "./UserProfile";
 import "./style.css";
 import Address from "../Address/Address";
+import UserOngoingRefund from "./UserOngoingRefund";
 
 function User() {
   const { user } = useUser();
@@ -91,7 +92,7 @@ function User() {
                       borderBottomColor: "primary",
                     }}
                   >
-                    Payment
+                    My Purchase
                   </Tab>
                   <Tab
                     _selected={{
@@ -99,7 +100,7 @@ function User() {
                       borderBottomColor: "primary",
                     }}
                   >
-                    My Purchase
+                    Manage Refund
                   </Tab>
                 </TabList>
 
@@ -110,11 +111,11 @@ function User() {
                   <TabPanel>
                     <Address />
                   </TabPanel>
-                  <TabPanel>
-                    <p>Pembayaran</p>
-                  </TabPanel>
                   <TabPanel padding="0">
                     <TransactionOrderHistory />
+                  </TabPanel>
+                  <TabPanel>
+                    <UserOngoingRefund />
                   </TabPanel>
                 </TabPanels>
               </Tabs>

@@ -14,7 +14,7 @@ function SellerRoutes() {
   useEffect(() => {
     fetchProfile().then((data) => {
       if (data?.role_id === userRole.ADMIN) {
-        navigate(routes.ADMIN_DASHBOARD);
+        navigate(routes.ADMIN);
       } else if (!data?.is_seller || data?.shop_id === 0) {
         navigate(routes.REGISTER_MERCHANT);
       }

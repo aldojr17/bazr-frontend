@@ -6,6 +6,7 @@ import CategoryScrollableContainer from "../../components/Container/CategoryScro
 import useCategory from "../../hooks/useCategory";
 import useTitle from "../../hooks/useTitle";
 import useUser from "../../hooks/useUser";
+
 import ProductShowcase from "./ProductShowcase";
 
 const Home = () => {

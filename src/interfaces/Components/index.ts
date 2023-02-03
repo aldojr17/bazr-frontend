@@ -303,3 +303,8 @@ export interface ISealabsPayPaymentProps {
   isOrderPlaced: boolean;
   setIsOrderPlaced: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface IRefundChatModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}

@@ -74,4 +74,10 @@ export const API_PATH = {
     UPDATE_ADDRESS: (address_id: number) => `/address/${address_id}`,
     SET_USER_DEFAULT_ADDRESS: "/address/default",
   },
+  refund: {
+    REFUNDS: "/refunds",
+    SELLER_REFUNDS: "/refunds/seller",
+    BUYER_REFUNDS: "/refunds/buyer",
+    REFUND_DETAIL: (id: number) => `/refunds/${id}`,
+  },
 };
