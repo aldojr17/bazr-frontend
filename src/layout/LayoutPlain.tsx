@@ -13,13 +13,12 @@ import {
 import { KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../assets/icons";
-import MobileBottomNavbar from "../components/Navbar/MobileBottomNavbar";
 import Navbar from "../components/Navbar/Navbar";
 import { ILayoutProps } from "../interfaces/Layout";
 import Footer from "./Footer/Footer";
 import routes from "../routes/Routes";
 
-const Layout = ({ children }: ILayoutProps) => {
+const LayoutPlain = ({ children }: ILayoutProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
@@ -40,9 +39,6 @@ const Layout = ({ children }: ILayoutProps) => {
       <Box flex={1}>{children}</Box>
       <Show above={"lg"}>
         <Footer />
-      </Show>
-      <Show below={"lg"}>
-        <MobileBottomNavbar />
       </Show>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -83,4 +79,4 @@ const Layout = ({ children }: ILayoutProps) => {
   );
 };
 
-export default Layout;
+export default LayoutPlain;
