@@ -86,6 +86,7 @@ const useShopPromotion = () => {
       variantProducts.forEach((val) => {
         if (val.product_id === productGroup.product_id) {
           newProductForm[index].variants.push({
+            price: 0,
             benefit: val.benefit,
             benefit_percentage: val.benefit_percentage,
             is_active: true,
@@ -115,8 +116,9 @@ const useShopPromotion = () => {
           product.variant_group?.variant_types.forEach((variant) => {
             let isAvailable: boolean = false;
 
-            productForm.variants.forEach((variantForm) => {
+            productForm.variants.forEach((variantForm, ind) => {
               if (variant.id === variantForm.variant_type_id) {
+                result[index].variants[ind].price = variant.price;
                 isAvailable = true;
                 return;
               }
@@ -124,6 +126,7 @@ const useShopPromotion = () => {
 
             if (!isAvailable) {
               result[index].variants.push({
+                price: variant.price,
                 benefit: 0,
                 benefit_percentage: 0,
                 is_active: false,

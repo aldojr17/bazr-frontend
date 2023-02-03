@@ -57,6 +57,7 @@ export interface IPromotionProps {
 export interface IPromotionVariantForm {
   variant_name: string;
   variant_type_id: number;
+  price: number;
   quota: number;
   benefit: number;
   benefit_percentage: number;
@@ -95,6 +96,17 @@ export interface IPromotionShopProductProps {
   checkedProduct: IPromotionProductForm[];
   onClose: () => void;
   onConfirm: (products: IPromotionProductForm[]) => void;
+}
+
+export interface IPromotionBulkForm {
+  quota: number | string;
+  benefit: number | string;
+  benefit_percentage: number | string;
+  max_buy_qty: number | string;
+}
+
+export interface IPromotionBulkFormProps {
+  onSubmit: (values: IPromotionBulkForm, isError: boolean) => void;
 }
 
 export interface IPromotionPayload {

@@ -16,18 +16,20 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Field, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { BsPlusCircle } from "react-icons/bs";
 import * as Yup from "yup";
 import useToast from "../../../hooks/useToast";
 import {
+  IPromotionBulkForm,
   IPromotionForm,
   IPromotionProductForm,
   IPromotionProps,
   IShopPromotionPayload,
   IShopPromotionProductPayload,
 } from "../../../interfaces/Promotion";
+import PromotionBulkForm from "./PromotionBulkForm";
 import PromotionProductForm from "./PromotionProductForm";
 import PromotionShopProduct from "./PromotionShopProduct";
 
@@ -44,6 +46,13 @@ function PromotionForm(props: IPromotionProps) {
       .min(
         Yup.ref("start_date"),
         "expiry date must be greater or equal than start date"
+      )
+      .test(
+        "current date",
+        "expiry date must be greater or equal than current date",
+        (value) => {
+          return value !== undefined && value >= new Date();
+        }
       ),
     products: Yup.array().of(
       Yup.object().shape({
@@ -55,27 +64,27 @@ function PromotionForm(props: IPromotionProps) {
                 .min(1, "Must be greater than 0")
                 .required("Required"),
             }),
-            benefit: Yup.number().when("is_active", {
-              is: true,
-              then: Yup.number().required("Required"),
-            }),
+            benefit: Yup.number().lessThan(
+              Yup.ref("price"),
+              `benefit must be less than price`
+            ),
             benefit_percentage: Yup.number().when("is_active", {
               is: true,
               then: Yup.number()
                 .min(0, "min 0 and max 100")
                 .max(100, "min 0 and max 100")
-                .required("Required")
                 .when("benefit", {
                   is: (benefit: number) => benefit > 0,
                   then: (b) =>
                     b.test(
                       "benefit_percentage",
                       "fill in one of the benefit or benefit percentage fields",
-                      (value) => value !== undefined && value === 0
+                      (value) => value === undefined || value === 0
                     ),
                 })
                 .when("benefit", {
-                  is: (benefit: number) => benefit === 0,
+                  is: (benefit: number) =>
+                    benefit === 0 || benefit === undefined,
                   then: (b) =>
                     b.test(
                       "benefit_percentage",
@@ -138,8 +147,8 @@ function PromotionForm(props: IPromotionProps) {
             product_name: product.name,
             variant_type_id: variant.variant_type_id,
             variant_type_name: variant.variant_name,
-            benefit: variant.benefit,
-            benefit_percentage: variant.benefit_percentage,
+            benefit: Number(variant.benefit),
+            benefit_percentage: Number(variant.benefit_percentage),
             max_buy_qty: variant.max_buy_qty,
             quota: variant.quota,
           };
@@ -164,6 +173,58 @@ function PromotionForm(props: IPromotionProps) {
     props.onSubmit(payload);
   };
 
+  const handleBulkUpdate = (
+    valBulk: IPromotionBulkForm,
+    isError: boolean,
+    valPromo: IPromotionForm,
+    setValues: (
+      values: React.SetStateAction<IPromotionForm>,
+      shouldValidate?: boolean | undefined
+    ) => void
+  ) => {
+    if (isError) {
+      return;
+    }
+
+    let newProducts: IPromotionProductForm[] = [];
+    valPromo.products.forEach((product, indexPrduct) => {
+      newProducts[indexPrduct] = {
+        ...product,
+        variants: [],
+      };
+
+      product.variants.forEach((variant, indexVariant) => {
+        newProducts[indexPrduct].variants[indexVariant] = variant;
+        if (variant.is_active) {
+          newProducts[indexPrduct].variants[indexVariant] = {
+            ...variant,
+            quota:
+              typeof valBulk.quota !== "number" ? variant.quota : valBulk.quota,
+            benefit:
+              typeof valBulk.benefit !== "number" ||
+              variant.benefit_percentage > 0
+                ? variant.benefit
+                : valBulk.benefit,
+            benefit_percentage:
+              typeof valBulk.benefit_percentage !== "number" ||
+              variant.benefit > 0
+                ? variant.benefit_percentage
+                : valBulk.benefit_percentage,
+            max_buy_qty:
+              typeof valBulk.max_buy_qty !== "number"
+                ? variant.max_buy_qty
+                : valBulk.max_buy_qty,
+          };
+        }
+      });
+    });
+
+    setValues({
+      ...valPromo,
+      products: newProducts,
+    });
+  };
+
   useEffect(() => {
     setChecked(props.product);
   }, [props.product]);
@@ -186,17 +247,10 @@ function PromotionForm(props: IPromotionProps) {
             handleSubmitForm(values);
           }}
         >
-          {({
-            handleSubmit,
-            handleChange,
-            setValues,
-            errors,
-            touched,
-            values,
-          }) => {
+          {({ handleChange, setValues, errors, touched, values }) => {
             return (
               <>
-                <form onSubmit={handleSubmit}>
+                <Form>
                   <CardBody>
                     <SimpleGrid
                       columns={{
@@ -215,7 +269,10 @@ function PromotionForm(props: IPromotionProps) {
                             type="text"
                             name="name"
                             variant={props.isDisabled ? "filled" : "outline"}
-                            isReadOnly={props.isDisabled}
+                            isDisabled={props.isDisabled}
+                            _disabled={{
+                              opacity: 1,
+                            }}
                           />
                         </Skeleton>
                         <FormErrorMessage>{errors.name}</FormErrorMessage>
@@ -230,7 +287,10 @@ function PromotionForm(props: IPromotionProps) {
                             type="datetime-local"
                             name="start_date"
                             variant={props.isDisabled ? "filled" : "outline"}
-                            isReadOnly={props.isDisabled}
+                            isDisabled={props.isDisabled}
+                            _disabled={{
+                              opacity: 1,
+                            }}
                           />
                         </Skeleton>
                         <FormErrorMessage>{errors.start_date}</FormErrorMessage>
@@ -245,7 +305,10 @@ function PromotionForm(props: IPromotionProps) {
                             type="datetime-local"
                             name="expiry_date"
                             variant={props.isDisabled ? "filled" : "outline"}
-                            isReadOnly={props.isDisabled}
+                            isDisabled={props.isDisabled}
+                            _disabled={{
+                              opacity: 1,
+                            }}
                           />
                         </Skeleton>
                         <FormErrorMessage>
@@ -279,6 +342,14 @@ function PromotionForm(props: IPromotionProps) {
                       )}
                     </Flex>
 
+                    {!props.isDisabled ? (
+                      <PromotionBulkForm
+                        onSubmit={(valBulk, isError) =>
+                          handleBulkUpdate(valBulk, isError, values, setValues)
+                        }
+                      />
+                    ) : null}
+
                     <PromotionProductForm
                       values={values}
                       errors={errors}
@@ -311,16 +382,16 @@ function PromotionForm(props: IPromotionProps) {
                       )}
                     </ButtonGroup>
                   </CardFooter>
-                </form>
+                </Form>
 
                 <PromotionShopProduct
                   isLoading={false}
                   isOpen={isOpen}
                   checkedProduct={checked}
                   onClose={onClose}
-                  onConfirm={(products) =>
-                    handleAddProduct(setValues, values, products)
-                  }
+                  onConfirm={(products) => {
+                    handleAddProduct(setValues, values, products);
+                  }}
                 />
               </>
             );

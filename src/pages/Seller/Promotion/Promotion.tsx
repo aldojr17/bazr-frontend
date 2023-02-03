@@ -35,7 +35,7 @@ function Promotion() {
           </Flex>
         </CardHeader>
         <CardBody>
-          <Tabs variant="enclosed">
+          <Tabs variant="enclosed" isLazy={true}>
             <TabList>
               <Tab>All</Tab>
               <Tab>Ongoing</Tab>

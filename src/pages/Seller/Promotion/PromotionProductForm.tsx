@@ -10,6 +10,7 @@ import {
   Switch,
   Table,
   TableContainer,
+  Tag,
   Tbody,
   Td,
   Text,
@@ -22,6 +23,7 @@ import { Field, FieldArray, getIn } from "formik";
 import React from "react";
 import { BsTrash } from "react-icons/bs";
 import { IPromotionProductFormProps } from "../../../interfaces/Promotion";
+import { formatCurrency } from "../../../util/util";
 
 function PromotionProductForm(props: IPromotionProductFormProps) {
   return (
@@ -86,10 +88,20 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                 <>
                                   {product.variants.map((variant, index2) => (
                                     <Tr key={index2}>
-                                      <Td>
-                                        <Text>{variant.variant_name}</Text>
+                                      <Td verticalAlign={"top"}>
+                                        <Text my={3}>
+                                          {variant.variant_name}{" "}
+                                          <Tag colorScheme={"gray"}>
+                                            Rp
+                                            {formatCurrency(variant.price)}
+                                          </Tag>
+                                        </Text>
                                       </Td>
-                                      <Td isNumeric>
+                                      <Td
+                                        verticalAlign={"top"}
+                                        isNumeric
+                                        alignItems={"start"}
+                                      >
                                         <FormControl
                                           isInvalid={
                                             !!getIn(
@@ -107,11 +119,20 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                             type="number"
                                             name={`products.${index1}.variants.${index2}.quota`}
                                             variant={
-                                              props.isDisabled
+                                              props.isDisabled ||
+                                              !props.values.products[index1]
+                                                .variants[index2].is_active
                                                 ? "filled"
                                                 : "outline"
                                             }
-                                            isReadOnly={props.isDisabled}
+                                            _disabled={{
+                                              opacity: 1,
+                                            }}
+                                            isDisabled={
+                                              props.isDisabled ||
+                                              !props.values.products[index1]
+                                                .variants[index2].is_active
+                                            }
                                           />
                                           <FormErrorMessage>
                                             {getIn(
@@ -121,7 +142,7 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                           </FormErrorMessage>
                                         </FormControl>
                                       </Td>
-                                      <Td isNumeric>
+                                      <Td verticalAlign={"top"} isNumeric>
                                         <FormControl
                                           isInvalid={
                                             !!getIn(
@@ -140,12 +161,29 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                               as={Input}
                                               type="number"
                                               name={`products.${index1}.variants.${index2}.benefit`}
+                                              minWidth={"150px"}
+                                              borderStartRadius={0}
                                               variant={
-                                                props.isDisabled
+                                                props.isDisabled ||
+                                                !props.values.products[index1]
+                                                  .variants[index2].is_active ||
+                                                props.values.products[index1]
+                                                  .variants[index2]
+                                                  .benefit_percentage > 0
                                                   ? "filled"
                                                   : "outline"
                                               }
-                                              isReadOnly={props.isDisabled}
+                                              _disabled={{
+                                                opacity: 1,
+                                              }}
+                                              isDisabled={
+                                                props.isDisabled ||
+                                                !props.values.products[index1]
+                                                  .variants[index2].is_active ||
+                                                props.values.products[index1]
+                                                  .variants[index2]
+                                                  .benefit_percentage > 0
+                                              }
                                             />
                                           </InputGroup>
                                           <FormErrorMessage>
@@ -156,7 +194,7 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                           </FormErrorMessage>
                                         </FormControl>
                                       </Td>
-                                      <Td isNumeric>
+                                      <Td verticalAlign={"top"} isNumeric>
                                         <FormControl
                                           isInvalid={
                                             !!getIn(
@@ -175,13 +213,27 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                               type="number"
                                               min={0}
                                               max={100}
+                                              borderEndRadius={0}
                                               name={`products.${index1}.variants.${index2}.benefit_percentage`}
                                               variant={
-                                                props.isDisabled
+                                                props.isDisabled ||
+                                                !props.values.products[index1]
+                                                  .variants[index2].is_active ||
+                                                props.values.products[index1]
+                                                  .variants[index2].benefit > 0
                                                   ? "filled"
                                                   : "outline"
                                               }
-                                              isReadOnly={props.isDisabled}
+                                              _disabled={{
+                                                opacity: 1,
+                                              }}
+                                              isDisabled={
+                                                props.isDisabled ||
+                                                !props.values.products[index1]
+                                                  .variants[index2].is_active ||
+                                                props.values.products[index1]
+                                                  .variants[index2].benefit > 0
+                                              }
                                             />
                                             <InputRightAddon children="%" />
                                           </InputGroup>
@@ -193,7 +245,7 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                           </FormErrorMessage>
                                         </FormControl>
                                       </Td>
-                                      <Td isNumeric>
+                                      <Td verticalAlign={"top"} isNumeric>
                                         <FormControl
                                           isInvalid={
                                             !!getIn(
@@ -211,11 +263,20 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                             type="number"
                                             name={`products.${index1}.variants.${index2}.max_buy_qty`}
                                             variant={
-                                              props.isDisabled
+                                              props.isDisabled ||
+                                              !props.values.products[index1]
+                                                .variants[index2].is_active
                                                 ? "filled"
                                                 : "outline"
                                             }
-                                            isReadOnly={props.isDisabled}
+                                            _disabled={{
+                                              opacity: 1,
+                                            }}
+                                            isDisabled={
+                                              props.isDisabled ||
+                                              !props.values.products[index1]
+                                                .variants[index2].is_active
+                                            }
                                           />
                                           <FormErrorMessage>
                                             {getIn(
@@ -225,8 +286,9 @@ function PromotionProductForm(props: IPromotionProductFormProps) {
                                           </FormErrorMessage>
                                         </FormControl>
                                       </Td>
-                                      <Td>
+                                      <Td verticalAlign={"top"}>
                                         <Switch
+                                          my={1}
                                           size="lg"
                                           name={`products.${index1}.variants.${index2}.is_active`}
                                           isDisabled={props.isDisabled}
