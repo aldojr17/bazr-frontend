@@ -33,7 +33,6 @@ const useUser = () => {
       setUserLoading(false);
       return response.data;
     } else {
-      localStorage.clear();
       destroyCookie(null, "auth");
     }
 

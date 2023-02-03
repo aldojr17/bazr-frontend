@@ -34,7 +34,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
       bgColor={"white"}
       borderBottom={"3px solid"}
       borderColor={"primary"}
-      py={5}
+      py={{ base: 2, lg: 5 }}
       boxShadow={"xl"}
       position={"sticky"}
       top={0}
@@ -50,10 +50,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
         width={"100%"}
         px={{
           base: 4,
-          sm: 4,
           md: 5,
-          lg: 5,
-          xl: 5,
         }}
         gridAutoFlow={"dense"}
       >
@@ -61,10 +58,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
           direction={"row"}
           display={{
             base: "none",
-            sm: "none",
-            md: "none",
             lg: "block",
-            xl: "block",
           }}
         >
           <Button variant={"ghost"}>
@@ -82,46 +76,36 @@ const Navbar = ({ onOpen }: NavbarProps) => {
         <HStack
           display={{
             base: "flex",
-            sm: "flex",
-            md: "flex",
             lg: "none",
-            xl: "none",
           }}
           gridColumn={2}
           justifyContent={"end"}
         >
-          <Button variant={"ghost"} onClick={onOpen}>
-            <Icon.Search />
+          <Button variant={"ghost"} onClick={onOpen} p={0}>
+            <Icon.Search fill={"lightDarken"} />
           </Button>
         </HStack>
 
         <Center
           justifyContent={{
             sm: "start",
-            md: "start",
             lg: "center",
-            xl: "center",
           }}
         >
           <Link to={"/"} className={`nav-link`}>
-            <Image src="/logo.svg" width={"8em"} />
+            <Image src="/logo.svg" width={{ base: "5rem", lg: "8em" }} />
           </Link>
         </Center>
         <HStack
           justifyContent={{
             sm: "start",
             md: "end",
-            lg: "end",
-            xl: "end",
           }}
           gridColumn={3}
           width={"100%"}
           marginStart={{
             base: "-1em",
             sm: 0,
-            md: 0,
-            lg: 0,
-            xl: 0,
           }}
         >
           <HStack
@@ -131,7 +115,6 @@ const Navbar = ({ onOpen }: NavbarProps) => {
               sm: 0,
               md: 3,
               lg: 4,
-              xl: 4,
             }}
             alignItems={"center"}
           >

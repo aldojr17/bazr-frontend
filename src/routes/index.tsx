@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import AdminRoutes from "./AdminRoutes";
 import EditProductForm from "../pages/Seller/Product/EditProductForm";
 import AuthRoutes from "./AuthRoutes";
+import LayoutPlainRoutes from "./LayoutPlainRoutes";
 import LayoutRoutes from "./LayoutRoutes";
 import SellerRoutes from "./SellerRoutes";
 import UserRoutes from "./UserRoutes";
@@ -98,11 +99,7 @@ const RouteList = () => {
       <Route element={<LayoutRoutes />}>
         <Route path="/" element={<Home />} errorElement={<NotFound />} />
         <Route path="/search" element={<Search />} />
-        <Route
-          path="/pdp/:id/:title"
-          element={<ProductDetail />}
-          errorElement={<NotFound />}
-        />
+
         <Route path="/p/:cPrimary" element={<CategoryPrimary />} />
         <Route
           path="/p/:cPrimary/:cSecondary"
@@ -111,6 +108,16 @@ const RouteList = () => {
         <Route
           path="/p/:cPrimary/:cSecondary/:cTertiary"
           element={<CategoryTertiary />}
+        />
+
+        <Route path="/shop/:shopUsername" element={<ShopHome />} />
+      </Route>
+
+      <Route element={<LayoutPlainRoutes />}>
+        <Route
+          path="/pdp/:id/:title"
+          element={<ProductDetail />}
+          errorElement={<NotFound />}
         />
         <Route element={<UserRoutes />}>
           <Route path="/cart" element={<Cart />} />
@@ -123,7 +130,6 @@ const RouteList = () => {
             element={<SealabsPayRedirect />}
           />
         </Route>
-        <Route path="/shop/:shopUsername" element={<ShopHome />} />
       </Route>
 
       <Route element={<AuthRoutes />}>

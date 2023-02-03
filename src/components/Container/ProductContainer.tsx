@@ -1,9 +1,8 @@
 import {
-  AspectRatio,
-  Box,
   Button,
   Center,
   Flex,
+  Grid,
   Heading,
   HStack,
   Skeleton,
@@ -53,24 +52,19 @@ function ProductContainer(props: IProductContainerProps) {
             <NoProductContainer onReload={onError} />
           ) : (
             <Skeleton isLoaded={!isLoading} borderRadius={"lg"}>
-              <Flex
-                wrap={"wrap"}
-                direction={"row"}
-                justifyContent={
-                  products.length <= 6 ? "start" : "space-between"
-                }
-                rowGap={{ base: 1, sm: 3, lg: 2 }}
-                columnGap={{ base: 1, sm: 2, lg: 1 }}
-                _after={{
-                  md: { content: '""', flex: "auto" },
-                  lg: { content: "none" },
+              <Grid
+                templateColumns={{
+                  base: "repeat(2, 1fr)",
+                  md: "repeat(4, 1fr)",
+                  lg: "repeat(6, 1fr)",
                 }}
+                gap={3}
               >
                 {products.length !== 0 &&
                   products.map((product) => (
                     <ProductCard key={product.id} {...product} />
                   ))}
-              </Flex>
+              </Grid>
               {onLoadMore && (
                 <Center mt={5}>
                   <Button variant={"primary"} onClick={() => onLoadMore()}>

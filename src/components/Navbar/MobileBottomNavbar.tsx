@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import useCart from "../../hooks/useCart";
+import routes from "../../routes/Routes";
 
 function MobileBottomNavbar() {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ function MobileBottomNavbar() {
         width={"20%"}
         variant={"unstyled"}
         height={"fit-content"}
-        onClick={handleSelectMenu}
+        onClick={() => navigate(routes.FAVORITE)}
       >
         <Flex direction={"column"} alignItems={"center"}>
           <Icon.Heart

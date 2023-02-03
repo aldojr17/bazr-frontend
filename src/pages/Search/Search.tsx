@@ -6,10 +6,8 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Center,
   Checkbox,
   Container,
-  Flex,
   Grid,
   GridItem,
   Heading,
@@ -367,69 +365,52 @@ const Search = () => {
   }, [search]);
 
   return (
-    <Container maxW="container.xl">
+    <Container maxW={{ base: "container.sm", lg: "container.xl" }}>
       <Box
         padding={{
           base: 5,
-          sm: 5,
-          md: 5,
           lg: 12,
-          xl: 12,
         }}
       >
         {search.get("q") !== null &&
-        search.get("q") !== undefined &&
-        search.get("q")!.length > 0 ? (
-          <HStack ps={4} pb={5}>
-            <Text
-              fontSize={{
-                base: "md",
-                sm: "md",
-                md: "lg",
-                lg: "xl",
-                xl: "xl",
-              }}
-            >
-              Search result for
-            </Text>
-            <Text
-              fontSize={{
-                base: "md",
-                sm: "md",
-                md: "lg",
-                lg: "xl",
-                xl: "xl",
-              }}
-              fontWeight={"bold"}
-            >
-              {'"' + search.get("q") + '"'}
-            </Text>
-          </HStack>
-        ) : (
-          ""
-        )}
+          search.get("q") !== undefined &&
+          search.get("q")!.length > 0 && (
+            <HStack ps={4} pb={5}>
+              <Text
+                fontSize={{
+                  base: "md",
+                  md: "lg",
+                  lg: "xl",
+                }}
+              >
+                Search result for
+              </Text>
+              <Text
+                fontSize={{
+                  base: "md",
+                  md: "lg",
+                  lg: "xl",
+                }}
+                fontWeight={"bold"}
+              >
+                {'"' + search.get("q") + '"'}
+              </Text>
+            </HStack>
+          )}
         <Grid
           templateColumns={{
             sm: "repeat(2, 1fr)",
             md: "repeat(3, 1fr)",
-            lg: "repeat(5, 1fr)",
-            xl: "repeat(5, 1fr)",
+            lg: "repeat(8, 1fr)",
           }}
           gap={4}
         >
           <GridItem
-            colSpan={1}
+            colSpan={2}
             padding={4}
-            width={{
-              lg: "13.5rem",
-              xl: "18rem",
-            }}
             display={{
               base: "none",
-              sm: "none",
-              md: "none",
               lg: "grid",
-              xl: "grid",
             }}
           >
             <VStack spacing={5}>
@@ -959,10 +940,8 @@ const Search = () => {
           <GridItem
             colSpan={{
               base: 2,
-              sm: 2,
               md: 3,
-              lg: 4,
-              xl: 4,
+              lg: 6,
             }}
             p={4}
             maxWidth={{
@@ -1251,21 +1230,18 @@ const Search = () => {
 
             <Box>
               {products?.data.length !== 0 ? (
-                <Flex
-                  wrap={"wrap"}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  rowGap={{ base: 1, sm: 3, lg: 2 }}
-                  columnGap={{ base: 1, sm: 2, lg: 1 }}
-                  _after={{
-                    md: { content: '""', flex: "auto" },
-                    lg: { content: "none" },
+                <Grid
+                  templateColumns={{
+                    base: "repeat(2, 1fr)",
+                    lg: "repeat(4, 1fr)",
+                    xl: "repeat(5, 1fr)",
                   }}
+                  gap={3}
                 >
                   {products?.data.map((product) => (
                     <ProductCard key={product.id} {...product} />
                   ))}
-                </Flex>
+                </Grid>
               ) : (
                 <NoProductContainer />
               )}

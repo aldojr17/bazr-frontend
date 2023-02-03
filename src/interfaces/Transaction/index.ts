@@ -80,6 +80,8 @@ export interface ICheckoutOrderDetailResponse {
   product_id: number;
   variant_id: number;
   quantity: number;
+  price_before_discount: number;
+  price_after_discount: number;
   total: number;
   notes: string;
   product_name: string;

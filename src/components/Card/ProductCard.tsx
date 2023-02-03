@@ -20,12 +20,7 @@ const ProductCard = ({ ...props }: IProductPayload) => {
     <Box
       onClick={() => navigate(routes.PDP(props.id, props.name))}
       flexShrink={0}
-      w={{
-        base: "49%",
-        sm: "49%",
-        md: "24%",
-        lg: "16%",
-      }}
+      w={"100%"}
       border={"2px solid"}
       borderColor={"light"}
       borderRadius={"lg"}
@@ -52,6 +47,8 @@ const ProductCard = ({ ...props }: IProductPayload) => {
           fontWeight={"bold"}
           color={"primary"}
           mb={1}
+          noOfLines={1}
+          wordBreak={"break-all"}
         >
           Rp {formatCurrency(props.lowest_price!)}
         </Text>

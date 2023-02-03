@@ -21,7 +21,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Container maxW="container.xl">
+    <Container maxW={{ base: "container.sm", lg: "container.xl" }}>
       <MainCarousel />
       <CategoryScrollableContainer
         categories={categories}

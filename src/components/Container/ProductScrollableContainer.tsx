@@ -55,7 +55,17 @@ function ProductScrollableContainer(props: IProductScrollableContainerProps) {
           <XScrollableWrapper showScrollbar={products.length > 6}>
             {products.length !== 0 &&
               products.map((product) => (
-                <ProductCard key={product.id} {...product} />
+                <Box
+                  flexShrink={0}
+                  w={{
+                    base: "10rem",
+                    sm: "16rem",
+                    md: "8rem",
+                    lg: "12rem",
+                  }}
+                >
+                  <ProductCard key={product.id} {...product} />
+                </Box>
               ))}
           </XScrollableWrapper>
         </Skeleton>

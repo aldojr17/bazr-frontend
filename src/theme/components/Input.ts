@@ -19,6 +19,24 @@ const Input = defineStyleConfig({
         },
       },
     },
+    filter: {
+      addon: {
+        backgroundColor: "lightLighten",
+        border: "solid",
+        borderColor: "lightLighten",
+        color: "darkLighten",
+        fontWeight: "semibold",
+      },
+      field: {
+        border: "2px solid",
+        borderColor: "lightLighten",
+        color: "dark",
+        fontWeight: "semibold",
+        _placeholder: {
+          opacity: 0.5,
+        },
+      },
+    },
   },
   defaultProps: {},
 });
