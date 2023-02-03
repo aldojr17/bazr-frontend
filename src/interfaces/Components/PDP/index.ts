@@ -45,6 +45,7 @@ export interface IProductActionProps {
   productId: number;
   isFavorite: boolean;
   favoriteCount: number;
+  isOwnedProduct?: boolean;
 }
 
 export interface IReviewProps {

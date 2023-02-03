@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import useOrder from "../../hooks/useOrder";
 import useToast from "../../hooks/useToast";
+import useUser from "../../hooks/useUser";
 import { ICartAddUpdateRequestPayload } from "../../interfaces/Cart";
 import { IMobileItemSummaryProps } from "../../interfaces/Components/PDP";
 import routes from "../../routes/Routes";
@@ -44,10 +45,12 @@ function MobileItemSummary(props: IMobileItemSummaryProps) {
   const { getCart, updateCart, setCheckoutCartIds, setCheckoutData } =
     useCart();
   const { createCheckout } = useOrder();
+  const { user } = useUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [isOwnedProduct, setIsOwnedProduct] = useState<boolean>(false);
 
   const handleSetQuantity = (quantity: number) => {
     setSelectedQuantity(quantity);
@@ -154,37 +157,47 @@ function MobileItemSummary(props: IMobileItemSummaryProps) {
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (user?.is_seller && user.shop_id === shopId) {
+      setIsOwnedProduct(true);
+    }
+  }, []);
+
   return (
     <>
-      <Box
-        background={"white"}
-        position={"fixed"}
-        right={0}
-        bottom={0}
-        left={0}
-        p={3}
-        borderTop="2px"
-        borderColor={"primary"}
-      >
-        <HStack width={"100%"} justifyContent={"space-between"}>
-          <Button
-            w={{ base: "100%", lg: "100%" }}
-            variant="primaryOutline"
-            my={1}
-            onClick={onOpen}
-          >
-            Add to cart
-          </Button>
-          <Button
-            w={{ base: "100%", lg: "100%" }}
-            variant="primary"
-            onClick={onOpen}
-            my={1}
-          >
-            Buy now
-          </Button>
-        </HStack>
-      </Box>
+      {!isOwnedProduct ? (
+        <Box
+          background={"white"}
+          position={"fixed"}
+          right={0}
+          bottom={0}
+          left={0}
+          p={3}
+          borderTop="2px"
+          borderColor={"primary"}
+        >
+          <HStack width={"100%"} justifyContent={"space-between"}>
+            <Button
+              w={{ base: "100%", lg: "100%" }}
+              variant="primaryOutline"
+              my={1}
+              onClick={onOpen}
+            >
+              Add to cart
+            </Button>
+            <Button
+              w={{ base: "100%", lg: "100%" }}
+              variant="primary"
+              onClick={onOpen}
+              my={1}
+            >
+              Buy now
+            </Button>
+          </HStack>
+        </Box>
+      ) : (
+        ""
+      )}
 
       <Drawer placement={"bottom"} onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
