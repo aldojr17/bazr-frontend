@@ -1,14 +1,50 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { AspectRatio, Flex, Image, Text } from "@chakra-ui/react";
 import { ICategoryCardProps } from "../../interfaces/Category";
+import { handleImageOnError } from "../../util/util";
 
 const CategoryCard = ({ ...props }: ICategoryCardProps) => {
   return (
-    <Box>
-      <Image src={props.icon} height={"10rem"} minWidth={"8.5rem"} />
-      <Text align={"center"} marginTop={5} marginBottom={3} noOfLines={2}>
+    <Flex
+      role="button"
+      onClick={props.onClick}
+      direction={{ base: "row", lg: "column" }}
+      flexShrink={0}
+      w={{
+        base: "200px",
+        lg: "125px",
+      }}
+      h={{
+        base: "50px",
+        lg: "auto",
+      }}
+      border={"2px solid"}
+      borderColor={"light"}
+      borderRadius={"lg"}
+      boxShadow={"default"}
+    >
+      <AspectRatio
+        ratio={1}
+        flexShrink={0}
+        width={{ base: "25%", lg: "100%" }}
+        height={{ base: "100%", lg: "auto" }}
+        borderRadius={"lg"}
+      >
+        <Image
+          src={props.icon}
+          borderRadius={"lg"}
+          onError={handleImageOnError}
+        />
+      </AspectRatio>
+      <Text
+        align={"center"}
+        variant={"productCardTitle"}
+        mx={2}
+        my={3}
+        noOfLines={{ base: 1, lg: 2 }}
+      >
         {props.name}
       </Text>
-    </Box>
+    </Flex>
   );
 };
 

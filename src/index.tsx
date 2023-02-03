@@ -11,19 +11,24 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { customTheme } from "./theme/theme";
 import { store } from "./redux";
+import NetworkStatus from "./components/NetworkStatus/NetworkStatus";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <ChakraProvider theme={customTheme}>
-    <GoogleOAuthProvider clientId="193045182620-6i9jf7k31ghtl4dkvqbvsni03r0dm7mm.apps.googleusercontent.com">
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </GoogleOAuthProvider>
+    <ErrorBoundary>
+      <GoogleOAuthProvider clientId="193045182620-6i9jf7k31ghtl4dkvqbvsni03r0dm7mm.apps.googleusercontent.com">
+        <NetworkStatus />
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </GoogleOAuthProvider>
+    </ErrorBoundary>
   </ChakraProvider>
 );
 

@@ -1,3 +1,5 @@
+import { ICheckoutSuccessResponsePayload } from "../Transaction";
+
 export interface ICartAddUpdateRequestPayload {
   shop_id: number;
   variant_type_id: number;
@@ -11,7 +13,9 @@ export interface ICartResponsePayload {
 }
 
 export interface ICartPayload {
+  product_id?: number;
   product_name: string;
+  product_photo: string;
   variant_type_name: string;
   variant_type_price: number;
   quantity: number;
@@ -19,17 +23,25 @@ export interface ICartPayload {
   shop_id: number;
   cart_id: number;
   variant_type_id: number;
+  stock: number;
+  city_id: number;
+  city_name: string;
+  min_buy_qty: number;
+  max_buy_qty: number;
 }
 
 export interface CartState {
   cart: ICartPayload[];
-  checkoutCart: ICartPayload[];
+  checkoutData: ICheckoutSuccessResponsePayload;
   deletedItem: ICartPayload;
+  checkoutCart: number[];
 }
 
 export interface IHoverCartProps {
   image: string;
   name: string;
+  variantName: string;
+  quantity: number;
   price: number;
 }
 

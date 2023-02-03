@@ -1,117 +1,115 @@
-import {
-  AspectRatio,
-  Box,
-  Image,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { AspectRatio, Box, Image, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
-import { IImagePreviewerProps } from "../../interfaces/Components";
+import { Navigation, Pagination } from "swiper";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { IImagePreviewerProps } from "../../interfaces/Components/PDP";
 import { XScrollableWrapper } from "../../styled/StyledXScrollableWrapper";
+import { handleImageOnError } from "../../util/util";
+import ImagePreviewerModal from "../Modal/ImagePreviewerModal";
+import "./style-image-previewer.css";
 
 function ImagePreviewer(props: IImagePreviewerProps) {
   const { data } = props;
-  const [selectedImage, setSelectedImage] = useState(data[0]);
+
+  const [swiperMain, setSwiperMain] = useState<any>(null);
+  const [selectedId, setSelectedId] = useState(0);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleSetSelectedImage = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    slideTo(parseInt(e.currentTarget.children[0].id));
+    setSelectedId(parseInt(e.currentTarget.children[0].id));
+  };
+
+  const slideTo = (index: number) => {
+    if (swiperMain) {
+      swiperMain.slideTo(index);
+    }
+  };
 
   return (
     <>
-      <Box px={{ base: "0", lg: "10" }}>
-        <AspectRatio
-          ratio={1}
-          borderRadius="xl"
-          mb={5}
-          boxShadow="default"
-          onClick={onOpen}
+      <Box>
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={0}
+          pagination={{ clickable: true }}
+          navigation={true}
+          modules={[Pagination, Navigation]}
+          onSlideChange={(swiper) => setSelectedId(swiper.realIndex)}
+          onSwiper={(swiper) => setSwiperMain(swiper)}
+          className={"swiper-image-preview"}
         >
-          <Image
-            src={selectedImage}
-            __css={{
-              objectFit: "scale-down !important",
-            }}
-          />
-        </AspectRatio>
-
-        <XScrollableWrapper>
-          {data.map((imageURL, index) => (
-            <AspectRatio
-              key={index}
-              ratio={1}
-              minW="25%"
-              onClick={(e) =>
-                setSelectedImage(
-                  (e.currentTarget.children[0] as HTMLImageElement).src
-                )
-              }
-              filter="auto"
-              brightness={`${imageURL === selectedImage ? "85%" : "100%"}`}
-              borderRadius="xl"
-              boxShadow="default"
-            >
+          {data.length > 0 ? (
+            data.map((productPhoto, index) => (
+              <SwiperSlide key={index} id={index.toString()}>
+                <AspectRatio ratio={1} onClick={onOpen} cursor={"pointer"}>
+                  <Image
+                    borderRadius="30px"
+                    src={productPhoto.url}
+                    __css={{
+                      objectFit: "scale-down !important",
+                    }}
+                  />
+                </AspectRatio>
+              </SwiperSlide>
+            ))
+          ) : (
+            <AspectRatio ratio={1}>
               <Image
-                src={imageURL}
-                borderRadius="xl"
-                border={`${imageURL === selectedImage ? "4px" : "none"}`}
-                borderColor={`teal.300`}
-              />
-            </AspectRatio>
-          ))}
-        </XScrollableWrapper>
-      </Box>
-
-      <Modal onClose={onClose} isOpen={isOpen} size={"xl"} isCentered>
-        <ModalOverlay />
-        <ModalContent backgroundColor={"transparent"} boxShadow="none">
-          <ModalHeader></ModalHeader>
-          <ModalCloseButton color={"white"} size={"xl"} />
-          <ModalBody>
-            <AspectRatio
-              ratio={1}
-              borderRadius="xl"
-              mb={5}
-              boxShadow="default"
-              backgroundColor={"white"}
-            >
-              <Image
-                src={selectedImage}
+                borderRadius="30px"
+                src={"./image-fallback.png"}
+                onError={handleImageOnError}
                 __css={{
                   objectFit: "scale-down !important",
                 }}
               />
             </AspectRatio>
-            <XScrollableWrapper>
-              {data.map((imageURL, index) => (
+          )}
+        </Swiper>
+
+        <Box display={{ base: "none", lg: "block" }}>
+          <XScrollableWrapper showScrollbar={data.length > 3}>
+            {data.length > 0 &&
+              data.map((productPhoto, index) => (
                 <AspectRatio
-                  key={index}
+                  key={productPhoto.id}
                   ratio={1}
-                  minW="25%"
-                  onClick={(e) =>
-                    setSelectedImage(
-                      (e.currentTarget.children[0] as HTMLImageElement).src
-                    )
-                  }
+                  minW={"25%"}
+                  onClick={handleSetSelectedImage}
                   filter="auto"
-                  brightness={`${imageURL === selectedImage ? "85%" : "100%"}`}
+                  brightness={`${index === selectedId ? "85%" : "100%"}`}
                   borderRadius="xl"
                   boxShadow="default"
+                  backgroundColor={"white"}
+                  cursor={"pointer"}
                 >
                   <Image
-                    src={imageURL}
+                    id={index.toString()}
+                    src={productPhoto.url}
                     borderRadius="xl"
-                    border={`${imageURL === selectedImage ? "4px" : "none"}`}
+                    border={`${index === selectedId ? "4px" : "none"}`}
                     borderColor={`teal.300`}
                   />
                 </AspectRatio>
               ))}
-            </XScrollableWrapper>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+          </XScrollableWrapper>
+        </Box>
+      </Box>
+
+      <ImagePreviewerModal
+        data={data}
+        isOpen={isOpen}
+        onClose={onClose}
+        selectedDefaultId={selectedId}
+      />
     </>
   );
 }

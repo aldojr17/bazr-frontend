@@ -1,12 +1,16 @@
 import { AxiosError } from "axios";
 import {
+  IChangePasswordRequestPayload,
   ILoginGoogleRequestPayload,
   ILoginRequestPayload,
   ILoginResponsePayload,
+  IPasswordResponsePayload,
   IRefreshRequestPayload,
   IRefreshResponsePayload,
+  IRegisterMerchantRequestPayload,
   IRegisterRequestPayload,
   IRegisterResponsePayload,
+  IResetPasswordRequestPayload,
 } from "../../interfaces/Auth";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
@@ -17,6 +21,21 @@ const register = async (
   try {
     const response = await instance.post<IRegisterResponsePayload>(
       API_PATH.auth.REGISTER,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IRegisterResponsePayload;
+  }
+};
+
+const registerMerchant = async (
+  payload: IRegisterMerchantRequestPayload
+): Promise<IRegisterResponsePayload> => {
+  try {
+    const response = await instance.post<IRegisterResponsePayload>(
+      API_PATH.auth.REGISTER_MERCHANT,
       payload
     );
 
@@ -88,12 +107,45 @@ const checkEmail = async (email: string) => {
   }
 };
 
+const resetPassword = async (
+  payload: IResetPasswordRequestPayload
+): Promise<IPasswordResponsePayload> => {
+  try {
+    const response = await instance.post<IPasswordResponsePayload>(
+      API_PATH.auth.PASSWORD,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IPasswordResponsePayload;
+  }
+};
+
+const changePassword = async (
+  payload: IChangePasswordRequestPayload
+): Promise<IPasswordResponsePayload> => {
+  try {
+    const response = await instance.put<IPasswordResponsePayload>(
+      API_PATH.auth.PASSWORD,
+      payload
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IPasswordResponsePayload;
+  }
+};
+
 const authService = {
   register,
+  registerMerchant,
   login,
   loginGoogle,
   refresh,
   checkEmail,
+  resetPassword,
+  changePassword,
 };
 
 export default authService;

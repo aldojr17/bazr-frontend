@@ -1,10 +1,10 @@
-import { Box, Heading, Select } from "@chakra-ui/react";
+import { Box, Divider, Heading, Select, Text, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
-import { IProductDetailVariantProps } from "../../interfaces/Product";
+import { IProductDetailVariantProps } from "../../interfaces/Components/PDP";
 
 function ProductDetailVariant(props: IProductDetailVariantProps) {
-  const { variantGroup, onVariantChange } = props;
+  const { variantGroup, onVariantChange, error } = props;
 
   const [displayVariants, setDisplayVariants] = useState({});
   const [selectedVariant, setSelectedVariant] = useState({});
@@ -12,7 +12,7 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
   const variantPreprocessing = () => {
     let variants = {};
     const variantNames = variantGroup?.name.split(",")!;
-    const variantTypes = variantGroup?.variant_type!;
+    const variantTypes = variantGroup?.variant_types ?? [];
 
     for (var index in variantNames) {
       let typeArray = [];
@@ -28,43 +28,51 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
     }
 
     setDisplayVariants(variants);
-  };
 
-  const setSelectedProductVariant = () => {
-    let variant = {};
-    const variantNames = variantGroup?.name.split(",")!;
-    let selectVariant = variantGroup?.variant_type.reduce((a, b) =>
-      a.price < b.price ? a : b
-    );
+    if (variantTypes.length === 1) {
+      let selectVariant = {};
+      Object.keys(variants).map(
+        (key) => ((selectVariant as any)[key] = (variants as any)[key][0])
+      );
 
-    for (var index in variantNames) {
-      variant = {
-        ...variant,
-        [variantNames[index]]: selectVariant.name.split(",")[index],
-      };
+      setSelectedVariant(selectVariant);
+      findVariantType(selectVariant);
     }
-
-    setSelectedVariant(variant);
-    onVariantChange(selectVariant);
   };
 
   const findVariantType = (variant: {}) => {
     let selectedVariantArray: string[] = Object.values(variant);
     let selectedVariantString = selectedVariantArray.join(",");
+    let selectedVariantStringAlt = selectedVariantArray.reverse().join(",");
 
-    let selectedVariantType = variantGroup.variant_type.find(
-      (variantType) => variantType.name === selectedVariantString
+    let selectedVariantType = variantGroup.variant_types.find(
+      (variantType) =>
+        variantType.name === selectedVariantString ||
+        variantType.name === selectedVariantStringAlt
     );
 
-    onVariantChange(selectedVariantType);
+    if (selectedVariantType) {
+      onVariantChange(selectedVariantType);
+    } else {
+      onVariantChange({
+        id: 0,
+        name: "",
+        price: 0,
+        stock: 0,
+        variant_group_id: 0,
+      });
+    }
   };
 
   const handleSetVariant = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const variantName =
-      e.currentTarget.parentElement?.parentElement?.children[0].innerHTML!;
+      e.currentTarget.parentElement?.parentElement?.children[0].innerHTML!.replace(
+        ":",
+        ""
+      );
     const variantType = e.currentTarget.value!;
 
-    let newVariant = { ...selectedVariant, [variantName]: variantType };
+    let newVariant = { ...selectedVariant, [variantName!]: variantType };
 
     setSelectedVariant(newVariant);
     findVariantType(newVariant);
@@ -72,31 +80,67 @@ function ProductDetailVariant(props: IProductDetailVariantProps) {
 
   useEffect(() => {
     variantPreprocessing();
-    setSelectedProductVariant();
   }, []);
 
   return (
-    <Box mt={10}>
-      {Object.keys(displayVariants).map((name: string) => (
-        <Box key={name} my={5}>
-          <Heading variant={"variantName"} my={1}>
-            {name}
-          </Heading>
-          <Select
-            variant={"default"}
-            width={"fit-content"}
-            icon={<Icon.ChevronDown fill={"primary"} />}
-            value={(selectedVariant as any)[name]}
-            onChange={(e) => handleSetVariant(e)}
+    <>
+      {Object.keys(displayVariants)[0] !== "DEFAULT" && (
+        <>
+          <VStack
+            backgroundColor={`${error ? "purple.100" : "transparent"}`}
+            px={3}
+            py={{ base: 0, lg: 3 }}
+            borderRadius={"lg"}
+            alignItems={"start"}
           >
-            <option>-</option>
-            {(displayVariants as any)[name].map((type: string) => (
-              <option key={type}>{type}</option>
+            <Heading
+              fontSize={{ base: "sm", lg: "md" }}
+              mb={{ base: 0, lg: 3 }}
+            >
+              Select variant:
+            </Heading>
+            {Object.keys(displayVariants).map((name: string) => (
+              <Box key={name} mb={5}>
+                <Heading
+                  fontSize={{ base: "xs", lg: "sm" }}
+                  fontWeight={"semibold"}
+                  color={"dark"}
+                  textTransform={"none"}
+                  my={1}
+                >
+                  {name}:
+                </Heading>
+                <Select
+                  variant={"default"}
+                  width={"fit-content"}
+                  icon={<Icon.ChevronDown fill={"primary"} />}
+                  value={(selectedVariant as any)[name]}
+                  onChange={(e) => handleSetVariant(e)}
+                >
+                  <option hidden>-</option>
+                  {(displayVariants as any)[name].map((type: string) => (
+                    <option key={type}>{type}</option>
+                  ))}
+                </Select>
+              </Box>
             ))}
-          </Select>
-        </Box>
-      ))}
-    </Box>
+            {error && (
+              <Text
+                as={"i"}
+                fontWeight={"semibold"}
+                fontSize={"sm"}
+                color={"secondary"}
+                alignSelf={"end"}
+                mt={10}
+              >
+                Variant is not selected
+              </Text>
+            )}
+          </VStack>
+          <Divider variant={"solidLight"} my={3} />
+        </>
+      )}
+    </>
   );
 }
 
