@@ -53,6 +53,7 @@ function UserProfile() {
               <CardBody>
                 <Flex flexDirection={"column"}>
                   <Image
+                    height={"185px"}
                     borderRadius={"md"}
                     src={user?.profile_picture}
                     alt="profile picture"
