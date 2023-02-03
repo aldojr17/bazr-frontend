@@ -57,6 +57,7 @@ function ResetRequest() {
       .required("Required")
       .min(8, "Password must contain at least 8 characters")
       .matches(
+        /* eslint-disable no-useless-escape */
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
         "Must contain at least One Uppercase, One Lowercase, One Number and one special case Character"
       )
