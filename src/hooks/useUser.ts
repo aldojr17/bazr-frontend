@@ -1,6 +1,7 @@
 import { destroyCookie } from "nookies";
 import { useState } from "react";
 import userService from "../api/service/user";
+import { ISearchFilterPayload } from "../interfaces/Filter";
 import {
   IEditProfilePayload,
   IUploadAvatarPayload,
@@ -88,6 +89,11 @@ const useUser = () => {
     return response;
   };
 
+  const fetchUserFavouriteProduct = async (filter?: ISearchFilterPayload) => {
+    const response = await userService.getUserFavoriteProduct(filter);
+    return response;
+  };
+
   return {
     user,
     userLoading,
@@ -96,6 +102,7 @@ const useUser = () => {
     editProfile,
     uploadAvatar,
     setUserFavoriteProduct,
+    fetchUserFavouriteProduct,
     sendEmailVerification,
     changeEmail,
     sendChangePasswordToken,

@@ -9,6 +9,8 @@ import {
   IUserResponsePayload,
   IUserChangePasswordPayload,
 } from "../../interfaces/User";
+import { IProductsResponsePayload } from "../../interfaces/Product";
+import { ISearchFilterPayload } from "../../interfaces/Filter";
 import instance from "../config/axios";
 import { API_PATH } from "../path";
 
@@ -68,6 +70,23 @@ const postUserFavoriteProduct = async (
     return response.data;
   } catch (err) {
     return err as IUserFavoriteProductResponsePayload;
+  }
+};
+
+const getUserFavoriteProduct = async (
+  filter?: ISearchFilterPayload
+): Promise<IProductsResponsePayload> => {
+  try {
+    const response = await instance.get<IProductsResponsePayload>(
+      API_PATH.user.FAVORITE_PRODUCT,
+      {
+        params: filter,
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    return err as IProductsResponsePayload;
   }
 };
 
@@ -148,6 +167,7 @@ const userService = {
   sendChangePasswordToken,
   changePassword,
   fetchUserAddresses,
+  getUserFavoriteProduct,
 };
 
 export default userService;
