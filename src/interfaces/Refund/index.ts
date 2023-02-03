@@ -1,3 +1,5 @@
+import { IProductPhotoPayload } from "../Product";
+
 export interface IRefund {
   id: number;
   order_id: number;
@@ -7,6 +9,7 @@ export interface IRefund {
   seller_name: string;
   amount: number;
   status: number;
+  status_name: string;
   payment_method_id: number;
   created_at: string;
 }
@@ -28,16 +31,17 @@ export interface IRefundPaginationPayload {
 export interface IRefundDetail {
   id: number;
   order_id: number;
-  buyer_id: string;
+  buyer_id: number;
   buyer_name: string;
   seller_id: number;
   seller_name: string;
   amount: number;
   status: number;
+  status_name: string;
   payment_method_id: number;
   created_at: string;
   note: string;
-  photos: IRefundPhoto;
+  photos: IProductPhotoPayload[];
   chats: IChat[];
   chats_last_updated: string;
 }
@@ -49,6 +53,12 @@ export interface IRefundPhoto {
 export interface IChat {
   user_id: number;
   text: string;
+}
+
+export interface IRefundActionResponse {
+  data: null;
+  is_success: boolean;
+  message: string;
 }
 
 export interface IRefundDetailPayload {

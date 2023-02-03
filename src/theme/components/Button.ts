@@ -99,7 +99,6 @@ const Button = defineStyleConfig({
       },
       _active: {
         color: "primaryDarken",
-        bg: "primaryLighten",
       },
     },
     secondary: {

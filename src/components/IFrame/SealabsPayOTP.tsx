@@ -1,6 +1,5 @@
 import { Center } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import useToast from "../../hooks/useToast";
+import React, { useEffect } from "react";
 import { ISealabsPayOTPProps } from "../../interfaces/Components";
 
 const SealabsPayOTP: React.FC<ISealabsPayOTPProps> = ({ ...props }) => {

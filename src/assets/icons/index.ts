@@ -1,6 +1,7 @@
 import ArrowDown from "./ArrowDown";
 import Cart from "./Cart";
 import CartFilled from "./CartFilled";
+import Chat from "./Chat";
 import ChevronDown from "./ChevronDown";
 import ChevronRight from "./ChevronRight";
 import ChevronUp from "./ChevronUp";
@@ -23,8 +24,8 @@ import Location from "./Location";
 import Lock from "./Lock";
 import Logout from "./Logout";
 import Minus from "./Minus";
-import Percentage from "./Percentage";
 import Pencil from "./Pencil";
+import Percentage from "./Percentage";
 import PersonCheck from "./PersonCheck";
 import PinMap from "./PinMap";
 import Plus from "./Plus";
@@ -34,6 +35,7 @@ import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
 import SeaPay from "./SeaPay";
 import Search from "./Search";
+import Send from "./Send";
 import Share from "./Share";
 import Shop from "./Shop";
 import Show from "./Show";
@@ -48,6 +50,7 @@ const Icon = {
   ArrowDown,
   Cart,
   CartFilled,
+  Chat,
   ChevronDown,
   ChevronRight,
   ChevronUp,
@@ -81,6 +84,7 @@ const Icon = {
   RightArrow,
   SeaPay,
   Search,
+  Send,
   Share,
   Shop,
   Show,

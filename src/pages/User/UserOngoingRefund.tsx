@@ -5,24 +5,31 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { BsFillChatDotsFill } from "react-icons/bs";
-import RefundChatModal from "../../components/Modal/RefundChatModal";
-import useRefund from "../../hooks/useRefund";
-import { formatCurrency } from "../../util/util";
-import { useState, useEffect } from "react";
-import { IRefund } from "../../interfaces/Refund";
+import Icon from "../../assets/icons";
 import Pagination from "../../components/Pagination/Pagination";
+import useRefund from "../../hooks/useRefund";
+import { IRefund, IRefundDetail } from "../../interfaces/Refund";
+import { refundStatusses } from "../../util/constant";
+import { formatCurrency } from "../../util/util";
+import OrderRefundChatModal from "../Seller/Order/OrderRefundChatModal";
+import OrderRefundDetailModal from "../Seller/Order/OrderRefundDetailModal";
 
 function UserOngoingRefund() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const chatModal = useDisclosure();
+  const detailModal = useDisclosure();
+
+  const { refundLoading, fetchBuyerRefund, fetchRefundDetail } = useRefund();
+
   const [refundList, setRefundList] = useState<IRefund[]>([]);
-  const { fetchBuyerRefund } = useRefund();
+  const [refundDetail, setRefundDetail] = useState<IRefundDetail | null>(null);
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
 
@@ -30,6 +37,30 @@ function UserOngoingRefund() {
     const response = await fetchBuyerRefund({ page: page });
     setRefundList(response.data.data);
     setTotalPage(response.data.total_page);
+  };
+
+  const handleChatSeller = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const refundId = e.currentTarget.id;
+
+    fetchRefundDetail(parseInt(refundId)).then((data) =>
+      setRefundDetail(data.data)
+    );
+
+    chatModal.onOpen();
+  };
+
+  const handleRefundDetail = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const refundId = e.currentTarget.id;
+
+    fetchRefundDetail(parseInt(refundId)).then((data) =>
+      setRefundDetail(data.data)
+    );
+
+    detailModal.onOpen();
   };
 
   useEffect(() => {
@@ -52,21 +83,32 @@ function UserOngoingRefund() {
             </Tr>
           </Thead>
           <Tbody>
-            {refundList.map((ref) => {
+            {refundList.map((ref, index) => {
               return (
-                <Tr>
+                <Tr key={index}>
                   <Td textAlign={"center"}>{ref.order_id}</Td>
                   <Td textAlign={"center"}>{ref.seller_name}</Td>
                   <Td textAlign={"center"}>
                     {"Rp" + formatCurrency(ref.amount)}
                   </Td>
                   <Td textAlign={"center"}>
+                    {ref.status_name !== refundStatusses.APPROVED &&
+                      ref.status_name !== refundStatusses.REFUNDED && (
+                        <IconButton
+                          id={ref.id.toString()}
+                          mx={1}
+                          aria-label="Refund"
+                          bgColor={"orange.400"}
+                          icon={<BsFillChatDotsFill />}
+                          onClick={handleChatSeller}
+                        />
+                      )}
                     <IconButton
+                      id={ref.id.toString()}
                       mx={1}
-                      aria-label="Refund"
-                      bgColor={"orange.400"}
-                      icon={<BsFillChatDotsFill />}
-                      onClick={onOpen}
+                      aria-label="Refund Detail"
+                      icon={<Icon.Show />}
+                      onClick={handleRefundDetail}
                     />
                   </Td>
                 </Tr>
@@ -79,7 +121,28 @@ function UserOngoingRefund() {
         data={{ total_page: totalPage, current_page: page }}
         setPage={setPage}
       />
-      <RefundChatModal isOpen={isOpen} onClose={onClose} />
+
+      <OrderRefundChatModal
+        config={"buyer"}
+        isOpen={chatModal.isOpen}
+        isLoading={refundLoading}
+        onClose={() => chatModal.onClose()}
+        chats={refundDetail?.chats!}
+        refundId={refundDetail?.id!}
+        buyerId={refundDetail?.buyer_id!}
+        buyerName={refundDetail?.buyer_name!}
+        sellerId={refundDetail?.seller_id!}
+        sellerName={refundDetail?.seller_name!}
+        lastUpdated={refundDetail?.chats_last_updated!}
+      />
+
+      <OrderRefundDetailModal
+        config={"buyer"}
+        isOpen={detailModal.isOpen}
+        isLoading={refundLoading}
+        onClose={() => detailModal.onClose()}
+        refundDetail={refundDetail!}
+      />
     </Flex>
   );
 }

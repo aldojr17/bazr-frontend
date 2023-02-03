@@ -3,7 +3,7 @@ import { formatProductUrl } from "../util/util";
 const routes = {
   HOME: "/",
   SEARCH: (query?: string, c?: number, cl?: number) =>
-    `/search?q=${query}${c && `&c=${c}`}${cl && `&cl=${cl}`}`,
+    `/search?q=${query}${c ? `&c=${c}` : ""}${cl ? `&cl=${cl}` : ""}`,
   PDP: (id: number, productName: string) =>
     `/pdp/${id}/${formatProductUrl(productName)}`,
   PRIMARY_CATEGORY: (cPrimary: string) => `/p/${cPrimary}`,
@@ -48,7 +48,6 @@ const routes = {
   SELLER_ORDER_DETAIL: (id: number) => `/seller/order/${id}/detail`,
   SELLER_ORDER_LABEL: (id: number) => `/seller/order/${id}/label`,
   ADMIN: "/admin",
-  SEARCH_HANDLESEARCH: (value: string) => `/search?q=${value}`,
 };
 
 export default routes;

@@ -79,5 +79,6 @@ export const API_PATH = {
     SELLER_REFUNDS: "/refunds/seller",
     BUYER_REFUNDS: "/refunds/buyer",
     REFUND_DETAIL: (id: number) => `/refunds/${id}`,
+    CHAT: "/refunds/chat",
   },
 };

@@ -98,6 +98,17 @@ export interface IUserAddress {
   is_shop_default: boolean;
 }
 
+export interface IUserChatRequestPayload {
+  refunds_id: number;
+  chat: string;
+}
+
+export interface IUserChatResponsePayload {
+  data: null;
+  is_success: boolean;
+  message: string;
+}
+
 export interface IConfirmUserReceivedOrderResponsePayload {
   data: null;
   is_success: boolean;

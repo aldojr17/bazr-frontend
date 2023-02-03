@@ -29,7 +29,7 @@ const Layout = ({ children }: ILayoutProps) => {
     }
 
     onClose();
-    navigate(routes.SEARCH_HANDLESEARCH(event.currentTarget.value), {
+    navigate(routes.SEARCH(event.currentTarget.value), {
       replace: true,
     });
   };

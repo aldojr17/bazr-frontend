@@ -7,10 +7,12 @@ import {
   ITertiaryCategoryPayload,
 } from "../Category";
 import { IProductPayload } from "../Product";
+import { IRefundDetail } from "../Refund";
 import { ICheckoutSuccessResponsePayload } from "../Transaction";
 import { IUserPayload } from "../User";
 import { ICreateVariantGroup, ICreateVariantType } from "../Variant";
 import { IMarketplaceVoucherPayload, IVoucherPayload } from "../Voucher";
+import { IChat } from "./Chatbox";
 
 export interface IBreadCrumbProps {
   categories: IProductCategoryPayload;
@@ -304,7 +306,24 @@ export interface ISealabsPayPaymentProps {
   setIsOrderPlaced: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface IRefundChatModalProps {
+export interface IChatModalProps {
+  config: string;
   isOpen: boolean;
+  isLoading: boolean;
   onClose: () => void;
+  sellerId: number;
+  sellerName: string;
+  buyerId: number;
+  buyerName: string;
+  refundId: number;
+  chats: IChat[];
+  lastUpdated: string;
+}
+
+export interface IRefundDetailModalProps {
+  config: string;
+  isOpen: boolean;
+  isLoading: boolean;
+  onClose: () => void;
+  refundDetail: IRefundDetail;
 }

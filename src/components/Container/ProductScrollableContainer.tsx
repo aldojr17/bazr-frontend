@@ -1,5 +1,4 @@
 import {
-  AspectRatio,
   Box,
   Center,
   Flex,

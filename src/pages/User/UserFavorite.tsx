@@ -1,4 +1,11 @@
-import { Container, Flex, Box, Heading, Skeleton } from "@chakra-ui/react";
+import {
+  Container,
+  Flex,
+  Box,
+  Heading,
+  Skeleton,
+  Grid,
+} from "@chakra-ui/react";
 import ProductCard from "../../components/Card/ProductCard";
 import { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination/Pagination";
@@ -50,22 +57,19 @@ function UserFavorite() {
             My Favourites
           </Heading>
           <Skeleton isLoaded={!isLoading} borderRadius={"lg"}>
-            <Flex
-              wrap={"wrap"}
-              direction={"row"}
-              justifyContent={products.length <= 5 ? "start" : "space-between"}
-              rowGap={{ base: 1, sm: 3, lg: 2 }}
-              columnGap={{ base: 1, sm: 2, lg: 1 }}
-              _after={{
-                md: { content: '""', flex: "auto" },
-                lg: { content: "none" },
+            <Grid
+              templateColumns={{
+                base: "repeat(2, 1fr)",
+                md: "repeat(4, 1fr)",
+                lg: "repeat(6, 1fr)",
               }}
+              gap={3}
             >
               {products.length !== 0 &&
                 products.map((product) => (
                   <ProductCard key={product.id} {...product} />
                 ))}
-            </Flex>
+            </Grid>
             <Pagination
               data={{
                 total_page: totalPage,
