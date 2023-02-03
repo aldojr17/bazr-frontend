@@ -29,6 +29,7 @@ import {
   IPromotionShopProductProps,
   IPromotionVariantForm,
 } from "../../../interfaces/Promotion";
+import { IVariantTypePayload } from "../../../interfaces/Variant";
 import { formatCurrency } from "../../../util/util";
 
 function PromotionShopProduct(props: IPromotionShopProductProps) {
@@ -63,6 +64,7 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
       return {
         variant_type_id: variant.id,
         variant_name: variant.name,
+        price: variant.price,
         benefit: 0,
         benefit_percentage: 0,
         is_active: true,
@@ -77,6 +79,17 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
       in_form: inForm,
       variants: newVariants,
     } as IPromotionProductForm;
+  };
+
+  const textProductPrice = (variants: IVariantTypePayload[]): string => {
+    const high = Math.max(...variants.map((v) => v.price));
+    const low = Math.min(...variants.map((v) => v.price));
+
+    if (low === high) {
+      return `Rp${formatCurrency(low)}`;
+    }
+
+    return `Rp${formatCurrency(low)} - Rp${formatCurrency(high)}`;
   };
 
   const handleNextPage = () => {
@@ -138,8 +151,9 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
                       <Td>{product.name}</Td>
                       <Td>{product.unit_sold}</Td>
                       <Td>
-                        Rp{formatCurrency(product.lowest_price!)}- Rp
-                        {formatCurrency(product.lowest_price!)}
+                        {textProductPrice(
+                          product.variant_group?.variant_types ?? []
+                        )}
                       </Td>
                     </Tr>
                   ))}
