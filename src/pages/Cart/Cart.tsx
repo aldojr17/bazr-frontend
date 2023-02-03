@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Container,
   Divider,
   Drawer,
   DrawerBody,
@@ -15,6 +16,13 @@ import {
   Heading,
   HStack,
   IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   RenderProps,
   Text,
   ToastId,
@@ -22,23 +30,36 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
+import StoreListItem from "../../components/Card/StoreListItem";
 import CartItem from "../../components/Cart/CartItem";
 import Toast from "../../components/Toast/Toast";
 import useCart from "../../hooks/useCart";
+import useOrder from "../../hooks/useOrder";
 import useTitle from "../../hooks/useTitle";
 import { ICartPayload } from "../../interfaces/Cart";
+import { ICheckoutOrderPayload } from "../../interfaces/Transaction";
+import routes from "../../routes/Routes";
 import { formatCurrency } from "../../util/util";
 
 const Cart = () => {
   useTitle("Cart | BAZR");
-  const { cart, setCart, deleteCart, deleteItem, undoDeleteItem } = useCart();
+  const {
+    cart,
+    setCheckoutData,
+    deleteCart,
+    deleteItem,
+    undoDeleteItem,
+    setCheckoutCartIds,
+    getCart,
+  } = useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
   const toastIdRef = useRef<ToastId>();
+  const { createCheckout } = useOrder();
 
   const [undoDelete, setUndoDelete] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<
@@ -47,14 +68,21 @@ const Cart = () => {
   const [formattedCart, setFormattedCart] = useState<
     Record<number, Record<number, ICartPayload>>
   >({});
-  const [checkoutCart, setCheckoutCart] = useState<ICartPayload[]>([]);
+  const [checkoutCartState, setCheckoutCartState] = useState<ICartPayload[]>(
+    []
+  );
   const [total, setTotal] = useState<number>(0);
+  const {
+    isOpen: isRemoveItemFromCartModalOpen,
+    onOpen: openRemoveItemFromCartModal,
+    onClose: closeRemoveItemFromCartModal,
+  } = useDisclosure();
 
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.checked) {
-      setCheckoutCart(cart);
+      setCheckoutCartState(cart);
     } else {
-      setCheckoutCart([]);
+      setCheckoutCartState([]);
     }
   };
 
@@ -63,12 +91,14 @@ const Cart = () => {
     id: number
   ) => {
     if (event.currentTarget.checked) {
-      setCheckoutCart([
-        ...checkoutCart,
+      setCheckoutCartState([
+        ...checkoutCartState.filter((val) => val.shop_id !== id),
         ...cart.filter((val) => val.shop_id === id),
       ]);
     } else {
-      setCheckoutCart(checkoutCart.filter((val) => val.shop_id !== id));
+      setCheckoutCartState(
+        checkoutCartState.filter((val) => val.shop_id !== id)
+      );
     }
   };
 
@@ -78,22 +108,56 @@ const Cart = () => {
     shopId: number
   ) => {
     if (event.currentTarget.checked) {
-      setCheckoutCart([
-        ...checkoutCart,
-        cart.find((val) => val.cart_id === id && val.shop_id === shopId)!,
+      setCheckoutCartState([
+        ...checkoutCartState,
+        cart.find((val) => val.cart_id === id)!,
       ]);
     } else {
-      setCheckoutCart(
-        checkoutCart.filter(
-          (val) => val.cart_id !== id && val.shop_id !== shopId
-        )
+      setCheckoutCartState(
+        checkoutCartState.filter((val) => val.cart_id !== id)
       );
     }
   };
 
-  const handleBuyNow = () => {
-    setCart(checkoutCart);
-    navigate("/cart/shipment", { replace: true });
+  const handleBuyNow = async () => {
+    let orders: ICheckoutOrderPayload[] = [];
+    let ids: number[] = [];
+
+    checkoutCartState.forEach((value) => {
+      if (
+        orders.length === 0 ||
+        orders.findIndex((val) => val.shop_id === value.shop_id) === -1
+      ) {
+        orders = [
+          ...orders,
+          {
+            shop_id: value.shop_id,
+            order_details: [
+              {
+                cart_id: value.cart_id,
+              },
+            ],
+          },
+        ];
+      } else {
+        orders
+          .find((val) => val.shop_id === value.shop_id)
+          ?.order_details.push({
+            cart_id: value.cart_id,
+          });
+      }
+
+      ids.push(value.cart_id);
+    });
+
+    const response = await createCheckout({
+      orders: orders,
+    });
+    if (response.is_success) {
+      setCheckoutData(response.data);
+      setCheckoutCartIds(ids);
+      navigate(routes.CART_SHIPMENT, { replace: true });
+    }
   };
 
   const handleDeleteItem = (id: number) => {
@@ -115,6 +179,18 @@ const Cart = () => {
           onClick={() => setUndoDelete(true)}
         />
       ),
+    });
+  };
+
+  const clearCartItems = () => {
+    Object.entries(formattedCart).forEach(([_, val]) => {
+      Object.values(val).forEach((childVal) => {
+        const cart_id = childVal.cart_id;
+        deleteItem(cart_id);
+        deleteCart(cart_id).then(() => {
+          getCart();
+        });
+      });
     });
   };
 
@@ -140,17 +216,17 @@ const Cart = () => {
 
   useEffect(() => {
     let newIsSelected: Record<number | string, boolean> = {
-      all: cart.length !== 0 ? checkoutCart.length === cart.length : false,
+      all: cart.length !== 0 ? checkoutCartState.length === cart.length : false,
     };
 
     Object.keys(formattedCart).forEach((key) => {
       newIsSelected[key] =
-        checkoutCart.filter((val) => val.shop_id === parseInt(key)).length ===
-        Object.values(formattedCart[parseInt(key)]).length;
+        checkoutCartState.filter((val) => val.shop_id === parseInt(key))
+          .length === Object.values(formattedCart[parseInt(key)]).length;
     });
 
-    let newTotal = checkoutCart.reduce(
-      (acc, val) => acc + val.variant_type_price,
+    let newTotal = checkoutCartState.reduce(
+      (acc, val) => acc + val.variant_type_price * val.quantity,
       0
     );
 
@@ -158,7 +234,7 @@ const Cart = () => {
     setIsSelected({
       ...newIsSelected,
     });
-  }, [checkoutCart]);
+  }, [checkoutCartState, cart]);
 
   useEffect(() => {
     if (cart.length !== 0) {
@@ -176,7 +252,7 @@ const Cart = () => {
   }, [cart]);
 
   return (
-    <>
+    <Container maxW="container.xl">
       <Box
         px={{
           base: "1em",
@@ -232,16 +308,22 @@ const Cart = () => {
                       <Checkbox
                         isChecked={isSelected["all"]}
                         onChange={handleSelectAll}
+                        textTransform={"uppercase"}
+                        fontWeight={"extrabold"}
+                        spacing={4}
+                        colorScheme={"default"}
                       >
                         Select All
                       </Checkbox>
                       <Button
                         variant={"unstyled"}
-                        visibility={
-                          checkoutCart.length !== 0 ? "initial" : "hidden"
-                        }
+                        color={"primary"}
+                        onClick={() => {
+                          openRemoveItemFromCartModal();
+                        }}
+                        fontSize={"xs"}
                       >
-                        Remove
+                        Clear cart
                       </Button>
                     </HStack>
                     <Divider />
@@ -250,25 +332,19 @@ const Cart = () => {
                   {Object.entries(formattedCart).map(([key, val], index) => (
                     <Box key={key} width={"100%"}>
                       <Box width={"100%"}>
-                        <HStack>
+                        <HStack alignItems={"start"} gap={2}>
                           <Checkbox
                             isChecked={isSelected[key]}
                             onChange={(event) =>
                               handleSelectFromShop(event, parseInt(key))
                             }
+                            mt={1}
+                            colorScheme={"default"}
                           />
-                          <Box>
-                            <Box>
-                              <Button
-                                variant={"unstyled"}
-                                height={"fit-content"}
-                                fontWeight={"bold"}
-                              >
-                                {Object.values(val).at(0)?.shop_name}
-                              </Button>
-                            </Box>
-                            <Text display={"inline-flex"}>Bandung</Text>
-                          </Box>
+                          <StoreListItem
+                            shopName={Object.values(val).at(0)?.shop_name!}
+                            shopCityName={Object.values(val).at(0)?.city_name!}
+                          />
                         </HStack>
 
                         <VStack>
@@ -278,25 +354,21 @@ const Cart = () => {
                                 handleSelectItem={handleSelectItem}
                                 data={childVal}
                                 selectedCart={
-                                  checkoutCart.findIndex(
+                                  checkoutCartState.findIndex(
                                     (val) => val.cart_id === childVal.cart_id
                                   ) !== -1
                                 }
                                 handleDeleteItem={handleDeleteItem}
                               />
-                              {childIndex < Object.values(val).length - 1 ? (
+                              {childIndex < Object.values(val).length - 1 && (
                                 <Divider borderBottomWidth={"0.1em"} />
-                              ) : (
-                                ""
                               )}
                             </Box>
                           ))}
                         </VStack>
                       </Box>
-                      {index < Object.entries(formattedCart).length ? (
+                      {index < Object.entries(formattedCart).length && (
                         <Divider />
-                      ) : (
-                        ""
                       )}
                     </Box>
                   ))}
@@ -312,31 +384,21 @@ const Cart = () => {
                   xl: "block",
                 }}
               >
-                <VStack boxShadow={"md"} p={4} spacing={5} borderRadius={"lg"}>
-                  <Button
-                    variant={"outline"}
-                    width={"100%"}
-                    borderRadius={"lg"}
-                  >
-                    <HStack
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      width={"100%"}
-                    >
-                      <Icon.Plus />
-                      <Text fontWeight={"semibold"}>Select Voucher</Text>
-                      <Icon.ChevronRight />
-                    </HStack>
-                  </Button>
-
-                  <Divider />
-
+                <VStack
+                  boxShadow={"md"}
+                  p={4}
+                  spacing={5}
+                  borderRadius={"lg"}
+                  border={"2px solid"}
+                  borderColor={"lightLighten"}
+                >
                   <Text
-                    fontWeight={"semibold"}
+                    fontWeight={"bold"}
                     textAlign={"start"}
                     width={"100%"}
+                    textTransform={"uppercase"}
                   >
-                    Shopping Summary
+                    Order Summary
                   </Text>
 
                   <VStack alignItems={"start"} width="100%" spacing={0}>
@@ -345,16 +407,40 @@ const Cart = () => {
                       alignItems={"center"}
                       width={"100%"}
                     >
-                      <Text>Total Price (Item)</Text>
-                      <Text>Rp{formatCurrency(total)}</Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Total Price (Item)
+                      </Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Rp{formatCurrency(total)}
+                      </Text>
                     </HStack>
                     <HStack
                       justifyContent={"space-between"}
                       alignItems={"center"}
                       width={"100%"}
                     >
-                      <Text>Total Discount Item(s)</Text>
-                      <Text>Rp{formatCurrency(0)}</Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Total Discount Item(s)
+                      </Text>
+                      <Text
+                        fontWeight={"semibold"}
+                        fontSize={"sm"}
+                        color={"gray.500"}
+                      >
+                        Rp{formatCurrency(0)}
+                      </Text>
                     </HStack>
                   </VStack>
 
@@ -364,20 +450,22 @@ const Cart = () => {
                     justifyContent={"space-between"}
                     alignItems={"center"}
                     width={"100%"}
-                    fontWeight={"semibold"}
+                    fontWeight={"bold"}
+                    textAlign={"start"}
                   >
-                    <Text>Grand Total</Text>
-                    <Text>Rp{formatCurrency(total)}</Text>
+                    <Text textTransform={"uppercase"}>Grand Total</Text>
+                    <Text color={"primary"}>Rp{formatCurrency(total)}</Text>
                   </HStack>
 
                   <Button
                     borderRadius={"lg"}
                     width={"100%"}
                     shadow={"none"}
-                    color={"white"}
                     onClick={handleBuyNow}
+                    variant={"primary"}
+                    isDisabled={checkoutCartState.length === 0}
                   >
-                    Buy ({checkoutCart.length})
+                    Checkout ({checkoutCartState.length})
                   </Button>
                 </VStack>
               </GridItem>
@@ -431,10 +519,15 @@ const Cart = () => {
                   <Button
                     borderRadius={"lg"}
                     shadow={"none"}
-                    color={"white"}
                     onClick={handleBuyNow}
+                    variant={
+                      checkoutCartState.length === 0
+                        ? "basicOutline"
+                        : "primary"
+                    }
+                    isDisabled={checkoutCartState.length === 0}
                   >
-                    Buy ({checkoutCart.length})
+                    Buy ({checkoutCartState.length})
                   </Button>
                 </HStack>
               </VStack>
@@ -480,14 +573,42 @@ const Cart = () => {
           <Center>
             <VStack>
               <Text>Your Cart is Empty</Text>
-              <Button borderRadius={"lg"} shadow={"none"} color="white">
+              <Button
+                borderRadius={"lg"}
+                shadow={"none"}
+                color="white"
+                onClick={() => navigate(routes.HOME, { replace: true })}
+              >
                 Shop Now
               </Button>
             </VStack>
           </Center>
         )}
       </Box>
-    </>
+      <Modal
+        isOpen={isRemoveItemFromCartModalOpen}
+        onClose={closeRemoveItemFromCartModal}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Are You Sure?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>Are you sure want to clear cart?</ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => {
+                closeRemoveItemFromCartModal();
+                clearCartItems();
+              }}
+            >
+              Clear Cart
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Container>
   );
 };
 

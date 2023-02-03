@@ -2,16 +2,20 @@ import { parseCookies } from "nookies";
 import { useEffect } from "react";
 import cartService from "../api/service/cart";
 import { ICartAddUpdateRequestPayload, ICartPayload } from "../interfaces/Cart";
+import { ICheckoutSuccessResponsePayload } from "../interfaces/Transaction";
 import {
   clearCart,
   storeCart,
   storeCheckoutCart,
+  storeCheckoutCartIds,
   storeDeletedItem,
 } from "../redux/cart";
 import { useAppDispatch, useAppSelector } from "./useSelector";
 
 const useCart = () => {
-  const { cart, deletedItem } = useAppSelector((state) => state.cart);
+  const { cart, deletedItem, checkoutData, checkoutCart } = useAppSelector(
+    (state) => state.cart
+  );
   const dispatch = useAppDispatch();
 
   const getCart = async () => {
@@ -42,11 +46,16 @@ const useCart = () => {
           )
         )
       );
+      return response.data;
     }
   };
 
-  const setCart = (payload: ICartPayload[]) => {
+  const setCheckoutData = (payload: ICheckoutSuccessResponsePayload) => {
     dispatch(storeCheckoutCart(payload));
+  };
+
+  const setCart = (payload: ICartPayload[]) => {
+    dispatch(storeCart(payload));
   };
 
   const deleteCart = async (payload: number) => {
@@ -66,6 +75,10 @@ const useCart = () => {
     dispatch(storeCart([...cart, deletedItem]));
   };
 
+  const setCheckoutCartIds = (payload: number[]) => {
+    dispatch(storeCheckoutCartIds(payload));
+  };
+
   useEffect(() => {
     if (cart.length === 0 && parseCookies().auth) {
       getCart();
@@ -76,11 +89,15 @@ const useCart = () => {
     cart,
     clearUserCart,
     updateCart,
-    setCart,
+    setCheckoutData,
     deleteCart,
     deleteItem,
     undoDeleteItem,
     getCart,
+    setCart,
+    checkoutData,
+    setCheckoutCartIds,
+    checkoutCart,
   };
 };
 

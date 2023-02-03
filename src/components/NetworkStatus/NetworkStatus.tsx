@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNetwork } from "../../hooks/useNetwork";
+import useToast from "../../hooks/useToast";
 
 const NetworkStatus = () => {
   const isOnline = useNetwork();
-  const [showStatus, setShowStatus] = useState(!isOnline);
+  const [isRendered, setIsRendered] = useState(false);
+  const { successToast, errorToast } = useToast();
 
   useEffect(() => {
-    setShowStatus(!isOnline);
+    if (!isOnline) {
+      errorToast("You are offline!");
+      return;
+    }
+
+    if (isRendered) {
+      successToast("You are online!");
+    }
   }, [isOnline]);
 
-  if (showStatus) {
-    return <h1>You are offline!</h1>;
-  }
+  useEffect(() => {
+    setIsRendered(true);
+  }, []);
 
-  return null;
+  return <></>;
 };
 
 export default NetworkStatus;
