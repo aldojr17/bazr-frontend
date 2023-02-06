@@ -8,7 +8,7 @@ import routes from "../../../routes/Routes";
 import VoucherForm from "./VoucherForm";
 
 function VoucherEdit() {
-  const { isLoading, voucher, editVoucher, fetchVoucher } = useVoucher();
+  const { voucherLoading, voucher, editVoucher, fetchVoucher } = useVoucher();
   const { successToast, errorToast } = useToast();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ function VoucherEdit() {
         }
         isEdit={true}
         isDisabled={false}
-        isLoading={isLoading}
+        isLoading={voucherLoading}
         onSubmit={(payload) => handleSubmitEditVoucher(payload)}
         onCancel={() => {
           navigate(routes.SELLER_VOUCHER);

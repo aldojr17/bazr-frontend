@@ -1,15 +1,19 @@
-import useTransactionOrderHistory from "../../hooks/transactionOrderHistory";
-import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
-import { formatCurrency } from "../../util/util";
-import { useEffect } from "react";
+import { Divider, Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
 import dayjs from "dayjs";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Icon from "../../assets/icons";
+import TransactionDetailActionButton from "../../components/Button/TransactionDetailActionButton";
+import ProductListItem from "../../components/Card/ProductListItem";
+import StoreListItem from "../../components/Card/StoreListItem";
+import useTransactionOrderHistory from "../../hooks/transactionOrderHistory";
 import {
   CListToShowAddReview,
   CListToShowOrderReceived,
-  CListToShowRefund,
   ITransaction,
 } from "../../interfaces/Transaction";
-import TransactionDetailActionButton from "../../components/Button/TransactionDetailActionButton";
+import routes from "../../routes/Routes";
+import { formatCurrency } from "../../util/util";
 
 function OrderHistory() {
   const {
@@ -20,12 +24,7 @@ function OrderHistory() {
     setShowTransactionDetail,
   } = useTransactionOrderHistory();
 
-  useEffect(() => {
-    fetchTransactionHistory({
-      page: page,
-      status: deliveryStatus,
-    });
-  }, [deliveryStatus, page]);
+  const navigate = useNavigate();
 
   const openTransactionDetail = (transaction: ITransaction) => {
     setShowTransactionDetail({
@@ -33,163 +32,219 @@ function OrderHistory() {
     });
   };
 
+  useEffect(() => {
+    fetchTransactionHistory({
+      page: page,
+      status: deliveryStatus,
+    });
+  }, [deliveryStatus, page]);
+
   return (
-    <Box>
+    <>
       {transactionOrderHistory.data.length !== 0 ? (
         transactionOrderHistory.data.map((transaction, h) => (
           <Flex
-            direction="column"
-            marginY={3}
-            borderRadius="xl"
-            padding={5}
-            bg="gray.300"
             key={`${transaction.id};${h}`}
+            direction="column"
+            marginY={5}
+            border={"2px solid"}
+            borderColor={"lightLighten"}
+            borderRadius="lg"
+            padding={5}
           >
-            <Box marginBottom={3} paddingX={5}>
-              <Flex fontWeight="thin" justifyContent="space-between">
-                <Flex>
-                  <Text marginEnd={3}>Transaction ID :</Text>
-                  <Text>{transaction.id}</Text>
-                </Flex>
-                <Box>
-                  <Flex>
-                    <Text marginEnd={3}>Payment Date :</Text>
-                    <Text>
-                      {dayjs(transaction.transaction_date).format(
-                        "DD MMM YYYY"
-                      )}
-                    </Text>
-                  </Flex>
-                </Box>
-              </Flex>
-              <Flex fontWeight="thin">
-                <Text marginEnd={3}>Payment Method :</Text>
-                <Text>{transaction.payment_method}</Text>
-              </Flex>
-            </Box>
-            <Box>
-              {transaction.orders.map((order, i) => (
-                <Flex
-                  direction="column"
-                  marginY={2}
-                  padding={3}
-                  bg="gray.200"
-                  borderRadius="xl"
-                  key={`${order.shop_name};${i}`}
-                >
-                  <Flex
-                    alignItems="center"
-                    paddingX={3}
-                    justifyContent="space-between"
-                  >
-                    <Box
-                      fontSize={{ base: "xl", sm: "xx-large" }}
-                      fontWeight="bold"
-                    >
-                      {order.shop_name}
-                    </Box>
-                    <Box fontWeight="bold" fontSize="lg" color="primary">
-                      {order.delivery_status}
-                    </Box>
-                  </Flex>
-                  <Divider marginY={4} />
-                  {order.list_of_products.map((product, j) => (
-                    <Box
-                      bg="gray.50"
-                      marginY={1}
-                      key={`${product.name};${j}`}
-                      role="button"
-                      borderRadius="lg"
-                      onClick={() => openTransactionDetail(transaction)}
-                    >
-                      <Flex margin={3}>
-                        <Image src={product.photo} width="24" height="24" />
-                        <Flex
-                          justifyContent="space-between"
-                          margin={1}
-                          key={`${product.name};${j}`}
-                          width="100%"
-                          alignItems="center"
-                        >
-                          <Flex marginStart={3} direction="column">
-                            <Box fontWeight="bold">{product.name}</Box>
-                            <Box>x {product.qty}</Box>
-                          </Flex>
-                          <Flex direction="column" alignItems="center">
-                            <Flex>
-                              <Box>Rp</Box>
-                              <Box>{formatCurrency(product.price)}</Box>
-                            </Flex>
-                            {CListToShowRefund.includes(
-                              order.delivery_status
-                            ) ? (
-                              <TransactionDetailActionButton label="Refund" />
-                            ) : (
-                              ""
-                            )}
-                            {CListToShowAddReview.includes(
-                              order.delivery_status
-                            ) ? (
-                              product.is_reviewed ? (
-                                ""
-                              ) : (
-                                <TransactionDetailActionButton label="Add Review" />
-                              )
-                            ) : (
-                              ""
-                            )}
-                          </Flex>
-                        </Flex>
-                      </Flex>
-                    </Box>
-                  ))}
-                  <Flex justifyContent="end" margin={3}>
-                    {CListToShowOrderReceived.includes(
-                      order.delivery_status
-                    ) ? (
-                      <TransactionDetailActionButton
-                        label="Confirm Order Received"
-                        role="button"
-                        onClick={() => {
-                          openTransactionDetail(transaction);
-                        }}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </Flex>
-                  <Divider marginY={4} />
-                  <Flex alignItems="center" paddingX={3} justifyContent="end">
-                    <Box paddingEnd={3}>Subtotal:</Box>
-                    <Box
-                      fontSize={{ base: "unset", sm: "x-large" }}
-                      color="primary"
-                    >
-                      <Flex>
-                        <Box>Rp</Box>
-                        <Box>{formatCurrency(order.total)}</Box>
-                      </Flex>
-                    </Box>
-                  </Flex>
-                </Flex>
-              ))}
-            </Box>
-            <Box marginTop={3} paddingX={5}>
-              <Flex alignItems="center" justifyContent="end">
-                <Text fontWeight="semibold" marginEnd={3}>
-                  Total :
+            <Grid
+              templateColumns={"repeat(2,1fr)"}
+              alignItems={"start"}
+              gap={10}
+              p={5}
+            >
+              <HStack>
+                <Text fontWeight={"bold"} fontSize={"sm"}>
+                  Transaction ID:
                 </Text>
+                <Text color={"dark"} fontWeight={"medium"} fontSize={"sm"}>
+                  {transaction.id}
+                </Text>
+              </HStack>
+              <Flex direction={"column"}>
+                <HStack>
+                  <Text fontWeight={"bold"} fontSize={"sm"}>
+                    Payment Method:
+                  </Text>
+                  <Text color={"dark"} fontWeight={"medium"} fontSize={"sm"}>
+                    {transaction.payment_method}
+                  </Text>
+                </HStack>
+                <HStack>
+                  <Text fontWeight={"bold"} fontSize={"sm"}>
+                    Payment Date:
+                  </Text>
+                  <Text color={"dark"} fontWeight={"medium"} fontSize={"sm"}>
+                    {dayjs(transaction.transaction_date).format("DD MMM YYYY")}
+                  </Text>
+                </HStack>
+              </Flex>
+            </Grid>
+            {transaction.orders.map((order, index) => (
+              <Flex
+                key={`${order.shop_name};${index}`}
+                direction="column"
+                border={"2px solid"}
+                borderColor={"lightLighten"}
+                borderRadius={"lg"}
+                p={5}
+                my={2}
+              >
+                {transaction.orders.length > 1 && (
+                  <Text fontWeight={"bold"} textTransform={"uppercase"} mb={3}>
+                    Order {index + 1}
+                  </Text>
+                )}
                 <Flex
-                  fontSize={{ base: "unset", sm: "xx-large" }}
-                  color="primary"
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                  alignItems={"start"}
                 >
-                  <Flex>
-                    <Box>Rp</Box>
-                    <Box>{formatCurrency(transaction.grand_total)}</Box>
+                  <StoreListItem
+                    shopName={order.shop_name}
+                    shopCityName={"Jakarta"}
+                    onClick={() => navigate(routes.SHOP(order.shop_username))}
+                  />
+                  <Flex
+                    direction={"column"}
+                    justifyContent={"start"}
+                    alignItems={"end"}
+                    mb={2}
+                  >
+                    <Text
+                      color={"primary"}
+                      fontWeight={"bold"}
+                      fontSize={"md"}
+                      textTransform={"uppercase"}
+                    >
+                      {order.delivery_status}
+                    </Text>
+                    <Flex direction={"row"} gap={3}>
+                      {CListToShowOrderReceived.includes(
+                        order.delivery_status
+                      ) && (
+                        <TransactionDetailActionButton
+                          label="Confirm Order Received"
+                          role="button"
+                          onClick={() => {
+                            openTransactionDetail(transaction);
+                          }}
+                        />
+                      )}
+                      {!order.order_is_reviewed &&
+                        CListToShowAddReview.includes(
+                          order.delivery_status
+                        ) && (
+                          <TransactionDetailActionButton
+                            label="Add review"
+                            role="button"
+                            onClick={() => {
+                              openTransactionDetail(transaction);
+                            }}
+                          />
+                        )}
+                    </Flex>
                   </Flex>
                 </Flex>
+                <Divider borderWidth={1} borderColor={"light"} />
+                <Flex direction={"column"} my={3}>
+                  <ProductListItem
+                    name={order.list_of_products[0].name}
+                    qty={order.list_of_products[0].qty}
+                    regularPrice={order.list_of_products[0].price}
+                    discountedPrice={
+                      order.list_of_products[0].price_after_discount
+                    }
+                    total={order.list_of_products[0].total}
+                    variantName={order.list_of_products[0].variant_type_name
+                      .split(",")
+                      .join(", ")}
+                    productPhoto={order.list_of_products[0].photo}
+                    onClick={() =>
+                      navigate(
+                        routes.PDP(
+                          order.list_of_products[0].product_id,
+                          order.list_of_products[0].name
+                        )
+                      )
+                    }
+                  />
+                  {order.list_of_products.length > 1 && (
+                    <Text
+                      as={"i"}
+                      align={"right"}
+                      color={"darkLighten"}
+                      fontSize={"xs"}
+                      fontWeight={"semibold"}
+                    >
+                      and {order.list_of_products.length - 1} more{" "}
+                      {order.list_of_products.length - 1 > 1
+                        ? "products"
+                        : "product"}
+                    </Text>
+                  )}
+                </Flex>
+                <Divider borderWidth={1} borderColor={"light"} />
+                <Grid
+                  templateColumns={"repeat(2,1fr)"}
+                  alignItems={"start"}
+                  gap={10}
+                  py={3}
+                >
+                  <GridItem></GridItem>
+
+                  <HStack justifyContent={"space-between"}>
+                    <Text
+                      fontWeight={"bold"}
+                      fontSize={"sm"}
+                      textTransform={"uppercase"}
+                    >
+                      Subtotal:
+                    </Text>
+                    <Text color={"dark"} fontWeight={"medium"} fontSize={"sm"}>
+                      Rp{formatCurrency(order.total)}
+                    </Text>
+                  </HStack>
+                </Grid>
               </Flex>
-            </Box>
+            ))}
+            <Grid
+              templateColumns={"repeat(2,1fr)"}
+              alignItems={"start"}
+              gap={10}
+              py={3}
+              px={5}
+            >
+              <Text
+                variant={"link"}
+                cursor={"pointer"}
+                onClick={() => openTransactionDetail(transaction)}
+              >
+                See transaction detail
+                <Icon.ChevronRight width={4} pb={"2px"} />
+              </Text>
+              <HStack justifyContent={"space-between"}>
+                <Text
+                  fontWeight={"bold"}
+                  fontSize={"md"}
+                  textTransform={"uppercase"}
+                >
+                  Total:
+                </Text>
+                <Text
+                  color={"primaryDarken"}
+                  fontWeight={"semibold"}
+                  fontSize={"md"}
+                >
+                  Rp{formatCurrency(transaction.grand_total)}
+                </Text>
+              </HStack>
+            </Grid>
           </Flex>
         ))
       ) : (
@@ -197,7 +252,7 @@ function OrderHistory() {
           No Transactions
         </Flex>
       )}
-    </Box>
+    </>
   );
 }
 

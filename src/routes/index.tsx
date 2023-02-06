@@ -17,7 +17,7 @@ const RegisterMerchant = React.lazy(
 const ResetRequest = React.lazy(() => import("../pages/Auth/ResetRequest"));
 const ResetPassword = React.lazy(() => import("../pages/Auth/ResetPassword"));
 const NotFound = React.lazy(() => import("../pages/NotFound/NotFound"));
-const Search = React.lazy(() => import("../pages/Search/Search"));
+const Search = React.lazy(() => import("../pages/Search/SearchPage"));
 const Cart = React.lazy(() => import("../pages/Cart/Cart"));
 const Checkout = React.lazy(() => import("../pages/Checkout/Checkout"));
 const CategoryPrimary = React.lazy(

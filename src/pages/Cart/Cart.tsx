@@ -16,13 +16,6 @@ import {
   Heading,
   HStack,
   IconButton,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   RenderProps,
   Text,
   ToastId,
@@ -35,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import StoreListItem from "../../components/Card/StoreListItem";
 import CartItem from "../../components/Cart/CartItem";
+import ClearCartModal from "../../components/Modal/ClearCartModal";
 import Toast from "../../components/Toast/Toast";
 import useCart from "../../hooks/useCart";
 import useOrder from "../../hooks/useOrder";
@@ -71,12 +65,11 @@ const Cart = () => {
   const [checkoutCartState, setCheckoutCartState] = useState<ICartPayload[]>(
     []
   );
+  const [subtotal, setSubtotal] = useState<number>(0);
+  const [discount, setDiscount] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
-  const {
-    isOpen: isRemoveItemFromCartModalOpen,
-    onOpen: openRemoveItemFromCartModal,
-    onClose: closeRemoveItemFromCartModal,
-  } = useDisclosure();
+  const [cartLength, setCartLength] = useState<number>(0);
+  const clearModal = useDisclosure();
 
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.checked) {
@@ -225,12 +218,27 @@ const Cart = () => {
           .length === Object.values(formattedCart[parseInt(key)]).length;
     });
 
-    let newTotal = checkoutCartState.reduce(
+    let newSubtotal = checkoutCartState.reduce(
       (acc, val) => acc + val.variant_type_price * val.quantity,
       0
     );
 
+    let newTotal = checkoutCartState.reduce(
+      (acc, val) => acc + val.price_after_discount * val.quantity,
+      0
+    );
+
+    let newDiscount = newSubtotal - newTotal;
+
+    let newCartLength = checkoutCartState.reduce(
+      (acc, val) => acc + val.quantity,
+      0
+    );
+
+    setSubtotal(newSubtotal);
+    setDiscount(newDiscount);
     setTotal(newTotal);
+    setCartLength(newCartLength);
     setIsSelected({
       ...newIsSelected,
     });
@@ -272,11 +280,8 @@ const Cart = () => {
         {cart.length !== 0 ? (
           <>
             <Heading
-              pb={3}
-              size={{
-                base: "md",
-                sm: "lg",
-              }}
+              variant={"sectionHeading"}
+              fontSize={{ base: "md", sm: "xl", md: "2xl" }}
             >
               Cart
             </Heading>
@@ -308,19 +313,21 @@ const Cart = () => {
                       <Checkbox
                         isChecked={isSelected["all"]}
                         onChange={handleSelectAll}
-                        textTransform={"uppercase"}
-                        fontWeight={"extrabold"}
                         spacing={4}
                         colorScheme={"default"}
                       >
-                        Select All
+                        <Text
+                          fontSize={"sm"}
+                          fontWeight={"bold"}
+                          textTransform={"uppercase"}
+                        >
+                          Select All
+                        </Text>
                       </Checkbox>
                       <Button
-                        variant={"unstyled"}
+                        variant={"navLink"}
                         color={"primary"}
-                        onClick={() => {
-                          openRemoveItemFromCartModal();
-                        }}
+                        onClick={clearModal.onOpen}
                         fontSize={"xs"}
                       >
                         Clear cart
@@ -412,14 +419,18 @@ const Cart = () => {
                         fontSize={"sm"}
                         color={"gray.500"}
                       >
-                        Total Price (Item)
+                        Total Price{" "}
+                        {cartLength !== 0 &&
+                          `(${cartLength} ${
+                            cartLength > 1 ? "Items" : "Item"
+                          })`}
                       </Text>
                       <Text
                         fontWeight={"semibold"}
                         fontSize={"sm"}
                         color={"gray.500"}
                       >
-                        Rp{formatCurrency(total)}
+                        Rp{formatCurrency(subtotal)}
                       </Text>
                     </HStack>
                     <HStack
@@ -432,14 +443,14 @@ const Cart = () => {
                         fontSize={"sm"}
                         color={"gray.500"}
                       >
-                        Total Discount Item(s)
+                        Total Discount
                       </Text>
                       <Text
                         fontWeight={"semibold"}
                         fontSize={"sm"}
                         color={"gray.500"}
                       >
-                        Rp{formatCurrency(0)}
+                        -Rp{formatCurrency(discount)}
                       </Text>
                     </HStack>
                   </VStack>
@@ -585,29 +596,15 @@ const Cart = () => {
           </Center>
         )}
       </Box>
-      <Modal
-        isOpen={isRemoveItemFromCartModalOpen}
-        onClose={closeRemoveItemFromCartModal}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Are You Sure?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>Are you sure want to clear cart?</ModalBody>
-          <ModalFooter>
-            <Button
-              colorScheme="blue"
-              mr={3}
-              onClick={() => {
-                closeRemoveItemFromCartModal();
-                clearCartItems();
-              }}
-            >
-              Clear Cart
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+
+      <ClearCartModal
+        isOpen={clearModal.isOpen}
+        onClose={clearModal.onClose}
+        onClearCart={() => {
+          clearModal.onClose();
+          clearCartItems();
+        }}
+      />
     </Container>
   );
 };

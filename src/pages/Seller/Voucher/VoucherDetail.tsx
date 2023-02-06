@@ -6,7 +6,7 @@ import routes from "../../../routes/Routes";
 import VoucherForm from "./VoucherForm";
 
 function VoucherDetail() {
-  const { isLoading, voucher, fetchVoucher } = useVoucher();
+  const { voucherLoading, voucher, fetchVoucher } = useVoucher();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ function VoucherDetail() {
             : ""
         }
         isDisabled={true}
-        isLoading={isLoading}
+        isLoading={voucherLoading}
         onSubmit={() => {}}
         onCancel={() => {
           navigate(routes.SELLER_VOUCHER);

@@ -2,11 +2,18 @@ import { Text, VStack } from "@chakra-ui/react";
 import { IStoreListItemProps } from "../../interfaces/Components";
 
 const StoreListItem = (props: IStoreListItemProps) => {
-  const { shopName, shopCityName } = props;
+  const { shopName, shopCityName, onClick } = props;
 
   return (
     <VStack alignItems={"start"} spacing={0} pb={3}>
-      <Text fontWeight={"bold"}>{shopName}</Text>
+      <Text
+        role={"button"}
+        fontWeight={"bold"}
+        onClick={onClick}
+        _hover={{ textDecoration: "underline" }}
+      >
+        {shopName}
+      </Text>
       <Text fontSize={"sm"} fontWeight={"semibold"} color={"gray.500"}>
         {shopCityName}
       </Text>

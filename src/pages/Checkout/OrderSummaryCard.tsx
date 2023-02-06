@@ -20,7 +20,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Icon from "../../assets/icons";
-import SealabsPay from "../../assets/icons/SealabsPay";
 import SealabsPayPaymentModal from "../../components/Modal/SealabsPayPaymentModal";
 import useSealabsPay from "../../hooks/useSealabsPay";
 import { IOrderSummaryCardProps } from "../../interfaces/Components";
@@ -251,7 +250,7 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
                       color={"gray.500"}
                       align="right"
                     >
-                      Rp{formatCurrency(props.payload.total_discount)}
+                      -Rp{formatCurrency(props.payload.total_discount)}
                     </Text>
                   </GridItem>
                 </Grid>
@@ -271,20 +270,20 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
                   Select Payment Method
                 </Text>
                 <Flex
-                  justifyContent={"space-around"}
+                  justifyContent={"space-between"}
                   direction={{ base: "column", xl: "row" }}
-                  gap={{ base: 3, xl: 3 }}
+                  width={"100%"}
+                  gap={3}
                 >
                   <Box
                     border={"2px solid"}
                     borderColor={
-                      props.paymentMethod === 1 ? "light" : "primaryLighten"
+                      props.paymentMethod === 1 ? "primary" : "light"
                     }
                     backgroundColor={
-                      props.paymentMethod === 1 ? "teal.100" : "white"
+                      props.paymentMethod === 1 ? "teal.50" : "white"
                     }
-                    width={{ base: "100%", xl: "11em" }}
-                    height={"4em"}
+                    width={{ base: "100%", xl: "50%" }}
                     as={Button}
                     variant={"paymentMethod"}
                     onClick={() => {
@@ -293,15 +292,22 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
                         : navigate(routes.WALLET);
                     }}
                     justifyContent={"center"}
+                    px={4}
+                    py={9}
                   >
                     <Flex
-                      gap={2}
-                      alignItems={"center"}
+                      gap={3}
+                      alignItems={"start"}
                       justifyContent={"center"}
                     >
-                      <Icon.Wallet fill={"darkLighten"} boxSize={6} />
+                      <Icon.Wallet
+                        fill={
+                          props.paymentMethod === 1 ? "primary" : "darkLighten"
+                        }
+                        boxSize={6}
+                      />
                       <VStack alignItems={"start"} spacing={1}>
-                        <Text fontWeight={"bold"}>My Wallet </Text>
+                        <Text fontWeight={"bold"}>My Wallet</Text>
                         <Text
                           fontSize={"xs"}
                           color={"darkLighten"}
@@ -320,76 +326,68 @@ const OrderSummaryCard = ({ ...props }: IOrderSummaryCardProps) => {
                   <Box
                     border={"2px solid"}
                     borderColor={
-                      props.paymentMethod === 2 ? "light" : "primaryLighten"
+                      props.paymentMethod === 2 ? "primary" : "light"
                     }
                     backgroundColor={
-                      props.paymentMethod === 2 ? "teal.100" : "white"
+                      props.paymentMethod === 2 ? "teal.50" : "white"
                     }
-                    width={{ base: "100%", xl: "11em" }}
-                    height={"4em"}
-                    px={5}
+                    width={{ base: "100%", xl: "50%" }}
                     as={Button}
                     variant={"paymentMethod"}
                     onClick={() => {
                       props.setPaymentMethod(2);
                     }}
+                    px={4}
+                    py={9}
                   >
                     <Flex
-                      // flexWrap={"wrap"}
-                      direction={"column"}
-                      gap={2}
-                      alignItems={"center"}
+                      gap={3}
+                      alignItems={"start"}
                       justifyContent={"center"}
                     >
-                      <Flex
-                        gap={4}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                      >
-                        <SealabsPay />
-                        <Text fontWeight={"bold"}>SeaLabs Pay</Text>
-                      </Flex>
-                      <Flex>
+                      <Icon.SealabsPay boxSize={6} />
+                      <VStack alignItems={"start"} spacing={1}>
+                        <Text fontWeight={"bold"}>Sealabs Pay</Text>
                         <Text
+                          fontSize={"xs"}
+                          color={"primary"}
+                          fontWeight={"semibold"}
+                          onClick={props.onOpenSealabsPay}
                           _hover={{
-                            color: "secondary",
+                            color: "primaryDarken",
                             textDecoration: "underline",
                           }}
-                          color={"teal"}
-                          onClick={props.onOpenSealabsPay}
                         >
-                          {chosenSealabsPay.card_number
+                          {chosenSealabsPay?.card_number
                             ? chosenSealabsPay.card_number
                             : "Choose Account"}
                         </Text>
-                      </Flex>
+                      </VStack>
                     </Flex>
                   </Box>
                 </Flex>
               </Box>
-              <Box pt={3}>
-                {warning && (
-                  <Alert mb={4} status="error">
-                    <AlertIcon />
-                    {warning}
-                  </Alert>
-                )}
-                <Button
-                  variant="primary"
-                  width="100%"
-                  onClick={() => {
-                    if (props.paymentMethod === 1) {
-                      props.onOpen();
-                    } else if (props.paymentMethod === 2) {
-                      setIsOrderPlaced(true);
-                      onOpenSp();
-                    }
-                  }}
-                  isDisabled={isButtonDisabled}
-                >
-                  Place Order
-                </Button>
-              </Box>
+              {warning && (
+                <Alert mb={4} status="error" variant={"left-accent"}>
+                  <AlertIcon />
+                  {warning}
+                </Alert>
+              )}
+              <Button
+                variant="primary"
+                width="100%"
+                onClick={() => {
+                  if (props.paymentMethod === 1) {
+                    props.onOpen();
+                  } else if (props.paymentMethod === 2) {
+                    setIsOrderPlaced(true);
+                    onOpenSp();
+                  }
+                }}
+                isDisabled={isButtonDisabled}
+              >
+                Place Order
+              </Button>
             </Skeleton>
           </Stack>
         </CardBody>

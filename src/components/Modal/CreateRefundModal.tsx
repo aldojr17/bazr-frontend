@@ -29,13 +29,17 @@ import useUser from "../../hooks/useUser";
 function CreateRefundModal(props: ICreateRefundModalProps) {
   const [imgList, setImgList] = useState<File[]>([]);
   const [notes, setNotes] = useState("");
+  const [isLoading, setIsloading] = useState(false);
+
   const { uploadProductPhoto } = useShop();
   const { errorToast, successToast } = useToast();
   const { createRefund } = useRefund();
   const { user } = useUser();
 
   const submitForm = async () => {
+    setIsloading(true);
     if (!user?.wallet_detail.is_activated) {
+      setIsloading(false);
       errorToast("Please activate your wallet");
       return;
     }
@@ -52,6 +56,7 @@ function CreateRefundModal(props: ICreateRefundModalProps) {
 
     const photoRes = await uploadProductPhoto(photoList);
     if (!photoRes.is_success) {
+      setIsloading(false);
       errorToast(photoRes.message);
       return;
     }
@@ -62,11 +67,13 @@ function CreateRefundModal(props: ICreateRefundModalProps) {
 
     const response = await createRefund(refund);
     if (!response.is_success) {
+      setIsloading(false);
       errorToast(response.message);
       return;
     }
 
     successToast("Refund has been requested");
+
     props.onClose();
   };
 
@@ -113,7 +120,12 @@ function CreateRefundModal(props: ICreateRefundModalProps) {
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={submitForm}>
+          <Button
+            colorScheme="blue"
+            mr={3}
+            onClick={submitForm}
+            isLoading={isLoading}
+          >
             Submit Refund
           </Button>
         </ModalFooter>

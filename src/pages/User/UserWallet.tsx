@@ -1,24 +1,25 @@
 import {
   Box,
   Button,
+  Center,
+  Container,
+  Divider,
   Flex,
   Heading,
   HStack,
   Popover,
-  PopoverContent,
-  PopoverBody,
   PopoverArrow,
+  PopoverBody,
+  PopoverContent,
   PopoverTrigger,
-  Text,
-  VStack,
   Select,
-  Divider,
-  useDisclosure,
   Spinner,
-  Center,
-  Container,
+  Text,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 import Icon from "../../assets/icons";
 import PaymentPinModal from "../../components/Modal/PaymentPinModal";
 import SealabsPayTopupWalletModal from "../../components/Modal/SealabsPayTopupWalletModal";
@@ -39,7 +40,6 @@ import {
   IWalletHistoryResponsePayload,
 } from "../../interfaces/Wallet";
 import { formatCurrency } from "../../util/util";
-import dayjs from "dayjs";
 
 function UserWallet() {
   var localizedFormat = require("dayjs/plugin/localizedFormat");
@@ -204,60 +204,70 @@ function UserWallet() {
             p={8}
             height={"fit-content"}
           >
-            <HStack justifyContent={"space-between"} pb={5} width={"100%"}>
-              <VStack justifyContent={"start"}>
-                <Heading
-                  size={{
-                    base: "md",
-                    sm: "lg",
-                  }}
-                >
-                  My Wallet
-                </Heading>
-                <HStack width="100%">
-                  <Icon.Wallet fill={"darkLighten"} boxSize={6} />
-                  <Text fontSize={"md"} fontWeight={"semibold"}>
-                    Wallet ID: {user?.wallet_detail.id}
-                  </Text>
-                </HStack>
-              </VStack>
-              <Popover placement="bottom-end">
-                <PopoverTrigger>
-                  <Button
-                    backgroundColor={"white"}
-                    boxShadow={"none"}
-                    variant={"unstyled"}
+            <Flex direction={"column"} width={"100%"}>
+              <HStack justifyContent={"space-between"} alignItems={"center"}>
+                <HStack>
+                  <Icon.Wallet fill={"primary"} />
+                  <Heading
+                    variant={"sectionHeading"}
+                    fontSize={{ base: "md", sm: "xl", md: "2xl" }}
+                    mb={0}
                   >
-                    <Icon.Gear boxSize={6} fill={"primary"} />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent width={"fit-content"}>
-                  <PopoverArrow />
-                  <PopoverBody>
-                    <Button onClick={onOpenVerify}>Change Wallet Pin</Button>
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
-            </HStack>
-            <Divider />
-            <Flex direction={"column"} alignItems={"center"} width="100%">
-              <Text
-                fontSize={{ base: "2em", lg: "2.5em" }}
-                fontWeight="bold"
-                color={"primary"}
-                py={7}
-              >
-                Rp{formatCurrency(user?.wallet_detail.balance!)}
-              </Text>
-              <Button
-                width={"100%"}
-                variant="solid"
-                colorScheme="green"
-                onClick={onOpenTopup}
-              >
-                Top-up
-              </Button>
+                    Wallet
+                  </Heading>
+                </HStack>
+
+                <Popover placement="bottom-end">
+                  <PopoverTrigger>
+                    <Button
+                      backgroundColor={"white"}
+                      boxShadow={"none"}
+                      variant={"unstyled"}
+                    >
+                      <Icon.Gear boxSize={6} fill={"primary"} />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent width={"fit-content"}>
+                    <PopoverArrow />
+                    <PopoverBody>
+                      <Button onClick={onOpenVerify}>Change Wallet Pin</Button>
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+              </HStack>
+
+              <Flex direction={"row"} justifyContent={"start"} gap={2}>
+                <Text fontWeight={"semibold"}>ID:</Text>
+                <Text
+                  textAlign={"end"}
+                  color={"darkLighten"}
+                  fontWeight={"semibold"}
+                >
+                  {user?.wallet_detail.id}
+                </Text>
+              </Flex>
             </Flex>
+
+            <Divider />
+            <Text fontWeight={"semibold"}>Balance:</Text>
+            <Text
+              align={"center"}
+              fontSize={{ base: "3xl", lg: "4xl" }}
+              fontWeight="bold"
+              color={"primary"}
+              width={"100%"}
+            >
+              Rp{formatCurrency(user?.wallet_detail.balance!)}
+            </Text>
+            <Button
+              width={"100%"}
+              variant="solid"
+              colorScheme="green"
+              onClick={onOpenTopup}
+              mt={3}
+            >
+              Top-up
+            </Button>
           </VStack>
           <VStack
             alignItems={"start"}
@@ -270,11 +280,9 @@ function UserWallet() {
             mt={{ base: "8", lg: "0" }}
           >
             <Heading
-              pb={3}
-              size={{
-                base: "md",
-                sm: "lg",
-              }}
+              variant={"sectionHeading"}
+              fontSize={{ base: "md", sm: "xl", md: "2xl" }}
+              mb={0}
             >
               Wallet History
             </Heading>

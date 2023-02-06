@@ -46,8 +46,8 @@ const useCart = () => {
           )
         )
       );
-      return response.data;
     }
+    return response;
   };
 
   const setCheckoutData = (payload: ICheckoutSuccessResponsePayload) => {

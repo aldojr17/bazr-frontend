@@ -120,7 +120,7 @@ function MobileItemSummary(props: IMobileItemSummaryProps) {
                 shop_id: shopId,
                 order_details: [
                   {
-                    cart_id: response?.cart_item_id!,
+                    cart_id: response?.data.cart_item_id!,
                   },
                 ],
               },
@@ -128,7 +128,7 @@ function MobileItemSummary(props: IMobileItemSummaryProps) {
           }).then((resp) => {
             if (resp.is_success) {
               setCheckoutData(resp.data);
-              setCheckoutCartIds([response?.cart_item_id!]);
+              setCheckoutCartIds([response?.data.cart_item_id!]);
               navigate(routes.CART_SHIPMENT, { replace: true });
             }
           });

@@ -13,7 +13,7 @@ function VoucherDuplicate() {
   const { fetchProfile } = useUser();
   const { fetchShopProfileById } = useShop();
   const [username, setUsername] = useState("");
-  const { isLoading, voucher, createVoucher, fetchVoucher } = useVoucher();
+  const { voucherLoading, voucher, createVoucher, fetchVoucher } = useVoucher();
   const { successToast, errorToast } = useToast();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ function VoucherDuplicate() {
             : ""
         }
         isDisabled={false}
-        isLoading={isLoading}
+        isLoading={voucherLoading}
         onSubmit={(payload) => handleSubmitCreateVoucher(payload)}
         onCancel={() => {
           navigate(routes.SELLER_VOUCHER);

@@ -13,13 +13,6 @@ import {
   GridItem,
   Heading,
   HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -33,10 +26,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductListItem from "../../components/Card/ProductListItem";
 import StoreListItem from "../../components/Card/StoreListItem";
-import VoucherCard from "../../components/Card/VoucherCard";
+import ShopVoucherModal from "../../components/Modal/Checkout/ShopVoucherModal";
+import VoucherModal from "../../components/Modal/Checkout/VoucherModal";
 import PaymentPinModal from "../../components/Modal/PaymentPinModal";
+import SealabsPayChooseAccountModal from "../../components/Modal/SealabsPayChooseAccountModal";
 import useCart from "../../hooks/useCart";
 import useOrder from "../../hooks/useOrder";
+import useSealabsPay from "../../hooks/useSealabsPay";
 import useShipping from "../../hooks/useShipping";
 import useTitle from "../../hooks/useTitle";
 import useToast from "../../hooks/useToast";
@@ -45,17 +41,14 @@ import useVoucher from "../../hooks/useVoucher";
 import useWallet from "../../hooks/useWallet";
 import { IPinRequestPayload } from "../../interfaces/Auth";
 import { MarketplaceVoucherInitial } from "../../interfaces/InitialState";
+import { ISealabsPayDataResponsePayload } from "../../interfaces/SealabsPay";
 import { ICheckoutOrderPayload } from "../../interfaces/Transaction";
-import { IUserPayload } from "../../interfaces/User";
+import { IUserAddress, IUserPayload } from "../../interfaces/User";
 import { IMarketplaceVoucherPayload } from "../../interfaces/Voucher";
 import { IPaymentWalletRequestPayload } from "../../interfaces/Wallet";
+import routes from "../../routes/Routes";
 import { formatCurrency } from "../../util/util";
 import OrderSummaryCard from "./OrderSummaryCard";
-import SealabsPayChooseAccountModal from "../../components/Modal/SealabsPayChooseAccountModal";
-import useSealabsPay from "../../hooks/useSealabsPay";
-import routes from "../../routes/Routes";
-import { IUserAddress } from "../../interfaces/User";
-import { ISealabsPayDataResponsePayload } from "../../interfaces/SealabsPay";
 
 const Checkout = () => {
   useTitle("Checkout");
@@ -93,6 +86,7 @@ const Checkout = () => {
   const [userAddresses, setUserAddresses] = useState<IUserAddress[]>([]);
   const [addressNotif, setAddressNotif] = useState<number>(0);
   const {
+    voucherLoading,
     marketplaceVouchers,
     fetchAllMarketplaceVoucher,
     vouchers,
@@ -314,13 +308,11 @@ const Checkout = () => {
   }, [addressNotif]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     if (checkoutData.cart.length === 0) {
       navigate(routes.CART, { replace: true });
     }
-  }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
 
     fetchProfile()
       .then((response) => {
@@ -335,6 +327,7 @@ const Checkout = () => {
               ({} as ISealabsPayDataResponsePayload)
           )
         );
+
         return response?.default_sealabs_pay_id;
       })
       .finally(() => setIsLoading(false));
@@ -452,7 +445,7 @@ const Checkout = () => {
                         </PopoverContent>
                       </Popover>
                     </HStack>
-                    {user?.default_address_id !== 0 ? (
+                    {user?.default_address_id !== 0 && (
                       <>
                         <Text fontSize="md" fontWeight={"bold"}>
                           {checkoutData.address_detail.recipient_name}
@@ -479,8 +472,6 @@ const Checkout = () => {
                           {checkoutData.address_detail.zip_code}
                         </Text>
                       </>
-                    ) : (
-                      ""
                     )}
                   </VStack>
                   <Divider />
@@ -496,30 +487,28 @@ const Checkout = () => {
                           pb="2"
                           pt={index === 0 ? "0" : "5"}
                         >
-                          {checkoutData.cart.length > 1 ? (
+                          {checkoutData.cart.length > 1 && (
                             <Text
                               fontWeight={"bold"}
                               textTransform={"uppercase"}
                             >
                               Order {index + 1}
                             </Text>
-                          ) : (
-                            ""
                           )}
                           <StoreListItem
                             shopName={val.shop_name}
                             shopCityName={val.shop_city_name}
                           />
                           {val.order_details.map((childVal, childIndex) => (
-                            <Box key={childVal.variant_id}>
-                              <Box
-                                pb={4}
-                                pt={childIndex !== 0 ? 3 : 0}
-                                width={"100%"}
-                              >
+                            <Box key={childVal.variant_id} width={"100%"}>
+                              <Box pb={5} pt={childIndex !== 0 ? 3 : 0} pe={5}>
                                 <ProductListItem
                                   name={childVal.product_name}
                                   qty={childVal.quantity}
+                                  regularPrice={childVal.price_before_discount}
+                                  discountedPrice={
+                                    childVal.price_after_discount
+                                  }
                                   total={childVal.total}
                                   variantName={childVal.variant_type_name
                                     .split(",")
@@ -573,7 +562,7 @@ const Checkout = () => {
                                     : "Select Voucher"}
                                 </Button>
                               </HStack>
-                              {val.user_shop_voucher_id !== 0 ? (
+                              {val.user_shop_voucher_id !== 0 && (
                                 <>
                                   <Text
                                     fontWeight={"semibold"}
@@ -594,8 +583,6 @@ const Checkout = () => {
                                       : `${val.shop_voucher_detail.benefit_percentage}%`}
                                   </Text>
                                 </>
-                              ) : (
-                                ""
                               )}
                             </VStack>
 
@@ -635,71 +622,74 @@ const Checkout = () => {
                                 >
                                   Shipping
                                 </Text>
-                                <Popover
-                                  placement="bottom-end"
-                                  isLazy
-                                  offset={[0, 15]}
-                                >
-                                  <PopoverTrigger>
-                                    <Button
-                                      variant={"primaryLink"}
-                                      p={0}
-                                      height={0}
-                                      size={"sm"}
-                                      _active={{
-                                        bg: "none",
-                                      }}
-                                      disabled={isLoading}
-                                    >
-                                      {val.courier_id !== 0
-                                        ? "Change Courier"
-                                        : "Select Courier"}
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent
-                                    width={"10em"}
-                                    bg={"gray.100"}
-                                    borderRadius={"lg"}
+                                <Box>
+                                  <Popover
+                                    placement="bottom-end"
+                                    isLazy
+                                    offset={[0, 15]}
                                   >
-                                    <PopoverBody p={0}>
-                                      <VStack
-                                        width={"100%"}
-                                        alignItems={"start"}
+                                    <PopoverTrigger>
+                                      <Button
+                                        variant={"primaryLink"}
+                                        p={0}
+                                        height={0}
+                                        size={"sm"}
+                                        _active={{
+                                          bg: "none",
+                                        }}
+                                        disabled={isLoading}
                                       >
-                                        {val.list_couriers.couriers.map(
-                                          (courier) => (
-                                            <Box
-                                              justifyContent={"start"}
-                                              width={"100%"}
-                                              p={3}
-                                              cursor={"pointer"}
-                                              fontWeight={"bold"}
-                                              fontSize={"sm"}
-                                              onClick={() =>
-                                                handleShippingOption(
-                                                  courier.code,
-                                                  val.shop_city,
-                                                  val.total_weight,
-                                                  val.list_couriers.couriers.find(
-                                                    (val) =>
-                                                      val.code === courier.code
-                                                  )?.id!,
-                                                  val.shop_id
-                                                )
-                                              }
-                                              _hover={{
-                                                bg: "light",
-                                              }}
-                                              key={courier.id}
-                                            >
-                                              {courier.name}
-                                            </Box>
-                                          )
-                                        )}
-                                      </VStack>
-                                    </PopoverBody>
-                                  </PopoverContent>
-                                </Popover>
+                                        {val.courier_id !== 0
+                                          ? "Change Courier"
+                                          : "Select Courier"}
+                                      </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent
+                                      width={"10em"}
+                                      bg={"gray.100"}
+                                      borderRadius={"lg"}
+                                    >
+                                      <PopoverBody p={0}>
+                                        <VStack
+                                          width={"100%"}
+                                          alignItems={"start"}
+                                        >
+                                          {val.list_couriers.couriers.map(
+                                            (courier) => (
+                                              <Box
+                                                justifyContent={"start"}
+                                                width={"100%"}
+                                                p={3}
+                                                cursor={"pointer"}
+                                                fontWeight={"bold"}
+                                                fontSize={"sm"}
+                                                onClick={() =>
+                                                  handleShippingOption(
+                                                    courier.code,
+                                                    val.shop_city,
+                                                    val.total_weight,
+                                                    val.list_couriers.couriers.find(
+                                                      (val) =>
+                                                        val.code ===
+                                                        courier.code
+                                                    )?.id!,
+                                                    val.shop_id
+                                                  )
+                                                }
+                                                _hover={{
+                                                  bg: "light",
+                                                }}
+                                                key={courier.id}
+                                              >
+                                                {courier.name}
+                                              </Box>
+                                            )
+                                          )}
+                                        </VStack>
+                                      </PopoverBody>
+                                    </PopoverContent>
+                                  </Popover>
+                                </Box>
                               </HStack>
                               {val.courier_id !== 0 ? (
                                 <>
@@ -762,6 +752,7 @@ const Checkout = () => {
                                 <HStack
                                   justifyContent={"space-between"}
                                   width="100%"
+                                  pb={2}
                                 >
                                   <Text
                                     fontWeight={"semibold"}
@@ -782,7 +773,7 @@ const Checkout = () => {
                                 <HStack
                                   justifyContent={"space-between"}
                                   width="100%"
-                                  py="2"
+                                  pb={2}
                                 >
                                   <Text
                                     fontSize={"sm"}
@@ -803,6 +794,7 @@ const Checkout = () => {
                                 <HStack
                                   justifyContent={"space-between"}
                                   width="100%"
+                                  pb={2}
                                 >
                                   <Text
                                     fontSize={"sm"}
@@ -816,8 +808,29 @@ const Checkout = () => {
                                     fontWeight={"semibold"}
                                     color={"gray.500"}
                                   >
-                                    Rp
+                                    - Rp
                                     {formatCurrency(val.shop_discount)}
+                                  </Text>
+                                </HStack>
+                                <HStack
+                                  justifyContent={"space-between"}
+                                  width="100%"
+                                  pb={2}
+                                >
+                                  <Text
+                                    fontSize={"sm"}
+                                    fontWeight={"semibold"}
+                                    color={"gray.500"}
+                                  >
+                                    Discount from BAZR
+                                  </Text>
+                                  <Text
+                                    fontSize={"sm"}
+                                    fontWeight={"semibold"}
+                                    color={"gray.500"}
+                                  >
+                                    - Rp
+                                    {formatCurrency(val.discount_marketplace)}
                                   </Text>
                                 </HStack>
                               </AccordionPanel>
@@ -825,11 +838,7 @@ const Checkout = () => {
                           </Accordion>
                         </VStack>
                       </Box>
-                      {index !== checkoutData.cart.length - 1 ? (
-                        <Divider />
-                      ) : (
-                        ""
-                      )}
+                      {index !== checkoutData.cart.length - 1 && <Divider />}
                     </Box>
                   ))}
                 </Skeleton>
@@ -863,200 +872,42 @@ const Checkout = () => {
             />
           </GridItem>
         </Grid>
-        <PaymentPinModal
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-          handlePinChange={handlePinChange}
-          pinInput={pinInput}
-          setPinInput={setPinInput}
-        />
-        <SealabsPayChooseAccountModal
-          isLoading={isLoading}
-          isOpen={isOpenSealabsPay}
-          onClose={onCloseSealabsPay}
-        />
       </Box>
 
-      <Modal
-        onClose={voucherModal.onClose}
+      <PaymentPinModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        handlePinChange={handlePinChange}
+        pinInput={pinInput}
+        setPinInput={setPinInput}
+      />
+
+      <SealabsPayChooseAccountModal
+        isLoading={isLoading}
+        isOpen={isOpenSealabsPay}
+        onClose={onCloseSealabsPay}
+      />
+
+      <VoucherModal
         isOpen={voucherModal.isOpen}
-        isCentered
-        scrollBehavior="inside"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader textTransform={"uppercase"}>Select Voucher</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <VStack width={"100%"} gap={3}>
-              {marketplaceVouchers?.filter(
-                (val) => checkoutData.subtotal > val.min_purchase
-              ).length > 0 ? (
-                <VStack width={"100%"}>
-                  <Text
-                    textAlign={"start"}
-                    fontWeight={"bold"}
-                    fontSize={"sm"}
-                    textTransform={"uppercase"}
-                    width="100%"
-                  >
-                    Available Vouchers
-                  </Text>
-                  <Divider borderColor={"light"} />
-                </VStack>
-              ) : (
-                ""
-              )}
-              {marketplaceVouchers
-                ?.filter((val) => checkoutData.subtotal > val.min_purchase)
-                .map((voucher) => (
-                  <VoucherCard
-                    key={voucher.id}
-                    selectShopVoucher={handleSelectShopVoucher}
-                    voucher={voucher}
-                    setVoucher={setselectedMarketplaceVoucher}
-                    onClose={voucherModal.onClose}
-                    isDisabled={false}
-                  />
-                ))}
+        onClose={voucherModal.onClose}
+        isLoading={voucherLoading}
+        vouchers={marketplaceVouchers!}
+        checkoutData={checkoutData!}
+        onSelectVoucher={setselectedMarketplaceVoucher}
+        onSelectShopVoucher={handleSelectShopVoucher}
+      />
 
-              <VStack width={"100%"}>
-                {marketplaceVouchers?.filter(
-                  (val) => checkoutData.subtotal < val.min_purchase
-                ).length > 0 ? (
-                  <VStack width={"100%"}>
-                    <Text
-                      textAlign={"start"}
-                      fontWeight={"bold"}
-                      fontSize={"sm"}
-                      textTransform={"uppercase"}
-                      width="100%"
-                    >
-                      Unavailable Vouchers
-                    </Text>
-                    <Divider borderColor={"light"} />
-                  </VStack>
-                ) : (
-                  ""
-                )}
-              </VStack>
-              {marketplaceVouchers
-                ?.filter((val) => checkoutData.subtotal < val.min_purchase)
-                .map((voucher) => (
-                  <VoucherCard
-                    key={voucher.id}
-                    selectShopVoucher={handleSelectShopVoucher}
-                    voucher={voucher}
-                    setVoucher={setselectedMarketplaceVoucher}
-                    onClose={voucherModal.onClose}
-                    isDisabled={true}
-                  />
-                ))}
-            </VStack>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={voucherModal.onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      <Modal
-        onClose={shopVoucherModal.onClose}
+      <ShopVoucherModal
         isOpen={shopVoucherModal.isOpen}
-        isCentered
-        scrollBehavior="inside"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader textTransform={"uppercase"}>Select Voucher</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <VStack width={"100%"} gap={3}>
-              {vouchers?.data?.filter(
-                (val) =>
-                  checkoutData.cart.find(
-                    (value) => val.shop_id === value.shop_id
-                  )?.subtotal! > val.min_purchase
-              ).length! > 0 ? (
-                <VStack width={"100%"}>
-                  <Text
-                    textAlign={"start"}
-                    fontWeight={"bold"}
-                    fontSize={"sm"}
-                    textTransform={"uppercase"}
-                    width="100%"
-                  >
-                    Available Vouchers
-                  </Text>
-                  <Divider borderColor={"light"} />
-                </VStack>
-              ) : (
-                ""
-              )}
-              {vouchers?.data
-                ?.filter(
-                  (val) =>
-                    checkoutData.cart.find(
-                      (value) => val.shop_id === value.shop_id
-                    )?.subtotal! > val.min_purchase
-                )
-                .map((voucher) => (
-                  <VoucherCard
-                    key={voucher.id}
-                    selectShopVoucher={handleSelectShopVoucher}
-                    setVoucher={setselectedMarketplaceVoucher}
-                    onClose={shopVoucherModal.onClose}
-                    shopVoucher={voucher}
-                    isDisabled={false}
-                  />
-                ))}
-
-              {vouchers?.data?.filter(
-                (val) =>
-                  checkoutData.cart.find(
-                    (value) => val.shop_id === value.shop_id
-                  )?.subtotal! < val.min_purchase
-              ).length! > 0 ? (
-                <VStack width={"100%"}>
-                  <Text
-                    textAlign={"start"}
-                    fontWeight={"bold"}
-                    fontSize={"sm"}
-                    textTransform={"uppercase"}
-                    width="100%"
-                  >
-                    Unavailable Vouchers
-                  </Text>
-                  <Divider borderColor={"light"} />
-                </VStack>
-              ) : (
-                ""
-              )}
-              {vouchers?.data
-                ?.filter(
-                  (val) =>
-                    checkoutData.cart.find(
-                      (value) => val.shop_id === value.shop_id
-                    )?.subtotal! < val.min_purchase
-                )
-                .map((voucher) => (
-                  <VoucherCard
-                    key={voucher.id}
-                    selectShopVoucher={handleSelectShopVoucher}
-                    setVoucher={setselectedMarketplaceVoucher}
-                    onClose={shopVoucherModal.onClose}
-                    shopVoucher={voucher}
-                    isDisabled={true}
-                  />
-                ))}
-            </VStack>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={shopVoucherModal.onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        onClose={shopVoucherModal.onClose}
+        isLoading={voucherLoading}
+        vouchers={vouchers!}
+        checkoutData={checkoutData!}
+        onSelectVoucher={setselectedMarketplaceVoucher}
+        onSelectShopVoucher={handleSelectShopVoucher}
+      />
     </Container>
   );
 };

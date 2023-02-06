@@ -43,13 +43,19 @@ const useRefund = () => {
   };
 
   const approveRefundSeller = async (refundId: number) => {
-    const response = await refundService.approveRefundSeller(refundId);
+    setRefundLoading(true);
+    const response = await refundService
+      .approveRefundSeller(refundId)
+      .finally(() => setRefundLoading(false));
 
     return response;
   };
 
   const rejectRefundSeller = async (refundId: number) => {
-    const response = await refundService.rejectRefundSeller(refundId);
+    setRefundLoading(true);
+    const response = await refundService
+      .rejectRefundSeller(refundId)
+      .finally(() => setRefundLoading(false));
 
     return response;
   };
@@ -58,7 +64,10 @@ const useRefund = () => {
     refundId: number,
     payload: IRefundConfirmPayload
   ) => {
-    const response = await refundService.approveRefundAdmin(refundId, payload);
+    setRefundLoading(true);
+    const response = await refundService
+      .approveRefundAdmin(refundId, payload)
+      .finally(() => setRefundLoading(false));
 
     return response;
   };

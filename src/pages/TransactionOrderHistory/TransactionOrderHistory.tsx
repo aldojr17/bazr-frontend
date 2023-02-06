@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import { useEffect } from "react";
 import useTransactionOrderHistory from "../../hooks/transactionOrderHistory";
 import OrderHistory from "./OrderHistory";
@@ -15,17 +14,17 @@ function TransactionOrderHistory() {
   }, []);
 
   return (
-    <Box>
+    <>
       {showTransactionDetail === undefined ? (
-        <Box>
+        <>
           <TabsTransactionOrderHistory />
           <OrderHistory />
           <PaginationTransactionOrderHistory />
-        </Box>
+        </>
       ) : (
         <TransactionDetails />
       )}
-    </Box>
+    </>
   );
 }
 

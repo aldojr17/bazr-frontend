@@ -1,4 +1,6 @@
 import ArrowDown from "./ArrowDown";
+import ArrowLeft from "./ArrowLeft";
+import ArrowRight from "./ArrowRight";
 import Cart from "./Cart";
 import CartFilled from "./CartFilled";
 import Chat from "./Chat";
@@ -33,6 +35,7 @@ import PlusCircleFill from "./PlusCircleFill";
 import Profile from "./Profile";
 import Refresh from "./Refresh";
 import RightArrow from "./RightArrow";
+import SealabsPay from "./SealabsPay";
 import SeaPay from "./SeaPay";
 import Search from "./Search";
 import Send from "./Send";
@@ -44,10 +47,13 @@ import Star from "./Star";
 import Trash from "./Trash";
 import Twitter from "./Twitter";
 import Wallet from "./Wallet";
+import Warning from "./Warning";
 import Whatsapp from "./Whatsapp";
 
 const Icon = {
   ArrowDown,
+  ArrowLeft,
+  ArrowRight,
   Cart,
   CartFilled,
   Chat,
@@ -82,6 +88,7 @@ const Icon = {
   Profile,
   Refresh,
   RightArrow,
+  SealabsPay,
   SeaPay,
   Search,
   Send,
@@ -93,6 +100,7 @@ const Icon = {
   Trash,
   Twitter,
   Wallet,
+  Warning,
   Whatsapp,
 };
 

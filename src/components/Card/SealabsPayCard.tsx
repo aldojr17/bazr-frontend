@@ -1,14 +1,14 @@
 import {
-  Card,
-  Heading,
-  CardBody,
-  Text,
-  Flex,
-  Button,
   Badge,
+  Button,
+  Card,
+  CardBody,
+  Flex,
+  Heading,
+  Text,
   Tooltip,
 } from "@chakra-ui/react";
-import Trash from "../../assets/icons/Trash";
+import Icon from "../../assets/icons";
 import useSealabsPay from "../../hooks/useSealabsPay";
 import useToast from "../../hooks/useToast";
 import useUser from "../../hooks/useUser";
@@ -28,16 +28,24 @@ const SealabsPayCard = (props: ISealabsPayCardProps) => {
         cursor="pointer"
         onClick={props.onClick}
         backgroundColor={props.chosen}
+        borderRadius={"lg"}
       >
         <CardBody>
           <Flex justifyContent={"space-between"}>
             <Flex direction={"column"}>
-              <Heading size="xs">{props.nameOnCard}</Heading>
-              <Text fontSize="md" textTransform={"uppercase"}>
+              <Heading fontSize="lg" textTransform={"none"}>
+                {props.nameOnCard}
+              </Heading>
+              <Text
+                color={"dark"}
+                fontSize="md"
+                textTransform={"uppercase"}
+                fontWeight={"semibold"}
+              >
                 {props.cardNumber}
               </Text>
 
-              <Text fontSize="xs">
+              <Text fontSize="xs" mt={1} fontWeight={"medium"}>
                 Active Date:{" "}
                 <strong>{activeDateParsed.toLocaleString()}</strong>
               </Text>
@@ -79,9 +87,12 @@ const SealabsPayCard = (props: ISealabsPayCardProps) => {
               <Tooltip hasArrow label="Delete!">
                 <Button
                   size={"sm"}
-                  bgColor={"red"}
+                  bgColor={"transparent"}
                   p={0}
                   alignSelf={"end"}
+                  _hover={{
+                    bgColor: "danger",
+                  }}
                   onClick={() =>
                     deleteASealabsPay({ sealabs_pay_id: props.id }).then(
                       (res) => {
@@ -103,7 +114,7 @@ const SealabsPayCard = (props: ISealabsPayCardProps) => {
                     )
                   }
                 >
-                  <Trash fill={"white"} />
+                  <Icon.Trash fill={"white"} />
                 </Button>
               </Tooltip>
             </Flex>

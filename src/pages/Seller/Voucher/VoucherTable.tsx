@@ -26,7 +26,8 @@ import routes from "../../../routes/Routes";
 import { formatCurrency } from "../../../util/util";
 
 function VoucherTable(props: { status: string }) {
-  const { vouchers, isLoading, fetchAllVoucher, deleteVoucher } = useVoucher();
+  const { vouchers, voucherLoading, fetchAllVoucher, deleteVoucher } =
+    useVoucher();
   const { successToast, errorToast } = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [id, setId] = useState<number>(0);
@@ -97,7 +98,7 @@ function VoucherTable(props: { status: string }) {
             </Tr>
           </Thead>
           <Tbody>
-            {isLoading ? (
+            {voucherLoading ? (
               <Tr>
                 <Td colSpan={7} textAlign="center">
                   <Spinner />
@@ -105,7 +106,7 @@ function VoucherTable(props: { status: string }) {
               </Tr>
             ) : null}
 
-            {!isLoading && vouchers?.data.length === 0 ? (
+            {!voucherLoading && vouchers?.data.length === 0 ? (
               <Tr>
                 <Td colSpan={7} textAlign="center">
                   Empty Data
@@ -113,7 +114,7 @@ function VoucherTable(props: { status: string }) {
               </Tr>
             ) : null}
 
-            {!isLoading &&
+            {!voucherLoading &&
               vouchers?.data.map((voucher, index) => {
                 return (
                   <Tr key={index}>
