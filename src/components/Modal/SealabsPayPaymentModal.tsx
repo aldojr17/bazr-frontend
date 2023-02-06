@@ -18,6 +18,7 @@ import useToast from "../../hooks/useToast";
 import { ISealabsPayPaymentProps } from "../../interfaces/Components";
 import { ISealabsPayPaymentPayload } from "../../interfaces/SealabsPay";
 import SealabsPayOTP from "../IFrame/SealabsPayOTP";
+import routes from "../../routes/Routes";
 
 const SealabsPayPaymentModal: React.FC<ISealabsPayPaymentProps> = ({
   ...props
@@ -105,13 +106,13 @@ const SealabsPayPaymentModal: React.FC<ISealabsPayPaymentProps> = ({
 
       var temp = cart.filter((val) => !checkoutCart.includes(val.cart_id));
       setCart(temp);
-      navigate("/", { replace: true });
+      navigate(routes.HOME, { replace: true });
     } else if (redirectParams.status === "TXN_FAILED") {
       errorToast(
         "Failed to pay with your sealabs pay account. \n " +
           redirectParams.message
       );
-      navigate("/", { replace: true });
+      navigate(routes.HOME, { replace: true });
     }
     setIsOrderPlaced(false);
   }, [redirectParams]);

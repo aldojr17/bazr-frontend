@@ -18,6 +18,7 @@ import authService from "../../api/service/auth";
 import Icon from "../../assets/icons";
 import useToast from "../../hooks/useToast";
 import { IChangePasswordRequestPayload } from "../../interfaces/Auth";
+import routes from "../../routes/Routes";
 
 function ResetRequest() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ function ResetRequest() {
 
     if (response.is_success) {
       successToast("Your password has been changed! Please log in again.");
-      navigate("/login");
+      navigate(routes.LOGIN);
     } else {
       errorToast(
         "Failed to change your password. Please try again",

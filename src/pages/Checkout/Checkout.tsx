@@ -129,7 +129,7 @@ const Checkout = () => {
 
         var temp = cart.filter((val) => !checkoutCart.includes(val.cart_id));
         setCart(temp);
-        navigate("/", { replace: true });
+        navigate(routes.HOME, { replace: true });
       } else {
         setPinInput("");
         errorToast("Pin Error", response.message, 3000);

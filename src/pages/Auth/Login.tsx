@@ -28,6 +28,7 @@ import {
   ILoginGoogleRequestPayload,
   ILoginRequestPayload,
 } from "../../interfaces/Auth";
+import routes from "../../routes/Routes";
 
 const Login = () => {
   useTitle("Login | BAZR");
@@ -46,7 +47,7 @@ const Login = () => {
 
     if (response.is_success) {
       successToast("Welcome back!");
-      navigate(state ?? "/");
+      navigate(state ?? routes.HOME);
     } else {
       errorToast("Failed to login", response.message);
     }
@@ -60,9 +61,9 @@ const Login = () => {
     if (response.is_success) {
       if (response.data.is_registered) {
         successToast("Welcome back!");
-        navigate(state ?? "/");
+        navigate(state ?? routes.HOME);
       } else {
-        navigate("/register", { state: response.data });
+        navigate(routes.REGISTER, { state: response.data });
       }
     } else {
       errorToast("Failed to login", response.message);

@@ -11,7 +11,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { Formik } from "formik";
@@ -22,11 +21,12 @@ import {
   IEditProfilePayload,
   IUploadAvatarPayload,
 } from "../../interfaces/User";
+import useToast from "../../hooks/useToast";
 
 function EditUserPhotoModal(props: IEditUserPhotoModalProps) {
   const { user, fetchProfile, editProfile, uploadAvatar } = useUser();
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
+  const { successToast, errorToast } = useToast();
 
   const initialFormUpload: IUploadAvatarPayload = {
     photo: "",
@@ -60,21 +60,11 @@ function EditUserPhotoModal(props: IEditUserPhotoModalProps) {
         } as IEditProfilePayload);
       }
 
-      toast({
-        title: response.message,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      successToast(response.message);
 
       fetchProfile();
     } else {
-      toast({
-        title: response.message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      errorToast(response.message);
     }
 
     setIsLoading(false);

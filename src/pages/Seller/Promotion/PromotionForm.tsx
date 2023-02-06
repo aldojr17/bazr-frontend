@@ -71,8 +71,8 @@ function PromotionForm(props: IPromotionProps) {
             benefit_percentage: Yup.number().when("is_active", {
               is: true,
               then: Yup.number()
-                .min(0, "min 0 and max 100")
-                .max(100, "min 0 and max 100")
+                .min(0, "min 0 and max 99")
+                .max(99, "min 0 and max 99")
                 .when("benefit", {
                   is: (benefit: number) => benefit > 0,
                   then: (b) =>

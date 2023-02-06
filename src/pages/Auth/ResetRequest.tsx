@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import authService from "../../api/service/auth";
 import useToast from "../../hooks/useToast";
 import { IResetPasswordRequestPayload } from "../../interfaces/Auth";
+import routes from "../../routes/Routes";
 
 function ResetRequest() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ function ResetRequest() {
       successToast(
         "Password request email has been sent! Please check your email."
       );
-      navigate("/");
+      navigate(routes.HOME);
     } else {
       errorToast("Failed to login", response.message);
     }
