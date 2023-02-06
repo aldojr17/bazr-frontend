@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   Card,
   CardBody,
   Center,
@@ -6,8 +8,12 @@ import {
   Flex,
   Image,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import routes from "../../routes/Routes";
 
 function AuthTemplate({ ...props }: any) {
+  const navigate = useNavigate();
+
   return (
     <Flex height={"auto"} width="full" align="center" justifyContent="center">
       <Container maxW={"container.xl"} position={"relative"}>
@@ -60,7 +66,18 @@ function AuthTemplate({ ...props }: any) {
               flexDirection={"column"}
               justifyContent={"center"}
             >
-              {props.children}
+              <Flex direction="column">
+                <Box marginBottom={8}>
+                  <Button
+                    variant="primaryLink"
+                    onClick={() => navigate(routes.HOME)}
+                    size="sm"
+                  >
+                    {"<"} Back To Home
+                  </Button>
+                </Box>
+                {props.children}
+              </Flex>
             </CardBody>
           </Card>
         </Flex>
