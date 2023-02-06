@@ -11,4 +11,4 @@ run-clean:
 	rm -rf node_modules/ && yarn && yarn start
 
 check-eslint:
-	npx eslint -c .eslintrc.yml .
+	npx eslint -c .custom-eslintrc.yml .
