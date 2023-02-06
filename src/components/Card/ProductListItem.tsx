@@ -26,6 +26,7 @@ const ProductListItem = (props: IProductListItemProps) => {
     <HStack alignItems={"start"} gap={3} width={"100%"}>
       <AspectRatio ratio={1} minWidth={"4em"} borderRadius={"lg"}>
         <Image
+          loading="lazy"
           src={productPhoto}
           alt={name}
           fallbackSrc={"./image-fallback.png"}

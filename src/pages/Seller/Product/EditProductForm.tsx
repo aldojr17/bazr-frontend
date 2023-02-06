@@ -376,6 +376,7 @@ function EditProductForm() {
                     <WrapItem key={index} className={"imgContainer"}>
                       {/* TODO: Delete Image Button */}
                       <Image
+                        loading="lazy"
                         src={URL.createObjectURL(file)}
                         width="120px"
                         height="120px"

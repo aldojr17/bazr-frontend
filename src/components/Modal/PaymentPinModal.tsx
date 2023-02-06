@@ -28,7 +28,7 @@ const PaymentPinModal = ({ ...props }: IPaymentPinProps) => {
       <ModalOverlay backdropFilter="blur(10px)" />
       <ModalContent>
         <ModalHeader>
-          <Image src="/logo.svg" width={"8em"} />
+          <Image loading="lazy" src="/logo.svg" width={"8em"} />
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>

@@ -32,9 +32,9 @@ function AuthTemplate({ ...props }: any) {
           px={{ base: 5, sm: 10 }}
         >
           <Center>
-            <Image src="/logo.svg" />
+            <Image loading="lazy" src="/logo.svg" />
           </Center>
-          <Image src={"./auth-asset.svg"} />
+          <Image loading="lazy" src={"./auth-asset.svg"} />
         </Flex>
         <Flex
           position={"absolute"}

@@ -52,6 +52,7 @@ function ImagePreviewer(props: IImagePreviewerProps) {
               <SwiperSlide key={index} id={index.toString()}>
                 <AspectRatio ratio={1} onClick={onOpen} cursor={"pointer"}>
                   <Image
+                    loading="lazy"
                     borderRadius="30px"
                     src={productPhoto.url}
                     __css={{
@@ -64,6 +65,7 @@ function ImagePreviewer(props: IImagePreviewerProps) {
           ) : (
             <AspectRatio ratio={1}>
               <Image
+                loading="lazy"
                 borderRadius="30px"
                 src={"./image-fallback.png"}
                 onError={handleImageOnError}
@@ -92,6 +94,7 @@ function ImagePreviewer(props: IImagePreviewerProps) {
                   cursor={"pointer"}
                 >
                   <Image
+                    loading="lazy"
                     id={index.toString()}
                     src={productPhoto.url}
                     borderRadius="xl"

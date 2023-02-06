@@ -280,6 +280,7 @@ function ProductTable() {
                           >
                             <Flex alignItems={"center"}>
                               <Image
+                                loading="lazy"
                                 boxSize="80px"
                                 objectFit="cover"
                                 marginEnd={4}
@@ -313,6 +314,7 @@ function ProductTable() {
                         <Td minWidth={"150px"} maxWidth={"250px"}>
                           <Flex alignItems={"center"}>
                             <Image
+                              loading="lazy"
                               boxSize="80px"
                               objectFit="cover"
                               marginEnd={4}

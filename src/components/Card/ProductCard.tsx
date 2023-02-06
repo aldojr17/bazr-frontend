@@ -26,6 +26,7 @@ const ProductCard = ({ ...props }: IProductPayload) => {
     >
       <AspectRatio ratio={1} objectFit={"cover"} borderRadius={"lg"}>
         <Image
+          loading="lazy"
           src={props.product_photo?.url}
           borderRadius={"lg"}
           onError={handleImageOnError}

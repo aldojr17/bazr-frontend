@@ -36,6 +36,7 @@ function Sidebar(props: ISidebarProps) {
       >
         <Flex px="8" py="7">
           <Image
+            loading="lazy"
             src="/logo.svg"
             width={"7em"}
             onClick={() => navigate(routes.HOME)}

@@ -36,7 +36,7 @@ const DeliveryLabelTemplate = React.forwardRef<
             justifyContent={"space-between"}
             alignItems="center"
           >
-            <Image boxSize={"85px"} src="/logo.svg"></Image>
+            <Image loading="lazy" boxSize={"85px"} src="/logo.svg"></Image>
             <Text fontSize={"35px"} fontWeight={"bold"}>
               REG
             </Text>
