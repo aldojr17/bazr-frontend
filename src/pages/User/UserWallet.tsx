@@ -261,8 +261,7 @@ function UserWallet() {
             </Text>
             <Button
               width={"100%"}
-              variant="solid"
-              colorScheme="green"
+              variant="primary"
               onClick={onOpenTopup}
               mt={3}
             >
