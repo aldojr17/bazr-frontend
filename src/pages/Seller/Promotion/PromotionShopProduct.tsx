@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useProduct from "../../../hooks/useProduct";
+import useUser from "../../../hooks/useUser";
 import {
   IProductPaginationPayload,
   IProductPayload,
@@ -33,6 +34,7 @@ import { IVariantTypePayload } from "../../../interfaces/Variant";
 import { formatCurrency } from "../../../util/util";
 
 function PromotionShopProduct(props: IPromotionShopProductProps) {
+  const { user } = useUser();
   const { fetchShopProducts } = useProduct();
   const [products, setProducts] = useState<IProductPaginationPayload>();
   const [checked, setChecked] = useState<IPromotionProductForm[]>([]);
@@ -95,22 +97,22 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
   const handleNextPage = () => {
     const page = (products?.current_page ?? 0) + 1;
 
-    fetchShopProducts(1, { page: page, limit: 5 }).then((response) =>
-      setProducts(response as IProductPaginationPayload)
+    fetchShopProducts(user?.shop_id ?? 0, { page: page, limit: 5 }).then(
+      (response) => setProducts(response as IProductPaginationPayload)
     );
   };
 
   const handlePrevPage = () => {
     const page = (products?.current_page ?? 0) - 1;
 
-    fetchShopProducts(1, { page: page, limit: 5 }).then((response) =>
-      setProducts(response as IProductPaginationPayload)
+    fetchShopProducts(user?.shop_id ?? 0, { page: page, limit: 5 }).then(
+      (response) => setProducts(response as IProductPaginationPayload)
     );
   };
 
   useEffect(() => {
-    fetchShopProducts(1, { page: 1, limit: 5 }).then((response) =>
-      setProducts(response as IProductPaginationPayload)
+    fetchShopProducts(user?.shop_id ?? 0, { page: 1, limit: 5 }).then(
+      (response) => setProducts(response as IProductPaginationPayload)
     );
   }, []);
 
@@ -159,7 +161,6 @@ function PromotionShopProduct(props: IPromotionShopProductProps) {
                   ))}
                 </Tbody>
               </Table>
-
               <Flex pt={"5"} justifyContent={"space-between"} mb={5}>
                 <Text fontSize={"sm"}>Total {products?.total}</Text>
                 <Flex alignItems={"center"}>

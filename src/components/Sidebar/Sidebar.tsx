@@ -13,7 +13,7 @@ function Sidebar(props: ISidebarProps) {
   };
 
   const isActive = (path: string): boolean => {
-    return location.pathname === path;
+    return "/" + location.pathname.split("/").slice(1, 3).join("/") === path;
   };
 
   return (

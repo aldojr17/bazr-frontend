@@ -5,8 +5,10 @@ import {
   Flex,
   HStack,
   IconButton,
+  Input,
   Text,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import useCart from "../../hooks/useCart";
@@ -18,6 +20,7 @@ import QuantitySelector from "../Default/QuantitySelector";
 const CartItem = ({ ...props }: ICartItemProps) => {
   const navigate = useNavigate();
   const { updateCart } = useCart();
+  const [showNotes, setShowNotes] = useState<boolean>(false);
 
   const isDisabled =
     !props.data.stock || props.data.stock < props.data.min_buy_qty;
@@ -80,16 +83,28 @@ const CartItem = ({ ...props }: ICartItemProps) => {
           xl: "row",
         }}
       >
-        <Button
-          variant={"unstyled"}
-          marginStart={"2.75em"}
-          color={"primary"}
-          textAlign={"start"}
-          fontSize={"xs"}
-          disabled={isDisabled}
-        >
-          Add Notes
-        </Button>
+        {showNotes ? (
+          <Input
+            marginStart={"2.75em"}
+            placeholder="Notes"
+            size="sm"
+            value={props.data.notes}
+            onChange={props.handleInputNotes}
+          />
+        ) : (
+          <Button
+            variant={"unstyled"}
+            marginStart={"2.75em"}
+            color={"primary"}
+            textAlign={"start"}
+            fontSize={"xs"}
+            disabled={isDisabled}
+            onClick={() => setShowNotes(true)}
+          >
+            Add Notes
+          </Button>
+        )}
+
         <HStack
           spacing={5}
           justifyContent={"end"}

@@ -182,17 +182,17 @@ function ProductTable() {
             flexDirection={{ base: "column", md: "row" }}
           >
             <Flex mb={{ base: 5, md: 0 }}>
+              <Text me={5} fontWeight={"medium"}>
+                {isActive ? "Active" : "Not Active"}
+              </Text>
               <Switch
-                me={2}
+                me={8}
                 colorScheme="teal"
                 size="lg"
                 alignItems={"start"}
                 isChecked={isActive}
                 onChange={() => setIsActive(!isActive)}
               />
-              <Text me={8} fontWeight={"medium"}>
-                {isActive ? "Active" : "Not Active"}
-              </Text>
             </Flex>
             <Button
               isDisabled={isLoading}

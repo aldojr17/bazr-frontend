@@ -48,6 +48,7 @@ const Cart = () => {
     undoDeleteItem,
     setCheckoutCartIds,
     getCart,
+    updateNotes,
   } = useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
@@ -127,6 +128,7 @@ const Cart = () => {
             shop_id: value.shop_id,
             order_details: [
               {
+                notes: value.notes,
                 cart_id: value.cart_id,
               },
             ],
@@ -136,6 +138,7 @@ const Cart = () => {
         orders
           .find((val) => val.shop_id === value.shop_id)
           ?.order_details.push({
+            notes: value.notes,
             cart_id: value.cart_id,
           });
       }
@@ -184,6 +187,16 @@ const Cart = () => {
           getCart();
         });
       });
+    });
+  };
+
+  const handleInputNotes = (
+    event: ChangeEvent<HTMLInputElement>,
+    data: ICartPayload
+  ) => {
+    updateNotes({
+      ...data,
+      notes: event.currentTarget.value,
     });
   };
 
@@ -366,6 +379,9 @@ const Cart = () => {
                                   ) !== -1
                                 }
                                 handleDeleteItem={handleDeleteItem}
+                                handleInputNotes={(e) =>
+                                  handleInputNotes(e, childVal)
+                                }
                               />
                               {childIndex < Object.values(val).length - 1 && (
                                 <Divider borderBottomWidth={"0.1em"} />
