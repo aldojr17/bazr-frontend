@@ -117,6 +117,7 @@ export interface IConfirmUserReceivedOrderResponsePayload {
 
 export interface IAddUserReviewRequestPayload {
   rating_score: number;
+  feedback?: string | undefined;
 }
 
 export interface IAddUserReviewResponsePayload {
