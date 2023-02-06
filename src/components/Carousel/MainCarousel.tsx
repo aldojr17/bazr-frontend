@@ -42,7 +42,7 @@ function MainCarousel(props: IMainCarouselProps) {
 export default MainCarousel;
 
 const content = [
-  "https://res.cloudinary.com/dk3xvbob3/image/upload/v1672978311/BAZR/DB/Carousel/Blog_Banner-Tokopedia-Fair_ofk48c.jpg",
-  "https://res.cloudinary.com/dk3xvbob3/image/upload/v1672978322/BAZR/DB/Carousel/06df6f5e-6477-4f0f-a194-21569793e17d_jn6c8q.png",
-  "https://res.cloudinary.com/dk3xvbob3/image/upload/v1672973337/BAZR/DB/Carousel/f09b50a8-da23-45de-a931-f2a433e8276a.jpg_aca4iy.jpg",
+  "https://res.cloudinary.com/dezwzyr2v/image/upload/w_0.5/valentine_yuskda.jpg",
+  "https://res.cloudinary.com/dezwzyr2v/image/upload/w_0.5/gratis-ongkir_onrwnu.jpg",
+  "https://res.cloudinary.com/dezwzyr2v/image/upload/w_0.5/bank_gz6tqh.png",
 ];
