@@ -89,7 +89,11 @@ const Navbar = ({ onOpen }: NavbarProps) => {
           }}
         >
           <Link to={"/"} className={`nav-link`}>
-            <Image src="/logo.svg" width={{ base: "5rem", lg: "8em" }} />
+            <Image
+              loading="lazy"
+              src="/logo.svg"
+              width={{ base: "5rem", lg: "8em" }}
+            />
           </Link>
         </Center>
         <HStack

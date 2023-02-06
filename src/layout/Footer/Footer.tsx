@@ -25,7 +25,7 @@ const Footer = () => {
         >
           <GridItem w="100%">
             <Link href={"#"} className={`nav-link`} mb={5}>
-              <Image src="/logo.svg" width={"8em"} />
+              <Image loading="lazy" src="/logo.svg" width={"8em"} />
             </Link>
           </GridItem>
           <GridItem w="100%">

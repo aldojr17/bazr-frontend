@@ -68,6 +68,7 @@ function ImagePreviewerModal(props: IImagePreviewerModalProps) {
                 <SwiperSlide key={index} id={index.toString()}>
                   <AspectRatio ratio={1} backgroundColor={"white"}>
                     <Image
+                      loading="lazy"
                       src={productPhoto.url}
                       __css={{
                         objectFit: "scale-down !important",
@@ -92,6 +93,7 @@ function ImagePreviewerModal(props: IImagePreviewerModalProps) {
                   backgroundColor={"white"}
                 >
                   <Image
+                    loading="lazy"
                     id={index.toString()}
                     src={productPhoto.url}
                     borderRadius="xl"

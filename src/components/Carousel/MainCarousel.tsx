@@ -28,6 +28,7 @@ function MainCarousel(props: IMainCarouselProps) {
             boxShadow="default"
           >
             <Image
+              loading="lazy"
               src={url}
               borderRadius={{ base: "10px", md: "20px", lg: "30px" }}
               borderColor={`teal.300`}

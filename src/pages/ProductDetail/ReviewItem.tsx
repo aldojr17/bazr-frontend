@@ -65,6 +65,7 @@ function ReviewItem(props: IReviewItemProps) {
               boxShadow="default"
             >
               <Image
+                loading="lazy"
                 src={review.picture}
                 borderRadius="xl"
                 border={"1px solid"}

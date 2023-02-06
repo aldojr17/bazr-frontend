@@ -71,7 +71,12 @@ function OrderDetails() {
         {orderDetails.items.map((item, i) => (
           <Box bg="gray.50" marginY={1} key={`${item.product_name};${i}`}>
             <Flex margin={1}>
-              <Image src={item.photo.url} width="20" height="20" />
+              <Image
+                loading="lazy"
+                src={item.photo.url}
+                width="20"
+                height="20"
+              />
               <Flex
                 justifyContent="space-between"
                 margin={1}

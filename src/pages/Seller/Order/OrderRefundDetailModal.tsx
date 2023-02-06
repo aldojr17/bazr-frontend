@@ -198,6 +198,7 @@ function OrderRefundDetailModal(props: IRefundDetailModalProps) {
                               cursor={"pointer"}
                             >
                               <Image
+                                loading="lazy"
                                 id={index.toString()}
                                 src={photo.url}
                                 borderRadius="xl"

@@ -14,6 +14,7 @@ const HoverCartItem = (props: IHoverCartProps) => {
     >
       <AspectRatio ratio={1} minWidth={"4em"} borderRadius={"lg"}>
         <Image
+          loading="lazy"
           src={image}
           alt={name}
           fallbackSrc={"./image-fallback.png"}

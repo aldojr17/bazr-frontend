@@ -30,6 +30,7 @@ function SingleImagePreviewerModal(props: ISingleImagePreviewerModalProps) {
               backgroundColor={"white"}
             >
               <Image
+                loading="lazy"
                 src={imageURL}
                 __css={{
                   objectFit: "scale-down !important",

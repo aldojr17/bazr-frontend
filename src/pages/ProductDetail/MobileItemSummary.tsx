@@ -213,6 +213,7 @@ function MobileItemSummary(props: IMobileItemSummaryProps) {
                 backgroundColor={"white"}
               >
                 <Image
+                  loading="lazy"
                   src={productPhoto}
                   fallbackSrc={"./image-fallback.png"}
                   borderRadius="xl"

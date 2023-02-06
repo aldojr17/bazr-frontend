@@ -30,6 +30,7 @@ const CategoryCard = ({ ...props }: ICategoryCardProps) => {
         borderRadius={"lg"}
       >
         <Image
+          loading="lazy"
           src={props.icon}
           borderRadius={"lg"}
           onError={handleImageOnError}

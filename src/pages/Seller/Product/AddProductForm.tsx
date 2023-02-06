@@ -277,6 +277,7 @@ function AddProductForm() {
                 return (
                   <WrapItem key={index} className="imgContainer">
                     <Image
+                      loading="lazy"
                       src={URL.createObjectURL(file)}
                       width="120px"
                       height="120px"
