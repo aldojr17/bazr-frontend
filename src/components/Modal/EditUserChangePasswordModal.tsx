@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -87,8 +89,8 @@ function EditUserChangePasswordModal(props: IEditUserChangePasswordModalProps) {
     const response = await changePassword(payload);
     if (response.is_success) {
       props.tokenModalOnClose();
-      props.logoutModalOnOpen();
-      successToast(response.message, 3000);
+      successToast(`${response.message}. Please login again`, 3000);
+      handleLogout();
     } else {
       errorToast(response.message, undefined, 3000);
     }
@@ -104,10 +106,34 @@ function EditUserChangePasswordModal(props: IEditUserChangePasswordModalProps) {
 
   return (
     <>
-      <Modal isOpen={props.isOpen} onClose={props.onClose}>
+      <Modal isOpen={props.isOpen} onClose={props.onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Change Password</ModalHeader>
+          <ModalHeader>
+            <Flex direction="column" width="100%">
+              Change Password
+              <Box marginBottom={5}>
+                <Text fontSize="sm" color="darkLighten">
+                  Already have the code?
+                  <Text
+                    as="a"
+                    fontSize="sm"
+                    color="primary"
+                    fontWeight="bold"
+                    padding={2}
+                    borderRadius="lg"
+                    role="button"
+                    onClick={() => {
+                      props.onClose();
+                      props.tokenModalOnOpen();
+                    }}
+                  >
+                    Click here?
+                  </Text>
+                </Text>
+              </Box>
+            </Flex>
+          </ModalHeader>
           <ModalCloseButton />
           <Formik
             initialValues={{
@@ -273,7 +299,12 @@ function EditUserChangePasswordModal(props: IEditUserChangePasswordModalProps) {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={props.tokenModalIsOpen} onClose={props.tokenModalOnClose}>
+      <Modal
+        isOpen={props.tokenModalIsOpen}
+        onClose={props.tokenModalOnClose}
+        isCentered
+        closeOnOverlayClick={false}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Verification Code</ModalHeader>
