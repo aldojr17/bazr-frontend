@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
@@ -45,8 +45,8 @@ function CategorySecondary() {
   }, []);
 
   return (
-    <>
-      <Box className="p-4 pb-5 p-lg-5">
+    <Container maxW={{ base: "container.sm", lg: "container.xl" }}>
+      <Box mb={10}>
         {primaryCategory && secondaryCategory && (
           <BreadCrumb
             categories={{
@@ -74,7 +74,7 @@ function CategorySecondary() {
       </Box>
 
       <Search />
-    </>
+    </Container>
   );
 }
 

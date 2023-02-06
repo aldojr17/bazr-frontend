@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -29,7 +30,8 @@ function OrderRefundDetailModal(props: IRefundDetailModalProps) {
   const { config, refundDetail, isOpen, onClose, isLoading } = props;
 
   const { successToast, errorToast } = useToast();
-  const { approveRefundSeller, rejectRefundSeller } = useRefund();
+  const { refundLoading, approveRefundSeller, rejectRefundSeller } =
+    useRefund();
 
   const lightboxModal = useDisclosure();
 
@@ -174,8 +176,7 @@ function OrderRefundDetailModal(props: IRefundDetailModalProps) {
                         Refund Notes:
                       </Text>
                       <Text fontWeight={"medium"} fontSize={"sm"}>
-                        {refundDetail.note}
-                        Sample notes from buyer when doing a refund request
+                        {refundDetail.note === "" ? "-" : refundDetail.note}
                       </Text>
                     </Flex>
 
@@ -217,18 +218,25 @@ function OrderRefundDetailModal(props: IRefundDetailModalProps) {
             refundDetail &&
             refundDetail.status_name !== refundStatusses.APPROVED && (
               <ModalFooter>
-                <Flex direction={"row"} justifyContent={"end"} gap={5}>
-                  <Button variant="primaryOutline" onClick={handleRejectRefund}>
-                    Reject
-                  </Button>
-                  <Button
-                    variant={"primary"}
-                    mr={3}
-                    onClick={handleApproveRefund}
-                  >
-                    Approve
-                  </Button>
-                </Flex>
+                {refundLoading ? (
+                  <Spinner color={"primary"} />
+                ) : (
+                  <Flex direction={"row"} justifyContent={"end"} gap={5}>
+                    <Button
+                      variant="primaryOutline"
+                      onClick={handleRejectRefund}
+                    >
+                      Reject
+                    </Button>
+                    <Button
+                      variant={"primary"}
+                      mr={3}
+                      onClick={handleApproveRefund}
+                    >
+                      Approve
+                    </Button>
+                  </Flex>
+                )}
               </ModalFooter>
             )}
         </ModalContent>

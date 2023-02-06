@@ -10,25 +10,19 @@ import { IVoucherCardProps } from "../../interfaces/Components";
 import { formatCurrency } from "../../util/util";
 
 const VoucherCard = (props: IVoucherCardProps) => {
-  const handleSelectVoucher = () => {
-    if (props.isDisabled) {
-      return;
-    }
+  const { voucher, shopVoucher, onSetVoucher, onSetShopVoucher, isDisabled } =
+    props;
 
-    props.setVoucher(props.voucher!);
-    props.onClose();
+  const handleSelectVoucher = () => {
+    if (!isDisabled) {
+      onSetVoucher(voucher!);
+    }
   };
 
   const handleSelectShopVoucher = () => {
-    if (props.isDisabled) {
-      return;
+    if (!isDisabled) {
+      onSetShopVoucher(shopVoucher?.shop_id!, shopVoucher?.id!);
     }
-
-    props.selectShopVoucher(
-      props.shopVoucher?.shop_id!,
-      props.shopVoucher?.id!
-    );
-    props.onClose();
   };
 
   return (
@@ -37,9 +31,9 @@ const VoucherCard = (props: IVoucherCardProps) => {
       borderColor={"light"}
       borderRadius={"lg"}
       width={"100%"}
-      onClick={props.voucher ? handleSelectVoucher : handleSelectShopVoucher}
-      opacity={props.isDisabled ? 0.5 : 1}
-      cursor={props.isDisabled ? "default" : "pointer"}
+      onClick={voucher ? handleSelectVoucher : handleSelectShopVoucher}
+      opacity={isDisabled ? 0.5 : 1}
+      cursor={isDisabled ? "default" : "pointer"}
     >
       <CardHeader
         bg={"lightLighten"}
@@ -48,7 +42,7 @@ const VoucherCard = (props: IVoucherCardProps) => {
         fontSize={"md"}
         py={3}
       >
-        {props.voucher ? props.voucher.code : props.shopVoucher?.code}
+        {voucher ? voucher.code : shopVoucher?.code}
       </CardHeader>
       <CardBody>
         <VStack width={"100%"} alignItems={"start"}>
@@ -56,30 +50,26 @@ const VoucherCard = (props: IVoucherCardProps) => {
             <Text fontWeight={"semibold"}>
               Disc.{" "}
               <Text as="span" fontSize={"xl"}>
-                {props.voucher
-                  ? props.voucher.benefit !== 0
-                    ? `Rp${formatCurrency(props.voucher.benefit)}`
-                    : `${props.voucher.benefit_percentage}%`
-                  : props.shopVoucher?.benefit !== 0
-                  ? `Rp${formatCurrency(props.shopVoucher?.benefit!)}`
-                  : `${props.shopVoucher.benefit_percentage}%`}
+                {voucher
+                  ? voucher.benefit !== 0
+                    ? `Rp${formatCurrency(voucher.benefit)}`
+                    : `${voucher.benefit_percentage}%`
+                  : shopVoucher?.benefit !== 0
+                  ? `Rp${formatCurrency(shopVoucher?.benefit!)}`
+                  : `${shopVoucher.benefit_percentage}%`}
               </Text>
             </Text>
             <Text color={"primaryDarken"} fontWeight={"bold"} fontSize={"lg"}>
-              {props.voucher ? props.voucher.code : props.shopVoucher?.code}
+              {voucher ? voucher.code : shopVoucher?.code}
             </Text>
           </HStack>
           <Text fontSize={"xs"} fontWeight={"semibold"} color={"darkLighten"}>
-            {props.voucher
-              ? props.voucher.min_purchase !== 0
-                ? `Min. Purchase: Rp${formatCurrency(
-                    props.voucher.min_purchase
-                  )}`
+            {voucher
+              ? voucher.min_purchase !== 0
+                ? `Min. Purchase: Rp${formatCurrency(voucher.min_purchase)}`
                 : "No Min. Purchase"
-              : props.shopVoucher?.min_purchase !== 0
-              ? `Min. Purchase: Rp${formatCurrency(
-                  props.shopVoucher?.min_purchase!
-                )}`
+              : shopVoucher?.min_purchase !== 0
+              ? `Min. Purchase: Rp${formatCurrency(shopVoucher?.min_purchase!)}`
               : "No Min. Purchase"}
           </Text>
         </VStack>

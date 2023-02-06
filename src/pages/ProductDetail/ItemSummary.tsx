@@ -62,9 +62,13 @@ function ItemSummary(props: IItemSummaryProps) {
 
       setIsLoading(true);
       updateCart(cartPayload)
-        .then(() => {
-          getCart();
-          successToast("Item added to cart!");
+        .then((res) => {
+          if (res.is_success) {
+            getCart();
+            successToast("Item added to cart!");
+          } else {
+            errorToast("Failed to add item to cart", res.message);
+          }
         })
         .catch((err) => {
           if (err === "Invalid credential") {
@@ -105,7 +109,7 @@ function ItemSummary(props: IItemSummaryProps) {
                 shop_id: shopId,
                 order_details: [
                   {
-                    cart_id: response?.cart_item_id!,
+                    cart_id: response?.data.cart_item_id!,
                   },
                 ],
               },
@@ -113,7 +117,7 @@ function ItemSummary(props: IItemSummaryProps) {
           }).then((resp) => {
             if (resp.is_success) {
               setCheckoutData(resp.data);
-              setCheckoutCartIds([response?.cart_item_id!]);
+              setCheckoutCartIds([response?.data.cart_item_id!]);
               navigate(routes.CART_SHIPMENT, { replace: true });
             }
           });

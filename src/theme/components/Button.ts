@@ -101,6 +101,17 @@ const Button = defineStyleConfig({
         color: "primaryDarken",
       },
     },
+    navLink: {
+      bg: "transparent",
+      color: "primary",
+      _hover: {
+        color: "primaryLighten",
+        textDecor: "none",
+      },
+      _active: {
+        color: "primaryDarken",
+      },
+    },
     secondary: {
       bg: "secondary",
       color: "dark",

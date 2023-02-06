@@ -1,4 +1,5 @@
 import { EDeliveryStatus } from "../Transaction";
+import { IVoucherPayload } from "../Voucher";
 
 export interface IPaymentWalletRequestPayload {
   token: string;
@@ -62,6 +63,7 @@ export interface IWalletTransactionDetail {
   total_qty: number;
   total_weight: number;
   transaction_date: string;
+  voucher: IVoucherPayload;
 }
 
 export interface ITransactionAddress {
@@ -80,12 +82,15 @@ export interface IWalletOrderDetail {
   courier_name: string;
   delivery_fee: number;
   delivery_status: EDeliveryStatus;
+  discount_marketplace: number;
+  discount_shop: number;
   id: number;
   items: IWalletOrderItemDetail[];
   shop_name: string;
+  shop_username: string;
+  shop_voucher: IVoucherPayload;
   subtotal: number;
   total: number;
-  total_discount: number;
 }
 
 export interface IWalletOrderItemDetail {
@@ -94,7 +99,9 @@ export interface IWalletOrderItemDetail {
   name: string;
   photo: string;
   price: number;
+  price_after_discount: number;
   product_id: number;
   qty: number;
   total_price: number;
+  variant_type_name: string;
 }

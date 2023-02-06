@@ -40,6 +40,7 @@ export interface ICheckoutResponsePayload {
 
 export interface ICheckoutSuccessResponsePayload {
   address_detail: IAddressPayload;
+  cart: ICheckoutCartSuccessResponsePayload[];
   user_voucher_id: number;
   voucher_discount: number;
   subtotal: number;
@@ -47,7 +48,6 @@ export interface ICheckoutSuccessResponsePayload {
   total_item: number;
   total_delivery_fee: number;
   total_discount: number;
-  cart: ICheckoutCartSuccessResponsePayload[];
 }
 
 export interface ICheckoutCartSuccessResponsePayload {
@@ -59,11 +59,12 @@ export interface ICheckoutCartSuccessResponsePayload {
   shop_city_name: string;
   shop_name: string;
   delivery_fee: number;
-  etd: string;
-  total_weight: number;
+  shop_discount: number;
+  discount_marketplace: number;
   subtotal: number;
   total: number;
-  shop_discount: number;
+  etd: string;
+  total_weight: number;
   list_couriers: ICheckoutCourierPayload;
   order_details: ICheckoutOrderDetailResponse[];
 }
@@ -79,6 +80,7 @@ export interface ICheckoutOrderDetailResponse {
   cart_id: number;
   product_id: number;
   variant_id: number;
+  variant_type_name: string;
   quantity: number;
   price_before_discount: number;
   price_after_discount: number;
@@ -86,7 +88,6 @@ export interface ICheckoutOrderDetailResponse {
   notes: string;
   product_name: string;
   product_photo: string;
-  variant_type_name: string;
 }
 
 export interface ICheckoutCourierPayload {
@@ -191,6 +192,7 @@ export interface IOrder {
   list_of_products: IProduct[];
   order_is_reviewed: boolean;
   shop_name: string;
+  shop_username: string;
   total: number;
 }
 
@@ -217,11 +219,15 @@ export const CListToShowRefund = [EDeliveryStatus.RECEIVED];
 
 export interface IProduct {
   id: number;
-  photo: string;
-  name: string;
-  qty: number;
-  price: number;
   is_reviewed: boolean;
+  name: string;
+  photo: string;
+  price: number;
+  price_after_discount: number;
+  product_id: number;
+  qty: number;
+  total: number;
+  variant_type_name: string;
 }
 
 export const initialStateTransactionHistory: ITransactionHistoryPagination = {

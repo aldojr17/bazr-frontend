@@ -7,7 +7,7 @@ import {
 } from "../interfaces/Voucher";
 
 const useVoucher = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [voucherLoading, setVoucherLoading] = useState(false);
   const [voucher, setVoucher] = useState<IVoucherPayload>();
   const [vouchers, setVouchers] = useState<IVoucherPaginationPayload>();
   const [marketplaceVouchers, setMarketplaceVouchers] = useState<
@@ -15,33 +15,33 @@ const useVoucher = () => {
   >([]);
 
   const createVoucher = async (payload: IVoucherPayload) => {
-    setIsLoading(true);
+    setVoucherLoading(true);
     const response = await voucherService.createVoucher(payload);
-    setIsLoading(false);
+    setVoucherLoading(false);
 
     return response;
   };
 
   const editVoucher = async (payload: IVoucherPayload) => {
-    setIsLoading(true);
+    setVoucherLoading(true);
     const response = await voucherService.editVoucher(payload);
-    setIsLoading(false);
+    setVoucherLoading(false);
 
     return response;
   };
 
   const deleteVoucher = async (id: number) => {
-    setIsLoading(true);
+    setVoucherLoading(true);
     const response = await voucherService.deleteVoucher(id);
-    setIsLoading(false);
+    setVoucherLoading(false);
 
     return response;
   };
 
   const fetchVoucher = async (id: number) => {
-    setIsLoading(true);
+    setVoucherLoading(true);
     const response = await voucherService.getVoucher(id);
-    setIsLoading(false);
+    setVoucherLoading(false);
 
     if (response.is_success) {
       setVoucher(response.data);
@@ -56,26 +56,26 @@ const useVoucher = () => {
     limit: number,
     shopId: number
   ) => {
-    setIsLoading(true);
+    setVoucherLoading(true);
     const response = await voucherService.getAllVouchers(
       status,
       page,
       limit,
       shopId
     );
-    setIsLoading(false);
 
     if (response.is_success) {
       setVouchers(response.data);
     }
 
+    setVoucherLoading(false);
     return response;
   };
 
   const fetchAllMarketplaceVoucher = async () => {
-    setIsLoading(true);
+    setVoucherLoading(true);
     const response = await voucherService.getAllMarketplaceVouchers();
-    setIsLoading(false);
+    setVoucherLoading(false);
 
     if (response.is_success) {
       setMarketplaceVouchers(response.data.data);
@@ -90,7 +90,7 @@ const useVoucher = () => {
     deleteVoucher,
     fetchVoucher,
     fetchAllVoucher,
-    isLoading,
+    voucherLoading,
     voucher,
     vouchers,
     fetchAllMarketplaceVoucher,

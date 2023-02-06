@@ -1,18 +1,20 @@
-import { Box, Center, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/BreadCrumb/BreadCrumb";
-import ProductCard from "../../components/Card/ProductCard";
 import CategoryScrollableContainer from "../../components/Container/CategoryScrollableContainer";
+import ProductContainer from "../../components/Container/ProductContainer";
 import useCategory from "../../hooks/useCategory";
 import useProduct from "../../hooks/useProduct";
 import useTitle from "../../hooks/useTitle";
 import { IPrimaryCategoryPayload } from "../../interfaces/Category";
 import { ISearchFilterPayload } from "../../interfaces/Filter";
+import routes from "../../routes/Routes";
 import { formatTitle } from "../../util/util";
 
 function CategoryPrimary() {
   const { cPrimary } = useParams();
+  const navigate = useNavigate();
   const {
     categoryLoading,
     fetchCategoriesProduct,
@@ -22,6 +24,7 @@ function CategoryPrimary() {
 
   const [primaryCategory, setPrimaryCategory] =
     useState<IPrimaryCategoryPayload | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useTitle(formatTitle(primaryCategory?.name!));
 
@@ -36,7 +39,7 @@ function CategoryPrimary() {
 
     setPrimaryCategory(primary ?? null);
 
-    fetchAllProducts(filter);
+    fetchAllProducts(filter).finally(() => setIsLoading(false));
   }, [categoryLoading]);
 
   useEffect(() => {
@@ -44,8 +47,8 @@ function CategoryPrimary() {
   }, []);
 
   return (
-    <>
-      <Box className="p-4 pb-5 p-lg-5">
+    <Container maxW={{ base: "container.sm", lg: "container.xl" }}>
+      <Box>
         {primaryCategory && (
           <BreadCrumb
             categories={{
@@ -67,37 +70,13 @@ function CategoryPrimary() {
         )}
       </Box>
 
-      <Box className="px-4 px-lg-5">
-        <Heading
-          fontWeight={"medium"}
-          size={{ base: "sm", sm: "sm", md: "md", lg: "lg" }}
-          className="pb-4"
-        >
-          PRODUCTS
-        </Heading>
-        <Flex
-          wrap={"wrap"}
-          direction={"row"}
-          justifyContent={"space-between"}
-          rowGap={{ base: 1, sm: 3, lg: 2 }}
-          columnGap={{ base: 1, sm: 2, lg: 1 }}
-          _after={{
-            md: { content: '""', flex: "auto" },
-            lg: { content: "none" },
-          }}
-        >
-          {products.data.length !== 0 ? (
-            products.data.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))
-          ) : (
-            <Center>
-              <Text>No products available.</Text>
-            </Center>
-          )}
-        </Flex>
-      </Box>
-    </>
+      <ProductContainer
+        products={products.data}
+        label={"Products"}
+        isLoading={isLoading}
+        onLoadMore={() => navigate(routes.SEARCH("", primaryCategory?.id, 1))}
+      />
+    </Container>
   );
 }
 

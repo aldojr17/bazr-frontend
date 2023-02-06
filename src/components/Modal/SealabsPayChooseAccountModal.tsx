@@ -1,6 +1,6 @@
 import {
   Button,
-  Heading,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,10 +9,12 @@ import {
   ModalHeader,
   ModalOverlay,
   StackDivider,
+  Text,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
+import Icon from "../../assets/icons";
 import useSealabsPay from "../../hooks/useSealabsPay";
 import useUser from "../../hooks/useUser";
 import { ISealabsPayChooseAccountModalProps } from "../../interfaces/Components";
@@ -25,20 +27,11 @@ const SealabsPayChooseAccountModal: React.FC<
   const { sealabsPay, chosenSealabsPay, getSealabsPay, setChosenSealabsPay } =
     useSealabsPay();
   const { user } = useUser();
-
-  const {
-    isOpen: isOpenAddNew,
-    onClose: onCloseAddNew,
-    onOpen: onOpenAddNew,
-  } = useDisclosure();
+  const addNewModal = useDisclosure();
 
   useEffect(() => {
     getSealabsPay();
   }, []);
-
-  // useEffect(() => {
-  //   fetchProfile();
-  // }, [chosenSealabsPay]);
 
   return (
     <>
@@ -49,7 +42,7 @@ const SealabsPayChooseAccountModal: React.FC<
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Choose your Sealabs Pay account to pay</ModalHeader>
+          <ModalHeader>Choose your Sealabs Pay account</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack
@@ -64,8 +57,8 @@ const SealabsPayChooseAccountModal: React.FC<
                       key={val.id}
                       chosen={
                         chosenSealabsPay.id === val.id
-                          ? "secondaryLighten"
-                          : "white"
+                          ? "primaryLighten"
+                          : "lightLighten"
                       }
                       nameOnCard={val.name_on_card}
                       cardNumber={val.card_number}
@@ -80,32 +73,61 @@ const SealabsPayChooseAccountModal: React.FC<
                   );
                 })
               ) : (
-                <Heading>No Sealabs Pay Yet. Add One!</Heading>
+                <Flex
+                  direction={"column"}
+                  alignItems={"center"}
+                  bgColor={"lightLighten"}
+                  borderRadius={"lg"}
+                  gap={5}
+                  p={8}
+                >
+                  <Icon.Warning boxSize={10} />
+                  <Text
+                    align={"center"}
+                    fontSize={"md"}
+                    fontWeight={"semibold"}
+                  >
+                    It looks like you don't have any SeaLabs Pay connected to
+                    your account.
+                  </Text>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      addNewModal.onOpen();
+                      props.onClose();
+                    }}
+                  >
+                    Add SeaLabs Pay
+                  </Button>
+                </Flex>
               )}
             </VStack>
-            {props.children}
+            {sealabsPay.length > 0 && <>{props.children}</>}
           </ModalBody>
-
           <ModalFooter>
-            <Button
-              variant="outline"
-              mr={3}
-              onClick={() => {
-                onOpenAddNew();
-                props.onClose();
-              }}
-            >
-              Add New
-            </Button>
-            <Button mr={3} onClick={props.onClose}>
-              Close
-            </Button>
+            <Flex direction={"row"} gap={2} justifyContent={"end"}>
+              {sealabsPay.length > 0 && (
+                <Button
+                  variant="primaryOutline"
+                  onClick={() => {
+                    addNewModal.onOpen();
+                    props.onClose();
+                  }}
+                >
+                  Add SeaLabs Pay
+                </Button>
+              )}
+              <Button variant={"primary"} onClick={props.onClose}>
+                Close
+              </Button>
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <SealabsPayAddNewAccountModal
-        isOpen={isOpenAddNew}
-        onClose={onCloseAddNew}
+        isOpen={addNewModal.isOpen}
+        onClose={addNewModal.onClose}
       />
     </>
   );

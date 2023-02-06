@@ -9,11 +9,11 @@ function TransactionDetailActionButton(props: {
     <Flex
       justifyContent="center"
       alignItems="center"
-      paddingX={2}
+      paddingX={3}
       paddingY={1}
-      marginBottom={1}
+      my={1}
       borderRadius="lg"
-      bg="teal.300"
+      bg="primary"
       color="white"
       fontWeight="bold"
       fontSize="xs"

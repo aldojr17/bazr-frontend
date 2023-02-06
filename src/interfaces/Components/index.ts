@@ -248,15 +248,16 @@ export interface IProductVariationListFormProps {
 export interface IVoucherCardProps {
   voucher?: IMarketplaceVoucherPayload;
   shopVoucher?: IVoucherPayload;
-  setVoucher: Dispatch<React.SetStateAction<IMarketplaceVoucherPayload>>;
-  selectShopVoucher: (shopId: number, voucherId: number) => void;
-  onClose: () => void;
+  onSetVoucher: (voucher: IMarketplaceVoucherPayload) => void;
+  onSetShopVoucher: (shopId: number, voucherId: number) => void;
   isDisabled: boolean;
 }
 
 export interface IProductListItemProps {
   name: string;
   qty: number;
+  regularPrice: number;
+  discountedPrice: number;
   total: number;
   variantName: string;
   onClick?: () => void;
@@ -267,6 +268,7 @@ export interface IProductListItemProps {
 export interface IStoreListItemProps {
   shopName: string;
   shopCityName: string;
+  onClick?: () => void;
 }
 
 export interface IQuantitySelectorProps {
@@ -326,4 +328,10 @@ export interface IRefundDetailModalProps {
   isLoading: boolean;
   onClose: () => void;
   refundDetail: IRefundDetail;
+}
+
+export interface IClearCartModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onClearCart: () => void;
 }

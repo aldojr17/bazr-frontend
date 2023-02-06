@@ -32,7 +32,8 @@ const SealabsPayOTP: React.FC<ISealabsPayOTPProps> = ({ ...props }) => {
         <iframe
           title="Sealabs OTP"
           src={iframeUrl}
-          height={"700px"}
+          width={"100%"}
+          height={"800px"}
           hidden={redirected >= 1}
           onLoad={(e) => {
             setParams(e.currentTarget.contentWindow?.location.search);

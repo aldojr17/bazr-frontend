@@ -47,20 +47,24 @@ const CartItem = ({ ...props }: ICartItemProps) => {
           }
           disabled={isDisabled}
         />
-        <ProductListItem
-          key={props.data.variant_type_id}
-          name={props.data.product_name}
-          qty={props.data.quantity}
-          total={props.data.variant_type_price}
-          variantName={props.data.variant_type_name.split(",").join(", ")}
-          onClick={() =>
-            navigate(
-              routes.PDP(props.data.product_id!, props.data.product_name)
-            )
-          }
-          disabled={isDisabled}
-          productPhoto={props.data.product_photo}
-        />
+        <Box width={"100%"} pb={5} pe={3}>
+          <ProductListItem
+            key={props.data.variant_type_id}
+            name={props.data.product_name}
+            qty={props.data.quantity}
+            regularPrice={props.data.variant_type_price}
+            discountedPrice={props.data.price_after_discount}
+            total={props.data.total}
+            variantName={props.data.variant_type_name.split(",").join(", ")}
+            onClick={() =>
+              navigate(
+                routes.PDP(props.data.product_id!, props.data.product_name)
+              )
+            }
+            disabled={isDisabled}
+            productPhoto={props.data.product_photo}
+          />
+        </Box>
       </HStack>
 
       <Flex

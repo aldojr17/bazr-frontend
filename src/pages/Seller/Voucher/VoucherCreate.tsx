@@ -12,7 +12,7 @@ function VoucherCreate() {
   const { fetchProfile } = useUser();
   const { fetchShopProfileById } = useShop();
   const [username, setUsername] = useState("");
-  const { isLoading, createVoucher } = useVoucher();
+  const { voucherLoading, createVoucher } = useVoucher();
   const { successToast, errorToast } = useToast();
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ function VoucherCreate() {
         min_purchase={0}
         start_date=""
         expiry_date=""
-        isLoading={isLoading}
+        isLoading={voucherLoading}
         isDisabled={false}
         onSubmit={(payload) => handleSubmitCreateVoucher(payload)}
         onCancel={() => {

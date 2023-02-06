@@ -27,7 +27,6 @@ import SealabsPayOTP from "../IFrame/SealabsPayOTP";
 const SealabsPayAddNewAccountModal = ({
   ...props
 }: ISealabsPayAddNewAccountProps) => {
-  // const [searchParams] = useSearchParams();
   const { getSealabsPay, setChosenSealabsPay } = useSealabsPay();
   const [isLoading, setIsLoading] = useState(false);
   const [iframeUrl, setIframeUrl] = useState("");
@@ -40,6 +39,7 @@ const SealabsPayAddNewAccountModal = ({
     message: "",
     status: "",
   });
+
   const addSealabsPayValidationSchema = Yup.object().shape({
     name_on_card: Yup.string()
       .required("Required")

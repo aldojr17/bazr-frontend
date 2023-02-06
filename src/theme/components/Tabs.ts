@@ -4,15 +4,20 @@ const Tabs = defineStyleConfig({
   variants: {
     default: {
       tab: {
+        mb: "-3px",
         fontSize: "lg",
         fontWeight: "semibold",
         color: "darkLighten",
-        borderBottom: "3px solid",
-        borderColor: "blackAlpha.200",
+        whiteSpace: "nowrap",
         _selected: {
           color: "primary",
           borderBottom: "3px solid",
         },
+      },
+      tablist: {
+        mb: "-3px",
+        borderBottom: "3px solid",
+        borderColor: "blackAlpha.200",
       },
     },
     customEnclosed: {

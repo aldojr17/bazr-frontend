@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
   Grid,
   GridItem,
   Heading,
@@ -366,13 +365,8 @@ const Search = () => {
   }, [search]);
 
   return (
-    <Container maxW={{ base: "container.sm", lg: "container.xl" }}>
-      <Box
-        padding={{
-          base: 5,
-          lg: 12,
-        }}
-      >
+    <>
+      <Box>
         {search.get("q") !== null &&
           search.get("q") !== undefined &&
           search.get("q")!.length > 0 && (
@@ -404,11 +398,10 @@ const Search = () => {
             md: "repeat(3, 1fr)",
             lg: "repeat(8, 1fr)",
           }}
-          gap={4}
+          gap={10}
         >
           <GridItem
             colSpan={2}
-            padding={4}
             display={{
               base: "none",
               lg: "grid",
@@ -944,7 +937,6 @@ const Search = () => {
               md: 3,
               lg: 6,
             }}
-            p={4}
             maxWidth={{
               base: "18rem",
               sm: "100%",
@@ -1734,7 +1726,7 @@ const Search = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Container>
+    </>
   );
 };
 
