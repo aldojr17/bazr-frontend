@@ -13,6 +13,7 @@ import {
   Wrap,
   WrapItem,
   Image,
+  Textarea,
 } from "@chakra-ui/react";
 import FileInputBtn from "../Input/FileInputBtn";
 import { useState } from "react";
@@ -89,8 +90,7 @@ function CreateRefundModal(props: ICreateRefundModalProps) {
             <Input disabled value={props.orderId} />
 
             <Text width="40%">Notes</Text>
-            <Input
-              type="text"
+            <Textarea
               placeholder="Input"
               value={notes}
               onChange={(e) => setNotes(e.currentTarget.value)}

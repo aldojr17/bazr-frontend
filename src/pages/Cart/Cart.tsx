@@ -236,10 +236,7 @@ const Cart = () => {
       0
     );
 
-    let newTotal = checkoutCartState.reduce(
-      (acc, val) => acc + val.price_after_discount * val.quantity,
-      0
-    );
+    let newTotal = checkoutCartState.reduce((acc, val) => acc + val.total, 0);
 
     let newDiscount = newSubtotal - newTotal;
 

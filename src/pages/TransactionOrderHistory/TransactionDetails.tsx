@@ -390,6 +390,7 @@ function TransactionDetails() {
                         color={"darkLighten"}
                         fontSize={"xs"}
                         fontWeight={"semibold"}
+                        cursor={"pointer"}
                         _hover={{
                           color: "danger",
                         }}
