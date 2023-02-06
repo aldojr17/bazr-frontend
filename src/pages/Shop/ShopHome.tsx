@@ -255,21 +255,18 @@ function ShopHome() {
           )}
         </TabList>
       </Tabs>
-      <Box className="py-4">
-        <ShopHomeProductsOverview
-          shopId={shopProfile!.id}
-          resetCategory={resetCategory}
-          setIndexActiveTab={setIndexActiveTab}
-          scrollToSortOption={scrollToSortOption}
-          resetSortBy={resetSortBy}
-          resetSort={resetSort}
-          resetPage={resetPage}
-        />
-      </Box>
+      <ShopHomeProductsOverview
+        shopId={shopProfile!.id}
+        resetCategory={resetCategory}
+        setIndexActiveTab={setIndexActiveTab}
+        scrollToSortOption={scrollToSortOption}
+        resetSortBy={resetSortBy}
+        resetSort={resetSort}
+        resetPage={resetPage}
+      />
       <HStack
         width={"100%"}
         bg="secondaryLighten"
-        px={4}
         justifyContent={"space-between"}
         display={{
           base: "flex",
@@ -357,13 +354,12 @@ function ShopHome() {
           </Select>
         </HStack>
       </HStack>
-      <Grid templateColumns="repeat(6, 1fr)" className="pt-4">
+      <Grid templateColumns="repeat(6, 1fr)" gap={10} my={10}>
         <GridItem
           display={{
             base: "none",
             xl: "flex",
           }}
-          className="px-3"
           colSpan={{
             base: 0,
             xl: 1,
@@ -389,7 +385,6 @@ function ShopHome() {
           </Box>
         </GridItem>
         <GridItem
-          className="px-3"
           colSpan={{
             base: 6,
             xl: 5,

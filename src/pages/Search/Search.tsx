@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Flex,
   Grid,
   GridItem,
   Heading,
@@ -937,232 +938,119 @@ const Search = () => {
               md: 3,
               lg: 6,
             }}
-            maxWidth={{
-              base: "18rem",
-              sm: "100%",
-            }}
-            justifySelf={{
-              base: "center",
-              sm: "auto",
-            }}
+            maxW={"100%"}
           >
-            <HStack
-              justifyContent={"space-between"}
-              __css={{
-                margin: "0",
-              }}
-            >
+            <Flex width={"100%"} direction={"column"}>
               <HStack
-                spacing={5}
-                display={{
-                  base: "none",
-                  sm: "none",
-                  md: "none",
-                  lg: "flex",
-                  xl: "flex",
-                }}
-              >
-                <Text
-                  fontSize={{
-                    lg: "sm",
-                    xl: "sm",
-                  }}
-                  fontWeight={"semibold"}
-                  color={"lightDarken"}
-                >
-                  Sort by:
-                </Text>
-                <Button
-                  fontWeight={sortBy === "view_count" ? "bold" : "semibold"}
-                  color={sortBy === "view_count" ? "primary" : "dark"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "sm",
-                    xl: "md",
-                  }}
-                  onClick={() => handleChangeSortBy("view_count")}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "sm",
-                    }}
-                  >
-                    Recommended
-                  </Text>
-                </Button>
-                <Button
-                  fontWeight={sortBy === "date" ? "bold" : "semibold"}
-                  color={sortBy === "date" ? "primary" : "dark"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "sm",
-                  }}
-                  onClick={() => handleChangeSortBy("date")}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "sm",
-                    }}
-                  >
-                    Newest
-                  </Text>
-                </Button>
-                <Button
-                  fontWeight={sortBy === "unit_sold" ? "bold" : "semibold"}
-                  color={sortBy === "unit_sold" ? "primary" : "dark"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "sm",
-                  }}
-                  onClick={() => {
-                    handleChangeSortBy("unit_sold");
-                    handleChangeSort("desc");
-                  }}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "sm",
-                    }}
-                  >
-                    Most buy
-                  </Text>
-                </Button>
-                <Button
-                  fontWeight={sortBy === "lowest_price" ? "bold" : "semibold"}
-                  color={sortBy === "lowest_price" ? "primary" : "dark"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "md",
-                  }}
-                  onClick={() => handleChangeSortBy("lowest_price")}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "sm",
-                    }}
-                  >
-                    Price
-                  </Text>
-                </Button>
-                <Button
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "md",
-                  }}
-                  onClick={() => {
-                    sort === "desc"
-                      ? handleChangeSort("asc")
-                      : handleChangeSort("desc");
-                  }}
-                >
-                  <Icon.Sort
-                    width={{
-                      lg: "1.2rem",
-                      xl: "1.5rem",
-                    }}
-                    height={{
-                      lg: "1.2rem",
-                      xl: "1.5rem",
-                    }}
-                    selected={sort}
-                  />
-                </Button>
-              </HStack>
-              <Button
-                variant={"outline"}
-                borderRadius={"md"}
-                size={{
-                  lg: "sm",
-                  xl: "sm",
-                }}
-                onClick={handleClearFilter}
-                display={{
-                  base: "none",
-                  sm: "none",
-                  md: "none",
-                  lg: display,
-                  xl: display,
-                }}
-              >
-                <Text
-                  fontSize={{
-                    lg: "sm",
-                    xl: "sm",
-                  }}
-                >
-                  Clear Filter
-                </Text>
-              </Button>
-
-              <HStack
-                width={"100%"}
-                bg="secondaryLighten"
-                px={4}
                 justifyContent={"space-between"}
-                display={{
-                  base: "flex",
-                  sm: "flex",
-                  md: "flex",
-                  lg: "none",
-                  xl: "none",
+                __css={{
+                  margin: "0",
                 }}
               >
-                <HStack>
-                  <Menu isLazy>
-                    <MenuButton
+                <HStack
+                  spacing={5}
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: "flex",
+                    xl: "flex",
+                  }}
+                >
+                  <Text
+                    fontSize={{
+                      lg: "sm",
+                      xl: "sm",
+                    }}
+                    fontWeight={"semibold"}
+                    color={"lightDarken"}
+                  >
+                    Sort by:
+                  </Text>
+                  <Button
+                    fontWeight={sortBy === "view_count" ? "bold" : "semibold"}
+                    color={sortBy === "view_count" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "sm",
+                      xl: "md",
+                    }}
+                    onClick={() => handleChangeSortBy("view_count")}
+                  >
+                    <Text
                       fontSize={{
-                        base: "sm",
-                        sm: "sm",
-                        md: "md",
+                        lg: "sm",
+                        xl: "sm",
                       }}
                     >
-                      {sortBy === "view_count"
-                        ? "Recommended"
-                        : sortBy === "date"
-                        ? "Newest"
-                        : sortBy === "unit_sold"
-                        ? "Most buy"
-                        : "lowest_price"}
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        onClick={() => handleChangeSortBy("view_count")}
-                      >
-                        Recommended
-                      </MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("date")}>
-                        Newest
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleChangeSortBy("unit_sold");
-                          handleChangeSort("desc");
-                        }}
-                      >
-                        Most buy
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => handleChangeSortBy("lowest_price")}
-                      >
-                        Price
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-
+                      Recommended
+                    </Text>
+                  </Button>
+                  <Button
+                    fontWeight={sortBy === "date" ? "bold" : "semibold"}
+                    color={sortBy === "date" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "xs",
+                      xl: "sm",
+                    }}
+                    onClick={() => handleChangeSortBy("date")}
+                  >
+                    <Text
+                      fontSize={{
+                        lg: "sm",
+                        xl: "sm",
+                      }}
+                    >
+                      Newest
+                    </Text>
+                  </Button>
+                  <Button
+                    fontWeight={sortBy === "unit_sold" ? "bold" : "semibold"}
+                    color={sortBy === "unit_sold" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "xs",
+                      xl: "sm",
+                    }}
+                    onClick={() => {
+                      handleChangeSortBy("unit_sold");
+                      handleChangeSort("desc");
+                    }}
+                  >
+                    <Text
+                      fontSize={{
+                        lg: "sm",
+                        xl: "sm",
+                      }}
+                    >
+                      Most buy
+                    </Text>
+                  </Button>
+                  <Button
+                    fontWeight={sortBy === "lowest_price" ? "bold" : "semibold"}
+                    color={sortBy === "lowest_price" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "xs",
+                      xl: "md",
+                    }}
+                    onClick={() => handleChangeSortBy("lowest_price")}
+                  >
+                    <Text
+                      fontSize={{
+                        lg: "sm",
+                        xl: "sm",
+                      }}
+                    >
+                      Price
+                    </Text>
+                  </Button>
                   <Button
                     variant={"unstyled"}
                     size={{
-                      base: "xs",
-                      sm: "sm",
-                      md: "md",
+                      lg: "xs",
+                      xl: "md",
                     }}
                     onClick={() => {
                       sort === "desc"
@@ -1172,87 +1060,198 @@ const Search = () => {
                   >
                     <Icon.Sort
                       width={{
-                        base: "1.2rem",
-                        sm: "1.2rem",
-                        md: "1.5rem",
+                        lg: "1.2rem",
+                        xl: "1.5rem",
                       }}
                       height={{
-                        base: "1.2rem",
-                        sm: "1.2rem",
-                        md: "1.5rem",
+                        lg: "1.2rem",
+                        xl: "1.5rem",
                       }}
                       selected={sort}
                     />
                   </Button>
                 </HStack>
-                <HStack>
-                  <Button
-                    textDecoration={display === "flex" ? "underline" : ""}
-                    fontWeight={"normal"}
-                    variant={"unstyled"}
-                    onClick={onOpen}
-                    size={{
-                      base: "sm",
-                      sm: "sm",
-                      md: "md",
+                <Button
+                  variant={"outline"}
+                  borderRadius={"md"}
+                  size={{
+                    lg: "sm",
+                    xl: "sm",
+                  }}
+                  onClick={handleClearFilter}
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: display,
+                    xl: display,
+                  }}
+                >
+                  <Text
+                    fontSize={{
+                      lg: "sm",
+                      xl: "sm",
                     }}
                   >
-                    Filter
-                  </Button>
-                  <IconButton
-                    size={"sm"}
-                    aria-label="close"
-                    variant={"unstyled"}
-                    icon={<Icon.Close />}
-                    onClick={handleClearFilter}
-                    display={display}
-                    width={{
-                      base: "1em",
-                      sm: "1.3em",
-                      md: "1.3em",
-                    }}
-                    height={{
-                      base: "1em",
-                      sm: "1.3em",
-                      md: "1.3em",
-                    }}
-                  />
+                    Clear Filter
+                  </Text>
+                </Button>
+
+                <HStack
+                  width={"100%"}
+                  bg="lightLighten"
+                  px={5}
+                  py={2}
+                  my={5}
+                  justifyContent={"space-between"}
+                  display={{
+                    base: "flex",
+                    sm: "flex",
+                    md: "flex",
+                    lg: "none",
+                    xl: "none",
+                  }}
+                >
+                  <HStack>
+                    <Menu isLazy>
+                      <MenuButton
+                        fontSize={{
+                          base: "sm",
+                          sm: "sm",
+                          md: "md",
+                        }}
+                      >
+                        {sortBy === "view_count"
+                          ? "Recommended"
+                          : sortBy === "date"
+                          ? "Newest"
+                          : sortBy === "unit_sold"
+                          ? "Most buy"
+                          : "lowest_price"}
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem
+                          onClick={() => handleChangeSortBy("view_count")}
+                        >
+                          Recommended
+                        </MenuItem>
+                        <MenuItem onClick={() => handleChangeSortBy("date")}>
+                          Newest
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            handleChangeSortBy("unit_sold");
+                            handleChangeSort("desc");
+                          }}
+                        >
+                          Most buy
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => handleChangeSortBy("lowest_price")}
+                        >
+                          Price
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+
+                    <Button
+                      variant={"unstyled"}
+                      size={{
+                        base: "xs",
+                        sm: "sm",
+                        md: "md",
+                      }}
+                      onClick={() => {
+                        sort === "desc"
+                          ? handleChangeSort("asc")
+                          : handleChangeSort("desc");
+                      }}
+                    >
+                      <Icon.Sort
+                        width={{
+                          base: "1.2rem",
+                          sm: "1.2rem",
+                          md: "1.5rem",
+                        }}
+                        height={{
+                          base: "1.2rem",
+                          sm: "1.2rem",
+                          md: "1.5rem",
+                        }}
+                        selected={sort}
+                      />
+                    </Button>
+                  </HStack>
+                  <HStack>
+                    <Button
+                      textDecoration={display === "flex" ? "underline" : ""}
+                      fontWeight={"normal"}
+                      variant={"unstyled"}
+                      onClick={onOpen}
+                      size={{
+                        base: "sm",
+                        sm: "sm",
+                        md: "md",
+                      }}
+                    >
+                      Filter
+                    </Button>
+                    <IconButton
+                      size={"sm"}
+                      aria-label="close"
+                      variant={"unstyled"}
+                      icon={<Icon.Close />}
+                      onClick={handleClearFilter}
+                      display={display}
+                      width={{
+                        base: "1em",
+                        sm: "1.3em",
+                        md: "1.3em",
+                      }}
+                      height={{
+                        base: "1em",
+                        sm: "1.3em",
+                        md: "1.3em",
+                      }}
+                    />
+                  </HStack>
                 </HStack>
               </HStack>
-            </HStack>
 
-            <Box>
-              {products?.data.length !== 0 ? (
-                <Grid
-                  templateColumns={{
-                    base: "repeat(2, 1fr)",
-                    lg: "repeat(4, 1fr)",
-                    xl: "repeat(5, 1fr)",
+              <Flex>
+                {products?.data.length !== 0 ? (
+                  <Grid
+                    w="100%"
+                    templateColumns={{
+                      base: "repeat(4, 1fr)",
+                      md: "repeat(8, 1fr)",
+                      xl: "repeat(10, 1fr)",
+                    }}
+                    gap={3}
+                  >
+                    {products?.data.map((product) => (
+                      <GridItem w={"100%"} colSpan={2}>
+                        <ProductCard key={product.id} {...product} />
+                      </GridItem>
+                    ))}
+                  </Grid>
+                ) : (
+                  <NoProductContainer />
+                )}
+              </Flex>
+
+              {products?.data.length !== 0 && (
+                <Pagination
+                  data={{
+                    current_page: products?.current_page
+                      ? products.current_page
+                      : 0,
+                    total_page: products?.total_page! ? products.total_page : 0,
                   }}
-                  gap={3}
-                >
-                  {products?.data.map((product) => (
-                    <ProductCard key={product.id} {...product} />
-                  ))}
-                </Grid>
-              ) : (
-                <NoProductContainer />
+                  setPage={setPage}
+                />
               )}
-            </Box>
-
-            {products?.data.length !== 0 ? (
-              <Pagination
-                data={{
-                  current_page: products?.current_page
-                    ? products.current_page
-                    : 0,
-                  total_page: products?.total_page! ? products.total_page : 0,
-                }}
-                setPage={setPage}
-              />
-            ) : (
-              ""
-            )}
+            </Flex>
           </GridItem>
         </Grid>
       </Box>

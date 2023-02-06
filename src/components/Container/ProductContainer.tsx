@@ -3,6 +3,7 @@ import {
   Center,
   Flex,
   Grid,
+  GridItem,
   Heading,
   HStack,
   Skeleton,
@@ -48,32 +49,36 @@ function ProductContainer(props: IProductContainerProps) {
         <ErrorContainer onError={onError} />
       ) : (
         <>
-          {products.length === 0 ? (
-            <NoProductContainer onReload={onError} />
-          ) : (
-            <Skeleton isLoaded={!isLoading} borderRadius={"lg"}>
-              <Grid
-                templateColumns={{
-                  base: "repeat(2, 1fr)",
-                  md: "repeat(4, 1fr)",
-                  lg: "repeat(6, 1fr)",
-                }}
-                gap={3}
-              >
-                {products.length !== 0 &&
-                  products.map((product) => (
-                    <ProductCard key={product.id} {...product} />
-                  ))}
-              </Grid>
-              {onLoadMore && (
-                <Center mt={5}>
-                  <Button variant={"primary"} onClick={() => onLoadMore()}>
-                    {loadMoreLabel ?? "See All Products"}
-                  </Button>
-                </Center>
-              )}
-            </Skeleton>
-          )}
+          <Skeleton isLoaded={!isLoading} borderRadius={"lg"}>
+            {products.length === 0 ? (
+              <NoProductContainer onReload={onError} />
+            ) : (
+              <>
+                <Grid
+                  templateColumns={{
+                    base: "repeat(4, 1fr)",
+                    md: "repeat(8, 1fr)",
+                    lg: "repeat(12, 1fr)",
+                  }}
+                  gap={3}
+                >
+                  {products.length !== 0 &&
+                    products.map((product) => (
+                      <GridItem colSpan={2}>
+                        <ProductCard key={product.id} {...product} />
+                      </GridItem>
+                    ))}
+                </Grid>
+                {onLoadMore && (
+                  <Center mt={5}>
+                    <Button variant={"primary"} onClick={() => onLoadMore()}>
+                      {loadMoreLabel ?? "See All Products"}
+                    </Button>
+                  </Center>
+                )}
+              </>
+            )}
+          </Skeleton>
         </>
       )}
     </Flex>

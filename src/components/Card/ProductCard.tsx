@@ -19,8 +19,6 @@ const ProductCard = ({ ...props }: IProductPayload) => {
   return (
     <Box
       onClick={() => navigate(routes.PDP(props.id, props.name))}
-      flexShrink={0}
-      w={"100%"}
       border={"2px solid"}
       borderColor={"light"}
       borderRadius={"lg"}
