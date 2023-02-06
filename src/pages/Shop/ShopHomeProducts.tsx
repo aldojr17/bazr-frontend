@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Flex,
+  Grid,
   GridItem,
   HStack,
   Text,
@@ -89,9 +90,23 @@ function ShopHomeProducts(props: IShopHomeProductsProps) {
     if (limit_is_given) {
       shopProductsData = shopProductsData.slice(0, limit);
     }
-    return shopProductsData.map((product) => (
-      <ProductCard key={product.id} {...product} />
-    ));
+    return (
+      <Grid
+        w="100%"
+        templateColumns={{
+          base: "repeat(4, 1fr)",
+          md: "repeat(8, 1fr)",
+          xl: "repeat(10, 1fr)",
+        }}
+        gap={3}
+      >
+        {shopProductsData?.map((product) => (
+          <GridItem w={"100%"} colSpan={2}>
+            <ProductCard key={product.id} {...product} />
+          </GridItem>
+        ))}
+      </Grid>
+    );
   };
 
   useEffect(() => {
@@ -219,7 +234,7 @@ function ShopHomeProducts(props: IShopHomeProductsProps) {
         </Button>
       </HStack>
       <Box className="py-3">
-        <Flex wrap="wrap" direction="row" justifyContent="space-evenly" gap={2}>
+        <Flex>
           {shopProducts.data.length !== 0 ? (
             showShopProducts()
           ) : (
@@ -240,7 +255,7 @@ function ShopHomeProducts(props: IShopHomeProductsProps) {
         </Flex>
       </Box>
       <Box>
-        {shopProducts?.data.length !== 0 ? (
+        {shopProducts?.data.length !== 0 && (
           <Pagination
             data={{
               current_page: shopProducts?.current_page
@@ -252,8 +267,6 @@ function ShopHomeProducts(props: IShopHomeProductsProps) {
             }}
             setPage={setPage}
           />
-        ) : (
-          ""
         )}
       </Box>
     </>

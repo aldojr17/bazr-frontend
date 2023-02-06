@@ -1,6 +1,14 @@
-import { Divider, Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
+import {
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Skeleton,
+  Text,
+} from "@chakra-ui/react";
 import dayjs from "dayjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import TransactionDetailActionButton from "../../components/Button/TransactionDetailActionButton";
@@ -26,6 +34,8 @@ function OrderHistory() {
 
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const openTransactionDetail = (transaction: ITransaction) => {
     setShowTransactionDetail({
       transactionId: transaction.id,
@@ -36,7 +46,7 @@ function OrderHistory() {
     fetchTransactionHistory({
       page: page,
       status: deliveryStatus,
-    });
+    }).finally(() => setIsLoading(false));
   }, [deliveryStatus, page]);
 
   return (
@@ -248,9 +258,11 @@ function OrderHistory() {
           </Flex>
         ))
       ) : (
-        <Flex paddingTop={5} justifyContent="center">
-          No Transactions
-        </Flex>
+        <Skeleton isLoaded={!isLoading} p={10} my={5}>
+          <Flex paddingTop={5} justifyContent="center">
+            No Transactions
+          </Flex>
+        </Skeleton>
       )}
     </>
   );
