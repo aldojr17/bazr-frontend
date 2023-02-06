@@ -50,6 +50,16 @@ const useCart = () => {
     return response;
   };
 
+  const updateNotes = (payload: ICartPayload) => {
+    dispatch(
+      storeCart(
+        cart.map((val) => {
+          return val.cart_id === payload.cart_id ? payload : val;
+        })
+      )
+    );
+  };
+
   const setCheckoutData = (payload: ICheckoutSuccessResponsePayload) => {
     dispatch(storeCheckoutCart(payload));
   };
@@ -98,6 +108,7 @@ const useCart = () => {
     checkoutData,
     setCheckoutCartIds,
     checkoutCart,
+    updateNotes,
   };
 };
 

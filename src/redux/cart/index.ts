@@ -46,6 +46,7 @@ const initialState: CartState = {
     variant_type_id: 0,
     variant_type_name: "",
     variant_type_price: 0,
+    notes: "",
   },
   checkoutCart: [],
 };

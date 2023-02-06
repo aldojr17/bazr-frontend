@@ -27,6 +27,7 @@ export interface ICartItemProps {
     shopId: number
   ) => void;
   handleDeleteItem: (id: number) => void;
+  handleInputNotes: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface IToastProps {
