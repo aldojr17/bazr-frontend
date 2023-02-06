@@ -162,9 +162,10 @@ function AddressModalBody(props: IPropsAddressModalBody) {
   const _addNewAddress = (formValues: IFormAddNewAddress) => {
     const addNewAddressReqPayload: IAddNewAddressRequestPayload =
       _mapFormToRequestPayload(formValues);
-    addNewAddress(addNewAddressReqPayload);
-    props.setRefetchUserAddress(Math.random());
-    props.onClose();
+    addNewAddress(addNewAddressReqPayload).then(() => {
+      props.setRefetchUserAddress(Math.random());
+      props.onClose();
+    });
   };
 
   const changeInputName = (
