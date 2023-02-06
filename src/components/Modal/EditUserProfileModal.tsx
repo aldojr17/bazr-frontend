@@ -12,7 +12,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { Field, Formik } from "formik";
@@ -21,11 +20,12 @@ import dayjs from "dayjs";
 import useUser from "../../hooks/useUser";
 import { IEditUserProfileModalProps } from "../../interfaces/Components";
 import { IEditProfilePayload } from "../../interfaces/User";
+import useToast from "../../hooks/useToast";
 
 function EditUserProfileModal(props: IEditUserProfileModalProps) {
   const { fetchProfile, editProfile } = useUser();
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
+  const { successToast, errorToast } = useToast();
 
   const userValidationSchema = Yup.object().shape({
     username: Yup.string()
@@ -42,20 +42,10 @@ function EditUserProfileModal(props: IEditUserProfileModalProps) {
     const response = await editProfile(payload);
     if (response.is_success) {
       props.onClose();
-      toast({
-        title: response.message,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      successToast(response.message);
       fetchProfile();
     } else {
-      toast({
-        title: response.message ?? "error edit profile",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      errorToast(response.message ?? "error edit profile");
     }
 
     setIsLoading(false);

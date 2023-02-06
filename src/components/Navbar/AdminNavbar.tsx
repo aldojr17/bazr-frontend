@@ -1,10 +1,37 @@
-import { Avatar, Center, Flex, Heading, IconButton } from "@chakra-ui/react";
+import {
+  Avatar,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverContent,
+  PopoverFooter,
+  PopoverTrigger,
+} from "@chakra-ui/react";
+import { destroyCookie } from "nookies";
+import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
+import useCart from "../../hooks/useCart";
 import useUser from "../../hooks/useUser";
 import { NavbarProps } from "../../interfaces/Navbar";
+import routes from "../../routes/Routes";
 
 const AdminNavbar = (props: NavbarProps) => {
   const { user } = useUser();
+
+  const { clearUserCart } = useCart();
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    destroyCookie(null, "auth");
+    localStorage.clear();
+    clearUserCart();
+    navigate(routes.LOGIN, { replace: true });
+  };
 
   return (
     <Flex
@@ -29,11 +56,33 @@ const AdminNavbar = (props: NavbarProps) => {
       </Heading>
 
       <Center>
-        <Avatar
-          name="Profile Picture"
-          src={user?.profile_picture}
-          cursor="pointer"
-        />
+        <Popover placement={"bottom-start"} isLazy trigger="hover">
+          <PopoverTrigger>
+            <Avatar
+              name="Profile Picture"
+              src={user?.profile_picture}
+              cursor="pointer"
+            />
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverArrow />
+            <PopoverFooter px={5}>
+              <Flex justifyContent={"end"}>
+                <Button
+                  variant={"primaryLink"}
+                  size={"md"}
+                  onClick={handleLogout}
+                  flexDirection={"row"}
+                  alignItems={"center"}
+                  gap={2}
+                >
+                  Logout
+                  <Icon.Logout fill={"primary"} />
+                </Button>
+              </Flex>
+            </PopoverFooter>
+          </PopoverContent>
+        </Popover>
       </Center>
     </Flex>
   );

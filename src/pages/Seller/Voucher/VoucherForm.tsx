@@ -37,7 +37,7 @@ function VoucherForm(props: IVoucherFormProps) {
     benefit: Yup.number().min(0),
     benefit_percentage: Yup.number()
       .min(0)
-      .max(100)
+      .max(99)
       .when("benefit", {
         is: (benefit: number) => benefit > 0,
         then: (b) =>

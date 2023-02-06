@@ -104,10 +104,10 @@ function PromotionBulkForm(props: IPromotionBulkFormProps) {
       isError = true;
     }
 
-    if (input.benefit_percentage < 0 || input.benefit_percentage > 100) {
+    if (input.benefit_percentage < 0 || input.benefit_percentage > 99) {
       setInputError((prev) => ({
         ...prev,
-        benefit_percentage: "min 0 and max 100",
+        benefit_percentage: "min 0 and max 99",
       }));
       isError = true;
     }

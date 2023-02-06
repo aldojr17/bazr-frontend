@@ -31,7 +31,7 @@ function NavProfile() {
     destroyCookie(null, "auth");
     localStorage.clear();
     clearUserCart();
-    navigate("/login", { replace: true });
+    navigate(routes.LOGIN, { replace: true });
   };
 
   useEffect(() => {}, [user]);

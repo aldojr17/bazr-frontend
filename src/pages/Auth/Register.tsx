@@ -20,6 +20,7 @@ import Icon from "../../assets/icons";
 import useTitle from "../../hooks/useTitle";
 import useToast from "../../hooks/useToast";
 import { IRegisterRequestPayload } from "../../interfaces/Auth";
+import routes from "../../routes/Routes";
 
 const Register = () => {
   useTitle("Register | BAZR");
@@ -51,10 +52,10 @@ const Register = () => {
     if (response.is_success) {
       if (state) {
         successToast("Your account has been created!");
-        navigate("/");
+        navigate(routes.HOME);
       } else {
         successToast("Your account has been created! Please log in.");
-        navigate("/login");
+        navigate(routes.LOGIN);
       }
     } else {
       errorToast("Failed to register", response.message);

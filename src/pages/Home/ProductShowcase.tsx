@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductContainer from "../../components/Container/ProductContainer";
 import useProduct from "../../hooks/useProduct";
+import routes from "../../routes/Routes";
 
 function ProductShowcase() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function ProductShowcase() {
       products={products.data}
       label={"Recommended"}
       isLoading={isLoading}
-      onLoadMore={() => navigate("/search?q=")}
+      onLoadMore={() => navigate(routes.SEARCH(""))}
     />
   );
 }
