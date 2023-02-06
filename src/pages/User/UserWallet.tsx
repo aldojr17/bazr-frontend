@@ -362,6 +362,7 @@ function UserWallet() {
           isOpen={isOpenTopup}
           onOpen={onOpenTopup}
           onClose={onCloseTopup}
+          getWalletHistory={getHistory}
         />
       </Box>
     </Container>

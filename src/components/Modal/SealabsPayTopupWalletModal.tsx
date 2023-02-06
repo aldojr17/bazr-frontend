@@ -76,6 +76,7 @@ const SealabsPayTopupWalletModal = ({
       successToast("Topup success!");
       props.onClose();
       fetchProfile();
+      props.getWalletHistory();
     } else if (redirectParams.status === "TXN_FAILED") {
       errorToast(
         "Failed to topup your wallet. because: " + redirectParams.message
