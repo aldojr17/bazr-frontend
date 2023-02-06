@@ -10,14 +10,14 @@ const Heading = defineStyleConfig({
       fontWeight: "bold",
     },
     productRating: {
-      fontSize: "xl",
-      fontWeight: "bold",
+      fontSize: "md",
+      fontWeight: "semibold",
       color: "gray.600",
     },
     productNormalPrice: {
       fontSize: "3xl",
       fontWeight: "bold",
-      color: "teal.400",
+      color: "primary",
     },
     productOriginalPrice: {
       fontSize: "xl",
@@ -30,12 +30,18 @@ const Heading = defineStyleConfig({
       color: "red.400",
     },
     variantName: {
-      fontSize: "md",
-      color: "gray.600",
+      fontSize: "sm",
+      fontWeight: "semibold",
+      color: "dark",
     },
     productShopName: {
       fontSize: "xl",
-      fontWeight: "semibold",
+      fontWeight: "bold",
+    },
+    sectionHeading: {
+      textTransform: "uppercase",
+      fontWeight: "bold",
+      marginBottom: 3,
     },
   },
   defaultProps: {

@@ -1,11 +1,13 @@
 import { Button, Flex } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Icon from "../../assets/icons";
 import { IPaginationProps } from "../../interfaces/Pagination";
 
 const Pagination = ({ ...props }: IPaginationProps) => {
   const [pagination, setPagination] = useState<String[]>([]);
 
   const handleClick = (page: number) => {
+    window.scrollTo(0, 0);
     props.setPage(page);
   };
 
@@ -71,21 +73,18 @@ const Pagination = ({ ...props }: IPaginationProps) => {
   return (
     <Flex justifyContent={"center"} gap={5} py={8}>
       <Button
-        variant={"unstyled"}
+        variant={"navLink"}
         borderRadius={"none"}
-        fontWeight={"normal"}
-        size={{
-          base: "md",
-          sm: "lg",
-          md: "lg",
-          lg: "lg",
-          xl: "lg",
-        }}
+        fontWeight={"medium"}
+        size={"md"}
         onClick={() => {
           if (props.data.current_page - 1 > 0) {
             handleClick(props.data.current_page - 1);
           }
         }}
+        leftIcon={<Icon.ArrowLeft fill={"currentcolor"} />}
+        display={"flex"}
+        disabled={props.data.current_page === 1}
       >
         Prev
       </Button>
@@ -94,22 +93,19 @@ const Pagination = ({ ...props }: IPaginationProps) => {
           key={index}
           variant={"unstyled"}
           borderRadius={"none"}
-          fontWeight={
-            props.data.current_page === Number(item) ? "bold" : "normal"
+          color={
+            props.data.current_page === Number(item) ? "black" : "darkLighten"
           }
-          borderBottom={props.data.current_page === Number(item) ? "1px" : ""}
+          fontSize={"md"}
+          fontWeight={
+            props.data.current_page === Number(item) ? "bold" : "medium"
+          }
+          borderBottom={props.data.current_page === Number(item) ? "2px" : ""}
           borderColor={"primary"}
-          size={{
-            md: "lg",
-            lg: "lg",
-            xl: "lg",
-          }}
+          size={"md"}
           display={{
             base: "none",
-            sm: "none",
             md: "inline",
-            lg: "inline",
-            xl: "inline",
           }}
           onClick={() => {
             if (item !== "...") {
@@ -121,21 +117,18 @@ const Pagination = ({ ...props }: IPaginationProps) => {
         </Button>
       ))}
       <Button
-        variant={"unstyled"}
+        variant={"navLink"}
         borderRadius={"none"}
-        fontWeight={"normal"}
-        size={{
-          base: "md",
-          sm: "lg",
-          md: "lg",
-          lg: "lg",
-          xl: "lg",
-        }}
+        fontWeight={"medium"}
+        size={"md"}
         onClick={() => {
           if (props.data.current_page + 1 <= props.data.total_page) {
             handleClick(props.data.current_page + 1);
           }
         }}
+        rightIcon={<Icon.ArrowRight fill={"currentcolor"} />}
+        display={"flex"}
+        disabled={props.data.current_page === props.data.total_page}
       >
         Next
       </Button>

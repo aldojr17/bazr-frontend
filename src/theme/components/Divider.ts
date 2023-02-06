@@ -4,13 +4,18 @@ const Divider = defineStyleConfig({
   baseStyle: {
     borderColor: "primary",
   },
-  sizes: {},
   variants: {
     solidPrimary: {
-      borderWidth: "5px",
+      borderWidth: "1px",
       borderStyle: "solid",
       borderRadius: 10,
       borderColor: "primary",
+    },
+    solidLight: {
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderRadius: 10,
+      borderColor: "lightLighten",
     },
   },
   defaultProps: {

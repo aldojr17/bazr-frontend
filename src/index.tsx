@@ -1,28 +1,35 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+import { ChakraProvider } from "@chakra-ui/react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
-import store, { persistor } from "./redux";
-import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import { customTheme } from "./theme/theme";
+import { store } from "./redux";
+import NetworkStatus from "./components/NetworkStatus/NetworkStatus";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>
+  <ChakraProvider theme={customTheme}>
+    <ErrorBoundary>
+      <GoogleOAuthProvider clientId="193045182620-6i9jf7k31ghtl4dkvqbvsni03r0dm7mm.apps.googleusercontent.com">
+        <NetworkStatus />
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </GoogleOAuthProvider>
+    </ErrorBoundary>
+  </ChakraProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

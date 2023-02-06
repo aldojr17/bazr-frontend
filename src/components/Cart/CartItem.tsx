@@ -1,45 +1,46 @@
 import {
-  AspectRatio,
   Box,
   Button,
   Checkbox,
   Flex,
   HStack,
   IconButton,
-  Image,
   Input,
   Text,
-  useNumberInput,
-  VStack,
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Icon from "../../assets/icons";
 import useCart from "../../hooks/useCart";
 import { ICartItemProps } from "../../interfaces/Components";
-import { formatCurrency } from "../../util/util";
+import routes from "../../routes/Routes";
+import ProductListItem from "../Card/ProductListItem";
+import QuantitySelector from "../Default/QuantitySelector";
 
 const CartItem = ({ ...props }: ICartItemProps) => {
+  const navigate = useNavigate();
   const { updateCart } = useCart();
-  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-    useNumberInput({
-      defaultValue: props.data.quantity,
-      min: 1,
-      max: 99,
-      onChange: (valString, valNumber) => {
-        if (valString !== "") {
-          updateCart({
-            quantity: valNumber,
-            shop_id: props.data.shop_id,
-            variant_type_id: props.data.variant_type_id,
-          });
-        }
-      },
-    });
+  const [showNotes, setShowNotes] = useState<boolean>(false);
+
+  const isDisabled =
+    !props.data.stock || props.data.stock < props.data.min_buy_qty;
+
+  const onQuantityChange = (qty: number) => {
+    if (qty !== props.data.quantity) {
+      updateCart({
+        quantity: qty - props.data.quantity,
+        shop_id: props.data.shop_id,
+        variant_type_id: props.data.variant_type_id,
+      });
+    }
+  };
 
   return (
-    <>
-      <HStack width={"100%"} pt={3} alignItems={"center"}>
+    <Box backgroundColor={isDisabled ? "lightLighten" : "transparent"}>
+      <HStack width={"100%"} pt={3} alignItems={"start"} gap={2}>
         <Checkbox
           isChecked={props.selectedCart}
+          colorScheme={"default"}
           onChange={(event) =>
             props.handleSelectItem(
               event,
@@ -47,72 +48,30 @@ const CartItem = ({ ...props }: ICartItemProps) => {
               props.data.shop_id
             )
           }
+          disabled={isDisabled}
         />
-        <AspectRatio
-          ratio={1}
-          width={{
-            base: "5em",
-            sm: "5em",
-            md: "6em",
-            lg: "6em",
-            xl: "7em",
-          }}
-        >
-          <Image src="https://res.cloudinary.com/dcdexrr4n/image/upload/v1670317984/mppsna4mqr567gep3ec6.png" />
-        </AspectRatio>
-        <VStack
-          maxH={{
-            base: "5em",
-            sm: "5em",
-            md: "6em",
-            lg: "6em",
-            xl: "7em",
-          }}
-          alignItems={"start"}
-        >
-          <Button
-            variant={"unstyled"}
-            size={{
-              base: "sm",
-              sm: "sm",
-              md: "initial",
-              lg: "initial",
-              xl: "initial",
-            }}
-            __css={{
-              paddingInlineStart: 0,
-            }}
-            fontWeight={"bold"}
-          >
-            {props.data.product_name}
-          </Button>
-          <Text
-            fontSize={{
-              base: "sm",
-              sm: "sm",
-              md: "initial",
-              lg: "initial",
-              xl: "initial",
-            }}
-          >
-            {props.data.variant_type_name}
-          </Text>
-          <Text
-            fontSize={{
-              base: "sm",
-              sm: "sm",
-              md: "initial",
-              lg: "initial",
-              xl: "initial",
-            }}
-          >
-            Rp.{formatCurrency(props.data.variant_type_price)}
-          </Text>
-        </VStack>
+        <Box width={"100%"} pb={5} pe={3}>
+          <ProductListItem
+            key={props.data.variant_type_id}
+            name={props.data.product_name}
+            qty={props.data.quantity}
+            regularPrice={props.data.variant_type_price}
+            discountedPrice={props.data.price_after_discount}
+            total={props.data.total}
+            variantName={props.data.variant_type_name.split(",").join(", ")}
+            onClick={() =>
+              navigate(
+                routes.PDP(props.data.product_id!, props.data.product_name)
+              )
+            }
+            disabled={isDisabled}
+            productPhoto={props.data.product_photo}
+          />
+        </Box>
       </HStack>
 
       <Flex
-        alignItems={"start"}
+        alignItems={"center"}
         width={"100%"}
         justifyContent={"space-between"}
         mb={3}
@@ -124,85 +83,56 @@ const CartItem = ({ ...props }: ICartItemProps) => {
           xl: "row",
         }}
       >
-        <Button
-          variant={"unstyled"}
-          marginStart={"1.5em"}
-          color={"teal.500"}
-          textAlign={"start"}
+        {showNotes ? (
+          <Input
+            marginStart={"2.75em"}
+            placeholder="Notes"
+            size="sm"
+            value={props.data.notes}
+            onChange={props.handleInputNotes}
+          />
+        ) : (
+          <Button
+            variant={"unstyled"}
+            marginStart={"2.75em"}
+            color={"primary"}
+            textAlign={"start"}
+            fontSize={"xs"}
+            disabled={isDisabled}
+            onClick={() => setShowNotes(true)}
+          >
+            Add Notes
+          </Button>
+        )}
+
+        <HStack
+          spacing={5}
+          justifyContent={"end"}
+          alignItems={"center"}
+          width={"100%"}
         >
-          Note
-        </Button>
-        <HStack spacing={5} justifyContent={"end"} width={"100%"}>
+          {isDisabled && (
+            <Text fontSize={"xs"} color={"dark"} fontWeight={"semibold"}>
+              Out of stock
+            </Text>
+          )}
           <IconButton
             variant={"unstyled"}
             aria-label="delete"
-            icon={<Icon.Trash />}
+            icon={<Icon.Trash boxSize={4} fill={isDisabled ? "red" : "dark"} />}
             onClick={() => props.handleDeleteItem(props.data.cart_id)}
           />
-          <HStack>
-            <Button
-              width={8}
-              variant={"outline"}
-              size={{
-                base: "sm",
-                sm: "sm",
-                md: "sm",
-                lg: "sm",
-                xl: "sm",
-              }}
-              {...getDecrementButtonProps()}
-            >
-              -
-            </Button>
-            <Box
-              borderBottom={"1px solid rgb(243, 243, 243)"}
-              width={{
-                base: "3em",
-                sm: "4em",
-                md: "4em",
-                lg: "4em",
-                xl: "4em",
-              }}
-            >
-              <Input
-                {...getInputProps()}
-                size={{
-                  base: "sm",
-                  sm: "sm",
-                  md: "sm",
-                  lg: "sm",
-                  xl: "md",
-                }}
-                border={"none"}
-                textAlign={"center"}
-                _focusVisible={{
-                  outline: "none",
-                }}
-                paddingInline={{
-                  sm: 0,
-                  md: 0,
-                  lg: 0,
-                  xl: 0,
-                }}
-              />
-            </Box>
-            <Button
-              width={8}
-              variant={"outline"}
-              size={{
-                sm: "sm",
-                md: "sm",
-                lg: "sm",
-                xl: "sm",
-              }}
-              {...getIncrementButtonProps()}
-            >
-              +
-            </Button>
-          </HStack>
+          <QuantitySelector
+            onQuantityChange={onQuantityChange}
+            maxQty={props.data.max_buy_qty}
+            minQty={props.data.min_buy_qty}
+            stock={props.data.stock}
+            defaultValue={props.data.quantity}
+            disabled={isDisabled}
+          />
         </HStack>
       </Flex>
-    </>
+    </Box>
   );
 };
 

@@ -3,6 +3,12 @@ export interface IRegisterRequestPayload {
   username: string;
   email: string;
   password: string;
+  isOauth: boolean;
+}
+
+export interface IRegisterMerchantRequestPayload {
+  name: string;
+  username: string;
 }
 
 export interface IRegisterResponsePayload {
@@ -39,5 +45,39 @@ export interface IRefreshRequestPayload {
 export interface IRefreshResponsePayload {
   is_success: boolean;
   data: null;
+  message: string;
+}
+
+export interface IChangePasswordRequestPayload {
+  token: string;
+  password: string;
+}
+
+export interface IResetPasswordRequestPayload {
+  email: string;
+}
+
+export interface IPasswordResponsePayload {
+  is_success: boolean;
+  data: null;
+  message: string;
+}
+
+export interface IPinRequestPayload {
+  pin: string;
+}
+
+export interface IPinPasswordRequestPayload {
+  password: string;
+}
+
+export interface IPinUpdateRequestPayload {
+  token: string;
+  pin: string;
+}
+
+export interface IPinResponsePayload {
+  is_success: boolean;
+  data: { token: string };
   message: string;
 }

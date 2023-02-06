@@ -1,10 +1,36 @@
 image: node:18.12.1-slim
 
+cache:
+  paths:
+    - node_modules/
+    - .yarn
+
+before_script:
+  - apt-get update -qq && apt-get install
+
 stages:
   - lint
+  - eslint
+  - build
 
 lint-job:
   stage: lint
   script:
     - npx prettier --check --config .prettierrc.yml --no-editorconfig .
   allow_failure: true
+
+eslint-job:
+  stage: eslint
+  script:
+    - npx eslint -c .custom-eslintrc.yml .
+
+build-job:
+  stage: build
+  before_script:
+    - yarn config set cache-folder .yarn
+    - yarn install
+  script:
+    - CI="false" && yarn build
+  artifacts:
+    paths:
+      - build

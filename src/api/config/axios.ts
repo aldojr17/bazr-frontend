@@ -1,9 +1,9 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { API_PATH } from "../path";
 
 const instance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 60000,
 });
 
@@ -26,7 +26,11 @@ instance.interceptors.request.use(
 export const handleHttpResponse = (status: string, message?: string) => {
   switch (status) {
     case "0": {
-      return "Network Error";
+      return {
+        message: "Network Error",
+        is_success: false,
+        data: null,
+      };
     }
     case "404": {
       return "Data Not Found";
@@ -43,34 +47,12 @@ export const handleHttpResponse = (status: string, message?: string) => {
   }
 };
 
-const handleFallback = (
-  method: string,
-  url: string,
-  payload?: AxiosRequestConfig
-) => {
-  switch (method) {
-    case "get":
-      instance.get(url, payload?.params);
-      return;
-    case "post":
-      instance.post(url, JSON.parse(payload?.data!)).catch((err) => {
-        console.log("Fallback Error: ", err);
-        // const error = err && err.response && err.response.data;
-        // if (error && error.message === "unauthorized") {
-        //   localStorage.clear()
-        //   window.location.replace("/login");
-        // }
-      });
-      return;
-    default:
-      return;
-  }
-};
-
 instance.interceptors.response.use(
   (res) => {
     if (res.data.data?.access_token) {
-      setCookie(null, "auth", `Bearer ${res.data.data.access_token}`);
+      setCookie(null, "auth", `Bearer ${res.data.data.access_token}`, {
+        path: "/",
+      });
     }
     if (res.data.data?.refresh_token) {
       localStorage.setItem("refresh", res.data.data.refresh_token);
@@ -84,7 +66,7 @@ instance.interceptors.response.use(
       destroyCookie(null, "auth");
 
       if (localStorage.getItem("refresh")) {
-        instance
+        return instance
           .post(API_PATH.auth.REFRESH, {
             refresh_token: localStorage.getItem("refresh"),
           })
@@ -92,25 +74,29 @@ instance.interceptors.response.use(
             setCookie(
               null,
               "auth",
-              `Bearer ${response.data.data.access_token}`
+              `Bearer ${response.data.data.access_token}`,
+              {
+                path: "/",
+              }
             );
-            handleFallback(err.config.method, err.config.url, err.config);
+
+            const originalRequest = err.config;
+            originalRequest._retry = true;
+
+            return instance(originalRequest);
           })
           .catch((error) => {
             localStorage.clear();
             window.location.replace("/login");
           });
-
-        return;
       }
 
-      window.location.replace("/login");
       throw Promise.reject("Invalid credential");
     } else {
-      if (err.code === "ERR_NETWORK") {
-        throw handleHttpResponse("0");
+      if (err.code === "ERR_NETWORK" || err.code === "ERR_CONNECTION_REFUSED") {
+        return Promise.reject(handleHttpResponse("0"));
       } else {
-        throw error;
+        throw err.response.data;
       }
     }
   }

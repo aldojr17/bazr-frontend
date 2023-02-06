@@ -22,6 +22,9 @@ const Button = defineStyleConfig({
       boxShadow: "default",
       _hover: {
         bg: "primaryLighten",
+        _disabled: {
+          bg: "primaryDarken",
+        },
       },
       _active: {
         bg: "primaryDarken",
@@ -30,18 +33,83 @@ const Button = defineStyleConfig({
     primaryOutline: {
       bg: "white",
       color: "primary",
-      border: "4px solid",
-      borderColor: "teal.400",
+      border: "2px solid",
+      borderColor: "primary",
       borderRadius: "lg",
       boxShadow: "default",
       _hover: {
-        bg: "primary",
+        bg: "primaryLighten",
         color: "white",
+        borderColor: "primaryLighten",
+
+        _disabled: {
+          color: "primaryDarken",
+          borderColor: "primaryDarken",
+        },
       },
       _active: {
         bg: "primaryDarken",
         borderColor: "primaryDarken",
         color: "white",
+      },
+    },
+    primaryGhost: {
+      bg: "tranparent",
+      color: "dark",
+      _hover: {
+        bg: "teal.50",
+      },
+      _active: {
+        bg: "primaryDarken",
+        borderColor: "primaryDarken",
+        color: "white",
+      },
+    },
+    primaryNavbarGhost: {
+      bg: "primaryLighten",
+      color: "dark",
+      borderRadius: "xl",
+      _hover: {
+        bg: "teal.100",
+        color: "darkDarken",
+        textDecor: "none",
+      },
+      _active: {
+        bg: "primary",
+      },
+    },
+    primaryLink: {
+      bg: "transparent",
+      color: "primary",
+      _hover: {
+        color: "primaryDarken",
+        textDecor: "none",
+      },
+      _active: {
+        color: "primaryDarken",
+        bg: "primaryLighten",
+      },
+    },
+    lightLink: {
+      bg: "transparent",
+      color: "dark",
+      _hover: {
+        color: "primary",
+        textDecor: "none",
+      },
+      _active: {
+        color: "primaryDarken",
+      },
+    },
+    navLink: {
+      bg: "transparent",
+      color: "primary",
+      _hover: {
+        color: "primaryLighten",
+        textDecor: "none",
+      },
+      _active: {
+        color: "primaryDarken",
       },
     },
     secondary: {
@@ -53,6 +121,19 @@ const Button = defineStyleConfig({
       },
       _active: {
         bg: "secondaryDarken",
+      },
+    },
+    lightGhost: {
+      bg: "lightLighten",
+      color: "dark",
+      borderRadius: "xl",
+      _hover: {
+        bg: "gray.100",
+        color: "darkDarken",
+        textDecor: "none",
+      },
+      _active: {
+        bg: "light",
       },
     },
     carousel: {
@@ -101,16 +182,25 @@ const Button = defineStyleConfig({
       },
     },
     outline: {
-      border: "4px solid",
+      border: "2px solid",
       borderColor: "primary",
       borderRadius: "lg",
       color: "teal.400",
+      _hover: {
+        backgroundColor: "teal.50",
+      },
+      _active: {
+        backgroundColor: "teal.100",
+      },
     },
     basicOutline: {
       border: "1px solid",
       borderColor: "primary",
       borderRadius: "lg",
       color: "teal.400",
+    },
+    paymentMethod: {
+      padding: "12",
     },
   },
   // 6. We can overwrite defaultProps

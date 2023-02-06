@@ -9,7 +9,7 @@ import { API_PATH } from "../path";
 const fetchAllCart = async (): Promise<ICartResponsePayload> => {
   try {
     const response = await instance.get<ICartResponsePayload>(
-      API_PATH.cart.CART + "?simplify=false"
+      API_PATH.cart.CART
     );
 
     return response.data;

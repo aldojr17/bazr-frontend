@@ -6,8 +6,8 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Center,
   Checkbox,
+  Flex,
   Grid,
   GridItem,
   Heading,
@@ -27,32 +27,33 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Skeleton,
   Text,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Icon from "../../assets/icons";
+import ProductCard from "../../components/Card/ProductCard";
+import NoProductContainer from "../../components/Default/NoProductContainer";
+import Pagination from "../../components/Pagination/Pagination";
+import useCategory from "../../hooks/useCategory";
+import useProduct from "../../hooks/useProduct";
+import useTitle from "../../hooks/useTitle";
 import {
   ISearchFilterPayload,
   ISearchParamsPayload,
   SearchParamsState,
 } from "../../interfaces/Filter";
-import ProductCard from "../../components/Card/ProductCard";
-import Pagination from "../../components/Pagination/Pagination";
-import useCategory from "../../hooks/useCategory";
 import { IProductPaginationPayload } from "../../interfaces/Product";
-import productService from "../../api/service/product";
-import useTitle from "../../hooks/useTitle";
 
 const Search = () => {
   const [search, setSearch] = useSearchParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   useTitle(`Shop for ${search.get("q")} | BAZR`);
 
-  const { categories } = useCategory();
+  const { fetchAllProducts } = useProduct();
+  const { categoriesProduct, fetchCategoriesProduct } = useCategory(false);
 
   const [params, setParams] = useState<ISearchParamsPayload>({
     q: search.get("q") !== null ? String(search.get("q")) : "",
@@ -66,6 +67,7 @@ const Search = () => {
   const [sortBy, setSortBy] = useState<string>("view_count");
   const [sort, setSort] = useState<string>("desc");
   const [products, setProducts] = useState<IProductPaginationPayload>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
   const [display, setDisplay] = useState<string>("none");
   const [page, setPage] = useState<number>(1);
@@ -73,16 +75,16 @@ const Search = () => {
   const getProducts = async (filter?: ISearchFilterPayload) => {
     setIsLoading(true);
 
-    const response = await productService.fetchAllProducts(filter);
+    const response = await fetchAllProducts(filter);
 
-    if (response.is_success) {
-      setProducts(response.data);
+    if (response) {
+      setProducts(response);
     }
 
     setIsLoading(false);
   };
 
-  const handleChangeLocation = (id: number, isChecked: boolean) => {
+  const handleChangeLocation = (id: number[], isChecked: boolean) => {
     let newParams: Record<string, string> = {
       q: search.get("q") !== null ? String(search.get("q")) : "",
     };
@@ -92,25 +94,25 @@ const Search = () => {
         ...params,
         city: params.city
           ?.split(",")
-          .filter((val) => parseInt(val) !== id)
+          .filter((val) => !id.includes(parseInt(val)))
           .join(","),
       });
       newParams["city"] = params.city
         ?.split(",")
-        .filter((val) => parseInt(val) !== id)
+        .filter((val) => !id.includes(parseInt(val)))
         .join(",")!;
     } else {
       setParams({
         ...params,
         city:
           params.city?.split(",").length !== 0
-            ? [...params.city?.split(",")!, id].join(",")
-            : `${id}`,
+            ? [...params.city?.split(",")!, ...id].join(",")
+            : `${id.join(",")}`,
       });
       newParams["city"] =
         params.city?.split(",").length !== 0
-          ? [...params.city?.split(",")!, id].join(",")
-          : `${id}`;
+          ? [...params.city?.split(",")!, ...id].join(",")
+          : `${id.join(",")}`;
     }
 
     if (newParams["city"].at(0) === ",") {
@@ -132,13 +134,13 @@ const Search = () => {
     setSearch(newParams, { replace: true });
   };
 
-  const handleChangeLocationModal = (id: number, isChecked: boolean) => {
+  const handleChangeLocationModal = (id: number[], isChecked: boolean) => {
     if (!isChecked) {
       setParams({
         ...params,
         city: params.city
           ?.split(",")
-          .filter((val) => parseInt(val) !== id)
+          .filter((val) => !id.includes(parseInt(val)))
           .join(","),
       });
     } else {
@@ -146,8 +148,8 @@ const Search = () => {
         ...params,
         city:
           params.city?.split(",").length !== 0
-            ? [...params.city?.split(",")!, id].join(",")
-            : `${id}`,
+            ? [...params.city?.split(",")!, ...id].join(",")
+            : `${id.join(",")}`,
       });
     }
   };
@@ -357,71 +359,60 @@ const Search = () => {
     setPage(1);
   }, [search, sortBy, sort]);
 
+  useEffect(() => {
+    fetchCategoriesProduct(
+      search.get("q") !== null ? String(search.get("q")) : ""
+    );
+  }, [search]);
+
   return (
     <>
-      <Box
-        padding={{
-          base: 5,
-          sm: 5,
-          md: 5,
-          lg: 12,
-          xl: 12,
-        }}
-      >
-        <HStack ps={4} pb={5}>
-          <Text
-            fontSize={{
-              base: "md",
-              sm: "md",
-              md: "lg",
-              lg: "xl",
-              xl: "xl",
-            }}
-          >
-            Search result for
-          </Text>
-          <Text
-            fontSize={{
-              base: "md",
-              sm: "md",
-              md: "lg",
-              lg: "xl",
-              xl: "xl",
-            }}
-            fontWeight={"bold"}
-          >
-            {'"' + search.get("q") + '"'}
-          </Text>
-        </HStack>
+      <Box>
+        {search.get("q") !== null &&
+          search.get("q") !== undefined &&
+          search.get("q")!.length > 0 && (
+            <HStack ps={4} pb={5}>
+              <Text
+                fontSize={{
+                  base: "md",
+                  md: "lg",
+                  lg: "xl",
+                }}
+              >
+                Search result for
+              </Text>
+              <Text
+                fontSize={{
+                  base: "md",
+                  md: "lg",
+                  lg: "xl",
+                }}
+                fontWeight={"bold"}
+              >
+                {'"' + search.get("q") + '"'}
+              </Text>
+            </HStack>
+          )}
         <Grid
           templateColumns={{
             sm: "repeat(2, 1fr)",
             md: "repeat(3, 1fr)",
-            lg: "repeat(5, 1fr)",
-            xl: "repeat(5, 1fr)",
+            lg: "repeat(8, 1fr)",
           }}
-          gap={4}
+          gap={10}
         >
           <GridItem
-            colSpan={1}
-            padding={4}
-            width={{
-              lg: "13.5rem",
-              xl: "18rem",
-            }}
+            colSpan={2}
             display={{
               base: "none",
-              sm: "none",
-              md: "none",
               lg: "grid",
-              xl: "grid",
             }}
           >
             <VStack spacing={5}>
               <VStack alignItems={"start"} spacing={5} width={"100%"}>
                 <Heading
-                  size={{
-                    lg: "sm",
+                  fontSize={{
+                    lg: "md",
                     xl: "md",
                   }}
                 >
@@ -434,8 +425,18 @@ const Search = () => {
                       xl: "md",
                     }}
                   >
-                    <InputLeftAddon children="Rp" />
+                    <InputLeftAddon
+                      style={{
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                      }}
+                      children="Rp"
+                    />
                     <Input
+                      style={{
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      }}
                       type="number"
                       placeholder="Minimum Price"
                       _focusVisible={{
@@ -452,8 +453,18 @@ const Search = () => {
                       xl: "md",
                     }}
                   >
-                    <InputLeftAddon children="Rp" />
+                    <InputLeftAddon
+                      children="Rp"
+                      style={{
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                      }}
+                    />
                     <Input
+                      style={{
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      }}
                       type="number"
                       placeholder="Maximum Price"
                       _focusVisible={{
@@ -478,15 +489,15 @@ const Search = () => {
                   </Button>
                 </VStack>
               </VStack>
-              <Accordion allowMultiple width={"100%"}>
+              <Accordion defaultIndex={[0]} allowMultiple width={"100%"}>
                 <AccordionItem>
                   {({ isExpanded }) => (
                     <>
                       <AccordionButton py={2} px={1}>
                         <Box as="span" flex="1" textAlign="left">
                           <Heading
-                            size={{
-                              lg: "sm",
+                            fontSize={{
+                              lg: "md",
                               xl: "md",
                             }}
                           >
@@ -496,8 +507,8 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        {categories.length !== 0
-                          ? categories.map((category) => (
+                        {categoriesProduct.length !== 0
+                          ? categoriesProduct.map((category) => (
                               <Accordion key={category.id} allowMultiple>
                                 <AccordionItem border={"none"}>
                                   <HStack spacing={8}>
@@ -514,20 +525,27 @@ const Search = () => {
                                       role={"button"}
                                       fontSize={{
                                         lg: "sm",
-                                        xl: "md",
+                                        xl: "sm",
                                       }}
                                       fontWeight={
                                         params.c! === String(category.id) &&
                                         params.cl === "1"
                                           ? "bold"
-                                          : "normal"
+                                          : "semibold"
+                                      }
+                                      color={
+                                        params.c! === String(category.id) &&
+                                        params.cl === "1"
+                                          ? "primary"
+                                          : "dark"
                                       }
                                     >
                                       {category.name}
                                     </Text>
                                   </HStack>
                                   <AccordionPanel py={0} pe={0}>
-                                    {category.secondary_category.length !== 0
+                                    {category.secondary_category &&
+                                    category.secondary_category.length !== 0
                                       ? category.secondary_category.map(
                                           (secondary) => (
                                             <Accordion
@@ -555,21 +573,29 @@ const Search = () => {
                                                     role={"button"}
                                                     fontSize={{
                                                       lg: "sm",
-                                                      xl: "md",
+                                                      xl: "sm",
                                                     }}
                                                     fontWeight={
                                                       params.c! ===
                                                         String(secondary.id) &&
                                                       params.cl === "2"
                                                         ? "bold"
-                                                        : "normal"
+                                                        : "semibold"
+                                                    }
+                                                    color={
+                                                      params.c! ===
+                                                        String(secondary.id) &&
+                                                      params.cl === "2"
+                                                        ? "primary"
+                                                        : "dark"
                                                     }
                                                   >
                                                     {secondary.name}
                                                   </Text>
                                                 </HStack>
                                                 <AccordionPanel py={0} pe={0}>
-                                                  {secondary.tertiary_category
+                                                  {secondary.tertiary_category &&
+                                                  secondary.tertiary_category
                                                     .length !== 0
                                                     ? secondary.tertiary_category.map(
                                                         (tertiary) => (
@@ -598,7 +624,7 @@ const Search = () => {
                                                               role={"button"}
                                                               fontSize={{
                                                                 lg: "sm",
-                                                                xl: "md",
+                                                                xl: "sm",
                                                               }}
                                                               fontWeight={
                                                                 params.c! ===
@@ -608,7 +634,17 @@ const Search = () => {
                                                                 params.cl ===
                                                                   "3"
                                                                   ? "bold"
-                                                                  : "normal"
+                                                                  : "semibold"
+                                                              }
+                                                              color={
+                                                                params.c! ===
+                                                                  String(
+                                                                    tertiary.id
+                                                                  ) &&
+                                                                params.cl ===
+                                                                  "3"
+                                                                  ? "primary"
+                                                                  : "dark"
                                                               }
                                                             >
                                                               {tertiary.name}
@@ -640,8 +676,8 @@ const Search = () => {
                       <AccordionButton py={2} px={1}>
                         <Box as="span" flex="1" textAlign="left">
                           <Heading
-                            size={{
-                              lg: "sm",
+                            fontSize={{
+                              lg: "md",
                               xl: "md",
                             }}
                           >
@@ -652,12 +688,13 @@ const Search = () => {
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
                         <Checkbox
+                          colorScheme={"default"}
                           onChange={handleChangeRating}
                           isChecked={params.rt !== ""}
                         >
                           <Icon.Star
                             mt={"-.3em"}
-                            fill={"orange"}
+                            fill={"yellow.200"}
                             width={"1.2em"}
                             marginEnd={2}
                           />
@@ -675,8 +712,8 @@ const Search = () => {
                       <AccordionButton py={2} px={1}>
                         <Box as="span" flex="1" textAlign="left">
                           <Heading
-                            size={{
-                              lg: "sm",
+                            fontSize={{
+                              lg: "md",
                               xl: "md",
                             }}
                           >
@@ -688,36 +725,203 @@ const Search = () => {
                       <AccordionPanel pb={4} px={1}>
                         <VStack alignItems={"start"}>
                           <Checkbox
-                            value="1"
+                            colorScheme={"default"}
+                            value="151"
                             onChange={(e) => {
-                              handleChangeLocation(1, e.currentTarget.checked);
+                              handleChangeLocation(
+                                [151, 152, 153, 154, 155, 189],
+                                e.currentTarget.checked
+                              );
                             }}
-                            isChecked={params.city?.includes("1")}
+                            isChecked={params.city?.includes("151")}
                           >
-                            <Text as={"span"} noOfLines={1}>
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
                               DKI Jakarta
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="2"
+                            colorScheme={"default"}
+                            value="444"
                             onChange={(e) => {
-                              handleChangeLocation(2, e.currentTarget.checked);
+                              handleChangeLocation(
+                                [444],
+                                e.currentTarget.checked
+                              );
                             }}
-                            isChecked={params.city?.includes("2")}
+                            isChecked={params.city?.includes("444")}
                           >
-                            <Text as={"span"} noOfLines={1}>
-                              Bali
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Surabaya
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="3"
+                            colorScheme={"default"}
+                            value="278"
                             onChange={(e) => {
-                              handleChangeLocation(3, e.currentTarget.checked);
+                              handleChangeLocation(
+                                [278],
+                                e.currentTarget.checked
+                              );
                             }}
-                            isChecked={params.city?.includes("3")}
+                            isChecked={params.city?.includes("278")}
                           >
-                            <Text as={"span"} noOfLines={1}>
-                              Jawa Barat
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Medan
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="22"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [22, 23, 24],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("22")}
+                          >
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Bandung
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="254"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [254],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("254")}
+                          >
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Makassar
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="398"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [398, 399],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("398")}
+                          >
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Semarang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="327"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [327],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("327")}
+                          >
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Palembang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="48"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [48],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("48")}
+                          >
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Batam
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="350"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [350],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("350")}
+                          >
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Pekanbaru
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="255"
+                            onChange={(e) => {
+                              handleChangeLocation(
+                                [255, 256],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("255")}
+                          >
+                            <Text
+                              as={"span"}
+                              fontWeight={"semibold"}
+                              fontSize={"sm"}
+                              noOfLines={1}
+                            >
+                              Malang
                             </Text>
                           </Checkbox>
                         </VStack>
@@ -731,222 +935,122 @@ const Search = () => {
           <GridItem
             colSpan={{
               base: 2,
-              sm: 2,
               md: 3,
-              lg: 4,
-              xl: 4,
+              lg: 6,
             }}
-            p={4}
-            maxWidth={{
-              base: "18rem",
-              sm: "100%",
-            }}
-            justifySelf={{
-              base: "center",
-              sm: "auto",
-            }}
+            maxW={"100%"}
           >
-            <HStack
-              justifyContent={"space-between"}
-              __css={{
-                margin: "0",
-              }}
-            >
+            <Flex width={"100%"} direction={"column"}>
               <HStack
-                spacing={5}
-                display={{
-                  base: "none",
-                  sm: "none",
-                  md: "none",
-                  lg: "flex",
-                  xl: "flex",
-                }}
-              >
-                <Text
-                  fontSize={{
-                    lg: "sm",
-                    xl: "lg",
-                  }}
-                >
-                  Sort by:
-                </Text>
-                <Button
-                  fontWeight={sortBy === "view_count" ? "bold" : "normal"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "sm",
-                    xl: "md",
-                  }}
-                  onClick={() => handleChangeSortBy("view_count")}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "lg",
-                    }}
-                  >
-                    Recommended
-                  </Text>
-                </Button>
-                <Button
-                  fontWeight={sortBy === "date" ? "bold" : "normal"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "md",
-                  }}
-                  onClick={() => handleChangeSortBy("date")}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "lg",
-                    }}
-                  >
-                    Newest
-                  </Text>
-                </Button>
-                <Button
-                  fontWeight={sortBy === "unit_sold" ? "bold" : "normal"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "md",
-                  }}
-                  onClick={() => handleChangeSortBy("unit_sold")}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "lg",
-                    }}
-                  >
-                    Most buy
-                  </Text>
-                </Button>
-                <Button
-                  fontWeight={sortBy === "price" ? "bold" : "normal"}
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "md",
-                  }}
-                  onClick={() => handleChangeSortBy("price")}
-                >
-                  <Text
-                    fontSize={{
-                      lg: "sm",
-                      xl: "lg",
-                    }}
-                  >
-                    Price
-                  </Text>
-                </Button>
-                <Button
-                  variant={"unstyled"}
-                  size={{
-                    lg: "xs",
-                    xl: "md",
-                  }}
-                  onClick={() => {
-                    sort === "desc"
-                      ? handleChangeSort("asc")
-                      : handleChangeSort("desc");
-                  }}
-                >
-                  <Icon.Sort
-                    width={{
-                      lg: "1.2rem",
-                      xl: "1.5rem",
-                    }}
-                    height={{
-                      lg: "1.2rem",
-                      xl: "1.5rem",
-                    }}
-                    selected={sort}
-                  />
-                </Button>
-              </HStack>
-              <Button
-                variant={"outline"}
-                borderRadius={"md"}
-                size={{
-                  lg: "sm",
-                  xl: "md",
-                }}
-                onClick={handleClearFilter}
-                display={{
-                  base: "none",
-                  sm: "none",
-                  md: "none",
-                  lg: display,
-                  xl: display,
-                }}
-              >
-                <Text
-                  fontSize={{
-                    lg: "sm",
-                    xl: "lg",
-                  }}
-                >
-                  Clear Filter
-                </Text>
-              </Button>
-
-              <HStack
-                width={"100%"}
-                bg="secondaryLighten"
-                px={4}
                 justifyContent={"space-between"}
-                display={{
-                  base: "flex",
-                  sm: "flex",
-                  md: "flex",
-                  lg: "none",
-                  xl: "none",
+                __css={{
+                  margin: "0",
                 }}
               >
-                <HStack>
-                  <Menu isLazy>
-                    <MenuButton
+                <HStack
+                  spacing={5}
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: "flex",
+                    xl: "flex",
+                  }}
+                >
+                  <Text
+                    fontSize={{
+                      lg: "sm",
+                      xl: "sm",
+                    }}
+                    fontWeight={"semibold"}
+                    color={"lightDarken"}
+                  >
+                    Sort by:
+                  </Text>
+                  <Button
+                    fontWeight={sortBy === "view_count" ? "bold" : "semibold"}
+                    color={sortBy === "view_count" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "sm",
+                      xl: "md",
+                    }}
+                    onClick={() => handleChangeSortBy("view_count")}
+                  >
+                    <Text
                       fontSize={{
-                        base: "sm",
-                        sm: "sm",
-                        md: "md",
+                        lg: "sm",
+                        xl: "sm",
                       }}
                     >
-                      {sortBy === "view_count"
-                        ? "Recommended"
-                        : sortBy === "date"
-                        ? "Newest"
-                        : sortBy === "unit_sold"
-                        ? "Most buy"
-                        : "Price"}
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        onClick={() => handleChangeSortBy("view_count")}
-                      >
-                        Recommended
-                      </MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("date")}>
-                        Newest
-                      </MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("unit_sold")}>
-                        Most buy
-                      </MenuItem>
-                      <MenuItem onClick={() => handleChangeSortBy("price")}>
-                        Price
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-
+                      Recommended
+                    </Text>
+                  </Button>
+                  <Button
+                    fontWeight={sortBy === "date" ? "bold" : "semibold"}
+                    color={sortBy === "date" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "xs",
+                      xl: "sm",
+                    }}
+                    onClick={() => handleChangeSortBy("date")}
+                  >
+                    <Text
+                      fontSize={{
+                        lg: "sm",
+                        xl: "sm",
+                      }}
+                    >
+                      Newest
+                    </Text>
+                  </Button>
+                  <Button
+                    fontWeight={sortBy === "unit_sold" ? "bold" : "semibold"}
+                    color={sortBy === "unit_sold" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "xs",
+                      xl: "sm",
+                    }}
+                    onClick={() => {
+                      handleChangeSortBy("unit_sold");
+                      handleChangeSort("desc");
+                    }}
+                  >
+                    <Text
+                      fontSize={{
+                        lg: "sm",
+                        xl: "sm",
+                      }}
+                    >
+                      Most buy
+                    </Text>
+                  </Button>
+                  <Button
+                    fontWeight={sortBy === "lowest_price" ? "bold" : "semibold"}
+                    color={sortBy === "lowest_price" ? "primary" : "dark"}
+                    variant={"unstyled"}
+                    size={{
+                      lg: "xs",
+                      xl: "md",
+                    }}
+                    onClick={() => handleChangeSortBy("lowest_price")}
+                  >
+                    <Text
+                      fontSize={{
+                        lg: "sm",
+                        xl: "sm",
+                      }}
+                    >
+                      Price
+                    </Text>
+                  </Button>
                   <Button
                     variant={"unstyled"}
                     size={{
-                      base: "xs",
-                      sm: "sm",
-                      md: "md",
+                      lg: "xs",
+                      xl: "md",
                     }}
                     onClick={() => {
                       sort === "desc"
@@ -956,110 +1060,198 @@ const Search = () => {
                   >
                     <Icon.Sort
                       width={{
-                        base: "1.2rem",
-                        sm: "1.2rem",
-                        md: "1.5rem",
+                        lg: "1.2rem",
+                        xl: "1.5rem",
                       }}
                       height={{
-                        base: "1.2rem",
-                        sm: "1.2rem",
-                        md: "1.5rem",
+                        lg: "1.2rem",
+                        xl: "1.5rem",
                       }}
                       selected={sort}
                     />
                   </Button>
                 </HStack>
-                <HStack>
-                  <Button
-                    textDecoration={display === "flex" ? "underline" : ""}
-                    fontWeight={"normal"}
-                    variant={"unstyled"}
-                    onClick={onOpen}
-                    size={{
-                      base: "sm",
-                      sm: "sm",
-                      md: "md",
+                <Button
+                  variant={"outline"}
+                  borderRadius={"md"}
+                  size={{
+                    lg: "sm",
+                    xl: "sm",
+                  }}
+                  onClick={handleClearFilter}
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: display,
+                    xl: display,
+                  }}
+                >
+                  <Text
+                    fontSize={{
+                      lg: "sm",
+                      xl: "sm",
                     }}
                   >
-                    Filter
-                  </Button>
-                  <IconButton
-                    size={"sm"}
-                    aria-label="close"
-                    variant={"unstyled"}
-                    icon={<Icon.Close />}
-                    onClick={handleClearFilter}
-                    display={display}
-                    width={{
-                      base: "1em",
-                      sm: "1.3em",
-                      md: "1.3em",
-                    }}
-                    height={{
-                      base: "1em",
-                      sm: "1.3em",
-                      md: "1.3em",
-                    }}
-                  />
+                    Clear Filter
+                  </Text>
+                </Button>
+
+                <HStack
+                  width={"100%"}
+                  bg="lightLighten"
+                  px={5}
+                  py={2}
+                  my={5}
+                  justifyContent={"space-between"}
+                  display={{
+                    base: "flex",
+                    sm: "flex",
+                    md: "flex",
+                    lg: "none",
+                    xl: "none",
+                  }}
+                >
+                  <HStack>
+                    <Menu isLazy>
+                      <MenuButton
+                        fontSize={{
+                          base: "sm",
+                          sm: "sm",
+                          md: "md",
+                        }}
+                      >
+                        {sortBy === "view_count"
+                          ? "Recommended"
+                          : sortBy === "date"
+                          ? "Newest"
+                          : sortBy === "unit_sold"
+                          ? "Most buy"
+                          : "lowest_price"}
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem
+                          onClick={() => handleChangeSortBy("view_count")}
+                        >
+                          Recommended
+                        </MenuItem>
+                        <MenuItem onClick={() => handleChangeSortBy("date")}>
+                          Newest
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            handleChangeSortBy("unit_sold");
+                            handleChangeSort("desc");
+                          }}
+                        >
+                          Most buy
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => handleChangeSortBy("lowest_price")}
+                        >
+                          Price
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+
+                    <Button
+                      variant={"unstyled"}
+                      size={{
+                        base: "xs",
+                        sm: "sm",
+                        md: "md",
+                      }}
+                      onClick={() => {
+                        sort === "desc"
+                          ? handleChangeSort("asc")
+                          : handleChangeSort("desc");
+                      }}
+                    >
+                      <Icon.Sort
+                        width={{
+                          base: "1.2rem",
+                          sm: "1.2rem",
+                          md: "1.5rem",
+                        }}
+                        height={{
+                          base: "1.2rem",
+                          sm: "1.2rem",
+                          md: "1.5rem",
+                        }}
+                        selected={sort}
+                      />
+                    </Button>
+                  </HStack>
+                  <HStack>
+                    <Button
+                      textDecoration={display === "flex" ? "underline" : ""}
+                      fontWeight={"normal"}
+                      variant={"unstyled"}
+                      onClick={onOpen}
+                      size={{
+                        base: "sm",
+                        sm: "sm",
+                        md: "md",
+                      }}
+                    >
+                      Filter
+                    </Button>
+                    <IconButton
+                      size={"sm"}
+                      aria-label="close"
+                      variant={"unstyled"}
+                      icon={<Icon.Close />}
+                      onClick={handleClearFilter}
+                      display={display}
+                      width={{
+                        base: "1em",
+                        sm: "1.3em",
+                        md: "1.3em",
+                      }}
+                      height={{
+                        base: "1em",
+                        sm: "1.3em",
+                        md: "1.3em",
+                      }}
+                    />
+                  </HStack>
                 </HStack>
               </HStack>
-            </HStack>
 
-            <Box marginTop={5}>
-              <Grid
-                templateColumns={{
-                  sm: "repeat(2, 1fr)",
-                  md: "repeat(3, 1fr)",
-                  lg: "repeat(4, 1fr)",
-                  xl: "repeat(4, 1fr)",
-                }}
-                placeItems={{
-                  base: "center",
-                  sm: "center",
-                  md: "initial",
-                  lg: "initial",
-                }}
-                gap={6}
-              >
+              <Flex>
                 {products?.data.length !== 0 ? (
-                  products?.data.map((product) => (
-                    <Skeleton key={product.id} isLoaded={!isLoading}>
-                      <GridItem>
-                        <ProductCard {...product} />
-                      </GridItem>
-                    </Skeleton>
-                  ))
-                ) : (
-                  <GridItem
-                    colSpan={{
-                      base: 2,
-                      sm: 2,
-                      md: 3,
-                      lg: 4,
-                      xl: 4,
+                  <Grid
+                    w="100%"
+                    templateColumns={{
+                      base: "repeat(4, 1fr)",
+                      md: "repeat(8, 1fr)",
+                      xl: "repeat(10, 1fr)",
                     }}
+                    gap={3}
                   >
-                    <Center>
-                      <Text>No products available.</Text>
-                    </Center>
-                  </GridItem>
+                    {products?.data.map((product) => (
+                      <GridItem w={"100%"} colSpan={2}>
+                        <ProductCard key={product.id} {...product} />
+                      </GridItem>
+                    ))}
+                  </Grid>
+                ) : (
+                  <NoProductContainer />
                 )}
-              </Grid>
-            </Box>
+              </Flex>
 
-            {products?.data.length !== 0 ? (
-              <Pagination
-                data={{
-                  current_page: products?.current_page
-                    ? products.current_page
-                    : 0,
-                  total_page: products?.total_page! ? products.total_page : 0,
-                }}
-                setPage={setPage}
-              />
-            ) : (
-              ""
-            )}
+              {products?.data.length !== 0 && (
+                <Pagination
+                  data={{
+                    current_page: products?.current_page
+                      ? products.current_page
+                      : 0,
+                    total_page: products?.total_page! ? products.total_page : 0,
+                  }}
+                  setPage={setPage}
+                />
+              )}
+            </Flex>
           </GridItem>
         </Grid>
       </Box>
@@ -1154,8 +1346,8 @@ const Search = () => {
                         {isExpanded ? <Icon.Minus /> : <Icon.Plus />}
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
-                        {categories.length !== 0
-                          ? categories.map((category) => (
+                        {categoriesProduct.length !== 0
+                          ? categoriesProduct.map((category) => (
                               <Accordion key={category.id} allowMultiple>
                                 <AccordionItem border={"none"}>
                                   <HStack spacing={8}>
@@ -1189,7 +1381,8 @@ const Search = () => {
                                     </Text>
                                   </HStack>
                                   <AccordionPanel py={0} pe={0}>
-                                    {category.secondary_category.length !== 0
+                                    {category.secondary_category &&
+                                    category.secondary_category.length !== 0
                                       ? category.secondary_category.map(
                                           (secondary) => (
                                             <Accordion
@@ -1232,7 +1425,8 @@ const Search = () => {
                                                   </Text>
                                                 </HStack>
                                                 <AccordionPanel py={0} pe={0}>
-                                                  {secondary.tertiary_category
+                                                  {secondary.tertiary_category &&
+                                                  secondary.tertiary_category
                                                     .length !== 0
                                                     ? secondary.tertiary_category.map(
                                                         (tertiary) => (
@@ -1316,6 +1510,7 @@ const Search = () => {
                       </AccordionButton>
                       <AccordionPanel pb={4} px={1}>
                         <Checkbox
+                          colorScheme={"default"}
                           onChange={(e) => {
                             handleChangeRatingModal(e);
                           }}
@@ -1354,45 +1549,153 @@ const Search = () => {
                       <AccordionPanel pb={4} px={1}>
                         <VStack alignItems={"start"}>
                           <Checkbox
-                            value="1"
+                            colorScheme={"default"}
+                            value="151"
                             onChange={(e) => {
                               handleChangeLocationModal(
-                                1,
+                                [151, 152, 153, 154, 155, 189],
                                 e.currentTarget.checked
                               );
                             }}
-                            isChecked={params.city?.includes("1")}
+                            isChecked={params.city?.includes("151")}
                           >
                             <Text as={"span"} noOfLines={1}>
                               DKI Jakarta
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="2"
+                            colorScheme={"default"}
+                            value="444"
                             onChange={(e) => {
                               handleChangeLocationModal(
-                                2,
+                                [444],
                                 e.currentTarget.checked
                               );
                             }}
-                            isChecked={params.city?.includes("2")}
+                            isChecked={params.city?.includes("444")}
                           >
                             <Text as={"span"} noOfLines={1}>
-                              Bali
+                              Surabaya
                             </Text>
                           </Checkbox>
                           <Checkbox
-                            value="3"
+                            colorScheme={"default"}
+                            value="278"
                             onChange={(e) => {
                               handleChangeLocationModal(
-                                3,
+                                [278],
                                 e.currentTarget.checked
                               );
                             }}
-                            isChecked={params.city?.includes("3")}
+                            isChecked={params.city?.includes("278")}
                           >
                             <Text as={"span"} noOfLines={1}>
-                              Jawa Barat
+                              Medan
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="22"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [22, 23, 24],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("22")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Bandung
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="254"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [254],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("254")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Makassar
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="398"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [398, 399],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("398")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Semarang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="327"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [327],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("327")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Palembang
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="48"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [48],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("48")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Batam
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="350"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [350],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("350")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Pekanbaru
+                            </Text>
+                          </Checkbox>
+                          <Checkbox
+                            colorScheme={"default"}
+                            value="255"
+                            onChange={(e) => {
+                              handleChangeLocationModal(
+                                [255, 256],
+                                e.currentTarget.checked
+                              );
+                            }}
+                            isChecked={params.city?.includes("255")}
+                          >
+                            <Text as={"span"} noOfLines={1}>
+                              Malang
                             </Text>
                           </Checkbox>
                         </VStack>

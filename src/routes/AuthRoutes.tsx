@@ -1,14 +1,12 @@
-import { parseCookies } from "nookies";
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import AuthTemplate from "../components/Auth/AuthTemplate";
 
 const AuthRoutes = () => {
-  const isLogged = parseCookies().auth;
-
-  if (isLogged && isLogged !== null) {
-    return <Navigate to="/" />;
-  }
-
-  return <Outlet />;
+  return (
+    <AuthTemplate>
+      <Outlet />
+    </AuthTemplate>
+  );
 };
 
 export default AuthRoutes;

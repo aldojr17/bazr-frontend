@@ -1,0 +1,25 @@
+.fileUploadBtn {
+  background: transparent;
+  border: 3px solid #4fd1c5;
+  color: #696969;
+  width: 120px;
+  height: 120px;
+  border-radius: 10%;
+}
+
+.fileUploadBtn:hover,
+.fileUploadBtn:active {
+  background: #f8f8f8;
+}
+
+.inputFile {
+  width: 120px !important;
+  height: 120px !important;
+  opacity: 0;
+  background-color: #4fd1c5;
+  position: absolute !important;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  cursor: pointer;
+}
