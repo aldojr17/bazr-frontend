@@ -10,6 +10,7 @@ before_script:
 
 stages:
   - lint
+  - eslint
   - build
 
 lint-job:
@@ -17,6 +18,11 @@ lint-job:
   script:
     - npx prettier --check --config .prettierrc.yml --no-editorconfig .
   allow_failure: true
+
+eslint-job:
+  stage: eslint
+  script:
+    - npx eslint -c .custom-eslintrc.yml .
 
 build-job:
   stage: build
