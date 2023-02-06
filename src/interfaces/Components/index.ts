@@ -191,6 +191,7 @@ export interface ISealabsPayTopupWalletProps {
   isOpen: boolean;
   onClose: () => void;
   onOpen: () => void;
+  getWalletHistory: () => void;
 }
 
 export interface ISealabsPayChooseAccountModalProps {
