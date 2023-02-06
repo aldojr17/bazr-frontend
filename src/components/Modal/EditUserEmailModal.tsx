@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   Input,
@@ -74,10 +76,34 @@ function EditUserEmailModal(props: IEditUserEmailModalProps) {
 
   return (
     <>
-      <Modal isOpen={props.isOpen} onClose={props.onClose}>
+      <Modal isOpen={props.isOpen} onClose={props.onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Change Email</ModalHeader>
+          <ModalHeader>
+            <Flex direction="column" width="100%">
+              Change Email
+              <Box marginBottom={5}>
+                <Text fontSize="sm" color="darkLighten">
+                  Already have the code?
+                  <Text
+                    as="a"
+                    fontSize="sm"
+                    color="primary"
+                    fontWeight="bold"
+                    padding={2}
+                    borderRadius="lg"
+                    role="button"
+                    onClick={() => {
+                      props.onClose();
+                      props.codeModalOnOpen();
+                    }}
+                  >
+                    Click here?
+                  </Text>
+                </Text>
+              </Box>
+            </Flex>
+          </ModalHeader>
           <ModalCloseButton />
           <Formik
             initialValues={{
@@ -121,6 +147,7 @@ function EditUserEmailModal(props: IEditUserEmailModalProps) {
         closeOnOverlayClick={false}
         isOpen={props.codeModalIsOpen}
         onClose={props.codeModalOnClose}
+        isCentered
       >
         <ModalOverlay />
         <ModalContent>
