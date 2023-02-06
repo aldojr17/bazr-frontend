@@ -8,6 +8,8 @@ import {
   Button,
   Divider,
   Flex,
+  FormControl,
+  FormLabel,
   Grid,
   HStack,
   Modal,
@@ -18,6 +20,7 @@ import {
   ModalOverlay,
   Select,
   Text,
+  Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
@@ -541,10 +544,10 @@ function TransactionDetails() {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
+          <ModalHeader paddingBottom={0}>
             <Flex direction="column">
               <Flex>Your review means a lot to us</Flex>
-              <Divider marginY={2} />
+              <Divider marginTop={2} />
             </Flex>
           </ModalHeader>
           <ModalCloseButton />
@@ -556,9 +559,19 @@ function TransactionDetails() {
                   "selectAddReviewRating"
                 ) as HTMLSelectElement;
                 const selectRatingValueInt = parseInt(selectRating.value);
+
                 const payload: IAddUserReviewRequestPayload = {
                   rating_score: selectRatingValueInt,
                 };
+
+                const textareaNotes = document.getElementById(
+                  "textareaAddReviewNotes"
+                ) as HTMLTextAreaElement;
+
+                if (textareaNotes.value.trim() !== "") {
+                  payload.feedback = textareaNotes.value.trim();
+                }
+
                 addUserReview(productOrderIdToReview, payload).then(() => {
                   refetch();
                 });
@@ -566,15 +579,24 @@ function TransactionDetails() {
               }}
             >
               <Flex direction="column">
-                <Box>
-                  <Select required id="selectAddReviewRating">
-                    <option value="">Add Rating</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </Select>
+                <Box marginBottom={5}>
+                  <FormControl>
+                    <FormLabel>Product Rating</FormLabel>
+                    <Select required id="selectAddReviewRating">
+                      <option value="">Add Rating</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box marginBottom={5}>
+                  <FormControl>
+                    <FormLabel>Product Review</FormLabel>
+                    <Textarea id="textareaAddReviewNotes" />
+                  </FormControl>
                 </Box>
                 <Divider marginY={2} />
                 <Flex justifyContent="end">
